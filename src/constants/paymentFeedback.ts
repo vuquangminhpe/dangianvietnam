@@ -191,7 +191,7 @@ export const UI_CONSTANTS = {
 // Sepay specific constants
 export const SEPAY_CONFIG = {
   BANK_INFO: {
-    ACCOUNT_NUMBER: "0979781768",
+    ACCOUNT_NUMBER: "7979799898989",
     ACCOUNT_NAME: "CONG TY TNHH MOVIEBOOKING",
     BANK_NAME: "Ngân hàng quân đội MB Bank",
     BRANCH: "Chi nhánh Hà Nội",

@@ -4,8 +4,8 @@ const Footer = () => {
       <div className="flex flex-col md:flex-row justify-between w-full gap-10 border-b border-gray-500 pb-10">
         <div className="md:max-w-96">
           <svg
-            width="400"
-            height="400"
+            width="80"
+            height="80"
             viewBox="0 0 400 400"
             xmlns="http://www.w3.org/2000/svg"
           >
@@ -377,11 +377,7 @@ const Footer = () => {
               opacity="0.3"
             />
           </svg>
-          <p className="mt-6 text-sm">
-            Lorem Ipsum has been the industry's standard dummy text ever since
-            the 1500s, when an unknown printer took a galley of type and
-            scrambled it to make a type specimen book.
-          </p>
+
           <div className="flex items-center gap-2 mt-4">
             <img
               src="https://raw.githubusercontent.com/prebuiltui/prebuiltui/refs/heads/main/assets/appDownload/googlePlayBtnBlack.svg"

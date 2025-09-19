@@ -12,9 +12,9 @@ interface VietQRBankingProps {
 const VietQRBanking: React.FC<VietQRBankingProps> = ({
   amount,
   content,
-  accountNumber = "0979781768",
+  accountNumber = "7979799898989",
   bankCode = "MB",
-  accountName = "VU QUANG MINH",
+  accountName = "HOANG BINH MINH",
 }) => {
   const [qrImageUrl, setQrImageUrl] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);

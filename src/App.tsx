@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import PartnerPage from "./pages/PartnerPage";
@@ -22,8 +22,31 @@ import PaymentFailed from "./pages/PaymentFailed/PaymentFailed";
 import ProfilePage from "./pages/ProfilePage";
 import SepayInstructions from "./components/sepay/SepayInstructions";
 import AdvancedSearchPage from "./pages/AdvancedSearchPage/AdvancedSearchPage";
+import { useEffect } from "react";
 
 function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const accessToken = urlParams.get("access_token");
+    const newUser = urlParams.get("new_user");
+    const verify = urlParams.get("verify");
+
+    if (accessToken) {
+      localStorage.setItem("access_token", accessToken);
+
+      if (newUser) {
+        localStorage.setItem("new_user", newUser);
+      }
+
+      if (verify) {
+        localStorage.setItem("verify", verify);
+      }
+
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [location.search]);
   return (
     <>
       <Toaster />

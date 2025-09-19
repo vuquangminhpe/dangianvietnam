@@ -16,7 +16,7 @@ const HeroSection = () => {
     isError: isErrorBanners,
     data: sliderBanners,
     error: errorBanners,
-    refetch
+    refetch,
   } = useQuery({
     queryKey: ["bannerSliders"],
     queryFn: () => getHomeSliderBanners(),
@@ -34,28 +34,28 @@ const HeroSection = () => {
     autoplaySpeed: 5000,
     pauseOnHover: true,
     fade: true,
-    cssEase: 'linear',
+    cssEase: "linear",
   };
 
   const formatDate = (dateString?: string) => {
-    if (!dateString) return 'N/A';
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
   const getTypeDisplay = (type: string) => {
     switch (type) {
-      case 'home_slider':
-        return 'Featured';
-      case 'movie_promotion':
-        return 'Movie';
-      case 'promotion':
-        return 'Promotion';
+      case "home_slider":
+        return "Featured";
+      case "movie_promotion":
+        return "Movie";
+      case "promotion":
+        return "Promotion";
       default:
-        return type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        return type.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
     }
   };
 
@@ -64,7 +64,7 @@ const HeroSection = () => {
       window.location.href = banner.link_url;
     } else {
       // Fallback to movies page
-      window.location.href = '/movies';
+      window.location.href = "/movies";
     }
   };
 
@@ -93,9 +93,13 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center text-white max-w-md px-6"
         >
-          <h2 className="text-2xl font-bold mb-4 text-red-400">Oops! Something went wrong</h2>
+          <h2 className="text-2xl font-bold mb-4 text-red-400">
+            Oops! Something went wrong
+          </h2>
           <p className="text-gray-300 mb-6">
-            {errorBanners instanceof Error ? errorBanners.message : 'Failed to load banners'}
+            {errorBanners instanceof Error
+              ? errorBanners.message
+              : "Failed to load banners"}
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -111,53 +115,25 @@ const HeroSection = () => {
     );
   }
 
-  // No banners state
-  if (!sliderBanners || sliderBanners.length === 0) {
-    return (
-      <div className="h-screen flex items-center justify-center bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center text-white max-w-md px-6"
-        >
-          <h2 className="text-2xl font-bold mb-4">No banners available</h2>
-          <p className="text-gray-300 mb-6">Check back later for exciting content!</p>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => window.location.href = '/movies'}
-            className="flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary-dull text-white rounded-full font-medium mx-auto transition-colors duration-200"
-          >
-            Explore Movies
-            <BsArrowRight className="w-4 h-4" />
-          </motion.button>
-        </motion.div>
-      </div>
-    );
-  }
-
   return (
     <div className="overflow-hidden">
       <Slider {...settings}>
         {sliderBanners?.map((banner, index) => (
-          <div
-            key={banner._id}
-            className="relative h-screen w-full"
-          >
+          <div key={banner._id} className="relative h-screen w-full">
             {/* Background Image */}
-            <div 
+            <div
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{
-                backgroundImage: `url('${banner.image_url}')`
+                backgroundImage: `url('${banner.image_url}')`,
               }}
             />
-            
+
             {/* Dark Overlay */}
             <div className="absolute inset-0 bg-black bg-opacity-60" />
-            
+
             {/* Content */}
             <div className="relative z-10 flex items-center h-full px-6 md:px-16 lg:px-36">
-              <motion.div 
+              <motion.div
                 className="flex flex-col gap-4 max-w-2xl"
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -178,7 +154,7 @@ const HeroSection = () => {
                   </span>
                 </motion.div>
 
-                <motion.h1 
+                <motion.h1
                   className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -187,7 +163,7 @@ const HeroSection = () => {
                   {banner.title}
                 </motion.h1>
 
-                <motion.div 
+                <motion.div
                   className="flex items-center gap-4 text-gray-300 flex-wrap"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -199,26 +175,30 @@ const HeroSection = () => {
 
                   {banner.start_date && (
                     <div className="flex items-center gap-1">
-                      <IoIosCalendar className="w-4 h-4" /> 
-                      <span className="text-sm">From {formatDate(banner.start_date)}</span>
+                      <IoIosCalendar className="w-4 h-4" />
+                      <span className="text-sm">
+                        From {formatDate(banner.start_date)}
+                      </span>
                     </div>
                   )}
 
                   {banner.end_date && (
                     <div className="flex items-center gap-1">
-                      <GoClock className="w-4 h-4" /> 
-                      <span className="text-sm">Until {formatDate(banner.end_date)}</span>
+                      <GoClock className="w-4 h-4" />
+                      <span className="text-sm">
+                        Until {formatDate(banner.end_date)}
+                      </span>
                     </div>
                   )}
                 </motion.div>
 
-                <motion.p 
+                <motion.p
                   className="text-lg text-gray-200 leading-relaxed max-h-20 overflow-hidden"
                   style={{
-                    display: '-webkit-box',
+                    display: "-webkit-box",
                     WebkitLineClamp: 3,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
                   }}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -227,7 +207,7 @@ const HeroSection = () => {
                   {banner.description}
                 </motion.p>
 
-                <motion.button 
+                <motion.button
                   className="flex items-center gap-2 px-8 py-3 text-sm bg-primary hover:bg-primary-dull transition-all duration-300 rounded-full font-medium cursor-pointer max-w-fit text-white group"
                   onClick={() => handleExploreClick(banner)}
                   initial={{ opacity: 0, y: 20 }}
@@ -236,7 +216,7 @@ const HeroSection = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {banner.link_url ? 'View Details' : 'Explore Movies'}
+                  {banner.link_url ? "View Details" : "Explore Movies"}
                   <BsArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
                 </motion.button>
 
@@ -247,7 +227,7 @@ const HeroSection = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
                 >
-                  {banner.status === 'active' ? (
+                  {banner.status === "active" ? (
                     <span className="text-green-400">● Active Banner</span>
                   ) : (
                     <span className="text-gray-500">● Inactive Banner</span>
@@ -266,4 +246,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
