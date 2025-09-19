@@ -34,7 +34,7 @@ function App() {
     const verify = urlParams.get("verify");
 
     if (accessToken) {
-      localStorage.setItem("access_token", accessToken);
+      localStorage.setItem("accessToken", accessToken);
 
       if (newUser) {
         localStorage.setItem("new_user", newUser);

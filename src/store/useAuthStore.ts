@@ -37,7 +37,7 @@ export const useAuthStore = create<AuthState>()(
         isLoading: false,
         error: null,
         tempEmail: null,
-        
+
         register: async (userData: RegisterUserType) => {
           set({ isLoading: true, error: null });
           try {
@@ -103,7 +103,7 @@ export const useAuthStore = create<AuthState>()(
             error: null,
           });
           // Redirect to home page (public route)
-          window.location.href = '/';
+          window.location.href = "/";
         },
 
         updateUser: (user: User) => {
