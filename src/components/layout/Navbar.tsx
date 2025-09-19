@@ -123,8 +123,7 @@ const Navbar = () => {
   const getNavigationItems = () => {
     const baseItems = [
       { title: "Home", link: "/" },
-      { title: "Movies", link: "/movies" },
-      
+      { title: "EVENTS", link: "/movies" },
     ];
 
     if (!user) {
@@ -349,7 +348,7 @@ const Navbar = () => {
                             <button
                               key={index}
                               onClick={() => {
-                                if ('action' in item && item.action) {
+                                if ("action" in item && item.action) {
                                   item.action();
                                 }
                                 setIsOpen(false);
@@ -395,11 +394,380 @@ const Navbar = () => {
         sm:inset-x-6 flex items-center justify-between px-4 max-md:hidden`}
       >
         <Link to={"/"} className="max-md:flex-1">
-          <img
-            src={"https://movie-store-wdp301.s3.ap-southeast-1.amazonaws.com/Images/2e128e74a80867df70af3c302.jpg"}
-            alt=""
-            className={`w-14 h-14 transition-all duration-300`}
-          />
+          <svg
+            width="80"
+            height="80"
+            viewBox="0 0 400 400"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <radialGradient id="modernBg" cx="50%" cy="40%" r="60%">
+                <stop
+                  offset="0%"
+                  style={{ stopColor: "#CC1A1A", stopOpacity: 1 }}
+                />
+                <stop
+                  offset="70%"
+                  style={{ stopColor: "#8B0000", stopOpacity: 1 }}
+                />
+                <stop
+                  offset="100%"
+                  style={{ stopColor: "#4A0000", stopOpacity: 1 }}
+                />
+              </radialGradient>
+
+              <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop
+                  offset="0%"
+                  style={{ stopColor: "#FFE55C", stopOpacity: 1 }}
+                />
+                <stop
+                  offset="50%"
+                  style={{ stopColor: "#FFD700", stopOpacity: 1 }}
+                />
+                <stop
+                  offset="100%"
+                  style={{ stopColor: "#DAA520", stopOpacity: 1 }}
+                />
+              </linearGradient>
+
+              <filter
+                id="dropShadow"
+                x="-50%"
+                y="-50%"
+                width="200%"
+                height="200%"
+              >
+                <feDropShadow
+                  dx="2"
+                  dy="4"
+                  stdDeviation="3"
+                  flood-color="#000000"
+                  flood-opacity="0.3"
+                />
+              </filter>
+
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <circle
+              cx="200"
+              cy="200"
+              r="190"
+              fill="url(#modernBg)"
+              stroke="url(#goldGrad)"
+              stroke-width="4"
+              filter="url(#dropShadow)"
+            />
+
+            <circle
+              cx="200"
+              cy="200"
+              r="170"
+              fill="none"
+              stroke="url(#goldGrad)"
+              stroke-width="2"
+              opacity="0.6"
+            />
+
+            <circle
+              cx="200"
+              cy="200"
+              r="140"
+              fill="none"
+              stroke="url(#goldGrad)"
+              stroke-width="4"
+              filter="url(#glow)"
+            />
+            <circle
+              cx="200"
+              cy="200"
+              r="120"
+              fill="none"
+              stroke="url(#goldGrad)"
+              stroke-width="3"
+              opacity="0.8"
+            />
+            <circle
+              cx="200"
+              cy="200"
+              r="100"
+              fill="none"
+              stroke="url(#goldGrad)"
+              stroke-width="2"
+              opacity="0.6"
+            />
+            <circle
+              cx="200"
+              cy="200"
+              r="80"
+              fill="none"
+              stroke="url(#goldGrad)"
+              stroke-width="2"
+              opacity="0.4"
+            />
+
+            <circle
+              cx="200"
+              cy="200"
+              r="35"
+              fill="url(#goldGrad)"
+              filter="url(#glow)"
+            />
+            <circle cx="200" cy="200" r="28" fill="#FFE55C" opacity="0.8" />
+
+            <g
+              stroke="url(#goldGrad)"
+              stroke-width="3"
+              fill="none"
+              filter="url(#glow)"
+            >
+              <line x1="200" y1="165" x2="200" y2="150" />
+              <line x1="225" y1="175" x2="235" y2="165" />
+              <line x1="235" y1="200" x2="250" y2="200" />
+              <line x1="225" y1="225" x2="235" y2="235" />
+              <line x1="200" y1="235" x2="200" y2="250" />
+              <line x1="175" y1="225" x2="165" y2="235" />
+              <line x1="165" y1="200" x2="150" y2="200" />
+              <line x1="175" y1="175" x2="165" y2="165" />
+            </g>
+
+            <g transform="translate(170, 150)" filter="url(#dropShadow)">
+              <rect
+                x="25"
+                y="25"
+                width="14"
+                height="45"
+                fill="url(#goldGrad)"
+                rx="7"
+              />
+              <circle cx="32" cy="20" r="12" fill="url(#goldGrad)" />
+              <line
+                x1="18"
+                y1="35"
+                x2="8"
+                y2="25"
+                stroke="url(#goldGrad)"
+                stroke-width="4"
+              />
+              <circle cx="8" cy="25" r="3" fill="#DAA520" />
+              <line
+                x1="46"
+                y1="35"
+                x2="56"
+                y2="25"
+                stroke="url(#goldGrad)"
+                stroke-width="4"
+              />
+              <circle cx="56" cy="25" r="3" fill="#DAA520" />
+              <line
+                x1="28"
+                y1="70"
+                x2="22"
+                y2="85"
+                stroke="url(#goldGrad)"
+                stroke-width="4"
+              />
+              <line
+                x1="36"
+                y1="70"
+                x2="42"
+                y2="85"
+                stroke="url(#goldGrad)"
+                stroke-width="4"
+              />
+
+              <line
+                x1="8"
+                y1="25"
+                x2="2"
+                y2="18"
+                stroke="#8B4513"
+                stroke-width="3"
+              />
+              <line
+                x1="56"
+                y1="25"
+                x2="62"
+                y2="18"
+                stroke="#8B4513"
+                stroke-width="3"
+              />
+            </g>
+
+            <g
+              transform="translate(90, 80) scale(1.2)"
+              filter="url(#dropShadow)"
+            >
+              <path
+                d="M0,15 Q15,0 30,15 Q20,20 15,17 Q10,20 0,15"
+                fill="url(#goldGrad)"
+              />
+              <path
+                d="M5,15 Q20,8 35,15"
+                fill="none"
+                stroke="url(#goldGrad)"
+                stroke-width="2"
+              />
+              <circle cx="20" cy="12" r="2" fill="#8B0000" />
+              <path
+                d="M15,17 Q12,25 15,30"
+                fill="none"
+                stroke="url(#goldGrad)"
+                stroke-width="1"
+              />
+            </g>
+
+            <g
+              transform="translate(280, 90) scale(1.2) rotate(30)"
+              filter="url(#dropShadow)"
+            >
+              <path
+                d="M0,15 Q15,0 30,15 Q20,20 15,17 Q10,20 0,15"
+                fill="url(#goldGrad)"
+              />
+              <path
+                d="M5,15 Q20,8 35,15"
+                fill="none"
+                stroke="url(#goldGrad)"
+                stroke-width="2"
+              />
+              <circle cx="20" cy="12" r="2" fill="#8B0000" />
+            </g>
+
+            <g
+              transform="translate(320, 200) scale(1.2) rotate(90)"
+              filter="url(#dropShadow)"
+            >
+              <path
+                d="M0,15 Q15,0 30,15 Q20,20 15,17 Q10,20 0,15"
+                fill="url(#goldGrad)"
+              />
+              <path
+                d="M5,15 Q20,8 35,15"
+                fill="none"
+                stroke="url(#goldGrad)"
+                stroke-width="2"
+              />
+              <circle cx="20" cy="12" r="2" fill="#8B0000" />
+            </g>
+
+            <g
+              transform="translate(290, 310) scale(1.2) rotate(150)"
+              filter="url(#dropShadow)"
+            >
+              <path
+                d="M0,15 Q15,0 30,15 Q20,20 15,17 Q10,20 0,15"
+                fill="url(#goldGrad)"
+              />
+              <path
+                d="M5,15 Q20,8 35,15"
+                fill="none"
+                stroke="url(#goldGrad)"
+                stroke-width="2"
+              />
+              <circle cx="20" cy="12" r="2" fill="#8B0000" />
+            </g>
+
+            <g
+              transform="translate(110, 320) scale(1.2) rotate(210)"
+              filter="url(#dropShadow)"
+            >
+              <path
+                d="M0,15 Q15,0 30,15 Q20,20 15,17 Q10,20 0,15"
+                fill="url(#goldGrad)"
+              />
+              <path
+                d="M5,15 Q20,8 35,15"
+                fill="none"
+                stroke="url(#goldGrad)"
+                stroke-width="2"
+              />
+              <circle cx="20" cy="12" r="2" fill="#8B0000" />
+            </g>
+
+            <g
+              transform="translate(70, 200) scale(1.2) rotate(270)"
+              filter="url(#dropShadow)"
+            >
+              <path
+                d="M0,15 Q15,0 30,15 Q20,20 15,17 Q10,20 0,15"
+                fill="url(#goldGrad)"
+              />
+              <path
+                d="M5,15 Q20,8 35,15"
+                fill="none"
+                stroke="url(#goldGrad)"
+                stroke-width="2"
+              />
+              <circle cx="20" cy="12" r="2" fill="#8B0000" />
+            </g>
+
+            <text
+              x="200"
+              y="60"
+              font-family="Georgia, serif"
+              font-size="24"
+              fill="url(#goldGrad)"
+              text-anchor="middle"
+              font-weight="bold"
+              filter="url(#glow)"
+            >
+              DÂN GIAN
+            </text>
+
+            <text
+              x="200"
+              y="360"
+              font-family="Georgia, serif"
+              font-size="24"
+              fill="url(#goldGrad)"
+              text-anchor="middle"
+              font-weight="bold"
+              filter="url(#glow)"
+            >
+              VIỆT NAM
+            </text>
+
+            <g opacity="0.4">
+              <path
+                d="M30,30 Q45,15 60,30 Q45,45 30,30"
+                fill="url(#goldGrad)"
+                filter="url(#glow)"
+              />
+              <path
+                d="M340,30 Q355,15 370,30 Q355,45 340,30"
+                fill="url(#goldGrad)"
+                filter="url(#glow)"
+              />
+              <path
+                d="M30,370 Q45,355 60,370 Q45,385 30,370"
+                fill="url(#goldGrad)"
+                filter="url(#glow)"
+              />
+              <path
+                d="M340,370 Q355,355 370,370 Q355,385 340,370"
+                fill="url(#goldGrad)"
+                filter="url(#glow)"
+              />
+            </g>
+
+            <circle
+              cx="200"
+              cy="200"
+              r="185"
+              fill="none"
+              stroke="url(#goldGrad)"
+              stroke-width="1"
+              opacity="0.3"
+            />
+          </svg>
         </Link>
 
         <div>
@@ -570,7 +938,7 @@ const Navbar = () => {
                         <button
                           key={index}
                           onClick={() => {
-                            if ('action' in item && item.action) {
+                            if ("action" in item && item.action) {
                               item.action();
                             }
                           }}
