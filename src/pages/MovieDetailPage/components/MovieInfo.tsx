@@ -1,8 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { motion } from "framer-motion";
-import { FaStar } from "react-icons/fa";
 import { getCountryDisplay } from "../../../const/language";
 import type { Movie } from "../../../types/Movie.type";
-import CastList from "./CastList";
 import type { GetTheatersResponse } from "../../../types/Theater.type";
 import type { Showtime } from "../../../types/Showtime.type";
 import TheaterShowtime from "./TheaterShowtime";
@@ -18,6 +17,7 @@ type Props = {
   userId?: string | null;
   isLoadingTheaters: boolean;
   isLoadingShowtimes: boolean;
+  setIsPlayTrailer: (boolean: true) => void;
 };
 
 export default function MovieInfo({
@@ -27,12 +27,11 @@ export default function MovieInfo({
   theater,
   showtimes,
   fetchShowtimesByTheater,
-  handleBookSeats,
-  userId,
+
   isLoadingTheaters,
   isLoadingShowtimes,
+  setIsPlayTrailer,
 }: Props) {
-
   const fadeUp = {
     hidden: { opacity: 0, y: 40 },
     visible: (i: number) => ({
@@ -69,51 +68,32 @@ export default function MovieInfo({
           Language: {getCountryDisplay(movie.language)}
         </motion.p>
         <motion.p variants={fadeUp} custom={3} className="mb-1">
-          Release:{" "}
-          {new Date(movie.release_date).toLocaleDateString("vi-VN")}
+          Release: {new Date(movie.release_date).toLocaleDateString("vi-VN")}
         </motion.p>
         <motion.p variants={fadeUp} custom={4} className="mb-1">
           Duration: {movie.duration} phút
         </motion.p>
-        <motion.p variants={fadeUp} custom={5} className="mb-1">
-          Genre:{" "}
-          {movie.genre
-            .map((genre: any) =>
-              typeof genre === "string" ? genre : genre.name
-            )
-            .join(", ")}
-        </motion.p>
+        {movie.trailer_url && (
+          <motion.button
+            onClick={() => setIsPlayTrailer(true)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="mt-4 w-full py-3 bg-gradient-to-r from-red-600 to-red-700 text-white 
+                                 font-semibold rounded-lg hover:from-red-700 hover:to-red-800 transition-all
+                                 flex items-center justify-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fillRule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Watch Trailer
+          </motion.button>
+        )}
 
-        <motion.div
-          variants={fadeUp}
-          custom={6}
-          className="flex items-center mb-2"
-        >
-          {[...Array(5)].map((_, i) => (
-            <FaStar
-              key={i}
-              className={`mr-1 ${
-                i < Math.round((movie.average_rating || 0) / 2)
-                  ? "text-yellow-400"
-                  : "text-gray-600"
-              }`}
-            />
-          ))}
-          <span className="ml-2">({movie.average_rating}/10)</span>
-          <span className="ml-2 text-sm text-gray-400">
-            ({movie.ratings_count} rating)
-          </span>
-        </motion.div>
-
-        <motion.p variants={fadeUp} custom={7} className="mb-4">
-          {movie.description}
-        </motion.p>
-
-        <motion.div variants={fadeUp} custom={8}>
-          <CastList movie={movie} />
-        </motion.div>
-
-        <motion.div variants={fadeUp} custom={9}>
+        <motion.div variants={fadeUp} custom={9} className="mt-10">
           <TheaterShowtime
             theater={theater}
             selectedInfo={selectedInfo}
@@ -123,29 +103,6 @@ export default function MovieInfo({
             isLoadingTheaters={isLoadingTheaters}
             isLoadingShowtimes={isLoadingShowtimes}
           />
-        </motion.div>
-
-        <motion.div
-          variants={fadeUp}
-          custom={10}
-          className="mt-4 flex justify-end"
-        >
-          {userId ? (
-            <button
-              onClick={handleBookSeats}
-              disabled={!selectedInfo.showtimeId}
-              className="px-4 py-2 text-xs text-white bg-primary hover:bg-primary-dull transition rounded-full font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Next
-            </button>
-          ) : (
-            <button
-              className="px-4 py-2 text-xs text-white bg-red-500  transition rounded-full font-medium"
-              disabled
-            >
-              Log in to booking
-            </button>
-          )}
         </motion.div>
       </motion.div>
     </div>

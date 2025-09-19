@@ -1,23 +1,43 @@
 import { FiX } from "react-icons/fi";
-import { getRedirectPathByRole, useAuthStore} from "../../store/useAuthStore";
+import { getRedirectPathByRole, useAuthStore } from "../../store/useAuthStore";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import RegisterModal from "./RegisterModal";
+import { Button } from "../ui/button";
+import { Chrome } from "lucide-react";
 
 interface LoginModalProps {
   isFormOpen: (value: boolean) => void;
 }
 
 const LoginModal = ({ isFormOpen }: LoginModalProps) => {
-  const { login, error} = useAuthStore();
+  const { login, error } = useAuthStore();
   const navigate = useNavigate();
   // Local loading state for better control
   const [isSubmitting, setIsSubmitting] = useState(false);
-  
+
   // Modal state to switch between login and register
   const [showRegisterModal, setShowRegisterModal] = useState(false);
 
+  const getGoogleAuthUrl = () => {
+    const url = "https://accounts.google.com/o/oauth2/auth";
+    const query = {
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      redirect_uri: import.meta.env.VITE_GOOGLE_REDIRECT_URI,
+      response_type: "code",
+      scope: [
+        "https://www.googleapis.com/auth/userinfo.profile",
+        "https://www.googleapis.com/auth/userinfo.email",
+      ].join(" "),
+      prompt: "consent",
+      access_type: "offline",
+    };
+    const queryString = new URLSearchParams(query).toString();
+    return `${url}?${queryString}`;
+  };
+
+  const googleOAuthUrl = getGoogleAuthUrl();
 
   // Login form state
   const [formData, setFormData] = useState({
@@ -55,9 +75,9 @@ const LoginModal = ({ isFormOpen }: LoginModalProps) => {
   // Function to handle blur events - auto trim spaces
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    
+
     // Only trim email field, not password
-    if (name === 'email') {
+    if (name === "email") {
       setFormData({
         ...formData,
         [name]: value.trim().toLowerCase(),
@@ -78,7 +98,8 @@ const LoginModal = ({ isFormOpen }: LoginModalProps) => {
     } else if (/\s/.test(trimmedEmail)) {
       newErrors.email = "Email cannot contain spaces";
     } else if (!emailRegex.test(trimmedEmail)) {
-      newErrors.email = "Please enter a valid email address (e.g., user@example.com)";
+      newErrors.email =
+        "Please enter a valid email address (e.g., user@example.com)";
     } else if (trimmedEmail.length > 254) {
       newErrors.email = "Email is too long";
     }
@@ -121,7 +142,6 @@ const LoginModal = ({ isFormOpen }: LoginModalProps) => {
           // Fallback to default home if user data is not available
           setTimeout(() => {
             navigate("/home");
-
           }, 1500);
         }
       } else {
@@ -235,24 +255,34 @@ const LoginModal = ({ isFormOpen }: LoginModalProps) => {
             >
               {isSubmitting ? "Signing in..." : "Sign in"}
             </button>
-
+            {/* Social Login */}
+            <div className="space-y-3">
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full cursor-pointer"
+                onClick={() => (window.location.href = googleOAuthUrl)}
+              >
+                <Chrome className="w-5 h-5 mr-3" />
+                Đăng nhập với google
+              </Button>
+            </div>
             <p className="text-center text-sm text-gray-300">
               Don't have account?{" "}
-              <span 
-                className="cursor-pointer text-red-400 hover:text-red-300 hover:underline transition" 
+              <span
+                className="cursor-pointer text-red-400 hover:text-red-300 hover:underline transition"
                 onClick={() => setShowRegisterModal(true)}
               >
                 Register
               </span>{" "}
             </p>
           </form>
-
         </div>
       </div>
 
       {/* Register Modal */}
       {showRegisterModal && (
-        <RegisterModal 
+        <RegisterModal
           isFormOpen={setShowRegisterModal}
           onSwitchToLogin={() => {
             setShowRegisterModal(false);

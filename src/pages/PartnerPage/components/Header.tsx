@@ -442,7 +442,7 @@ const Header = () => {
               </motion.div>
               <div>
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
-                  CinemaConnect
+                  DANGIANVIETNAM
                 </h1>
                 <p className="text-slate-400">Partner Management Dashboard</p>
               </div>

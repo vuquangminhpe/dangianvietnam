@@ -6,7 +6,10 @@ import type { Movie } from "../../types/Movie.type";
 import type { Showtime } from "../../types/Showtime.type";
 import type { GetTheatersResponse } from "../../types/Theater.type";
 import { getMovieById } from "../../apis/movie.api";
-import { getShowtimeByMovieIdAndTheaterId, getTheatersWithShowtimes } from "../../apis/showtime.api";
+import {
+  getShowtimeByMovieIdAndTheaterId,
+  getTheatersWithShowtimes,
+} from "../../apis/showtime.api";
 import { useAuthAction } from "../../hooks/useAuthAction";
 import LoginModal from "../../components/user/LoginModal";
 import ReactPlayer from "react-player";
@@ -14,6 +17,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import MovieInfo from "./components/MovieInfo";
 import MovieFeedbackSection from "../../components/movie/MovieFeedbackSection";
+import CastList from "./components/CastList";
+import { getCountryDisplay } from "../../const/language";
 
 type SelectedInfo = {
   movieId: string;
@@ -165,58 +170,26 @@ export default function MovieDetailsPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-primary/40 to-slate-900 text-gray-300 overflow-x-hidden">
+    <div className="relative min-h-screen  bg-zinc-900 text-gray-300 overflow-x-hidden">
       {/* Background Elements - matching your design theme */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-purple-500/5 to-transparent rounded-full" />
-      </div>
 
-      <div className="relative z-10 px-6 md:px-16 lg:px-24 xl:px-44 pt-20 pb-20">
+      <div className="relative   z-10 px-6 md:px-16 lg:px-24 xl:px-44 pt-20 pb-20">
         {/* Movie Info Section */}
         <motion.div
           variants={container}
           initial="hidden"
           animate="visible"
-          className="grid md:grid-cols-3 gap-6 bg-white/10 backdrop-blur-lg p-6 rounded-3xl 
+          className="flex flex-col md:flex-row gap-6 bg-white/10 backdrop-blur-lg p-6 rounded-3xl
           shadow-xl border border-white/20 mb-10 mt-10"
         >
-          <motion.div variants={fadeUp} className="flex flex-col items-center">
-            <img
-              src={movie.poster_url}
-              alt={movie.title}
-              className="rounded-lg w-full shadow-2xl border border-white/10"
-            />
-
+          <motion.div
+            variants={fadeUp}
+            className="flex flex-col gap-3 items-center w-full md:w-1/3"
+          >
             {/* Play Trailer Button */}
-            {movie.trailer_url && (
-              <motion.button
-                onClick={() => setIsPlayTrailer(true)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="mt-4 w-full py-3 bg-gradient-to-r from-red-600 to-red-700 text-white 
-                         font-semibold rounded-lg hover:from-red-700 hover:to-red-800 transition-all
-                         flex items-center justify-center gap-2"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Watch Trailer
-              </motion.button>
-            )}
-          </motion.div>
 
-          <motion.div variants={fadeUp} className="md:col-span-2">
             <MovieInfo
+              setIsPlayTrailer={setIsPlayTrailer}
               movie={movie}
               theater={theater}
               selectedInfo={selectedInfo}
@@ -229,8 +202,61 @@ export default function MovieDetailsPage() {
               isLoadingShowtimes={isLoadingShowtimes}
             />
           </motion.div>
-        </motion.div>
 
+          <motion.div variants={fadeUp} className="pb-10 w-full md:w-2/3 relative">
+            <img
+              src={movie.poster_url}
+              alt={movie.title}
+              className="rounded-lg w-full h-[400px] md:h-[600px] object-cover shadow-2xl border border-white/10"
+            />
+            <motion.div
+              variants={fadeUp}
+              custom={10}
+              className="absolute right-3 bottom-2"
+            >
+              {userId ? (
+                <button
+                  onClick={handleBookSeats}
+                  disabled={!selectedInfo.showtimeId}
+                  className="px-4 py-2 w-[100px] h-[40px] text-xs text-white bg-primary hover:bg-primary-dull transition rounded-xl font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Đặt vé
+                </button>
+              ) : (
+                <button
+                  className="px-4 py-2 text-xs text-white bg-red-500  transition rounded-full font-medium"
+                  disabled
+                >
+                  Log in to booking
+                </button>
+              )}
+            </motion.div>
+          </motion.div>
+        </motion.div>
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="visible"
+          className="gap-6 bg-white/10 backdrop-blur-lg p-6 rounded-3xl 
+          shadow-xl border border-white/20 mb-10 mt-10"
+        >
+          <motion.div
+            variants={fadeUp}
+            className="flex flex-col gap-3 items-center"
+          ></motion.div>
+          <motion.p variants={fadeUp} custom={1} className="mb-1">
+            Tác giả: {movie.director}
+          </motion.p>
+          <motion.p variants={fadeUp} custom={2} className="mb-1">
+            Đạo diễn: {getCountryDisplay(movie.language)}
+          </motion.p>
+          <motion.div variants={fadeUp} custom={8}>
+            <CastList movie={movie} />
+          </motion.div>
+          <motion.p variants={fadeUp} custom={7} className="mb-4">
+            {movie.description}
+          </motion.p>
+        </motion.div>
         {/* Feedback Section - New integrated component */}
         <motion.div
           variants={fadeUp}

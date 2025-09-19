@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CreditCard, Download } from "lucide-react";
+import { CreditCard } from "lucide-react";
 
 interface VietQRBankingProps {
   amount: number;
@@ -64,18 +64,6 @@ const VietQRBanking: React.FC<VietQRBankingProps> = ({
     return JSON.stringify(bankInfo);
   };
 
-  const handleDownloadQR = () => {
-    if (qrImageUrl) {
-      const link = document.createElement("a");
-      link.href = qrImageUrl;
-      link.download = `VietQR-${accountNumber}-${Date.now()}.png`;
-      link.target = "_blank";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  };
-
   return (
     <div className="bg-white/10 rounded-xl p-6 text-center border border-blue-500/30 max-w-sm mx-auto">
       <div className="flex items-center justify-center gap-2 mb-4">
@@ -129,35 +117,7 @@ const VietQRBanking: React.FC<VietQRBankingProps> = ({
               {amount.toLocaleString("vi-VN")} ₫
             </span>
           </div>
-          <div className="pt-2 flex items-center text-black border-t border-blue-500/20">
-            <p className="text-gray-400 text-xs mb-1">Content payment:</p>
-            <p className=" text-sm font-medium bg-white/10 p-2 rounded">
-              {content}
-            </p>
-          </div>
         </div>
-      </div>
-
-      {/* Action Buttons */}
-      <div className="space-y-3 flex justify-center w-full">
-        <div>
-          <button
-            onClick={handleDownloadQR}
-            className="flex items-center justify-center gap-1 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors text-sm"
-          >
-            <Download className="h-3 w-3" />
-            View QR
-          </button>
-        </div>
-      </div>
-
-      <div className="mt-4 p-3 bg-orange-500/10 border border-orange-500/20 rounded-lg">
-        <p className="text-orange-400 text-xs font-medium mb-1">
-          ⚠️ IMPORTANT
-        </p>
-        <p className="text-black text-xs">
-          Enter the correct transfer content to be processed automatically.
-        </p>
       </div>
     </div>
   );

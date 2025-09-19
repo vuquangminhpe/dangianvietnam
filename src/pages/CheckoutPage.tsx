@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Check,
@@ -24,6 +24,7 @@ import {
   useUpdateBooking,
   useBookingExpiration,
 } from "../hooks/useBooking";
+import { useCreatePayment } from "../hooks/usePayment";
 import { useAuthStore } from "../store/useAuthStore";
 import { useSeatPersistence } from "../hooks/useSeatPersistence";
 import CheckoutPaymentStep from "../components/checkout/CheckoutPaymentStep";
@@ -47,9 +48,18 @@ interface BookingInfo {
 export default function CheckoutPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const { user } = useAuthStore();
-  const [currentStep, setCurrentStep] = useState<CheckoutStep>("review");
+
+  // Check if we should skip review step and go directly to payment
+  const skipReview = location.state?.skipReview || searchParams.get('step') === 'payment';
+  const bookingDataFromState = location.state?.bookingData;
+
+  const [currentStep, setCurrentStep] = useState<CheckoutStep>(skipReview ? "processing" : "review");
   const [bookingId, setBookingId] = useState<string | null>(null);
+
+  // Payment mutation
+  const createPaymentMutation = useCreatePayment();
 
   // Original state
   const [seats, setSeats] = useState<string[]>([]);
@@ -97,6 +107,88 @@ export default function CheckoutPage() {
   useEffect(() => {
     setHasLoadedData(false);
   }, [seatData?.showtimeId]);
+
+  // Create booking for direct payment flow and automatically process Sepay payment
+  const handleCreateBookingForDirectFlow = async (directBookingData: any) => {
+    if (!user) {
+      toast.error("User not logged in");
+      return;
+    }
+
+    setIsCreatingBooking(true);
+
+    try {
+      // Step 1: Create booking
+      const bookingResponse = await createBookingMutation.mutateAsync(directBookingData);
+      const newBookingId = bookingResponse.data.result.booking._id;
+      setBookingId(newBookingId);
+
+      // Step 2: Automatically create Sepay payment
+      const paymentResponse = await createPaymentMutation.mutateAsync({
+        booking_id: newBookingId,
+        payment_method: "sepay",
+      });
+
+      // Step 3: Navigate directly to Sepay instructions
+      navigate(
+        `/payment/sepay-instructions?bookingId=${newBookingId}&paymentId=${paymentResponse.data.payment_id}`
+      );
+    } catch (error: any) {
+      console.error("Direct booking and payment creation error:", error);
+      toast.error("Failed to create booking and payment. Please try again.");
+      // Navigate back to seat selection on error
+      navigate(-1);
+    } finally {
+      setIsCreatingBooking(false);
+    }
+  };
+
+  // Handle direct payment flow from navigation state
+  useEffect(() => {
+    if (skipReview && bookingDataFromState && !hasLoadedData) {
+      // Handle direct payment flow with data from navigation state
+      const bookingData: BookingInfo = {
+        seats: bookingDataFromState.seats.map((seat: any) => `${seat.row}${seat.number}`),
+        screenId: searchParams.get('screenId') || '',
+        movieId: searchParams.get('movieId') || '',
+        showtimeId: bookingDataFromState.showtime_id,
+        totalAmount: bookingDataFromState.total_amount,
+      };
+
+      setBookingInfo(bookingData);
+      setSeats(bookingData.seats);
+      setPrice(bookingData.totalAmount);
+      setHasLoadedData(true);
+
+      // Create booking immediately for direct payment flow
+      const processedBookingData = {
+        showtime_id: bookingData.showtimeId,
+        seats: bookingDataFromState.seats, // Use original seat format from navigation state
+        coupon_code: bookingDataFromState.coupon_code,
+        coupon_discount: bookingDataFromState.coupon_discount,
+        total_amount: bookingData.totalAmount,
+      };
+      handleCreateBookingForDirectFlow(processedBookingData);
+
+      // Load related data
+      if (bookingData.screenId) {
+        getScreenById(bookingData.screenId)
+          .then(setScreen)
+          .catch(() => setScreen(null));
+      }
+      if (bookingData.movieId) {
+        getMovieById(bookingData.movieId)
+          .then(setMovie as any)
+          .catch(() => setMovie(null));
+      }
+      if (bookingData.showtimeId) {
+        getShowtimeById(bookingData.showtimeId)
+          .then(setShowtime)
+          .catch(() => setShowtime(null));
+      }
+      return;
+    }
+  }, [skipReview, bookingDataFromState, hasLoadedData, searchParams]);
 
   // Load saved booking info from persistence hook (only once)
   useEffect(() => {
@@ -178,6 +270,8 @@ export default function CheckoutPage() {
     navigate,
     deletedLockedSeatsMutation,
     searchParams,
+    skipReview,
+    bookingDataFromState,
   ]);
 
   // Update seats and price when seatData changes (without calling APIs again)
@@ -417,7 +511,7 @@ export default function CheckoutPage() {
 
   if (!screen || seats.length === 0 || !bookingInfo) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-black/70 flex items-center justify-center">
         <div className="text-center">
           <AlertTriangle className="h-16 w-16 text-orange-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-white mb-2">
@@ -435,14 +529,16 @@ export default function CheckoutPage() {
     );
   }
 
-  const steps = [
+  const steps = skipReview ? [
+    { id: "processing", title: "Processing Payment", icon: CreditCard },
+  ] : [
     { id: "review", title: "Review Booking", icon: Ticket },
     { id: "payment", title: "Payment", icon: CreditCard },
     { id: "processing", title: "Processing", icon: Check },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8">
+    <div className="min-h-screen bg-black/70 py-8">
       {/* Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl" />
@@ -567,7 +663,7 @@ export default function CheckoutPage() {
             transition={{ delay: 0.2 }}
             className="lg:col-span-1"
           >
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 sticky top-8">
+            <div className="bg-black/70 backdrop-blur-lg rounded-2xl p-6 border border-white/20 sticky top-8">
               <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
                 <Ticket className="h-5 w-5 text-purple-400" />
                 Booking Summary
@@ -674,7 +770,7 @@ export default function CheckoutPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20"
+                  className="bg-black/70 backdrop-blur-lg rounded-2xl p-6 border border-white/20"
                 >
                   <h2 className="text-2xl font-bold text-white mb-6">
                     Review Your Booking
@@ -723,7 +819,6 @@ export default function CheckoutPage() {
                       ) : (
                         <>
                           <CreditCard className="h-5 w-5" />
-                          Proceed to Payment
                         </>
                       )}
                     </motion.button>
@@ -737,7 +832,7 @@ export default function CheckoutPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20"
+                  className="bg-black/70 backdrop-blur-lg rounded-2xl p-6 border border-white/20"
                 >
                   <CheckoutPaymentStep
                     bookingId={bookingId}
@@ -748,6 +843,39 @@ export default function CheckoutPage() {
                     onPaymentSuccess={handlePaymentSuccess}
                     onPaymentError={handlePaymentError}
                   />
+                </motion.div>
+              )}
+
+              {currentStep === "processing" && (
+                <motion.div
+                  key="processing"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="bg-black/70 backdrop-blur-lg rounded-2xl p-6 border border-white/20"
+                >
+                  <div className="text-center space-y-6">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-400 mx-auto" />
+                    <h2 className="text-2xl font-bold text-white">
+                      Processing Your Booking
+                    </h2>
+                    <p className="text-gray-300">
+                      {isCreatingBooking || createBookingMutation.isPending || createPaymentMutation.isPending
+                        ? "Creating your booking and setting up Sepay payment..."
+                        : "Redirecting to payment instructions..."}
+                    </p>
+                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
+                      <h3 className="font-semibold text-blue-300 mb-2">
+                        What happens next?
+                      </h3>
+                      <ul className="text-blue-400/80 text-sm space-y-1 text-left">
+                        <li>• You'll be redirected to Sepay payment instructions</li>
+                        <li>• Follow the bank transfer details provided</li>
+                        <li>• Your payment will be verified automatically</li>
+                        <li>• Booking confirmation will be sent to your email</li>
+                      </ul>
+                    </div>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
