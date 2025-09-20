@@ -20,9 +20,6 @@ export const useCreatePayment = () => {
         toast.success("Payment initiated successfully");
       } else {
         // For Sepay, show different message
-        toast.info(
-          "Transfer instructions prepared. Please complete the bank transfer."
-        );
       }
 
       // Invalidate and refetch payment queries

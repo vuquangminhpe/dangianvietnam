@@ -101,7 +101,6 @@ const Header = () => {
                         dx="2"
                         dy="4"
                         stdDeviation="3"
-                        flood-color="#000000"
                         flood-opacity="0.3"
                       />
                     </filter>
