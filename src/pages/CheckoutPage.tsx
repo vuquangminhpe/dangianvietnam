@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -52,10 +52,13 @@ export default function CheckoutPage() {
   const { user } = useAuthStore();
 
   // Check if we should skip review step and go directly to payment
-  const skipReview = location.state?.skipReview || searchParams.get('step') === 'payment';
+  const skipReview =
+    location.state?.skipReview || searchParams.get("step") === "payment";
   const bookingDataFromState = location.state?.bookingData;
 
-  const [currentStep, setCurrentStep] = useState<CheckoutStep>(skipReview ? "processing" : "review");
+  const [currentStep, setCurrentStep] = useState<CheckoutStep>(
+    skipReview ? "processing" : "review"
+  );
   const [bookingId, setBookingId] = useState<string | null>(null);
 
   // Payment mutation
@@ -79,6 +82,10 @@ export default function CheckoutPage() {
   const [isCreatingBooking, setIsCreatingBooking] = useState(false);
   const [bookingInfo, setBookingInfo] = useState<BookingInfo | null>(null);
   const [hasLoadedData, setHasLoadedData] = useState(false);
+  const [isLoadingRelatedData, setIsLoadingRelatedData] = useState(false);
+  const [isProcessingDirectFlow, setIsProcessingDirectFlow] = useState(false);
+  const bookingCreationRef = useRef<boolean>(false);
+  const directFlowProcessedRef = useRef<boolean>(false);
   const { seatData, isExpired, getTimeRemaining, clearSeatData } =
     useSeatPersistence();
 
@@ -103,54 +110,120 @@ export default function CheckoutPage() {
     },
   });
 
-  // Reset flag when showtimeId changes
+  // Reset flags when showtimeId changes
   useEffect(() => {
     setHasLoadedData(false);
+    bookingCreationRef.current = false;
+    directFlowProcessedRef.current = false;
   }, [seatData?.showtimeId]);
 
   // Create booking for direct payment flow and automatically process Sepay payment
-  const handleCreateBookingForDirectFlow = async (directBookingData: any) => {
-    if (!user) {
-      toast.error("User not logged in");
-      return;
-    }
+  const handleCreateBookingForDirectFlow = useCallback(
+    async (directBookingData: any) => {
+      if (!user || isCreatingBooking || directFlowProcessedRef.current) {
+        if (!user) toast.error("User not logged in");
+        if (directFlowProcessedRef.current) return;
+      }
 
-    setIsCreatingBooking(true);
+      directFlowProcessedRef.current = true;
+      setIsCreatingBooking(true);
 
-    try {
-      // Step 1: Create booking
-      const bookingResponse = await createBookingMutation.mutateAsync(directBookingData);
-      const newBookingId = bookingResponse.data.result.booking._id;
-      setBookingId(newBookingId);
+      try {
+        // Step 1: Create booking
 
-      // Step 2: Automatically create Sepay payment
-      const paymentResponse = await createPaymentMutation.mutateAsync({
-        booking_id: newBookingId,
-        payment_method: "sepay",
-      });
+        const bookingResponse = await createBookingMutation.mutateAsync(
+          directBookingData
+        );
+        const newBookingId = bookingResponse.data.result.booking._id;
+        setBookingId(newBookingId);
 
-      // Step 3: Navigate directly to Sepay instructions
-      navigate(
-        `/payment/sepay-instructions?bookingId=${newBookingId}&paymentId=${paymentResponse.data.payment_id}`
-      );
-    } catch (error: any) {
-      console.error("Direct booking and payment creation error:", error);
-      toast.error("Failed to create booking and payment. Please try again.");
-      // Navigate back to seat selection on error
-      navigate(-1);
-    } finally {
-      setIsCreatingBooking(false);
-    }
-  };
+        // Step 2: Automatically create Sepay payment
+        const paymentResponse = await createPaymentMutation.mutateAsync({
+          booking_id: newBookingId,
+          payment_method: "sepay",
+        });
+
+        // Step 3: Navigate directly to Sepay instructions
+        navigate(
+          `/payment/sepay-instructions?bookingId=${newBookingId}&paymentId=${paymentResponse.data.payment_id}`
+        );
+      } catch (error: any) {
+        console.error("Direct booking and payment creation error:", error);
+        toast.error("Failed to create booking and payment. Please try again.");
+        directFlowProcessedRef.current = false;
+        navigate(-1);
+      } finally {
+        setIsCreatingBooking(false);
+      }
+    },
+    [
+      user,
+      isCreatingBooking,
+      createBookingMutation,
+      createPaymentMutation,
+      navigate,
+    ]
+  );
+
+  // Consolidated function to load related data
+  const loadRelatedData = useCallback(
+    async (bookingData: BookingInfo) => {
+      if (isLoadingRelatedData) return;
+
+      setIsLoadingRelatedData(true);
+      try {
+        const promises = [];
+
+        if (bookingData.screenId) {
+          promises.push(
+            getScreenById(bookingData.screenId)
+              .then(setScreen)
+              .catch(() => setScreen(null))
+          );
+        }
+        if (bookingData.movieId) {
+          promises.push(
+            getMovieById(bookingData.movieId)
+              .then(setMovie as any)
+              .catch(() => setMovie(null))
+          );
+        }
+        if (bookingData.showtimeId) {
+          promises.push(
+            getShowtimeById(bookingData.showtimeId)
+              .then(setShowtime)
+              .catch(() => setShowtime(null))
+          );
+        }
+
+        if (promises.length > 0) {
+          await Promise.all(promises);
+        }
+      } finally {
+        setIsLoadingRelatedData(false);
+      }
+    },
+    [isLoadingRelatedData]
+  );
 
   // Handle direct payment flow from navigation state
   useEffect(() => {
-    if (skipReview && bookingDataFromState && !hasLoadedData) {
+    if (
+      skipReview &&
+      bookingDataFromState &&
+      !hasLoadedData &&
+      !isProcessingDirectFlow &&
+      !directFlowProcessedRef.current
+    ) {
+      setIsProcessingDirectFlow(true);
+
       // Handle direct payment flow with data from navigation state
       const bookingData: BookingInfo = {
-        seats: bookingDataFromState.seats.map((seat: any) => `${seat.row}${seat.number}`),
-        screenId: searchParams.get('screenId') || '',
-        movieId: searchParams.get('movieId') || '',
+        seats: bookingDataFromState.seats.map(
+          (seat: any) => `${seat.row}${seat.number}`
+        ),
+        screenId: searchParams.get("screenId") || "",
+        movieId: searchParams.get("movieId") || "",
         showtimeId: bookingDataFromState.showtime_id,
         totalAmount: bookingDataFromState.total_amount,
       };
@@ -168,30 +241,32 @@ export default function CheckoutPage() {
         coupon_discount: bookingDataFromState.coupon_discount,
         total_amount: bookingData.totalAmount,
       };
-      handleCreateBookingForDirectFlow(processedBookingData);
 
-      // Load related data
-      if (bookingData.screenId) {
-        getScreenById(bookingData.screenId)
-          .then(setScreen)
-          .catch(() => setScreen(null));
-      }
-      if (bookingData.movieId) {
-        getMovieById(bookingData.movieId)
-          .then(setMovie as any)
-          .catch(() => setMovie(null));
-      }
-      if (bookingData.showtimeId) {
-        getShowtimeById(bookingData.showtimeId)
-          .then(setShowtime)
-          .catch(() => setShowtime(null));
-      }
+      // Load related data and create booking concurrently
+      Promise.all([
+        loadRelatedData(bookingData),
+        handleCreateBookingForDirectFlow(processedBookingData),
+      ]).finally(() => {
+        setIsProcessingDirectFlow(false);
+      });
+
       return;
     }
-  }, [skipReview, bookingDataFromState, hasLoadedData, searchParams]);
+  }, [
+    skipReview,
+    bookingDataFromState,
+    hasLoadedData,
+    isProcessingDirectFlow,
+    searchParams,
+    loadRelatedData,
+    handleCreateBookingForDirectFlow,
+  ]);
 
   // Load saved booking info from persistence hook (only once)
   useEffect(() => {
+    // Skip if we're in direct payment flow or already processed
+    if (skipReview || hasLoadedData || isProcessingDirectFlow) return;
+
     if (isExpired) {
       // Try to cancel locked seats before clearing data
       if (seatData && seatData.seats.length > 0) {
@@ -215,7 +290,7 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (seatData && !hasLoadedData) {
+    if (seatData) {
       // Get screenId from URL params for validation
       const urlScreenId = searchParams.get("screenId");
 
@@ -246,21 +321,7 @@ export default function CheckoutPage() {
       setHasLoadedData(true);
 
       // Load related data
-      if (bookingData.screenId) {
-        getScreenById(bookingData.screenId)
-          .then(setScreen)
-          .catch(() => setScreen(null));
-      }
-      if (bookingData.movieId) {
-        getMovieById(bookingData.movieId)
-          .then(setMovie as any)
-          .catch(() => setMovie(null));
-      }
-      if (bookingData.showtimeId) {
-        getShowtimeById(bookingData.showtimeId)
-          .then(setShowtime)
-          .catch(() => setShowtime(null));
-      }
+      loadRelatedData(bookingData);
     }
   }, [
     seatData,
@@ -271,24 +332,32 @@ export default function CheckoutPage() {
     deletedLockedSeatsMutation,
     searchParams,
     skipReview,
-    bookingDataFromState,
+    isProcessingDirectFlow,
+    loadRelatedData,
   ]);
 
   // Update seats and price when seatData changes (without calling APIs again)
-  useEffect(() => {
-    if (seatData && hasLoadedData && bookingInfo) {
-      setSeats(Array.isArray(seatData.seats) ? seatData.seats : []);
-      setPrice(seatData.totalAmount || 0);
+  const derivedData = useMemo(() => {
+    if (!seatData || !hasLoadedData) return null;
 
-      // Debug: Log price being set
-      console.log("CheckoutPage price update:", {
-        seatDataTotalAmount: seatData.totalAmount,
-        priceBeingSet: seatData.totalAmount || 0,
-        couponCode: seatData.couponCode,
-        couponDiscount: seatData.couponDiscount,
-      });
+    return {
+      seats: Array.isArray(seatData.seats) ? seatData.seats : [],
+      price: seatData.totalAmount || 0,
+    };
+  }, [seatData?.seats, seatData?.totalAmount, hasLoadedData]);
+
+  useEffect(() => {
+    if (derivedData && bookingInfo) {
+      setSeats(derivedData.seats);
+      setPrice(derivedData.price);
     }
-  }, [seatData?.seats, seatData?.totalAmount, hasLoadedData, bookingInfo]);
+  }, [
+    derivedData,
+    bookingInfo,
+    seatData?.totalAmount,
+    seatData?.couponCode,
+    seatData?.couponDiscount,
+  ]);
 
   // Update timer from both persistence hook and booking expiration
   useEffect(() => {
@@ -391,6 +460,11 @@ export default function CheckoutPage() {
       return;
     }
 
+    if (isCreatingBooking || bookingCreationRef.current) {
+      return;
+    }
+
+    bookingCreationRef.current = true;
     setIsCreatingBooking(true);
 
     try {
@@ -411,18 +485,6 @@ export default function CheckoutPage() {
         total_amount: bookingInfo.totalAmount, // Final amount after coupon discount
       };
 
-      // Debug: Log booking data being sent
-      console.log("Creating Booking with data:", {
-        bookingData,
-        seatData: {
-          couponCode: seatData?.couponCode,
-          couponDiscount: seatData?.couponDiscount,
-          appliedCoupon: seatData?.appliedCoupon,
-          totalAmount: seatData?.totalAmount,
-        },
-        bookingInfo,
-      });
-
       // Check if existing booking data exists for this showtimeId
 
       const hasExistingBooking = checkExistingBooking(bookingInfo.showtimeId);
@@ -431,9 +493,6 @@ export default function CheckoutPage() {
       let newBookingId;
 
       if (hasExistingBooking) {
-        // Both selected-movie-info AND seat-locked exist, use updateBooking
-
-        // Get existing booking ID from seat-locked data (preferred) or selected-movie-info
         let existingBookingId = null;
 
         // Fallback to selected-movie-info if no bookingId in seat-locked
@@ -452,12 +511,10 @@ export default function CheckoutPage() {
           });
           newBookingId = existingBookingId;
         } else {
-          // Fallback to createBooking
           response = await createBookingMutation.mutateAsync(bookingData, {});
           newBookingId = response.data.result.booking._id;
         }
       } else {
-        // Use createBooking if either or both localStorage items are missing
         response = await createBookingMutation.mutateAsync(bookingData);
         newBookingId = response.data.result.booking._id;
       }
@@ -467,6 +524,8 @@ export default function CheckoutPage() {
     } catch (error: any) {
       // Error is already handled by the hook
       console.error("Booking creation error:", error);
+      // Reset the ref on error so user can retry
+      bookingCreationRef.current = false;
     } finally {
       setIsCreatingBooking(false);
     }
@@ -509,33 +568,13 @@ export default function CheckoutPage() {
     }
   };
 
-  if (!screen || seats.length === 0 || !bookingInfo) {
-    return (
-      <div className="min-h-screen bg-black/70 flex items-center justify-center">
-        <div className="text-center">
-          <AlertTriangle className="h-16 w-16 text-orange-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-2">
-            No Booking Information
-          </h2>
-          <p className="text-gray-300 mb-4">Please select seats first</p>
-          <button
-            onClick={() => navigate("/movies")}
-            className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-          >
-            Browse Movies
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const steps = skipReview ? [
-    { id: "processing", title: "Processing Payment", icon: CreditCard },
-  ] : [
-    { id: "review", title: "Review Booking", icon: Ticket },
-    { id: "payment", title: "Payment", icon: CreditCard },
-    { id: "processing", title: "Processing", icon: Check },
-  ];
+  const steps = skipReview
+    ? [{ id: "processing", title: "Processing Payment", icon: CreditCard }]
+    : [
+        { id: "review", title: "Review Booking", icon: Ticket },
+        { id: "payment", title: "Payment", icon: CreditCard },
+        { id: "processing", title: "Processing", icon: Check },
+      ];
 
   return (
     <div className="min-h-screen bg-black/70 py-8">
@@ -694,13 +733,13 @@ export default function CheckoutPage() {
                   <MapPin className="h-4 w-4 text-gray-400 mt-1" />
                   <div>
                     <p className="text-white font-medium">
-                      {screen.theater?.name}
+                      {screen?.theater?.name}
                     </p>
                     <p className="text-gray-300 text-sm">
-                      {screen.theater?.location}, {screen.theater?.city}
+                      {screen?.theater?.location}, {screen?.theater?.city}
                     </p>
                     <p className="text-gray-400 text-sm">
-                      Screen: {screen.name} ({screen.screen_type})
+                      Screen: {screen?.name} ({screen?.screen_type})
                     </p>
                   </div>
                 </div>
@@ -860,21 +899,12 @@ export default function CheckoutPage() {
                       Processing Your Booking
                     </h2>
                     <p className="text-gray-300">
-                      {isCreatingBooking || createBookingMutation.isPending || createPaymentMutation.isPending
-                        ? "Creating your booking and setting up Sepay payment..."
+                      {isCreatingBooking ||
+                      createBookingMutation.isPending ||
+                      createPaymentMutation.isPending
+                        ? "Creating your booking..."
                         : "Redirecting to payment instructions..."}
                     </p>
-                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-                      <h3 className="font-semibold text-blue-300 mb-2">
-                        What happens next?
-                      </h3>
-                      <ul className="text-blue-400/80 text-sm space-y-1 text-left">
-                        <li>• You'll be redirected to Sepay payment instructions</li>
-                        <li>• Follow the bank transfer details provided</li>
-                        <li>• Your payment will be verified automatically</li>
-                        <li>• Booking confirmation will be sent to your email</li>
-                      </ul>
-                    </div>
                   </div>
                 </motion.div>
               )}

@@ -64,15 +64,21 @@ const handleUserError = (error: unknown): Error => {
     if (status === 401) {
       throw new Error("Unauthorized. Please login to continue.");
     } else if (status === 403) {
-      throw new Error("Access denied. You don't have permission to access this resource.");
+      throw new Error(
+        "Access denied. You don't have permission to access this resource."
+      );
     } else if (status === 404) {
       throw new Error(message || "Coupon not found or not available.");
     } else if (status === 400) {
       throw new Error(message || "Invalid request. Please check your input.");
     } else if (status === 409) {
-      throw new Error(message || "Coupon is not valid or has already been used.");
+      throw new Error(
+        message || "Coupon is not valid or has already been used."
+      );
     } else if (status === 422) {
-      throw new Error(message || "Coupon validation failed. Please check the requirements.");
+      throw new Error(
+        message || "Coupon validation failed. Please check the requirements."
+      );
     } else if (status === 500) {
       throw new Error("Server error. Please try again later.");
     } else {
@@ -93,7 +99,9 @@ const handleUserError = (error: unknown): Error => {
 export const getMyCoupons = async (): Promise<GetMyCouponsResponse> => {
   try {
     const userApi = createUserRequest();
-    const response = await userApi.get<GetMyCouponsResponse>("/coupons/my-coupons");
+    const response = await userApi.get<GetMyCouponsResponse>(
+      "/coupons/my-coupons"
+    );
     return response.data;
   } catch (error) {
     throw handleUserError(error);
@@ -218,7 +226,9 @@ export const getCouponStatusMessage = (coupon: Coupon): string => {
   const endDate = new Date(coupon.end_date);
 
   if (now < startDate) {
-    return `This coupon will be available from ${startDate.toLocaleDateString("vi-VN")}`;
+    return `This coupon will be available from ${startDate.toLocaleDateString(
+      "vi-VN"
+    )}`;
   }
 
   if (now > endDate) {

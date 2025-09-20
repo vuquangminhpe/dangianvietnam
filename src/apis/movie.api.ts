@@ -256,8 +256,6 @@ export const getMoviesByGenre = async (
   }
 };
 
-
-
 // Get latest movies
 export const getLatestMovies = async (limit = 10): Promise<Movie[]> => {
   try {
@@ -285,10 +283,14 @@ export const searchMoviesAdvanced = async (
     if (params.genre) queryParams.append("genre", params.genre);
     if (params.year) queryParams.append("year", params.year.toString());
     if (params.language) queryParams.append("language", params.language);
-    if (params.duration_min) queryParams.append("duration_min", params.duration_min.toString());
-    if (params.duration_max) queryParams.append("duration_max", params.duration_max.toString());
-    if (params.rating_min) queryParams.append("rating_min", params.rating_min.toString());
-    if (params.rating_max) queryParams.append("rating_max", params.rating_max.toString());
+    if (params.duration_min)
+      queryParams.append("duration_min", params.duration_min.toString());
+    if (params.duration_max)
+      queryParams.append("duration_max", params.duration_max.toString());
+    if (params.rating_min)
+      queryParams.append("rating_min", params.rating_min.toString());
+    if (params.rating_max)
+      queryParams.append("rating_max", params.rating_max.toString());
     if (params.page) queryParams.append("page", params.page.toString());
     if (params.limit) queryParams.append("limit", params.limit.toString());
 

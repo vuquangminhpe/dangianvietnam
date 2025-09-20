@@ -245,23 +245,23 @@ export const getAllShowtimeByMovieIdAndTheaterId = async (
 export const getTheatersWithShowtimes = async (movie_id: string) => {
   try {
     const res = await showtimeApi.get<any>("", {
-      params: { 
+      params: {
         movie_id,
         page: 1,
         limit: 1000, // Lấy nhiều để đảm bảo có đủ dữ liệu
-        sort_by: 'start_time',
-        sort_order: 'asc'
+        sort_by: "start_time",
+        sort_order: "asc",
       },
     });
 
     const showtimes = res.data.result?.showtimes || res.data.showtimes || [];
-    
+
     // Lọc chỉ lấy suất chiếu trong tương lai
     const futureShowtimes = filterFutureShowtimes(showtimes);
-    
+
     // Tạo map các rạp từ showtimes
     const theaterMap = new Map();
-    
+
     futureShowtimes.forEach((showtime: any) => {
       if (showtime.theater && showtime.theater._id) {
         theaterMap.set(showtime.theater._id, {
@@ -276,14 +276,14 @@ export const getTheatersWithShowtimes = async (movie_id: string) => {
           amenities: showtime.theater.amenities || [],
           status: showtime.theater.status || "active",
           created_at: showtime.theater.created_at || "",
-          updated_at: showtime.theater.updated_at || ""
+          updated_at: showtime.theater.updated_at || "",
         });
       }
     });
-    
+
     // Chuyển map thành array
     const theaters = Array.from(theaterMap.values());
-    
+
     return {
       message: "Get theaters with showtimes success",
       result: {
@@ -291,8 +291,8 @@ export const getTheatersWithShowtimes = async (movie_id: string) => {
         total: theaters.length,
         page: 1,
         limit: theaters.length,
-        total_pages: 1
-      }
+        total_pages: 1,
+      },
     };
   } catch (error) {
     throw handleShowtimeError(error);

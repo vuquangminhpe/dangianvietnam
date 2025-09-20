@@ -95,9 +95,9 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
     const { name, value } = e.target;
 
     // Only trim text fields, not password fields
-    if (name !== 'password' && name !== 'confirm_password') {
+    if (name !== "password" && name !== "confirm_password") {
       const trimmedValue = value.trim();
-      
+
       if (name.includes("address.")) {
         const addressField = name.split(".")[1];
         setFormData({
@@ -127,7 +127,11 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
       newErrors.name = "Name must be at least 2 characters long";
     } else if (trimmedName.length > 50) {
       newErrors.name = "Name must be less than 50 characters";
-    } else if (!/^[a-zA-ZÀ-ÿĂăÂâÊêÔôƠơƯưĐđàáảãạầấẩẫậằắẳẵặèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ\s]+$/.test(trimmedName)) {
+    } else if (
+      !/^[a-zA-ZÀ-ÿĂăÂâÊêÔôƠơƯưĐđàáảãạầấẩẫậằắẳẵặèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ\s]+$/.test(
+        trimmedName
+      )
+    ) {
       newErrors.name = "Name can only contain letters and spaces";
     } else if (/\s{2,}/.test(trimmedName)) {
       newErrors.name = "Name cannot contain multiple consecutive spaces";
@@ -141,7 +145,8 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
     } else if (/\s/.test(trimmedEmail)) {
       newErrors.email = "Email cannot contain spaces";
     } else if (!emailRegex.test(trimmedEmail)) {
-      newErrors.email = "Please enter a valid email address (e.g., user@example.com)";
+      newErrors.email =
+        "Please enter a valid email address (e.g., user@example.com)";
     } else if (trimmedEmail.length > 254) {
       newErrors.email = "Email is too long";
     }
@@ -155,13 +160,16 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
     } else if (password.length > 128) {
       newErrors.password = "Password must be less than 128 characters";
     } else if (!/(?=.*[a-z])/.test(password)) {
-      newErrors.password = "Password must contain at least one lowercase letter";
+      newErrors.password =
+        "Password must contain at least one lowercase letter";
     } else if (!/(?=.*[A-Z])/.test(password)) {
-      newErrors.password = "Password must contain at least one uppercase letter";
+      newErrors.password =
+        "Password must contain at least one uppercase letter";
     } else if (!/(?=.*\d)/.test(password)) {
       newErrors.password = "Password must contain at least one number";
     } else if (!/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(password)) {
-      newErrors.password = "Password must contain at least one special character";
+      newErrors.password =
+        "Password must contain at least one special character";
     }
 
     // Validate password confirmation
@@ -179,11 +187,12 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
       const today = new Date();
       const age = today.getFullYear() - birthDate.getFullYear();
       const monthDiff = today.getMonth() - birthDate.getMonth();
-      
+
       if (birthDate > today) {
         newErrors.date_of_birth = "Date of birth cannot be in the future";
       } else if (age < 13 || (age === 13 && monthDiff < 0)) {
-        newErrors.date_of_birth = "You must be at least 13 years old to register";
+        newErrors.date_of_birth =
+          "You must be at least 13 years old to register";
       } else if (age > 120) {
         newErrors.date_of_birth = "Please enter a valid date of birth";
       }
@@ -202,7 +211,8 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
     if (!trimmedStreet) {
       newErrors["address.street"] = "Street address is required";
     } else if (trimmedStreet.length < 5) {
-      newErrors["address.street"] = "Street address must be at least 5 characters long";
+      newErrors["address.street"] =
+        "Street address must be at least 5 characters long";
     } else if (trimmedStreet.length > 100) {
       newErrors["address.street"] = "Street address is too long";
     }
@@ -210,30 +220,53 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
     const trimmedCity = formData.address.city.trim();
     if (!trimmedCity) {
       newErrors["address.city"] = "City is required";
-    } else if (!/^[a-zA-ZÀ-ÿĂăÂâÊêÔôƠơƯưĐđàáảãạầấẩẫậằắẳẵặèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ\s\-\.]+$/.test(trimmedCity)) {
-      newErrors["address.city"] = "City can only contain letters, spaces, hyphens, and periods";
+    } else if (
+      !/^[a-zA-ZÀ-ÿĂăÂâÊêÔôƠơƯưĐđàáảãạầấẩẫậằắẳẵặèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ\s\-\.]+$/.test(
+        trimmedCity
+      )
+    ) {
+      newErrors["address.city"] =
+        "City can only contain letters, spaces, hyphens, and periods";
     } else if (trimmedCity.length < 2) {
-      newErrors["address.city"] = "City name must be at least 2 characters long";
+      newErrors["address.city"] =
+        "City name must be at least 2 characters long";
     }
 
     const trimmedCountry = formData.address.country.trim();
     if (!trimmedCountry) {
       newErrors["address.country"] = "Country is required";
-    } else if (!/^[a-zA-ZÀ-ÿĂăÂâÊêÔôƠơƯưĐđàáảãạầấẩẫậằắẳẵặèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ\s\-\.]+$/.test(trimmedCountry)) {
-      newErrors["address.country"] = "Country can only contain letters, spaces, hyphens, and periods";
+    } else if (
+      !/^[a-zA-ZÀ-ÿĂăÂâÊêÔôƠơƯưĐđàáảãạầấẩẫậằắẳẵặèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ\s\-\.]+$/.test(
+        trimmedCountry
+      )
+    ) {
+      newErrors["address.country"] =
+        "Country can only contain letters, spaces, hyphens, and periods";
     } else if (trimmedCountry.length < 2) {
-      newErrors["address.country"] = "Country name must be at least 2 characters long";
+      newErrors["address.country"] =
+        "Country name must be at least 2 characters long";
     }
 
     // Validate state (optional but if provided, should be valid)
     const trimmedState = formData.address.state.trim();
-    if (trimmedState && trimmedState.length > 0 && !/^[a-zA-ZÀ-ÿĂăÂâÊêÔôƠơƯưĐđàáảãạầấẩẫậằắẳẵặèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ\s\-\.]+$/.test(trimmedState)) {
-      newErrors["address.state"] = "State can only contain letters, spaces, hyphens, and periods";
+    if (
+      trimmedState &&
+      trimmedState.length > 0 &&
+      !/^[a-zA-ZÀ-ÿĂăÂâÊêÔôƠơƯưĐđàáảãạầấẩẫậằắẳẵặèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ\s\-\.]+$/.test(
+        trimmedState
+      )
+    ) {
+      newErrors["address.state"] =
+        "State can only contain letters, spaces, hyphens, and periods";
     }
 
     // Validate zip code (optional but if provided, should be valid)
     const trimmedZipCode = formData.address.zipCode.trim();
-    if (trimmedZipCode && trimmedZipCode.length > 0 && !/^[a-zA-Z0-9\s\-]{3,10}$/.test(trimmedZipCode)) {
+    if (
+      trimmedZipCode &&
+      trimmedZipCode.length > 0 &&
+      !/^[a-zA-Z0-9\s\-]{3,10}$/.test(trimmedZipCode)
+    ) {
       newErrors["address.zipCode"] = "Please enter a valid zip code";
     }
 
@@ -245,11 +278,6 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
     e.preventDefault();
 
     const validationResult = validateForm();
-    console.log("Validation result:", validationResult);
-    console.log("Current errors:", errors);
-    console.log("Form data:", formData);
-    console.log("State value:", `"${formData.address.state}"`);
-    console.log("State length:", formData.address.state.length);
 
     if (!validationResult) {
       toast.error("Please fix form errors before submitting");
@@ -296,10 +324,15 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
         basicInfoErrors.name = "Name must be at least 2 characters long";
       } else if (trimmedName.length > 50) {
         basicInfoErrors.name = "Name must be less than 50 characters";
-      } else if (!/^[a-zA-ZÀ-ÿĂăÂâÊêÔôƠơƯưĐđàáảãạầấẩẫậằắẳẵặèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ\s]+$/.test(trimmedName)) {
+      } else if (
+        !/^[a-zA-ZÀ-ÿĂăÂâÊêÔôƠơƯưĐđàáảãạầấẩẫậằắẳẵặèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ\s]+$/.test(
+          trimmedName
+        )
+      ) {
         basicInfoErrors.name = "Name can only contain letters and spaces";
       } else if (/\s{2,}/.test(trimmedName)) {
-        basicInfoErrors.name = "Name cannot contain multiple consecutive spaces";
+        basicInfoErrors.name =
+          "Name cannot contain multiple consecutive spaces";
       }
 
       // Validate email
@@ -310,7 +343,8 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
       } else if (/\s/.test(trimmedEmail)) {
         basicInfoErrors.email = "Email cannot contain spaces";
       } else if (!emailRegex.test(trimmedEmail)) {
-        basicInfoErrors.email = "Please enter a valid email address (e.g., user@example.com)";
+        basicInfoErrors.email =
+          "Please enter a valid email address (e.g., user@example.com)";
       } else if (trimmedEmail.length > 254) {
         basicInfoErrors.email = "Email is too long";
       }
@@ -320,17 +354,23 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
       if (!password) {
         basicInfoErrors.password = "Password is required";
       } else if (password.length < 8) {
-        basicInfoErrors.password = "Password must be at least 8 characters long";
+        basicInfoErrors.password =
+          "Password must be at least 8 characters long";
       } else if (password.length > 128) {
         basicInfoErrors.password = "Password must be less than 128 characters";
       } else if (!/(?=.*[a-z])/.test(password)) {
-        basicInfoErrors.password = "Password must contain at least one lowercase letter";
+        basicInfoErrors.password =
+          "Password must contain at least one lowercase letter";
       } else if (!/(?=.*[A-Z])/.test(password)) {
-        basicInfoErrors.password = "Password must contain at least one uppercase letter";
+        basicInfoErrors.password =
+          "Password must contain at least one uppercase letter";
       } else if (!/(?=.*\d)/.test(password)) {
         basicInfoErrors.password = "Password must contain at least one number";
-      } else if (!/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(password)) {
-        basicInfoErrors.password = "Password must contain at least one special character";
+      } else if (
+        !/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(password)
+      ) {
+        basicInfoErrors.password =
+          "Password must contain at least one special character";
       }
 
       // Validate password confirmation
@@ -383,7 +423,9 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
             <div className="flex items-center">
               <div
                 className={`flex items-center justify-center w-6 h-6 rounded-full text-xs ${
-                  currentStep === 0 ? "bg-red-500 text-white" : "bg-gray-600 text-white"
+                  currentStep === 0
+                    ? "bg-red-500 text-white"
+                    : "bg-gray-600 text-white"
                 }`}
               >
                 1
@@ -394,7 +436,9 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
             <div className="flex items-center">
               <div
                 className={`flex items-center justify-center w-6 h-6 rounded-full text-xs ${
-                  currentStep === 1 ? "bg-red-500 text-white" : "bg-gray-600 text-white"
+                  currentStep === 1
+                    ? "bg-red-500 text-white"
+                    : "bg-gray-600 text-white"
                 }`}
               >
                 2
@@ -478,7 +522,9 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                     } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-gray-700 text-white`}
                   />
                   {errors.password && (
-                    <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.password}
+                    </p>
                   )}
                 </div>
 
@@ -498,11 +544,15 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                     onChange={handleChange}
                     placeholder="Confirm your password"
                     className={`w-full px-4 py-2 border ${
-                      errors.confirm_password ? "border-red-500" : "border-gray-600"
+                      errors.confirm_password
+                        ? "border-red-500"
+                        : "border-gray-600"
                     } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-gray-700 text-white`}
                   />
                   {errors.confirm_password && (
-                    <p className="mt-1 text-sm text-red-500">{errors.confirm_password}</p>
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.confirm_password}
+                    </p>
                   )}
                 </div>
 
@@ -534,11 +584,15 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                     value={formData.date_of_birth}
                     onChange={handleChange}
                     className={`w-full px-4 py-2 border ${
-                      errors.date_of_birth ? "border-red-500" : "border-gray-600"
+                      errors.date_of_birth
+                        ? "border-red-500"
+                        : "border-gray-600"
                     } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-gray-700 text-white`}
                   />
                   {errors.date_of_birth && (
-                    <p className="mt-1 text-sm text-red-500">{errors.date_of_birth}</p>
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors.date_of_birth}
+                    </p>
                   )}
                 </div>
 
@@ -583,11 +637,15 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                     onChange={handleChange}
                     placeholder="Enter your street address"
                     className={`w-full px-4 py-2 border ${
-                      errors["address.street"] ? "border-red-500" : "border-gray-600"
+                      errors["address.street"]
+                        ? "border-red-500"
+                        : "border-gray-600"
                     } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-gray-700 text-white`}
                   />
                   {errors["address.street"] && (
-                    <p className="mt-1 text-sm text-red-500">{errors["address.street"]}</p>
+                    <p className="mt-1 text-sm text-red-500">
+                      {errors["address.street"]}
+                    </p>
                   )}
                 </div>
 
@@ -608,11 +666,15 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                       onChange={handleChange}
                       placeholder="City"
                       className={`w-full px-4 py-2 border ${
-                        errors["address.city"] ? "border-red-500" : "border-gray-600"
+                        errors["address.city"]
+                          ? "border-red-500"
+                          : "border-gray-600"
                       } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-gray-700 text-white`}
                     />
                     {errors["address.city"] && (
-                      <p className="mt-1 text-sm text-red-500">{errors["address.city"]}</p>
+                      <p className="mt-1 text-sm text-red-500">
+                        {errors["address.city"]}
+                      </p>
                     )}
                   </div>
                   <div>
@@ -631,11 +693,15 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                       onBlur={handleBlur}
                       placeholder="State"
                       className={`w-full px-4 py-2 border ${
-                        errors["address.state"] ? "border-red-500" : "border-gray-600"
+                        errors["address.state"]
+                          ? "border-red-500"
+                          : "border-gray-600"
                       } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-gray-700 text-white`}
                     />
                     {errors["address.state"] && (
-                      <p className="mt-1 text-sm text-red-500">{errors["address.state"]}</p>
+                      <p className="mt-1 text-sm text-red-500">
+                        {errors["address.state"]}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -657,11 +723,15 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                       onChange={handleChange}
                       placeholder="Country"
                       className={`w-full px-4 py-2 border ${
-                        errors["address.country"] ? "border-red-500" : "border-gray-600"
+                        errors["address.country"]
+                          ? "border-red-500"
+                          : "border-gray-600"
                       } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-gray-700 text-white`}
                     />
                     {errors["address.country"] && (
-                      <p className="mt-1 text-sm text-red-500">{errors["address.country"]}</p>
+                      <p className="mt-1 text-sm text-red-500">
+                        {errors["address.country"]}
+                      </p>
                     )}
                   </div>
                   <div>
@@ -680,11 +750,15 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                       onBlur={handleBlur}
                       placeholder="Zip code"
                       className={`w-full px-4 py-2 border ${
-                        errors["address.zipCode"] ? "border-red-500" : "border-gray-600"
+                        errors["address.zipCode"]
+                          ? "border-red-500"
+                          : "border-gray-600"
                       } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-gray-700 text-white`}
                     />
                     {errors["address.zipCode"] && (
-                      <p className="mt-1 text-sm text-red-500">{errors["address.zipCode"]}</p>
+                      <p className="mt-1 text-sm text-red-500">
+                        {errors["address.zipCode"]}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -713,7 +787,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
 
             <p className="text-center text-sm text-gray-300">
               Already have an account?{" "}
-              <span 
+              <span
                 className="cursor-pointer text-red-400 hover:text-red-300 hover:underline transition"
                 onClick={onSwitchToLogin}
               >

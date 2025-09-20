@@ -6,7 +6,6 @@ import {
   Building2,
   RefreshCw,
   ArrowLeft,
-  AlertCircle,
   Clock,
   CheckCircle,
   Timer,
@@ -72,39 +71,6 @@ const SepayInstructions: React.FC = () => {
 
   const transferContent = booking?.ticket_code || "";
   const amount = booking?.total_amount || 0;
-
-  // Debug: Log booking data to understand the issue
-  useEffect(() => {
-    if (booking) {
-      console.log("Sepay Booking Data:", {
-        total_amount: booking.total_amount,
-        coupon_code: booking.coupon_code,
-        coupon_discount: booking.coupon_discount,
-        seats: booking.seats,
-        full_booking: booking,
-      });
-    }
-  }, [booking]);
-
-  if (!bookingId || !booking) {
-    return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <div className="text-center">
-          <AlertCircle className="h-16 w-16 text-red-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-2">
-            Wait for process QR code
-          </h2>
-
-          <button
-            onClick={() => navigate("/my-bookings")}
-            className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-          >
-            Go to My Bookings
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   if (isPaymentCompleted) {
     return (
@@ -177,20 +143,20 @@ const SepayInstructions: React.FC = () => {
               </h3>
 
               <div className="space-y-3">
-                {booking.movie?.poster_url && (
+                {booking?.movie?.poster_url && (
                   <img
-                    src={booking.movie.poster_url}
-                    alt={booking.movie.title}
+                    src={booking?.movie.poster_url}
+                    alt={booking?.movie.title}
                     className="w-full h-[530px] object-cover rounded-lg"
                   />
                 )}
 
                 <div>
                   <h4 className="font-semibold text-white">
-                    {booking.movie?.title}
+                    {booking?.movie?.title}
                   </h4>
                   <p className="text-gray-300 text-sm">
-                    {booking.theater?.name}
+                    {booking?.theater?.name}
                   </p>
                 </div>
 
@@ -198,13 +164,13 @@ const SepayInstructions: React.FC = () => {
                   <p className="text-gray-400">
                     Ticket Code:{" "}
                     <span className="text-white font-mono">
-                      {booking.ticket_code}
+                      {booking?.ticket_code}
                     </span>
                   </p>
                   <p className="text-gray-400">
                     Seats:{" "}
                     <span className="text-white">
-                      {booking.seats
+                      {booking?.seats
                         ?.map((s: any) => `${s.row}${s.number}`)
                         .join(", ")}
                     </span>
@@ -213,20 +179,20 @@ const SepayInstructions: React.FC = () => {
 
                 <div className="border-t border-white/20 pt-3">
                   {/* Coupon Discount Display */}
-                  {booking.coupon_code && booking.coupon_discount && (
+                  {booking?.coupon_code && booking?.coupon_discount && (
                     <>
                       <div className="flex justify-between text-gray-300 text-sm mb-2">
                         <span>Original Amount</span>
                         <span>
                           {formatCurrency(
-                            booking.original_amount ||
-                              booking.total_amount + booking.coupon_discount
+                            booking?.original_amount ||
+                              booking?.total_amount + booking?.coupon_discount
                           )}
                         </span>
                       </div>
                       <div className="flex justify-between text-green-400 text-sm mb-2">
-                        <span>Coupon Discount ({booking.coupon_code})</span>
-                        <span>-{formatCurrency(booking.coupon_discount)}</span>
+                        <span>Coupon Discount ({booking?.coupon_code})</span>
+                        <span>-{formatCurrency(booking?.coupon_discount)}</span>
                       </div>
                       <div className="border-t border-white/10 pt-2">
                         <div className="flex justify-between text-white font-semibold">
@@ -238,7 +204,7 @@ const SepayInstructions: React.FC = () => {
                   )}
 
                   {/* No coupon - just show total */}
-                  {!booking.coupon_code && (
+                  {!booking?.coupon_code && (
                     <div className="flex justify-between text-white font-semibold">
                       <span>Total</span>
                       <span>{formatCurrency(amount)}</span>

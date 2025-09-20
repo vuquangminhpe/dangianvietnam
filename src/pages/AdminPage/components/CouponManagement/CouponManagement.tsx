@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   getAllCoupons,
   getCouponById,
@@ -8,21 +8,21 @@ import {
   updateCoupon,
   deleteCoupon,
   // bulkUpdateCouponStatus // TODO: Enable when server API is implemented
-} from '../../../../apis/coupon.api';
+} from "../../../../apis/coupon.api";
 import type {
   CouponsQueryParams,
   CreateCouponRequest,
-  UpdateCouponRequest
-} from '../../../../types/Coupon.type';
+  UpdateCouponRequest,
+} from "../../../../types/Coupon.type";
 
-import { CouponFilters } from './CouponFilters';
-import { CouponTable } from './CouponTable';
-import { 
-  CouponDetailModal, 
-  CreateCouponModal, 
-  EditCouponModal, 
-  DeleteConfirmModal 
-} from './CouponModals';
+import { CouponFilters } from "./CouponFilters";
+import { CouponTable } from "./CouponTable";
+import {
+  CouponDetailModal,
+  CreateCouponModal,
+  EditCouponModal,
+  DeleteConfirmModal,
+} from "./CouponModals";
 
 export const CouponManagement = () => {
   // Coupon Management States
@@ -31,12 +31,12 @@ export const CouponManagement = () => {
   const [totalCoupons, setTotalCoupons] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [limit] = useState(10);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('');
-  const [sortBy, setSortBy] = useState<string>('created_at');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("created_at");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [activeOnly, setActiveOnly] = useState<boolean>(false);
-  
+
   // Modal states
   const [selectedCoupon, setSelectedCoupon] = useState<any | null>(null);
   const [showCouponModal, setShowCouponModal] = useState(false);
@@ -57,32 +57,31 @@ export const CouponManagement = () => {
         page: currentPage,
         limit,
         search: searchTerm || undefined,
-        status: statusFilter as any || undefined,
+        status: (statusFilter as any) || undefined,
         sort_by: sortBy,
         sort_order: sortOrder,
-        active_only: activeOnly
+        active_only: activeOnly,
       };
-      
+
       const response = await getAllCoupons(params);
-      console.log('Coupons API Response:', response);
-      
+
       if (response?.result?.coupons) {
         setCoupons(response.result.coupons);
         setTotalCoupons(response.result.total);
       } else {
-        console.warn('Unexpected response structure:', response);
+        console.warn("Unexpected response structure:", response);
         setCoupons([]);
         setTotalCoupons(0);
       }
     } catch (error) {
-      console.error('Failed to fetch coupons:', error);
+      console.error("Failed to fetch coupons:", error);
       setCoupons([]);
       setTotalCoupons(0);
-      
+
       if (error instanceof Error) {
         toast.error(`Failed to load coupons: ${error.message}`);
       } else {
-        toast.error('Failed to load coupons');
+        toast.error("Failed to load coupons");
       }
     } finally {
       setCouponsLoading(false);
@@ -95,23 +94,23 @@ export const CouponManagement = () => {
       setSelectedCoupon(couponDetails.result);
       setShowCouponModal(true);
     } catch (error) {
-      console.error('Failed to fetch coupon details:', error);
-      toast.error('Failed to load coupon details');
+      console.error("Failed to fetch coupon details:", error);
+      toast.error("Failed to load coupon details");
     }
   };
 
   const handleCreateCoupon = async (couponData: CreateCouponRequest) => {
     try {
       await createCoupon(couponData);
-      toast.success('Coupon created successfully');
+      toast.success("Coupon created successfully");
       setShowCreateModal(false);
       fetchCoupons();
     } catch (error) {
-      console.error('Failed to create coupon:', error);
+      console.error("Failed to create coupon:", error);
       if (error instanceof Error) {
         toast.error(`Failed to create coupon: ${error.message}`);
       } else {
-        toast.error('Failed to create coupon');
+        toast.error("Failed to create coupon");
       }
     }
   };
@@ -121,18 +120,21 @@ export const CouponManagement = () => {
     setShowEditModal(true);
   };
 
-  const handleUpdateCoupon = async (couponId: string, couponData: UpdateCouponRequest) => {
+  const handleUpdateCoupon = async (
+    couponId: string,
+    couponData: UpdateCouponRequest
+  ) => {
     try {
       await updateCoupon(couponId, couponData);
-      toast.success('Coupon updated successfully');
+      toast.success("Coupon updated successfully");
       setShowEditModal(false);
       fetchCoupons();
     } catch (error) {
-      console.error('Failed to update coupon:', error);
+      console.error("Failed to update coupon:", error);
       if (error instanceof Error) {
         toast.error(`Failed to update coupon: ${error.message}`);
       } else {
-        toast.error('Failed to update coupon');
+        toast.error("Failed to update coupon");
       }
     }
   };
@@ -147,50 +149,49 @@ export const CouponManagement = () => {
 
     try {
       await deleteCoupon(couponToDelete._id);
-      toast.success('Coupon deleted successfully');
+      toast.success("Coupon deleted successfully");
       setShowDeleteModal(false);
       setCouponToDelete(null);
       fetchCoupons();
     } catch (error) {
-      console.error('Failed to delete coupon:', error);
+      console.error("Failed to delete coupon:", error);
       if (error instanceof Error) {
         toast.error(`Failed to delete coupon: ${error.message}`);
       } else {
-        toast.error('Failed to delete coupon');
+        toast.error("Failed to delete coupon");
       }
     }
   };
 
   // Bulk operations
-  const handleBulkStatusUpdate = async (status: 'active' | 'inactive') => {
+  const handleBulkStatusUpdate = async (status: "active" | "inactive") => {
     if (selectedCoupons.length === 0) {
-      toast.warning('Please select coupons to update');
+      toast.warning("Please select coupons to update");
       return;
     }
 
     try {
       setBulkLoading(true);
-      console.log('Selected coupon IDs:', selectedCoupons);
-      
+
       // Temporary solution: Update each coupon individually
       // TODO: Implement proper bulk update API on server
       const updatePromises = selectedCoupons.map(async (couponId) => {
-        const coupon = coupons.find(c => c._id === couponId);
+        const coupon = coupons.find((c) => c._id === couponId);
         if (coupon) {
           return await updateCoupon(couponId, { ...coupon, status });
         }
       });
-      
+
       await Promise.all(updatePromises);
       toast.success(`${selectedCoupons.length} coupons updated successfully`);
       setSelectedCoupons([]);
       fetchCoupons();
     } catch (error) {
-      console.error('Failed to bulk update coupons:', error);
+      console.error("Failed to bulk update coupons:", error);
       if (error instanceof Error) {
         toast.error(`Failed to update coupons: ${error.message}`);
       } else {
-        toast.error('Failed to update coupons');
+        toast.error("Failed to update coupons");
       }
     } finally {
       setBulkLoading(false);
@@ -198,9 +199,9 @@ export const CouponManagement = () => {
   };
 
   const handleSelectCoupon = (couponId: string) => {
-    setSelectedCoupons(prev => 
-      prev.includes(couponId) 
-        ? prev.filter(id => id !== couponId)
+    setSelectedCoupons((prev) =>
+      prev.includes(couponId)
+        ? prev.filter((id) => id !== couponId)
         : [...prev, couponId]
     );
   };
@@ -209,7 +210,7 @@ export const CouponManagement = () => {
     if (selectedCoupons.length === coupons.length) {
       setSelectedCoupons([]);
     } else {
-      setSelectedCoupons(coupons.map(coupon => coupon._id));
+      setSelectedCoupons(coupons.map((coupon) => coupon._id));
     }
   };
 
@@ -235,7 +236,7 @@ export const CouponManagement = () => {
             Manage discount coupons and promotional codes
           </p>
         </div>
-        
+
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -259,8 +260,8 @@ export const CouponManagement = () => {
         activeOnly={activeOnly}
         onActiveOnlyChange={setActiveOnly}
         selectedCount={selectedCoupons.length}
-        onBulkActivate={() => handleBulkStatusUpdate('active')}
-        onBulkDeactivate={() => handleBulkStatusUpdate('inactive')}
+        onBulkActivate={() => handleBulkStatusUpdate("active")}
+        onBulkDeactivate={() => handleBulkStatusUpdate("inactive")}
         bulkLoading={bulkLoading}
       />
 
@@ -309,7 +310,9 @@ export const CouponManagement = () => {
               setShowEditModal(false);
               setSelectedCoupon(null);
             }}
-            onSubmit={(data: UpdateCouponRequest) => handleUpdateCoupon(selectedCoupon._id, data)}
+            onSubmit={(data: UpdateCouponRequest) =>
+              handleUpdateCoupon(selectedCoupon._id, data)
+            }
           />
         )}
 

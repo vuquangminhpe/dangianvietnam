@@ -15,10 +15,6 @@ export const useCreateBooking = () => {
   return useMutation({
     mutationFn: (data: CreateBookingRequest) => bookingApi.createBooking(data),
     onSuccess: () => {
-      toast.success(
-        "Booking created successfully! Please complete payment within 5 minutes."
-      );
-      // Invalidate and refetch booking queries
       queryClient.invalidateQueries({ queryKey: ["bookings"] });
       queryClient.invalidateQueries({ queryKey: ["my-bookings"] });
     },

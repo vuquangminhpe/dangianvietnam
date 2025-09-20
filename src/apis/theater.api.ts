@@ -17,13 +17,14 @@ const theaterApi = axios.create({
 });
 
 // Lấy danh sách rạp
-export const getTheaters = async (limit = 100): Promise<GetTheatersResponse> => {
+export const getTheaters = async (
+  limit = 100
+): Promise<GetTheatersResponse> => {
   const res = await theaterApi.get<GetTheatersResponse>(API_URL, {
     params: { limit },
   });
   return res.data;
 };
-
 
 // Lấy thông tin rạp theo ID
 export const getTheaterById = async (

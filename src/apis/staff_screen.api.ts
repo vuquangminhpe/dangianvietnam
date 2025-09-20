@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { getAuthToken } from './user.api';
+import axios from "axios";
+import { getAuthToken } from "./user.api";
 
-const BASE_URL = 'https://bookmovie-5n6n.onrender.com';
+const BASE_URL = "https://bookmovie-5n6n.onrender.com";
 
 // Create authenticated axios instance for staff screen requests
 const createStaffScreenRequest = () => {
@@ -10,8 +10,8 @@ const createStaffScreenRequest = () => {
     baseURL: BASE_URL,
     headers: {
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   });
 };
 
@@ -21,44 +21,46 @@ const handleStaffScreenError = (error: unknown): Error => {
     const status = error.response?.status;
     const message = error.response?.data?.message;
     const errors = error.response?.data?.errors;
-    
+
     if (status === 401) {
-      throw new Error('Unauthorized. Please login as staff.');
+      throw new Error("Unauthorized. Please login as staff.");
     } else if (status === 403) {
-      throw new Error('Access denied. Staff privileges required.');
+      throw new Error("Access denied. Staff privileges required.");
     } else if (status === 404) {
-      throw new Error(message || 'Screen not found.');
+      throw new Error(message || "Screen not found.");
     } else if (status === 400) {
       // Handle validation errors specifically
-      if (errors && typeof errors === 'object') {
-        const errorMessages = Object.entries(errors).map(([field, error]: [string, any]) => {
-          return `${field}: ${error.msg || error.message || 'Invalid value'}`;
-        });
-        throw new Error(errorMessages.join(', '));
+      if (errors && typeof errors === "object") {
+        const errorMessages = Object.entries(errors).map(
+          ([field, error]: [string, any]) => {
+            return `${field}: ${error.msg || error.message || "Invalid value"}`;
+          }
+        );
+        throw new Error(errorMessages.join(", "));
       }
-      throw new Error(message || 'Invalid request data.');
+      throw new Error(message || "Invalid request data.");
     } else if (status === 500) {
-      throw new Error('Server error. Please try again later.');
+      throw new Error("Server error. Please try again later.");
     } else {
-      throw new Error(message || 'Request failed.');
+      throw new Error(message || "Request failed.");
     }
   }
-  throw new Error('Network error. Please check your connection.');
+  throw new Error("Network error. Please check your connection.");
 };
 
 // Screen Types
 export interface Seat {
   row: string;
   number: number;
-  type: 'regular' | 'premium' | 'vip';
-  status: 'active' | 'inactive' | 'maintenance';
+  type: "regular" | "premium" | "vip";
+  status: "active" | "inactive" | "maintenance";
 }
 
 export interface ScreenCreateRequest {
   name: string;
   seat_layout: Seat[][];
   capacity: number;
-  screen_type: 'standard' | 'premium' | 'imax' | 'dolby';
+  screen_type: "standard" | "premium" | "imax" | "dolby";
 }
 
 export interface ScreenUpdateRequest extends ScreenCreateRequest {}
@@ -69,8 +71,8 @@ export interface Screen {
   name: string;
   seat_layout: Seat[][];
   capacity: number;
-  screen_type: 'standard' | 'premium' | 'imax' | 'dolby';
-  status: 'active' | 'inactive' | 'maintenance';
+  screen_type: "standard" | "premium" | "imax" | "dolby";
+  status: "active" | "inactive" | "maintenance";
   created_at: string;
   updated_at: string;
   theater?: {
@@ -139,7 +141,7 @@ export interface TheaterResponse {
     pincode: string;
     screens: number;
     amenities: string[];
-    status: 'active' | 'inactive';
+    status: "active" | "inactive";
     manager_id: string;
     contact_phone: string;
     contact_email: string;
@@ -158,7 +160,7 @@ export interface TheaterResponse {
 export const getMyTheater = async (): Promise<TheaterResponse> => {
   try {
     const staffApi = createStaffScreenRequest();
-    const response = await staffApi.get('/staff/theater/mine');
+    const response = await staffApi.get("/staff/theater/mine");
     return response.data;
   } catch (error) {
     throw handleStaffScreenError(error);
@@ -179,7 +181,7 @@ export const getTheaterScreens = async (
   try {
     const staffApi = createStaffScreenRequest();
     const response = await staffApi.get(`/staff/theater/${theaterId}/screens`, {
-      params: { page, limit }
+      params: { page, limit },
     });
     return response.data;
   } catch (error) {
@@ -198,7 +200,10 @@ export const createScreen = async (
 ): Promise<ScreenCreateResponse> => {
   try {
     const staffApi = createStaffScreenRequest();
-    const response = await staffApi.post(`/staff/theater/${theaterId}/screens`, screenData);
+    const response = await staffApi.post(
+      `/staff/theater/${theaterId}/screens`,
+      screenData
+    );
     return response.data;
   } catch (error) {
     throw handleStaffScreenError(error);
@@ -209,7 +214,9 @@ export const createScreen = async (
  * Get screen details by screen ID
  * @param screenId - The screen ID
  */
-export const getScreenById = async (screenId: string): Promise<ScreenResponse> => {
+export const getScreenById = async (
+  screenId: string
+): Promise<ScreenResponse> => {
   try {
     const staffApi = createStaffScreenRequest();
     const response = await staffApi.get(`/staff/screens/${screenId}`);
@@ -230,7 +237,10 @@ export const updateScreen = async (
 ): Promise<ScreenUpdateResponse> => {
   try {
     const staffApi = createStaffScreenRequest();
-    const response = await staffApi.put(`/staff/screens/${screenId}`, screenData);
+    const response = await staffApi.put(
+      `/staff/screens/${screenId}`,
+      screenData
+    );
     return response.data;
   } catch (error) {
     throw handleStaffScreenError(error);
@@ -241,7 +251,9 @@ export const updateScreen = async (
  * Delete a screen
  * @param screenId - The screen ID
  */
-export const deleteScreen = async (screenId: string): Promise<ScreenDeleteResponse> => {
+export const deleteScreen = async (
+  screenId: string
+): Promise<ScreenDeleteResponse> => {
   try {
     const staffApi = createStaffScreenRequest();
     const response = await staffApi.delete(`/staff/screens/${screenId}`);
@@ -266,7 +278,10 @@ export const calculateTotalSeats = (seatLayout: Seat[][]): number => {
  * @param seatLayout - 2D array of seats
  * @param capacity - Declared capacity
  */
-export const validateSeatLayoutCapacity = (seatLayout: Seat[][], capacity: number): boolean => {
+export const validateSeatLayoutCapacity = (
+  seatLayout: Seat[][],
+  capacity: number
+): boolean => {
   const totalSeats = calculateTotalSeats(seatLayout);
   return totalSeats === capacity;
 };
@@ -280,27 +295,27 @@ export const validateSeatLayoutCapacity = (seatLayout: Seat[][], capacity: numbe
 export const generateSeatLayout = (
   rows: number,
   seatsPerRow: number,
-  seatType: 'regular' | 'premium' | 'vip' = 'regular'
+  seatType: "regular" | "premium" | "vip" = "regular"
 ): Seat[][] => {
   const seatLayout: Seat[][] = [];
-  const rowLabels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  
+  const rowLabels = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
   for (let i = 0; i < rows; i++) {
     const row: Seat[] = [];
     const rowLabel = rowLabels[i] || `Row${i + 1}`;
-    
+
     for (let j = 0; j < seatsPerRow; j++) {
       row.push({
         row: rowLabel,
         number: j + 1,
         type: seatType,
-        status: 'active'
+        status: "active",
       });
     }
-    
+
     seatLayout.push(row);
   }
-  
+
   return seatLayout;
 };
 
@@ -310,14 +325,14 @@ export const generateSeatLayout = (
  */
 export const getScreenTypeDisplay = (screenType: string): string => {
   switch (screenType) {
-    case 'standard':
-      return 'Standard';
-    case 'premium':
-      return 'Premium';
-    case 'imax':
-      return 'IMAX';
-    case 'dolby':
-      return 'Dolby Atmos';
+    case "standard":
+      return "Standard";
+    case "premium":
+      return "Premium";
+    case "imax":
+      return "IMAX";
+    case "dolby":
+      return "Dolby Atmos";
     default:
       return screenType;
   }
@@ -329,12 +344,12 @@ export const getScreenTypeDisplay = (screenType: string): string => {
  */
 export const getSeatTypeDisplay = (seatType: string): string => {
   switch (seatType) {
-    case 'regular':
-      return 'Regular';
-    case 'premium':
-      return 'Premium';
-    case 'vip':
-      return 'VIP';
+    case "regular":
+      return "Regular";
+    case "premium":
+      return "Premium";
+    case "vip":
+      return "VIP";
     default:
       return seatType;
   }
@@ -346,14 +361,14 @@ export const getSeatTypeDisplay = (seatType: string): string => {
  */
 export const getScreenStatusColor = (status: string): string => {
   switch (status) {
-    case 'active':
-      return 'text-green-400 bg-green-500/20';
-    case 'inactive':
-      return 'text-red-400 bg-red-500/20';
-    case 'maintenance':
-      return 'text-yellow-400 bg-yellow-500/20';
+    case "active":
+      return "text-green-400 bg-green-500/20";
+    case "inactive":
+      return "text-red-400 bg-red-500/20";
+    case "maintenance":
+      return "text-yellow-400 bg-yellow-500/20";
     default:
-      return 'text-slate-400 bg-slate-500/20';
+      return "text-slate-400 bg-slate-500/20";
   }
 };
 
@@ -369,5 +384,5 @@ export default {
   generateSeatLayout,
   getScreenTypeDisplay,
   getSeatTypeDisplay,
-  getScreenStatusColor
+  getScreenStatusColor,
 };

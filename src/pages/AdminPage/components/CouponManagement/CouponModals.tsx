@@ -66,11 +66,9 @@ const SelectionModal = ({ isOpen, onClose, type, selectedIds, onSelectionChange 
     try {
       if (type === 'users') {
         const response = await getAllUsers({ limit: 100 });
-        console.log('Users response:', response.result.users);
         setItems(response.result.users);
       } else {
         const response = await getAllMovies({ limit: 100 });
-        console.log('Movies response:', response.result.movies);
         setItems(response.result.movies);
       }
     } catch (error) {

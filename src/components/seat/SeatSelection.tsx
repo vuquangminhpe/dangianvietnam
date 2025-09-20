@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import type { Seat } from "../../types/Screen.type";
@@ -51,6 +51,7 @@ export default function SeatSelection({
   const [countdowns, setCountdowns] = useState<Record<string, number>>({});
   const [isRefetching, setIsRefetching] = useState(false);
   const [hasInitialized, setHasInitialized] = useState(false);
+  const [isLoadingInitialData, setIsLoadingInitialData] = useState(false);
 
   // Coupon states
   const [availableCoupons, setAvailableCoupons] = useState<Coupon[]>([]);
@@ -231,9 +232,11 @@ export default function SeatSelection({
   // Remove automatic localStorage updates to avoid infinite loops
   // Updates will be handled manually in toggleSeat function
 
-  // Fetch seat data function
+  // Fetch seat data function with ref to avoid useEffect dependency issues
+  const fetchSeatDataRef = useRef<(() => Promise<void>) | null>(null);
+
   const fetchSeatData = useCallback(async () => {
-    if (!seatData || !seatData.showtimeId) return;
+    if (!seatData || !seatData.showtimeId || isRefetching) return;
 
     const showtimeId = seatData.showtimeId;
     if (showtimeId) {
@@ -296,20 +299,34 @@ export default function SeatSelection({
         setIsRefetching(false);
       }
     }
-  }, [seatData, user]);
+  }, [seatData, user, isRefetching]);
+
+  // Update ref when function changes
+  useEffect(() => {
+    fetchSeatDataRef.current = fetchSeatData;
+  }, [fetchSeatData]);
 
   // Reset initialization flag when showtimeId changes
   useEffect(() => {
     setHasInitialized(false);
   }, [seatData?.showtimeId]);
 
-  // Lấy giá tiền và ghế đã đặt từ showtimeId
+  // Load initial data only once when showtimeId is available
   useEffect(() => {
-    if (seatData && !isExpired && seatData.showtimeId && !hasInitialized) {
-      fetchSeatData();
-      setHasInitialized(true);
+    if (
+      seatData &&
+      !isExpired &&
+      seatData.showtimeId &&
+      !hasInitialized &&
+      !isLoadingInitialData
+    ) {
+      setIsLoadingInitialData(true);
+      fetchSeatDataRef.current?.().finally(() => {
+        setHasInitialized(true);
+        setIsLoadingInitialData(false);
+      });
     }
-  }, [seatData?.showtimeId, isExpired, hasInitialized, fetchSeatData]); // Only run once when showtimeId is available
+  }, [seatData?.showtimeId, isExpired, hasInitialized, isLoadingInitialData]);
 
   const toggleSeat = (seat: Seat) => {
     const key = `${seat.row}${seat.number}`;
@@ -695,8 +712,10 @@ export default function SeatSelection({
           <div className="flex  gap-3 min-w-[300px]">
             <motion.button
               onClick={() => {
-                setHasInitialized(false);
-                fetchSeatData();
+                if (!isRefetching) {
+                  setHasInitialized(false);
+                  fetchSeatData();
+                }
               }}
               disabled={isRefetching}
               whileHover={{ scale: isRefetching ? 1 : 1.02 }}
