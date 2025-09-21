@@ -589,7 +589,6 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
         {!loading && !error && carouselItems.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center bg-black z-[100]">
             <div className="text-center">
-              <div className="text-slate-400 text-6xl mb-4">📷</div>
               <div className="text-slate-400 text-xl mb-2">
                 No Banners Available
               </div>
@@ -622,12 +621,12 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
                   <div className="content absolute top-[20%] left-1/2 transform -translate-x-1/2 w-full max-w-6xl px-8 text-white">
                     <div className="max-w-[60%] pr-[30%]">
                       <div className="author font-bold tracking-[10px] text-sm mb-4 text-white/90 drop-shadow-md">
-                        {item.author}
+                        {item?.author}
                       </div>
-                      <h1 className="title text-4xl md:text-6xl lg:text-8xl font-bold leading-tight mb-2 drop-shadow-2xl">
+                      <h1 className="title text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-2 drop-shadow-2xl">
                         {item.title}
                       </h1>
-                      <h2 className="topic text-4xl md:text-6xl lg:text-8xl font-bold leading-tight mb-6 text-orange-500 drop-shadow-2xl">
+                      <h2 className="topic text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-orange-500 drop-shadow-2xl">
                         {item.topic}
                       </h2>
                       <p className="des text-base lg:text-lg mb-8 leading-relaxed text-white/90 drop-shadow-lg">
