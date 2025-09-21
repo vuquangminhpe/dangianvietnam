@@ -183,7 +183,6 @@ export const CreateBannerSliderHomeModal: React.FC<{
               onChange={(e) => handleChange("author", e.target.value)}
               placeholder="Author name"
               className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
-              required
             />
           </FormField>
 
