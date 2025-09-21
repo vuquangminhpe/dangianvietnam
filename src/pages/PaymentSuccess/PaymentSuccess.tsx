@@ -19,7 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import bookingApi from "../../apis/booking.api";
 import { formatCurrency, formatDateTime } from "../../utils/format";
-import QRSection from "../../components/QR/QRSection";
+import QRCode from "react-qr-code";
 
 const PaymentSuccess: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -36,26 +36,72 @@ const PaymentSuccess: React.FC = () => {
   const bookingData = bookingDatas?.data?.result;
 
   const handleDownloadTicket = () => {
-    const ticketInfo = `
-CINEMA TICKET 🎬
-━━━━━━━━━━━━━━━━━━━━━━━━
-${bookingData?.movie?.title}
-${formatDateTime(bookingData?.showtime?.start_time as any)}
-${bookingData?.theater?.name}
-Ghế: ${bookingData?.seats?.map((s: any) => `${s.row}${s.number}`).join(", ")}
-Mã vé: ${bookingData?.ticket_code}
-Tổng tiền: ${formatCurrency(bookingData?.total_amount as any)}
-━━━━━━━━━━━━━━━━━━━━━━━━
-Vui lòng đến rạp trước 15 phút!
-    `;
+    const svg = document.querySelector("#payment-qr svg") as SVGElement;
+    if (svg && bookingData) {
+      // Create canvas for QR code
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = new Image();
 
-    const element = document.createElement("a");
-    const file = new Blob([ticketInfo], { type: "text/plain" });
-    element.href = URL.createObjectURL(file);
-    element.download = `ticket-${bookingData?.ticket_code}.txt`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+      canvas.width = 800;
+      canvas.height = 600;
+
+      img.onload = () => {
+        if (ctx) {
+          // White background
+          ctx.fillStyle = "white";
+          ctx.fillRect(0, 0, 800, 600);
+
+          // Title
+          ctx.fillStyle = "#000000";
+          ctx.font = "bold 24px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("CINEMA TICKET", 400, 40);
+
+          // Line
+          ctx.strokeStyle = "#000000";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(50, 60);
+          ctx.lineTo(750, 60);
+          ctx.stroke();
+
+          // Movie info
+          ctx.font = "18px Arial";
+          ctx.textAlign = "left";
+          ctx.fillText(`Phim: ${bookingData.movie?.title}`, 50, 100);
+          ctx.fillText(`Rạp: ${bookingData.theater?.name}`, 50, 130);
+          ctx.fillText(`Suất: ${formatDateTime(bookingData.showtime?.start_time as any)}`, 50, 160);
+          ctx.fillText(`Ghế: ${bookingData.seats?.map((s: any) => `${s.row}${s.number}`).join(", ")}`, 50, 190);
+          ctx.fillText(`Mã vé: ${bookingData.ticket_code}`, 50, 220);
+          ctx.fillText(`Tổng tiền: ${formatCurrency(bookingData.total_amount as any)}`, 50, 250);
+
+          // QR Code
+          ctx.drawImage(img, 300, 300, 200, 200);
+
+          // QR Code label
+          ctx.font = "14px Arial";
+          ctx.textAlign = "center";
+          ctx.fillText("Quét QR code để vào rạp", 400, 530);
+
+          // Footer
+          ctx.font = "12px Arial";
+          ctx.fillText("Vui lòng đến rạp trước 15 phút!", 400, 570);
+        }
+
+        // Download
+        const url = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `ticket-${bookingData.ticket_code}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
+
+      const svgData = new XMLSerializer().serializeToString(svg);
+      img.src = "data:image/svg+xml;base64," + btoa(svgData);
+    }
   };
 
   const handleCopyTicketCode = async () => {
@@ -109,7 +155,7 @@ Vui lòng đến rạp trước 15 phút!
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8">
+    <div className="min-h-screen  bg-gray-950 py-8">
       {/* Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-green-500/10 rounded-full blur-3xl" />
@@ -271,10 +317,33 @@ Vui lòng đến rạp trước 15 phút!
                 </div>
               </div>
 
-              <QRSection
-                content={bookingData?.ticket_code}
-                amount={bookingData?.total_amount}
-              />
+              {/* Simple QR Code Section */}
+              <div className="mt-6 pt-6 border-t border-white/20">
+                <div className="text-center">
+                  <h4 className="text-lg font-semibold text-white mb-4 flex items-center justify-center gap-2">
+                    <Ticket className="h-5 w-5 text-green-400" />
+                    QR Code vé xem phim
+                  </h4>
+
+                  <div className="bg-white p-4 rounded-lg inline-block" id="payment-qr">
+                    <QRCode
+                      value={bookingData?.ticket_code || ""}
+                      size={160}
+                      level="M"
+                      bgColor="#FFFFFF"
+                      fgColor="#000000"
+                    />
+                  </div>
+
+                  <p className="text-gray-300 text-sm mt-3 font-mono">
+                    {bookingData?.ticket_code}
+                  </p>
+
+                  <p className="text-gray-400 text-xs mt-2">
+                    Đưa QR code này cho nhân viên rạp để vào xem phim
+                  </p>
+                </div>
+              </div>
             </motion.div>
           )}
 
