@@ -39,6 +39,7 @@ export default function MovieDetailsPage() {
   const navigate = useNavigate();
   const { showLoginModal, setShowLoginModal } = useAuthAction();
   const { isAuthenticated } = useAuthStore();
+
   const [isPlayTrailer, setIsPlayTrailer] = useState(false);
 
   const [showtimes, setShowtimes] = useState<Showtime[]>([]);
@@ -127,7 +128,7 @@ export default function MovieDetailsPage() {
   };
 
   const handleBookSeats = () => {
-    if (isAuthenticated) {
+    if (isAuthenticated || userId) {
       if (
         selectedInfo.theaterId &&
         selectedInfo.showtimeId &&
@@ -222,7 +223,7 @@ export default function MovieDetailsPage() {
             custom={10}
             className="absolute pt-4 right-6 bottom-2"
           >
-            {isAuthenticated ? (
+            {isAuthenticated || userId ? (
               <button
                 onClick={handleBookSeats}
                 disabled={!selectedInfo.showtimeId}

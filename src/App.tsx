@@ -33,7 +33,6 @@ function App() {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const accessToken = urlParams.get("access_token");
-    const newUser = urlParams.get("new_user");
     const verify = urlParams.get("verify");
 
     if (accessToken) {
@@ -42,20 +41,19 @@ function App() {
       getUserProfile().then((profile) => {
         console.log(profile);
 
-        if (newUser) {
-          const authStorageData = {
-            state: {
-              user: profile?.result,
-              isAuthenticated: true,
-              isLoading: false,
-              error: null,
-              tempEmail: null,
-            },
-            version: 0,
-          };
-          localStorage.setItem("auth-storage", JSON.stringify(authStorageData));
-          updateUser(profile?.result);
-        }
+        // Always update the store for both new and existing users
+        const authStorageData = {
+          state: {
+            user: profile?.result,
+            isAuthenticated: true,
+            isLoading: false,
+            error: null,
+            tempEmail: null,
+          },
+          version: 0,
+        };
+        localStorage.setItem("auth-storage", JSON.stringify(authStorageData));
+        updateUser(profile?.result);
       });
 
       if (verify) {

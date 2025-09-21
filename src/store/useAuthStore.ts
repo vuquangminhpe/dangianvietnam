@@ -107,7 +107,7 @@ export const useAuthStore = create<AuthState>()(
         },
 
         updateUser: (user: User) => {
-          set({ user });
+          set({ user, isAuthenticated: true });
         },
 
         setTempEmail: (email: string) => set({ tempEmail: email }),
