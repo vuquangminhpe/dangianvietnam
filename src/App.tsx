@@ -24,9 +24,11 @@ import SepayInstructions from "./components/sepay/SepayInstructions";
 import AdvancedSearchPage from "./pages/AdvancedSearchPage/AdvancedSearchPage";
 import { useEffect } from "react";
 import { getUserProfile } from "./apis/user.api";
+import { useAuthStore } from "./store/useAuthStore";
 
 function App() {
   const location = useLocation();
+  const { updateUser } = useAuthStore();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -52,6 +54,7 @@ function App() {
             version: 0,
           };
           localStorage.setItem("auth-storage", JSON.stringify(authStorageData));
+          updateUser(profile?.result);
         }
       });
 
