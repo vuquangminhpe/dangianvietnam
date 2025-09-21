@@ -11,6 +11,7 @@ import {
   getTheatersWithShowtimes,
 } from "../../apis/showtime.api";
 import { useAuthAction } from "../../hooks/useAuthAction";
+import { useAuthStore } from "../../store/useAuthStore";
 import LoginModal from "../../components/user/LoginModal";
 import ReactPlayer from "react-player";
 import "slick-carousel/slick/slick.css";
@@ -36,7 +37,8 @@ export default function MovieDetailsPage() {
   const [isLoadingTheaters, setIsLoadingTheaters] = useState(false);
   const [isLoadingShowtimes, setIsLoadingShowtimes] = useState(false);
   const navigate = useNavigate();
-  const { requireAuth, showLoginModal, setShowLoginModal } = useAuthAction();
+  const { showLoginModal, setShowLoginModal } = useAuthAction();
+  const { isAuthenticated } = useAuthStore();
   const [isPlayTrailer, setIsPlayTrailer] = useState(false);
 
   const [showtimes, setShowtimes] = useState<Showtime[]>([]);
@@ -125,7 +127,7 @@ export default function MovieDetailsPage() {
   };
 
   const handleBookSeats = () => {
-    requireAuth(() => {
+    if (isAuthenticated) {
       if (
         selectedInfo.theaterId &&
         selectedInfo.showtimeId &&
@@ -133,7 +135,9 @@ export default function MovieDetailsPage() {
       ) {
         navigate(`/movies/${id}/${selectedInfo.screenId}`);
       }
-    });
+    } else {
+      setShowLoginModal(true);
+    }
   };
 
   // Remove old handleSubmitFeedback - now handled by MovieFeedbackSection
@@ -218,7 +222,7 @@ export default function MovieDetailsPage() {
             custom={10}
             className="absolute pt-4 right-6 bottom-2"
           >
-            {userId ? (
+            {isAuthenticated ? (
               <button
                 onClick={handleBookSeats}
                 disabled={!selectedInfo.showtimeId}
