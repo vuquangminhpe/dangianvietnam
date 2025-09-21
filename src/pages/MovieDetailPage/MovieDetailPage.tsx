@@ -228,8 +228,8 @@ export default function MovieDetailsPage() {
               </button>
             ) : (
               <button
-                className="px-4 py-2 text-xs text-white bg-red-500 transition rounded-xl font-medium shadow-lg backdrop-blur-sm"
-                disabled
+                className="px-4 py-2 text-xs text-white bg-red-500 hover:bg-red-600 transition rounded-xl font-medium shadow-lg backdrop-blur-sm cursor-pointer"
+                onClick={() => setShowLoginModal(true)}
               >
                 Log in to booking
               </button>

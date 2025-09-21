@@ -1,6 +1,13 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import { FiLinkedin, FiMenu, FiTwitter, FiX, FiUser, FiLogOut } from "react-icons/fi";
+import {
+  FiLinkedin,
+  FiMenu,
+  FiTwitter,
+  FiX,
+  FiUser,
+  FiLogOut,
+} from "react-icons/fi";
 import { HiOutlineTicket } from "react-icons/hi2";
 import { IoSearchOutline } from "react-icons/io5";
 import { headerItems } from "../../const/index";
@@ -14,7 +21,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen(!isOpen);
   const navigate = useNavigate();
-  
+
   // Get auth state from zustand store
   const { user, isAuthenticated, logout } = useAuthStore();
 
@@ -22,23 +29,23 @@ const Header = () => {
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const handleLogin = () => {
-    navigate('/login');
+    navigate("/login");
     setIsOpen(false); // Close mobile menu
   };
-  
+
   const handleRegister = () => {
-    navigate('/register');
+    navigate("/register");
     setIsOpen(false); // Close mobile menu
   };
-  
+
   const handleLogout = () => {
     logout();
-    navigate('/home');
+    navigate("/home");
     setUserDropdownOpen(false);
   };
 
   const handleProfile = () => {
-    navigate('/profile');
+    navigate("/profile");
     setUserDropdownOpen(false);
   };
 
@@ -47,14 +54,17 @@ const Header = () => {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setUserDropdownOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
   return (
@@ -78,7 +88,7 @@ const Header = () => {
             duration: 1.2,
           }}
           className="flex items-center cursor-pointer"
-          onClick={() => navigate('/home')}
+          onClick={() => navigate("/home")}
         >
           <div
             className="h-10 w-10 rounded-xl bg-gradient-to-r from-gray-500 to-gray-100
@@ -94,7 +104,6 @@ const Header = () => {
             Cinema Connect
           </span>
         </motion.div>
-
         {/* Destop navigation */}
         <nav className="lg:flex hidden space-x-8">
           {headerItems.map((item, index) => {
@@ -131,8 +140,11 @@ const Header = () => {
               </motion.a>
             );
           })}
-        </nav>        {/* Navbar shortlink */}
-        <div className="md:flex hidden items-center space-x-1">          {isAuthenticated ? (
+        </nav>{" "}
+        {/* Navbar shortlink */}
+        <div className="md:flex hidden items-center space-x-1">
+          {" "}
+          {isAuthenticated ? (
             // User is logged in - show user dropdown
             <div className="relative" ref={dropdownRef}>
               <motion.button
@@ -144,13 +156,15 @@ const Header = () => {
                 transition-colors duration-300"
               >
                 {/* Avatar with fallback */}
-                <Avatar 
-                  src={user?.avatar} 
-                  alt={user?.name}
-                  size="md"
+                <Avatar src={user?.avatar} alt={user?.name} size="md" />
+                <span className="hidden lg:block font-medium">
+                  {user?.name}
+                </span>
+                <IoIosArrowUp
+                  className={`transition-transform duration-300 ${
+                    userDropdownOpen ? "rotate-0" : "rotate-180"
+                  }`}
                 />
-                <span className="hidden lg:block font-medium">{user?.name}</span>
-                <IoIosArrowUp className={`transition-transform duration-300 ${userDropdownOpen ? 'rotate-0' : 'rotate-180'}`} />
               </motion.button>
 
               {/* User Dropdown */}
@@ -166,7 +180,9 @@ const Header = () => {
                     <div className="py-2">
                       <div className="px-4 py-2 border-b border-gray-600">
                         <p className="text-sm text-gray-300">{user?.email}</p>
-                        <p className="text-xs text-gray-400 capitalize">{user?.role}</p>
+                        <p className="text-xs text-gray-400 capitalize">
+                          {user?.role}
+                        </p>
                       </div>
                       <button
                         onClick={handleProfile}
@@ -189,32 +205,31 @@ const Header = () => {
           ) : (
             // User is not logged in - show login/register buttons
             <>
-  <motion.button
-    onClick={handleLogin}
-    initial={{ opacity: 0, scale: 0.5 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ delay: 1.3, duration: 0.8 }}
-    className="px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-400
+              <motion.button
+                onClick={handleLogin}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.3, duration: 0.8 }}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-orange-500 to-orange-400
     text-white font-bold hover:from-orange-600 hover:to-orange-500
     transition-all duration-500 cursor-pointer"
-  >
-    Login
-  </motion.button>
+              >
+                Login
+              </motion.button>
 
-  <motion.button
-    onClick={handleRegister}
-    initial={{ opacity: 0, scale: 0.5 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ delay: 1.4, duration: 0.8 }}
-    className="ml-2 px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-violet-400
+              <motion.button
+                onClick={handleRegister}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.4, duration: 0.8 }}
+                className="ml-2 px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-violet-400
     text-white font-bold hover:from-violet-700 hover:to-purple-700
     transition-all duration-500 cursor-pointer"
-  >
-    Sign Up
-  </motion.button>
-</>
+              >
+                Sign Up
+              </motion.button>
+            </>
           )}
-
           {/* Search Button */}
           <motion.button
             initial={{ opacity: 0, scale: 0.8 }}
@@ -233,7 +248,6 @@ const Header = () => {
             <IoSearchOutline />
           </motion.button>
         </div>
-
         {/* Mobile Menu Button */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -253,7 +267,8 @@ const Header = () => {
             )}
           </motion.button>
         </motion.div>
-      </div>      {/* Mobile Menu */}
+      </div>{" "}
+      {/* Mobile Menu */}
       <motion.div
         initial={{ opacity: 0, height: 0 }}
         animate={{
@@ -271,7 +286,6 @@ const Header = () => {
             </a>
           ))}
         </nav>
-
         <div
           className="pt-4 border-t border-gray-200 
         dark:border-gray-700"
@@ -281,27 +295,23 @@ const Header = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3 text-gray-300">
                 {/* Mobile Avatar */}
-                <Avatar 
-                  src={user?.avatar} 
-                  alt={user?.name}
-                  size="lg"
-                />
+                <Avatar src={user?.avatar} alt={user?.name} size="lg" />
                 <div>
                   <p className="font-medium">{user?.name}</p>
                   <p className="text-sm text-gray-400">{user?.email}</p>
                 </div>
               </div>
               <div className="flex flex-col space-y-2">
-                <button 
+                <button
                   onClick={() => {
-                    navigate('/profile');
+                    navigate("/profile");
                     setIsOpen(false);
                   }}
                   className="text-left text-gray-300 py-2"
                 >
                   Profile
                 </button>
-                <button 
+                <button
                   onClick={handleLogout}
                   className="text-left text-gray-300 py-2 flex items-center space-x-2"
                 >
@@ -309,7 +319,8 @@ const Header = () => {
                   <span>Logout</span>
                 </button>
               </div>
-            </div>          ) : (
+            </div>
+          ) : (
             // Mobile login/register buttons
             <div className="space-y-3">
               <div className="flex space-x-5">
@@ -349,7 +360,8 @@ const Header = () => {
           >
             <IoSearchOutline />
           </button>
-        </div>      </motion.div>
+        </div>{" "}
+      </motion.div>
     </header>
   );
 };
