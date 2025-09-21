@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Showtime } from "../../../types/Showtime.type";
 import type { GetTheatersResponse } from "../../../types/Theater.type";
 
@@ -119,9 +120,11 @@ export default function TheaterShowtime({
                   }`}
                 >
                   <div className="flex flex-col items-center gap-1">
-                    <div className={`font-semibold text-xs ${
-                      isClosed ? "text-red-400" : "text-primary-light"
-                    }`}>
+                    <div
+                      className={`font-semibold text-xs ${
+                        isClosed ? "text-red-400" : "text-primary-light"
+                      }`}
+                    >
                       {screenName}
                     </div>
                     <div className="text-xs opacity-75">{dateInfo}</div>

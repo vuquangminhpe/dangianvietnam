@@ -83,6 +83,13 @@ export const AdminSidebar = ({
       color: "from-pink-500 to-rose-500",
     },
     {
+      id: "banner-slider-home",
+      label: "Home Slider Banners",
+      icon: Film,
+      count: null,
+      color: "from-orange-500 to-amber-500",
+    },
+    {
       id: "coupons",
       label: "Coupon Management",
       icon: Tag,

@@ -35,5 +35,8 @@ export { PaymentManagement } from "../../../components/admin/PaymentManagement";
 // Banner Management Components
 export { BannerManagement } from "./BannerManagement/BannerManagement";
 
+// Banner Slider Home Management Components
+export { BannerSliderHomeManagement } from "./BannerSliderHomeManagement/BannerSliderHomeManagement";
+
 // Ticket Verification Components
 export { TicketVerification } from "./TicketVerification";

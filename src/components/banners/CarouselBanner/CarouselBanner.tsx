@@ -3,13 +3,13 @@ import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { gsap } from "gsap";
 import { Button } from "../../ui/button";
-import Test1 from "../../../../public/avatar2.jpg";
-import Test2 from "../../../../public/avenger_endgame.jpg";
-import Test3 from "../../../../public/spidermanAcross.jpg";
-import Test4 from "../../../../public/johnWick4.png";
+import {
+  getActiveBannerSliderHome,
+  type BannerSliderHome,
+} from "../../../apis/bannerSliderHome.api";
 
 interface CarouselItem {
-  id: number;
+  id: string;
   image: string;
   author: string;
   title: string;
@@ -21,50 +21,26 @@ interface CarouselBannerProps {
   items?: CarouselItem[];
 }
 
-const defaultItems: CarouselItem[] = [
-  {
-    id: 1,
-    image: Test1,
-    author: "CINEMA CONNECT",
-    title: "MOVIE SLIDER",
-    topic: "CINEMA",
-    description:
-      "Experience the magic of cinema with our curated collection of the latest blockbusters and timeless classics. Immerse yourself in stories that captivate, inspire, and entertain audiences worldwide.",
-  },
-  {
-    id: 2,
-    image: Test2,
-    author: "CINEMA CONNECT",
-    title: "FEATURED FILMS",
-    topic: "DRAMA",
-    description:
-      "Discover compelling narratives and powerful performances in our featured film collection. From award-winning dramas to thrilling adventures, find your next favorite movie experience.",
-  },
-  {
-    id: 3,
-    image: Test3,
-    author: "CINEMA CONNECT",
-    title: "NEW RELEASES",
-    topic: "ACTION",
-    description:
-      "Stay up to date with the latest releases and upcoming blockbusters. Get exclusive access to trailers, behind-the-scenes content, and early screening opportunities.",
-  },
-  {
-    id: 4,
-    image: Test4,
-    author: "CINEMA CONNECT",
-    title: "CLASSIC COLLECTION",
-    topic: "VINTAGE",
-    description:
-      "Revisit the golden age of cinema with our carefully preserved classic collection. Experience the timeless stories that have shaped modern filmmaking and continue to inspire new generations.",
-  },
-];
+// Transform API data to CarouselItem format
+const transformBannerToCarouselItem = (
+  banner: BannerSliderHome
+): CarouselItem => ({
+  id: banner._id,
+  image: banner.image,
+  author: banner.author,
+  title: banner.title,
+  topic: banner.topic || "FEATURED",
+  description: banner.description,
+});
 
-const CarouselBanner: React.FC<CarouselBannerProps> = ({
-  items = defaultItems,
-}) => {
+const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
+  const [carouselItems, setCarouselItems] = useState<CarouselItem[]>(
+    items || []
+  );
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [loading, setLoading] = useState(!items);
+  const [error, setError] = useState<string | null>(null);
 
   const carouselRef = useRef<HTMLDivElement>(null);
   const timebarRef = useRef<HTMLDivElement>(null);
@@ -72,6 +48,41 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({
 
   const timeRunning = 1800;
   const timeAutoNext = 7000;
+
+  // Fetch active banners from API
+  useEffect(() => {
+    if (items) {
+      setCarouselItems(items);
+      setLoading(false);
+      return;
+    }
+
+    const fetchBanners = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const banners = await getActiveBannerSliderHome();
+
+        if (banners && banners.length > 0) {
+          const transformedItems = banners.map(transformBannerToCarouselItem);
+          setCarouselItems(transformedItems);
+        } else {
+          // No banners available
+          setCarouselItems([]);
+          setError("No active banners found. Please contact administrator.");
+        }
+      } catch (err) {
+        console.error("Error fetching banner slider home:", err);
+        setError(err instanceof Error ? err.message : "Failed to load banners");
+        // No fallback - show error instead
+        setCarouselItems([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBanners();
+  }, [items]);
 
   const createSilkyTransition = (
     newIdx: number,
@@ -240,13 +251,14 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({
 
   const handleNext = () => {
     if (isAnimating) return;
-    const newIndex = (currentIndex + 1) % items.length;
+    const newIndex = (currentIndex + 1) % carouselItems.length;
     createSilkyTransition(newIndex, "next");
   };
 
   const handlePrev = () => {
     if (isAnimating) return;
-    const newIndex = (currentIndex - 1 + items.length) % items.length;
+    const newIndex =
+      (currentIndex - 1 + carouselItems.length) % carouselItems.length;
     createSilkyTransition(newIndex, "prev");
   };
 
@@ -551,113 +563,154 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({
           style={{ width: "0%" }}
         />
 
-        {/* Main slider */}
-        <div className="list relative w-full h-full">
-          {items.map((item, index) => (
-            <div
-              key={item.id}
-              data-slide={index}
-              className="item"
-              style={{
-                opacity: index === currentIndex ? 1 : 0,
-                zIndex: index === currentIndex ? 2 : 1,
-              }}
-            >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="content absolute top-[20%] left-1/2 transform -translate-x-1/2 w-full max-w-6xl px-8 text-white">
-                <div className="max-w-[60%] pr-[30%]">
-                  <div className="author font-bold tracking-[10px] text-sm mb-4 text-white/90 drop-shadow-md">
-                    {item.author}
-                  </div>
-                  <h1 className="title text-4xl md:text-6xl lg:text-8xl font-bold leading-tight mb-2 drop-shadow-2xl">
-                    {item.title}
-                  </h1>
-                  <h2 className="topic text-4xl md:text-6xl lg:text-8xl font-bold leading-tight mb-6 text-orange-500 drop-shadow-2xl">
-                    {item.topic}
-                  </h2>
-                  <p className="des text-base lg:text-lg mb-8 leading-relaxed text-white/90 drop-shadow-lg">
-                    {item.description}
-                  </p>
-                  <div className="buttons flex gap-4">
-                    <Button
-                      size="lg"
-                      className="bg-white text-black hover:bg-white/90 font-medium tracking-wider px-6 lg:px-8 transform hover:scale-105 transition-all duration-300 shadow-xl"
-                    >
-                      SEE MORE
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="border-white text-white hover:bg-white hover:text-black font-medium tracking-wider px-6 lg:px-8 transform hover:scale-105 transition-all duration-300 shadow-xl"
-                    >
-                      SUBSCRIBE
-                    </Button>
-                  </div>
-                </div>
+        {/* Loading State */}
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black z-[100]">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+              <div className="text-white text-xl">Loading banners...</div>
+            </div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && !loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black z-[100]">
+            <div className="text-center">
+              <div className="text-red-400 text-xl mb-2">
+                Error Loading Banners
+              </div>
+              <div className="text-slate-400 text-sm">{error}</div>
+            </div>
+          </div>
+        )}
+
+        {/* No Data State */}
+        {!loading && !error && carouselItems.length === 0 && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black z-[100]">
+            <div className="text-center">
+              <div className="text-slate-400 text-6xl mb-4">📷</div>
+              <div className="text-slate-400 text-xl mb-2">
+                No Banners Available
+              </div>
+              <div className="text-slate-500 text-sm">
+                Please contact administrator to add banners
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        )}
 
-        {/* Navigation arrows with fixed interaction */}
-        <div className="arrows absolute bottom-12 right-8 flex flex-col gap-4 z-[300]">
-          <Button
-            onClick={handlePrev}
-            disabled={isAnimating}
-            size="icon"
-            className="navigation-button w-14 h-14 rounded-full bg-black/20 hover:bg-black/40 border border-white/30 text-white shadow-2xl"
-            style={{ pointerEvents: "auto" }}
-          >
-            <ChevronLeft className="w-7 h-7" />
-          </Button>
-          <Button
-            onClick={handleNext}
-            disabled={isAnimating}
-            size="icon"
-            className="navigation-button w-14 h-14 rounded-full bg-black/20 hover:bg-black/40 border border-white/30 text-white shadow-2xl"
-            style={{ pointerEvents: "auto" }}
-          >
-            <ChevronRight className="w-7 h-7" />
-          </Button>
-        </div>
-
-        {/* Fixed thumbnails with correct active state */}
-        <div className="thumbnail absolute bottom-16 right-36 flex flex-col gap-4 z-[200]">
-          {items.map((item, index) => (
-            <div
-              key={item.id}
-              onClick={() => handleThumbnailClick(index)}
-              className={`item w-24 h-32 lg:w-28 lg:h-36 flex-shrink-0 relative rounded-xl overflow-hidden border-2 transition-all duration-300 ${
-                index === currentIndex
-                  ? "active border-orange-500"
-                  : "border-white/20 hover:border-white/60"
-              }`}
-              style={{
-                pointerEvents: isAnimating ? "none" : "auto",
-                cursor: isAnimating ? "default" : "pointer",
-              }}
-            >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-              <div className="content absolute bottom-2 left-2 right-2 text-white">
-                <div className="title font-semibold text-xs truncate drop-shadow-md">
-                  {item.title}
+        {/* Main slider - Only render if we have data */}
+        {carouselItems.length > 0 && (
+          <>
+            <div className="list relative w-full h-full">
+              {carouselItems.map((item, index) => (
+                <div
+                  key={item.id}
+                  data-slide={index}
+                  className="item"
+                  style={{
+                    opacity: index === currentIndex ? 1 : 0,
+                    zIndex: index === currentIndex ? 2 : 1,
+                  }}
+                >
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="content absolute top-[20%] left-1/2 transform -translate-x-1/2 w-full max-w-6xl px-8 text-white">
+                    <div className="max-w-[60%] pr-[30%]">
+                      <div className="author font-bold tracking-[10px] text-sm mb-4 text-white/90 drop-shadow-md">
+                        {item.author}
+                      </div>
+                      <h1 className="title text-4xl md:text-6xl lg:text-8xl font-bold leading-tight mb-2 drop-shadow-2xl">
+                        {item.title}
+                      </h1>
+                      <h2 className="topic text-4xl md:text-6xl lg:text-8xl font-bold leading-tight mb-6 text-orange-500 drop-shadow-2xl">
+                        {item.topic}
+                      </h2>
+                      <p className="des text-base lg:text-lg mb-8 leading-relaxed text-white/90 drop-shadow-lg">
+                        {item.description}
+                      </p>
+                      <div className="buttons flex gap-4">
+                        <Button
+                          size="lg"
+                          className="bg-white text-black hover:bg-white/90 font-medium tracking-wider px-6 lg:px-8 transform hover:scale-105 transition-all duration-300 shadow-xl"
+                        >
+                          SEE MORE
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="lg"
+                          className="border-white text-white hover:bg-white hover:text-black font-medium tracking-wider px-6 lg:px-8 transform hover:scale-105 transition-all duration-300 shadow-xl"
+                        >
+                          SUBSCRIBE
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="description font-light text-xs text-orange-300 truncate">
-                  {item.topic}
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+
+            {/* Navigation arrows with fixed interaction */}
+            <div className="arrows absolute bottom-12 right-8 flex flex-col gap-4 z-[300]">
+              <Button
+                onClick={handlePrev}
+                disabled={isAnimating}
+                size="icon"
+                className="navigation-button w-14 h-14 rounded-full bg-black/20 hover:bg-black/40 border border-white/30 text-white shadow-2xl"
+                style={{ pointerEvents: "auto" }}
+              >
+                <ChevronLeft className="w-7 h-7" />
+              </Button>
+              <Button
+                onClick={handleNext}
+                disabled={isAnimating}
+                size="icon"
+                className="navigation-button w-14 h-14 rounded-full bg-black/20 hover:bg-black/40 border border-white/30 text-white shadow-2xl"
+                style={{ pointerEvents: "auto" }}
+              >
+                <ChevronRight className="w-7 h-7" />
+              </Button>
+            </div>
+
+            {/* Fixed thumbnails with correct active state */}
+            <div className="thumbnail absolute bottom-16 right-36 flex flex-col gap-4 z-[200]">
+              {carouselItems.map((item, index) => (
+                <div
+                  key={item.id}
+                  onClick={() => handleThumbnailClick(index)}
+                  className={`item w-24 h-32 lg:w-28 lg:h-36 flex-shrink-0 relative rounded-xl overflow-hidden border-2 transition-all duration-300 ${
+                    index === currentIndex
+                      ? "active border-orange-500"
+                      : "border-white/20 hover:border-white/60"
+                  }`}
+                  style={{
+                    pointerEvents: isAnimating ? "none" : "auto",
+                    cursor: isAnimating ? "default" : "pointer",
+                  }}
+                >
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                  <div className="content absolute bottom-2 left-2 right-2 text-white">
+                    <div className="title font-semibold text-xs truncate drop-shadow-md">
+                      {item.title}
+                    </div>
+                    <div className="description font-light text-xs text-orange-300 truncate">
+                      {item.topic}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </>
   );

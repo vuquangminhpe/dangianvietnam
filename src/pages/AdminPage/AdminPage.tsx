@@ -11,6 +11,7 @@ import {
   ContractManagement,
   CouponManagement,
   BannerManagement,
+  BannerSliderHomeManagement,
   TicketVerification,
 } from "./components";
 import { PaymentManagement } from "../../components/admin/PaymentManagement";
@@ -45,6 +46,8 @@ const AdminPage = () => {
         return <CouponManagement />;
       case "banners":
         return <BannerManagement />;
+      case "banner-slider-home":
+        return <BannerSliderHomeManagement />;
       case "payments":
         return <PaymentManagement />;
       case "ticket-verification":
