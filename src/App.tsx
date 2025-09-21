@@ -36,10 +36,14 @@ function App() {
 
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken);
-      getUserProfile();
-      if (newUser) {
-        localStorage.setItem("new_user", newUser);
-      }
+
+      getUserProfile().then((profile) => {
+        console.log(profile);
+
+        if (newUser) {
+          localStorage.setItem("auth-storage", JSON.stringify(profile));
+        }
+      });
 
       if (verify) {
         localStorage.setItem("verify", verify);
