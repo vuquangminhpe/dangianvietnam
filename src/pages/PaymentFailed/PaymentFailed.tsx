@@ -258,7 +258,6 @@ const PaymentFailed: React.FC = () => {
             </motion.button>
 
             <motion.button
-              onClick={() => window.open("mailto:sonphhe173195@fpt.edu.vn")}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="flex items-center gap-3 p-4 bg-blue-600/20 text-blue-300 rounded-lg 
