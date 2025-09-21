@@ -203,34 +203,37 @@ export default function MovieDetailsPage() {
             />
           </motion.div>
 
-          <motion.div variants={fadeUp} className="pb-10 w-full md:w-2/3 relative">
+          <motion.div
+            variants={fadeUp}
+            className="pb-10 w-full md:w-2/3 relative"
+          >
             <img
               src={movie.poster_url}
               alt={movie.title}
               className="rounded-lg w-full h-[400px] md:h-[600px] object-cover shadow-2xl border border-white/10"
             />
-            <motion.div
-              variants={fadeUp}
-              custom={10}
-              className="absolute right-3 bottom-2"
-            >
-              {userId ? (
-                <button
-                  onClick={handleBookSeats}
-                  disabled={!selectedInfo.showtimeId}
-                  className="px-4 py-2 w-[100px] h-[40px] text-xs text-white bg-primary hover:bg-primary-dull transition rounded-xl font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  Đặt vé
-                </button>
-              ) : (
-                <button
-                  className="px-4 py-2 text-xs text-white bg-red-500  transition rounded-full font-medium"
-                  disabled
-                >
-                  Log in to booking
-                </button>
-              )}
-            </motion.div>
+          </motion.div>
+          <motion.div
+            variants={fadeUp}
+            custom={10}
+            className="absolute pt-4 right-6 bottom-2"
+          >
+            {userId ? (
+              <button
+                onClick={handleBookSeats}
+                disabled={!selectedInfo.showtimeId}
+                className="px-4 py-2 w-[100px] h-[40px] text-xs text-white bg-primary hover:bg-primary-dull transition rounded-xl font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-lg backdrop-blur-sm"
+              >
+                Đặt vé
+              </button>
+            ) : (
+              <button
+                className="px-4 py-2 text-xs text-white bg-red-500 transition rounded-xl font-medium shadow-lg backdrop-blur-sm"
+                disabled
+              >
+                Log in to booking
+              </button>
+            )}
           </motion.div>
         </motion.div>
         <motion.div
