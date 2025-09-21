@@ -23,6 +23,7 @@ import ProfilePage from "./pages/ProfilePage";
 import SepayInstructions from "./components/sepay/SepayInstructions";
 import AdvancedSearchPage from "./pages/AdvancedSearchPage/AdvancedSearchPage";
 import { useEffect } from "react";
+import { getUserProfile } from "./apis/user.api";
 
 function App() {
   const location = useLocation();
@@ -35,7 +36,7 @@ function App() {
 
     if (accessToken) {
       localStorage.setItem("accessToken", accessToken);
-
+      getUserProfile();
       if (newUser) {
         localStorage.setItem("new_user", newUser);
       }
