@@ -41,7 +41,17 @@ function App() {
         console.log(profile);
 
         if (newUser) {
-          localStorage.setItem("auth-storage", JSON.stringify(profile));
+          const authStorageData = {
+            state: {
+              user: profile?.result,
+              isAuthenticated: true,
+              isLoading: false,
+              error: null,
+              tempEmail: null,
+            },
+            version: 0,
+          };
+          localStorage.setItem("auth-storage", JSON.stringify(authStorageData));
         }
       });
 
