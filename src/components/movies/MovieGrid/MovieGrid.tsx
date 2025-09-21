@@ -43,7 +43,9 @@ export const MovieGrid = ({
     return (
       <div className="col-span-full text-center py-12">
         <div className="text-gray-400 text-lg mb-4">
-          {searchTerm ? "Không tìm thấy phim nào" : "Chưa có phim nào"}
+          {searchTerm
+            ? "Không tìm thấy Buổi biểu diễn nào"
+            : "Chưa có Buổi biểu diễn nào"}
         </div>
         {onResetFilters && (
           <Button
@@ -51,7 +53,7 @@ export const MovieGrid = ({
             variant="outline"
             className="border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white"
           >
-            Xem tất cả phim
+            Xem tất cả Buổi biểu diễn
           </Button>
         )}
       </div>

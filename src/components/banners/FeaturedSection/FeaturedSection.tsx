@@ -23,7 +23,7 @@ const FeaturedSection = () => {
         const movies = await getMoviesByStatus("now_showing", 4, pages);
         if (!ignore) {
           setGetShowingMovies((prev) => [...prev, ...movies]);
-          // Kiểm tra nếu số lượng phim trả về ít hơn limit hoặc không có phim nào
+          // Kiểm tra nếu số lượng Buổi biểu diễn trả về ít hơn limit hoặc không có Buổi biểu diễn nào
           if (movies.length < 4) {
             setIsMaxMovie(true);
           }
@@ -81,7 +81,7 @@ const FeaturedSection = () => {
       {/* <div>
         <div className="relative flex items-center justify-between pt-20 pb-10">
           <BlurCircle top={"0"} left={"-80px"} />
-          <p className="text-gray-300 font-medium text-lg">Lich Chieu Phim</p>
+          <p className="text-gray-300 font-medium text-lg">Lich Chieu Buổi biểu diễn</p>
         </div>
         <MoviesByTheaters />
       </div> */}

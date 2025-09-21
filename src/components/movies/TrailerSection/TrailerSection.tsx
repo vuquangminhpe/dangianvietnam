@@ -111,11 +111,8 @@ const TrailerSection = () => {
         className="text-center mb-12"
       >
         <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          Movie Trailers
+          Đoạn giới thiệu của các buổi biểu diễn
         </h2>
-        <p className="text-gray-300 font-medium text-lg max-w-[960px] mx-auto">
-          Click on any movie below to watch its trailer
-        </p>
       </motion.div>
 
       {/* Video Player - Only show when a trailer is selected */}

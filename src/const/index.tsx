@@ -3,15 +3,15 @@ export const headerItems = [
     title: "Lịch chiếu",
     content: [
       {
-        itemTitle: "Lịch chiếu phim hôm nay",
+        itemTitle: "Lịch chiếu Buổi biểu diễn hôm nay",
         itemLink: "",
       },
       {
-        itemTitle: "Phim đang chiếu",
+        itemTitle: "Buổi biểu diễn đang chiếu",
         itemLink: "",
       },
       {
-        itemTitle: "Phim sắp chiếu",
+        itemTitle: "Buổi biểu diễn sắp chiếu",
         itemLink: "",
       },
     ],
@@ -62,9 +62,9 @@ export const headerItems = [
     ],
   },
   {
-    title: "Phim chiếu",
+    title: "Buổi biểu diễn chiếu",
   },
   {
-    title: "Top phim",
+    title: "Top Buổi biểu diễn",
   },
 ];

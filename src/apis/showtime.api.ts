@@ -241,7 +241,7 @@ export const getAllShowtimeByMovieIdAndTheaterId = async (
   }
 };
 
-// Lấy danh sách rạp có lịch chiếu cho phim cụ thể
+// Lấy danh sách rạp có lịch chiếu cho Buổi biểu diễn cụ thể
 export const getTheatersWithShowtimes = async (movie_id: string) => {
   try {
     const res = await showtimeApi.get<any>("", {

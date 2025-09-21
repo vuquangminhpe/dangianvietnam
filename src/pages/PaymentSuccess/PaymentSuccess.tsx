@@ -69,12 +69,26 @@ const PaymentSuccess: React.FC = () => {
           // Movie info
           ctx.font = "18px Arial";
           ctx.textAlign = "left";
-          ctx.fillText(`Phim: ${bookingData.movie?.title}`, 50, 100);
+          ctx.fillText(`Buổi biểu diễn: ${bookingData.movie?.title}`, 50, 100);
           ctx.fillText(`Rạp: ${bookingData.theater?.name}`, 50, 130);
-          ctx.fillText(`Suất: ${formatDateTime(bookingData.showtime?.start_time as any)}`, 50, 160);
-          ctx.fillText(`Ghế: ${bookingData.seats?.map((s: any) => `${s.row}${s.number}`).join(", ")}`, 50, 190);
+          ctx.fillText(
+            `Suất: ${formatDateTime(bookingData.showtime?.start_time as any)}`,
+            50,
+            160
+          );
+          ctx.fillText(
+            `Ghế: ${bookingData.seats
+              ?.map((s: any) => `${s.row}${s.number}`)
+              .join(", ")}`,
+            50,
+            190
+          );
           ctx.fillText(`Mã vé: ${bookingData.ticket_code}`, 50, 220);
-          ctx.fillText(`Tổng tiền: ${formatCurrency(bookingData.total_amount as any)}`, 50, 250);
+          ctx.fillText(
+            `Tổng tiền: ${formatCurrency(bookingData.total_amount as any)}`,
+            50,
+            250
+          );
 
           // QR Code
           ctx.drawImage(img, 300, 300, 200, 200);
@@ -119,7 +133,7 @@ const PaymentSuccess: React.FC = () => {
   const handleShareExperience = async () => {
     const shareData = {
       title: `Đã đặt vé xem ${bookingData?.movie?.title}! 🎬`,
-      text: `Tôi vừa đặt vé xem phim "${bookingData?.movie?.title}" tại ${bookingData?.theater?.name}. Cùng đi xem nhé! 🍿`,
+      text: `Tôi vừa đặt vé xem Buổi biểu diễn "${bookingData?.movie?.title}" tại ${bookingData?.theater?.name}. Cùng đi xem nhé! 🍿`,
       url: window.location.href,
     };
 
@@ -322,10 +336,13 @@ const PaymentSuccess: React.FC = () => {
                 <div className="text-center">
                   <h4 className="text-lg font-semibold text-white mb-4 flex items-center justify-center gap-2">
                     <Ticket className="h-5 w-5 text-green-400" />
-                    QR Code vé xem phim
+                    QR Code vé xem Buổi biểu diễn
                   </h4>
 
-                  <div className="bg-white p-4 rounded-lg inline-block" id="payment-qr">
+                  <div
+                    className="bg-white p-4 rounded-lg inline-block"
+                    id="payment-qr"
+                  >
                     <QRCode
                       value={bookingData?.ticket_code || ""}
                       size={160}
@@ -340,7 +357,7 @@ const PaymentSuccess: React.FC = () => {
                   </p>
 
                   <p className="text-gray-400 text-xs mt-2">
-                    Đưa QR code này cho nhân viên rạp để vào xem phim
+                    Đưa QR code này cho nhân viên rạp để vào xem Buổi biểu diễn
                   </p>
                 </div>
               </div>
@@ -409,7 +426,7 @@ const PaymentSuccess: React.FC = () => {
               <div>
                 <p className="text-white font-medium">Xem vé đã đặt</p>
                 <p className="text-gray-400 text-sm">
-                  Quản lý tất cả vé xem phim của bạn
+                  Quản lý tất cả vé xem Buổi biểu diễn của bạn
                 </p>
               </div>
               <button
@@ -435,7 +452,7 @@ const PaymentSuccess: React.FC = () => {
             onClick={() => navigate("/movies")}
             className="text-purple-400 hover:text-purple-300 transition-colors font-medium"
           >
-            Đặt vé phim khác →
+            Đặt vé Buổi biểu diễn khác →
           </button>
         </motion.div>
       </div>

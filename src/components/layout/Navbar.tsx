@@ -196,7 +196,7 @@ const Navbar = () => {
                 <div className="relative">
                   <input
                     type="text"
-                    placeholder="Search for movies..."
+                    placeholder="Search for event s..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="w-full px-4 py-2 pl-10 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-colors"
@@ -279,7 +279,7 @@ const Navbar = () => {
                 {!searchQuery.trim() && (
                   <div className="p-8 text-center">
                     <p className="text-gray-400">
-                      Start typing to search for movies...
+                      Start typing to Search for event s...
                     </p>
                   </div>
                 )}
@@ -800,7 +800,7 @@ const Navbar = () => {
                   <div className="relative">
                     <input
                       type="text"
-                      placeholder="Search for movies..."
+                      placeholder="Search for event s..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       className="w-full px-4 py-2 pl-10 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-colors"
@@ -883,7 +883,7 @@ const Navbar = () => {
                   {!searchQuery.trim() && (
                     <div className="p-8 text-center">
                       <p className="text-gray-400">
-                        Start typing to search for movies...
+                        Start typing to Search for event s...
                       </p>
                     </div>
                   )}

@@ -21,7 +21,7 @@ const SuggestionTheater = () => {
         const movies = await getPopularMovies(4, pages);
         if (!ignore) {
           setGetShowingMovies((prev) => [...prev, ...movies]);
-          // Kiểm tra nếu số lượng phim trả về ít hơn limit hoặc không có phim nào
+          // Kiểm tra nếu số lượng Buổi biểu diễn trả về ít hơn limit hoặc không có Buổi biểu diễn nào
           if (movies.length < 4) {
             setIsMaxMovie(true);
           }

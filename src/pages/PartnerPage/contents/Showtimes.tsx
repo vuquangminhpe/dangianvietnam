@@ -411,7 +411,9 @@ const Showtimes = () => {
 
     // Check if screens exist
     if (!screens || screens.length === 0) {
-      toast.error("Please create at least one screen for your theater before adding showtimes");
+      toast.error(
+        "Please create at least one screen for your theater before adding showtimes"
+      );
       return;
     }
 
@@ -722,7 +724,9 @@ const Showtimes = () => {
                 ? {}
                 : { scale: 0.95 }
             }
-            disabled={loading || !theater?.result || !screens || screens.length === 0}
+            disabled={
+              loading || !theater?.result || !screens || screens.length === 0
+            }
             title={
               !theater?.result
                 ? "Please create a theater first"
@@ -746,7 +750,7 @@ const Showtimes = () => {
               />
               <input
                 type="text"
-                placeholder="Search showtimes by movie or screen..."
+                placeholder="Search showtimes for event or screen..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full bg-slate-800/60 border border-slate-700/50 rounded-lg pl-10 pr-4 py-2 text-white placeholder-slate-400 focus:border-orange-500 focus:outline-none"
@@ -849,30 +853,31 @@ const Showtimes = () => {
                   Theater Required
                 </h3>
                 <p className="text-slate-300 mb-6">
-                  You need to create a theater first before you can manage showtimes.
-                  Please set up your theater information to get started.
+                  You need to create a theater first before you can manage
+                  showtimes. Please set up your theater information to get
+                  started.
                 </p>
               </motion.div>
-            ) : (!screens || screens.length === 0) ? (
+            ) : !screens || screens.length === 0 ? (
               <motion.div
                 className="bg-slate-800/60 backdrop-blur-sm p-8 rounded-xl border border-slate-700/50 text-center"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <MonitorPlay
-                  size={64}
-                  className="text-blue-400 mx-auto mb-4"
-                />
+                <MonitorPlay size={64} className="text-blue-400 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-white mb-2">
                   No Screens Available
                 </h3>
                 <p className="text-slate-300 mb-6">
-                  You need to create at least one screen (màn chiếu) for your theater before creating showtimes.
-                  Screens define the viewing areas where movies will be shown.
+                  You need to create at least one screen (màn chiếu) for your
+                  theater before creating showtimes. Screens define the viewing
+                  areas where movies will be shown.
                 </p>
                 <motion.button
                   onClick={() => {
-                    toast.info("Please navigate to Screen Management to create screens for your theater");
+                    toast.info(
+                      "Please navigate to Screen Management to create screens for your theater"
+                    );
                   }}
                   className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors flex items-center mx-auto"
                   whileHover={{ scale: 1.05 }}
@@ -882,8 +887,7 @@ const Showtimes = () => {
                   Manage Screens
                 </motion.button>
               </motion.div>
-            ) :
-            /* Showtimes Table */
+            ) : /* Showtimes Table */
             filteredShowtimes.length > 0 ? (
               <div className="bg-slate-800/60 backdrop-blur-sm rounded-xl border border-slate-700/50 overflow-hidden">
                 <div className="overflow-x-auto">
@@ -1129,7 +1133,9 @@ const Showtimes = () => {
                         ? {}
                         : { scale: 0.95 }
                     }
-                    disabled={!theater?.result || !screens || screens.length === 0}
+                    disabled={
+                      !theater?.result || !screens || screens.length === 0
+                    }
                     title={
                       !theater?.result
                         ? "Please create a theater first"
@@ -1139,7 +1145,9 @@ const Showtimes = () => {
                     }
                   >
                     <Plus size={18} className="mr-2" />
-                    {!screens || screens.length === 0 ? "Create Screen First" : "Add Showtime"}
+                    {!screens || screens.length === 0
+                      ? "Create Screen First"
+                      : "Add Showtime"}
                   </motion.button>
                 </motion.div>
               )
@@ -1720,9 +1728,7 @@ const Showtimes = () => {
                           </div>
                         </div>
                       ) : (
-                        <p className="text-slate-400">
-                          Loading movie information...
-                        </p>
+                        <p className="text-slate-400">Loading information...</p>
                       )}
                     </div>
                   </div>

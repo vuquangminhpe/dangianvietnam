@@ -1,30 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { 
-  MapPin, 
-  Building2, 
-  Phone, 
-  Mail, 
-  Edit3, 
-  Plus, 
+import {
+  MapPin,
+  Building2,
+  Phone,
+  Mail,
+  Edit3,
+  Plus,
   CheckCircle,
   AlertCircle,
   Save,
-  X
+  X,
 } from "lucide-react";
-import { 
-  getMyTheater, 
-  createTheater, 
+import {
+  getMyTheater,
+  createTheater,
   updateTheater,
   type TheaterResponse,
-  type TheaterCreateRequest
-} from '../../../apis/staff.api';
-import { toast } from 'sonner';
+  type TheaterCreateRequest,
+} from "../../../apis/staff.api";
+import { toast } from "sonner";
 
 // ✅ Di chuyển TheaterForm ra ngoài component chính
-const TheaterForm = ({ 
-  isEdit = false, 
-  onSubmit, 
+const TheaterForm = ({
+  isEdit = false,
+  onSubmit,
   onCancel,
   formData,
   loading,
@@ -36,16 +36,22 @@ const TheaterForm = ({
   amenityInput,
   setAmenityInput,
   formErrors,
-  isSubmitting
-}: { 
-  isEdit?: boolean; 
-  onSubmit: (e: React.FormEvent) => void; 
+  isSubmitting,
+}: {
+  isEdit?: boolean;
+  onSubmit: (e: React.FormEvent) => void;
   onCancel: () => void;
   formData: TheaterCreateRequest;
   loading: boolean;
   availableAmenities: string[];
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  handleInputBlur: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleInputChange: (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => void;
+  handleInputBlur: (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   addAmenity: (amenity: string) => void;
   removeAmenity: (amenityToRemove: string) => void;
   amenityInput: string;
@@ -61,8 +67,12 @@ const TheaterForm = ({
   >
     <div className="flex items-center justify-between mb-6">
       <h3 className="text-xl font-bold text-white flex items-center">
-        {isEdit ? <Edit3 size={24} className="mr-2 text-orange-400" /> : <Plus size={24} className="mr-2 text-orange-400" />}
-        {isEdit ? 'Edit Theater' : 'Create New Theater'}
+        {isEdit ? (
+          <Edit3 size={24} className="mr-2 text-orange-400" />
+        ) : (
+          <Plus size={24} className="mr-2 text-orange-400" />
+        )}
+        {isEdit ? "Edit Theater" : "Create New Theater"}
       </h3>
       <button
         onClick={onCancel}
@@ -75,7 +85,9 @@ const TheaterForm = ({
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">Theater Name</label>
+          <label className="block text-slate-300 text-sm font-medium mb-2">
+            Theater Name
+          </label>
           <input
             type="text"
             name="name"
@@ -83,11 +95,11 @@ const TheaterForm = ({
             onChange={handleInputChange}
             onBlur={handleInputBlur}
             className={`w-full bg-slate-700/50 border rounded-lg px-3 py-2 text-white focus:outline-none transition-colors ${
-              formErrors.name 
-                ? 'border-red-500 focus:border-red-400' 
-                : 'border-slate-600 focus:border-orange-500'
+              formErrors.name
+                ? "border-red-500 focus:border-red-400"
+                : "border-slate-600 focus:border-orange-500"
             }`}
-            placeholder="Cinema Name / Rạp Chiếu Phim"
+            placeholder="Cinema Name / Rạp Chiếu Buổi biểu diễn"
             required
           />
           {formErrors.name && (
@@ -98,7 +110,9 @@ const TheaterForm = ({
           )}
         </div>
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">Location</label>
+          <label className="block text-slate-300 text-sm font-medium mb-2">
+            Location
+          </label>
           <input
             type="text"
             name="location"
@@ -106,9 +120,9 @@ const TheaterForm = ({
             onChange={handleInputChange}
             onBlur={handleInputBlur}
             className={`w-full bg-slate-700/50 border rounded-lg px-3 py-2 text-white focus:outline-none transition-colors ${
-              formErrors.location 
-                ? 'border-red-500 focus:border-red-400' 
-                : 'border-slate-600 focus:border-orange-500'
+              formErrors.location
+                ? "border-red-500 focus:border-red-400"
+                : "border-slate-600 focus:border-orange-500"
             }`}
             placeholder="Downtown, City Center / Trung tâm thành phố"
             required
@@ -123,7 +137,9 @@ const TheaterForm = ({
       </div>
 
       <div>
-        <label className="block text-slate-300 text-sm font-medium mb-2">Address</label>
+        <label className="block text-slate-300 text-sm font-medium mb-2">
+          Address
+        </label>
         <input
           type="text"
           name="address"
@@ -131,9 +147,9 @@ const TheaterForm = ({
           onChange={handleInputChange}
           onBlur={handleInputBlur}
           className={`w-full bg-slate-700/50 border rounded-lg px-3 py-2 text-white focus:outline-none transition-colors ${
-            formErrors.address 
-              ? 'border-red-500 focus:border-red-400' 
-              : 'border-slate-600 focus:border-orange-500'
+            formErrors.address
+              ? "border-red-500 focus:border-red-400"
+              : "border-slate-600 focus:border-orange-500"
           }`}
           placeholder="123 Main Street / 123 Đường Chính"
           required
@@ -148,7 +164,9 @@ const TheaterForm = ({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">City</label>
+          <label className="block text-slate-300 text-sm font-medium mb-2">
+            City
+          </label>
           <input
             type="text"
             name="city"
@@ -156,9 +174,9 @@ const TheaterForm = ({
             onChange={handleInputChange}
             onBlur={handleInputBlur}
             className={`w-full bg-slate-700/50 border rounded-lg px-3 py-2 text-white focus:outline-none transition-colors ${
-              formErrors.city 
-                ? 'border-red-500 focus:border-red-400' 
-                : 'border-slate-600 focus:border-orange-500'
+              formErrors.city
+                ? "border-red-500 focus:border-red-400"
+                : "border-slate-600 focus:border-orange-500"
             }`}
             placeholder="Hà Nội"
             required
@@ -171,7 +189,9 @@ const TheaterForm = ({
           )}
         </div>
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">State</label>
+          <label className="block text-slate-300 text-sm font-medium mb-2">
+            State
+          </label>
           <input
             type="text"
             name="state"
@@ -179,9 +199,9 @@ const TheaterForm = ({
             onChange={handleInputChange}
             onBlur={handleInputBlur}
             className={`w-full bg-slate-700/50 border rounded-lg px-3 py-2 text-white focus:outline-none transition-colors ${
-              formErrors.state 
-                ? 'border-red-500 focus:border-red-400' 
-                : 'border-slate-600 focus:border-orange-500'
+              formErrors.state
+                ? "border-red-500 focus:border-red-400"
+                : "border-slate-600 focus:border-orange-500"
             }`}
             placeholder="Hà Nội"
             required
@@ -194,7 +214,9 @@ const TheaterForm = ({
           )}
         </div>
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">Pin Code</label>
+          <label className="block text-slate-300 text-sm font-medium mb-2">
+            Pin Code
+          </label>
           <input
             type="text"
             name="pincode"
@@ -202,9 +224,9 @@ const TheaterForm = ({
             onChange={handleInputChange}
             onBlur={handleInputBlur}
             className={`w-full bg-slate-700/50 border rounded-lg px-3 py-2 text-white focus:outline-none transition-colors ${
-              formErrors.pincode 
-                ? 'border-red-500 focus:border-red-400' 
-                : 'border-slate-600 focus:border-orange-500'
+              formErrors.pincode
+                ? "border-red-500 focus:border-red-400"
+                : "border-slate-600 focus:border-orange-500"
             }`}
             placeholder="8000"
             required
@@ -220,7 +242,9 @@ const TheaterForm = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">Number of Screens</label>
+          <label className="block text-slate-300 text-sm font-medium mb-2">
+            Number of Screens
+          </label>
           <input
             type="number"
             name="screens"
@@ -230,9 +254,9 @@ const TheaterForm = ({
             min="1"
             max="50"
             className={`w-full bg-slate-700/50 border rounded-lg px-3 py-2 text-white focus:outline-none transition-colors ${
-              formErrors.screens 
-                ? 'border-red-500 focus:border-red-400' 
-                : 'border-slate-600 focus:border-orange-500'
+              formErrors.screens
+                ? "border-red-500 focus:border-red-400"
+                : "border-slate-600 focus:border-orange-500"
             }`}
             required
           />
@@ -244,7 +268,9 @@ const TheaterForm = ({
           )}
         </div>
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">Contact Phone</label>
+          <label className="block text-slate-300 text-sm font-medium mb-2">
+            Contact Phone
+          </label>
           <input
             type="tel"
             name="contact_phone"
@@ -252,9 +278,9 @@ const TheaterForm = ({
             onChange={handleInputChange}
             onBlur={handleInputBlur}
             className={`w-full bg-slate-700/50 border rounded-lg px-3 py-2 text-white focus:outline-none transition-colors ${
-              formErrors.contact_phone 
-                ? 'border-red-500 focus:border-red-400' 
-                : 'border-slate-600 focus:border-orange-500'
+              formErrors.contact_phone
+                ? "border-red-500 focus:border-red-400"
+                : "border-slate-600 focus:border-orange-500"
             }`}
             placeholder="0947679302"
             required
@@ -269,7 +295,9 @@ const TheaterForm = ({
       </div>
 
       <div>
-        <label className="block text-slate-300 text-sm font-medium mb-2">Contact Email</label>
+        <label className="block text-slate-300 text-sm font-medium mb-2">
+          Contact Email
+        </label>
         <input
           type="email"
           name="contact_email"
@@ -277,9 +305,9 @@ const TheaterForm = ({
           onChange={handleInputChange}
           onBlur={handleInputBlur}
           className={`w-full bg-slate-700/50 border rounded-lg px-3 py-2 text-white focus:outline-none transition-colors ${
-            formErrors.contact_email 
-              ? 'border-red-500 focus:border-red-400' 
-              : 'border-slate-600 focus:border-orange-500'
+            formErrors.contact_email
+              ? "border-red-500 focus:border-red-400"
+              : "border-slate-600 focus:border-orange-500"
           }`}
           placeholder="theater@example.com"
           required
@@ -293,7 +321,9 @@ const TheaterForm = ({
       </div>
 
       <div>
-        <label className="block text-slate-300 text-sm font-medium mb-2">Description</label>
+        <label className="block text-slate-300 text-sm font-medium mb-2">
+          Description
+        </label>
         <textarea
           name="description"
           value={formData.description}
@@ -301,11 +331,11 @@ const TheaterForm = ({
           onBlur={handleInputBlur}
           rows={3}
           className={`w-full bg-slate-700/50 border rounded-lg px-3 py-2 text-white focus:outline-none transition-colors ${
-            formErrors.description 
-              ? 'border-red-500 focus:border-red-400' 
-              : 'border-slate-600 focus:border-orange-500'
+            formErrors.description
+              ? "border-red-500 focus:border-red-400"
+              : "border-slate-600 focus:border-orange-500"
           }`}
-          placeholder="Premium cinema experience... / Trải nghiệm rạp chiếu phim cao cấp..."
+          placeholder="Premium cinema experience... / Trải nghiệm rạp chiếu Buổi biểu diễn cao cấp..."
           required
         />
         {formErrors.description && (
@@ -317,7 +347,9 @@ const TheaterForm = ({
       </div>
 
       <div>
-        <label className="block text-slate-300 text-sm font-medium mb-2">Amenities</label>
+        <label className="block text-slate-300 text-sm font-medium mb-2">
+          Amenities
+        </label>
         <div className="flex flex-wrap gap-2 mb-3">
           {formData.amenities.map((amenity, index) => (
             <span
@@ -334,40 +366,46 @@ const TheaterForm = ({
               </button>
             </span>
           ))}
-        </div>          <div className="flex gap-2 mb-2">
-            <input
-              type="text"
-              value={amenityInput}
-              onChange={(e) => setAmenityInput(e.target.value)}
-              className="flex-1 bg-slate-700/50 border border-slate-600 rounded-lg px-3 py-2 text-white focus:border-orange-500 focus:outline-none"
-              placeholder="Add amenity... / Thêm tiện ích..."
-              onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addAmenity(amenityInput))}
-            />
-            <button
-              type="button"
-              onClick={() => addAmenity(amenityInput)}
-              className="px-4 py-2 bg-orange-500/20 text-orange-400 rounded-lg hover:bg-orange-500/30 transition-colors"
-            >
-              Add
-            </button>
-          </div>
-          {formErrors.amenities && (
-            <p className="text-red-400 text-xs mb-2 flex items-center">
-              <AlertCircle size={12} className="mr-1" />
-              {formErrors.amenities}
-            </p>
-          )}
+        </div>{" "}
+        <div className="flex gap-2 mb-2">
+          <input
+            type="text"
+            value={amenityInput}
+            onChange={(e) => setAmenityInput(e.target.value)}
+            className="flex-1 bg-slate-700/50 border border-slate-600 rounded-lg px-3 py-2 text-white focus:border-orange-500 focus:outline-none"
+            placeholder="Add amenity... / Thêm tiện ích..."
+            onKeyPress={(e) =>
+              e.key === "Enter" &&
+              (e.preventDefault(), addAmenity(amenityInput))
+            }
+          />
+          <button
+            type="button"
+            onClick={() => addAmenity(amenityInput)}
+            className="px-4 py-2 bg-orange-500/20 text-orange-400 rounded-lg hover:bg-orange-500/30 transition-colors"
+          >
+            Add
+          </button>
+        </div>
+        {formErrors.amenities && (
+          <p className="text-red-400 text-xs mb-2 flex items-center">
+            <AlertCircle size={12} className="mr-1" />
+            {formErrors.amenities}
+          </p>
+        )}
         <div className="flex flex-wrap gap-2">
-          {availableAmenities.filter(amenity => !formData.amenities.includes(amenity)).map((amenity) => (
-            <button
-              key={amenity}
-              type="button"
-              onClick={() => addAmenity(amenity)}
-              className="px-2 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-full hover:bg-orange-500/20 hover:text-orange-400 transition-colors"
-            >
-              + {amenity}
-            </button>
-          ))}
+          {availableAmenities
+            .filter((amenity) => !formData.amenities.includes(amenity))
+            .map((amenity) => (
+              <button
+                key={amenity}
+                type="button"
+                onClick={() => addAmenity(amenity)}
+                className="px-2 py-1 bg-slate-700/50 text-slate-300 text-xs rounded-full hover:bg-orange-500/20 hover:text-orange-400 transition-colors"
+              >
+                + {amenity}
+              </button>
+            ))}
         </div>
       </div>
 
@@ -382,7 +420,7 @@ const TheaterForm = ({
           ) : (
             <Save size={18} className="mr-2" />
           )}
-          {isEdit ? 'Update Theater' : 'Create Theater'}
+          {isEdit ? "Update Theater" : "Create Theater"}
         </button>
         <button
           type="button"
@@ -403,29 +441,46 @@ const TheaterInfo = () => {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [formData, setFormData] = useState<TheaterCreateRequest>({
-    name: '',
-    location: '',
-    address: '',
-    city: '',
-    state: '',
-    pincode: '',
+    name: "",
+    location: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
     screens: 1,
     amenities: [],
-    contact_phone: '',
-    contact_email: '',
-    description: ''
+    contact_phone: "",
+    contact_email: "",
+    description: "",
   });
-  const [amenityInput, setAmenityInput] = useState('');
+  const [amenityInput, setAmenityInput] = useState("");
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const availableAmenities = [
-    'Parking', 'Food Court', 'AC', '3D', 'IMAX', 'Dolby Atmos', 
-    'VIP Seats', 'Premium Sound', 'Recliner Seats', '4DX', 
-    'VIP Lounge', 'Concession Stand', 'Bar & Grill',
-    'Bãi đậu xe', 'Khu ăn uống', 'Điều hòa', 'Ghế VIP', 
-    'Âm thanh cao cấp', 'Ghế nằm', 'Phòng chờ VIP',
-    'Quầy bán đồ ăn', 'WiFi miễn phí', 'Thang máy'
+    "Parking",
+    "Food Court",
+    "AC",
+    "3D",
+    "IMAX",
+    "Dolby Atmos",
+    "VIP Seats",
+    "Premium Sound",
+    "Recliner Seats",
+    "4DX",
+    "VIP Lounge",
+    "Concession Stand",
+    "Bar & Grill",
+    "Bãi đậu xe",
+    "Khu ăn uống",
+    "Điều hòa",
+    "Ghế VIP",
+    "Âm thanh cao cấp",
+    "Ghế nằm",
+    "Phòng chờ VIP",
+    "Quầy bán đồ ăn",
+    "WiFi miễn phí",
+    "Thang máy",
   ];
 
   // Validation patterns
@@ -435,7 +490,7 @@ const TheaterInfo = () => {
     pincode: /^\d{4,6}$/,
     name: /^[a-zA-ZÀ-ỹĐđ0-9\s\-&.()]{2,50}$/,
     text: /^[a-zA-ZÀ-ỹĐđ0-9\s\-,.()&]{2,100}$/,
-    description: /^[a-zA-ZÀ-ỹĐđ0-9\s\-,.()&!?'"]{10,500}$/
+    description: /^[a-zA-ZÀ-ỹĐđ0-9\s\-,.()&!?'"]{10,500}$/,
   };
 
   useEffect(() => {
@@ -460,13 +515,14 @@ const TheaterInfo = () => {
           amenities: response.result.amenities,
           contact_phone: response.result.contact_phone,
           contact_email: response.result.contact_email,
-          description: response.result.description
+          description: response.result.description,
         });
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch theater data';
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to fetch theater data";
       setError(errorMessage);
-      console.error('Error fetching theater:', err);
+      console.error("Error fetching theater:", err);
     } finally {
       setLoading(false);
     }
@@ -475,94 +531,116 @@ const TheaterInfo = () => {
   // Validation functions
   const validateField = (name: string, value: string): string => {
     const trimmedValue = value.trim();
-    
+
     switch (name) {
-      case 'name':
-        if (!trimmedValue) return 'Theater name is required';
-        if (trimmedValue.length < 2) return 'Theater name must be at least 2 characters';
-        if (trimmedValue.length > 50) return 'Theater name must be less than 50 characters';
-        if (!validationPatterns.name.test(trimmedValue)) return 'Theater name contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)';
-        return '';
-        
-      case 'location':
-        if (!trimmedValue) return 'Location is required';
-        if (trimmedValue.length < 2) return 'Location must be at least 2 characters';
-        if (trimmedValue.length > 100) return 'Location must be less than 100 characters';
-        if (!validationPatterns.text.test(trimmedValue)) return 'Location contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)';
-        return '';
-        
-      case 'address':
-        if (!trimmedValue) return 'Address is required';
-        if (trimmedValue.length < 5) return 'Address must be at least 5 characters';
-        if (trimmedValue.length > 100) return 'Address must be less than 100 characters';
-        if (!validationPatterns.text.test(trimmedValue)) return 'Address contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)';
-        return '';
-        
-      case 'city':
-        if (!trimmedValue) return 'City is required';
-        if (trimmedValue.length < 2) return 'City must be at least 2 characters';
-        if (trimmedValue.length > 50) return 'City must be less than 50 characters';
-        if (!validationPatterns.name.test(trimmedValue)) return 'City contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)';
-        return '';
-        
-      case 'state':
-        if (!trimmedValue) return 'State is required';
-        if (trimmedValue.length < 2) return 'State must be at least 2 characters';
-        if (trimmedValue.length > 50) return 'State must be less than 50 characters';
-        if (!validationPatterns.name.test(trimmedValue)) return 'State contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)';
-        return '';
-        
-      case 'pincode':
-        if (!trimmedValue) return 'Pin code is required';
-        if (!validationPatterns.pincode.test(trimmedValue)) return 'Pin code must be 4-6 digits';
-        return '';
-        
-      case 'contact_phone':
-        if (!trimmedValue) return 'Contact phone is required';
-        if (!validationPatterns.phone.test(trimmedValue)) return 'Please enter a valid Vietnamese phone number (e.g., 0947679302 or +84947679302)';
-        return '';
-        
-      case 'contact_email':
-        if (!trimmedValue) return 'Contact email is required';
-        if (!validationPatterns.email.test(trimmedValue)) return 'Please enter a valid email address';
-        return '';
-        
-      case 'description':
-        if (!trimmedValue) return 'Description is required';
-        if (trimmedValue.length < 10) return 'Description must be at least 10 characters';
-        if (trimmedValue.length > 500) return 'Description must be less than 500 characters';
-        if (!validationPatterns.description.test(trimmedValue)) return 'Description contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)';
-        return '';
-        
-      case 'screens':
+      case "name":
+        if (!trimmedValue) return "Theater name is required";
+        if (trimmedValue.length < 2)
+          return "Theater name must be at least 2 characters";
+        if (trimmedValue.length > 50)
+          return "Theater name must be less than 50 characters";
+        if (!validationPatterns.name.test(trimmedValue))
+          return "Theater name contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)";
+        return "";
+
+      case "location":
+        if (!trimmedValue) return "Location is required";
+        if (trimmedValue.length < 2)
+          return "Location must be at least 2 characters";
+        if (trimmedValue.length > 100)
+          return "Location must be less than 100 characters";
+        if (!validationPatterns.text.test(trimmedValue))
+          return "Location contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)";
+        return "";
+
+      case "address":
+        if (!trimmedValue) return "Address is required";
+        if (trimmedValue.length < 5)
+          return "Address must be at least 5 characters";
+        if (trimmedValue.length > 100)
+          return "Address must be less than 100 characters";
+        if (!validationPatterns.text.test(trimmedValue))
+          return "Address contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)";
+        return "";
+
+      case "city":
+        if (!trimmedValue) return "City is required";
+        if (trimmedValue.length < 2)
+          return "City must be at least 2 characters";
+        if (trimmedValue.length > 50)
+          return "City must be less than 50 characters";
+        if (!validationPatterns.name.test(trimmedValue))
+          return "City contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)";
+        return "";
+
+      case "state":
+        if (!trimmedValue) return "State is required";
+        if (trimmedValue.length < 2)
+          return "State must be at least 2 characters";
+        if (trimmedValue.length > 50)
+          return "State must be less than 50 characters";
+        if (!validationPatterns.name.test(trimmedValue))
+          return "State contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)";
+        return "";
+
+      case "pincode":
+        if (!trimmedValue) return "Pin code is required";
+        if (!validationPatterns.pincode.test(trimmedValue))
+          return "Pin code must be 4-6 digits";
+        return "";
+
+      case "contact_phone":
+        if (!trimmedValue) return "Contact phone is required";
+        if (!validationPatterns.phone.test(trimmedValue))
+          return "Please enter a valid Vietnamese phone number (e.g., 0947679302 or +84947679302)";
+        return "";
+
+      case "contact_email":
+        if (!trimmedValue) return "Contact email is required";
+        if (!validationPatterns.email.test(trimmedValue))
+          return "Please enter a valid email address";
+        return "";
+
+      case "description":
+        if (!trimmedValue) return "Description is required";
+        if (trimmedValue.length < 10)
+          return "Description must be at least 10 characters";
+        if (trimmedValue.length > 500)
+          return "Description must be less than 500 characters";
+        if (!validationPatterns.description.test(trimmedValue))
+          return "Description contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)";
+        return "";
+
+      case "screens":
         const screenCount = parseInt(trimmedValue);
-        if (!screenCount || screenCount < 1) return 'Number of screens must be at least 1';
-        if (screenCount > 50) return 'Number of screens cannot exceed 50';
-        return '';
-        
+        if (!screenCount || screenCount < 1)
+          return "Number of screens must be at least 1";
+        if (screenCount > 50) return "Number of screens cannot exceed 50";
+        return "";
+
       default:
-        return '';
+        return "";
     }
   };
 
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
     const trimmedFormData: any = {};
-    
+
     // Process all fields
-    Object.keys(formData).forEach(key => {
-      if (key !== 'amenities') {
+    Object.keys(formData).forEach((key) => {
+      if (key !== "amenities") {
         const value = formData[key as keyof TheaterCreateRequest];
-        const stringValue = String(value || '');
+        const stringValue = String(value || "");
         const trimmedValue = stringValue.trim();
-        
-        if (key === 'screens') {
+
+        if (key === "screens") {
           const numValue = parseInt(trimmedValue) || 1;
           trimmedFormData[key] = Math.max(1, numValue);
         } else {
           trimmedFormData[key] = trimmedValue;
         }
-        
+
         const error = validateField(key, trimmedValue);
         if (error) errors[key] = error;
       } else {
@@ -575,25 +653,29 @@ const TheaterInfo = () => {
 
     // Validate amenities
     if (formData.amenities.length === 0) {
-      errors.amenities = 'At least one amenity is required';
+      errors.amenities = "At least one amenity is required";
     }
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
-    
+
     // Update form data without trimming during typing
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Clear error for this field if it exists
     if (formErrors[name]) {
-      setFormErrors(prev => {
+      setFormErrors((prev) => {
         const newErrors = { ...prev };
         delete newErrors[name];
         return newErrors;
@@ -602,34 +684,36 @@ const TheaterInfo = () => {
   };
 
   // Handle field blur (when user leaves the input)
-  const handleInputBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    
+
     // Trim the value on blur and handle special cases
     const stringValue = String(value);
     const trimmedValue = stringValue.trim();
-    
+
     let finalValue: string | number;
-    if (name === 'screens') {
+    if (name === "screens") {
       // For screens, ensure minimum value of 1
       const numValue = parseInt(trimmedValue) || 1;
       finalValue = Math.max(1, numValue);
     } else {
       finalValue = trimmedValue;
     }
-    
+
     // Update form data with processed value
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: finalValue
+      [name]: finalValue,
     }));
 
     // Validate field on blur
     const error = validateField(name, trimmedValue);
     if (error) {
-      setFormErrors(prev => ({
+      setFormErrors((prev) => ({
         ...prev,
-        [name]: error
+        [name]: error,
       }));
     }
   };
@@ -638,62 +722,67 @@ const TheaterInfo = () => {
     const trimmedAmenity = amenity.trim();
     if (trimmedAmenity && !formData.amenities.includes(trimmedAmenity)) {
       if (trimmedAmenity.length < 2) {
-        toast.error('Amenity must be at least 2 characters');
+        toast.error("Amenity must be at least 2 characters");
         return;
       }
       if (trimmedAmenity.length > 30) {
-        toast.error('Amenity must be less than 30 characters');
+        toast.error("Amenity must be less than 30 characters");
         return;
       }
       if (!/^[a-zA-ZÀ-ỹĐđ0-9\s\-&.()]{2,30}$/.test(trimmedAmenity)) {
-        toast.error('Amenity contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)');
+        toast.error(
+          "Amenity contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)"
+        );
         return;
       }
-      
-      setFormData(prev => ({
+
+      setFormData((prev) => ({
         ...prev,
-        amenities: [...prev.amenities, trimmedAmenity]
+        amenities: [...prev.amenities, trimmedAmenity],
       }));
-      
+
       // Clear amenities error if it exists
       if (formErrors.amenities) {
-        setFormErrors(prev => {
+        setFormErrors((prev) => {
           const newErrors = { ...prev };
           delete newErrors.amenities;
           return newErrors;
         });
       }
     } else if (formData.amenities.includes(trimmedAmenity)) {
-      toast.error('This amenity already exists');
+      toast.error("This amenity already exists");
     }
-    setAmenityInput('');
+    setAmenityInput("");
   };
 
   const removeAmenity = (amenityToRemove: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      amenities: prev.amenities.filter(amenity => amenity !== amenityToRemove)
+      amenities: prev.amenities.filter(
+        (amenity) => amenity !== amenityToRemove
+      ),
     }));
   };
 
   const handleCreateTheater = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
-      toast.error('Please fix all validation errors before submitting');
+      toast.error("Please fix all validation errors before submitting");
       return;
     }
-    
+
     try {
       setIsSubmitting(true);
       setLoading(true);
       await createTheater(formData);
-      toast.success('Theater created successfully!');
+      toast.success("Theater created successfully!");
       setShowCreateForm(false);
       setFormErrors({});
       await fetchTheaterData(); // Refresh data
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to create theater';
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to create theater";
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -704,22 +793,23 @@ const TheaterInfo = () => {
   const handleUpdateTheater = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!theater?.result?._id) return;
-    
+
     if (!validateForm()) {
-      toast.error('Please fix all validation errors before submitting');
+      toast.error("Please fix all validation errors before submitting");
       return;
     }
-    
+
     try {
       setIsSubmitting(true);
       setLoading(true);
       await updateTheater(theater.result._id, formData);
-      toast.success('Theater updated successfully!');
+      toast.success("Theater updated successfully!");
       setShowEditForm(false);
       setFormErrors({});
       await fetchTheaterData(); // Refresh data
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to update theater';
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to update theater";
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -729,28 +819,28 @@ const TheaterInfo = () => {
 
   const resetForm = () => {
     setFormData({
-      name: '',
-      location: '',
-      address: '',
-      city: '',
-      state: '',
-      pincode: '',
+      name: "",
+      location: "",
+      address: "",
+      city: "",
+      state: "",
+      pincode: "",
       screens: 1,
       amenities: [],
-      contact_phone: '',
-      contact_email: '',
-      description: ''
+      contact_phone: "",
+      contact_email: "",
+      description: "",
     });
-    setAmenityInput('');
+    setAmenityInput("");
     setFormErrors({});
     setIsSubmitting(false);
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -781,9 +871,7 @@ const TheaterInfo = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-white">
-            Theater Management
-          </h2>
+          <h2 className="text-2xl font-bold text-white">Theater Management</h2>
           {theater?.result && !showEditForm && !showCreateForm && (
             <button
               onClick={() => {
@@ -800,7 +888,7 @@ const TheaterInfo = () => {
                     amenities: theater.result.amenities,
                     contact_phone: theater.result.contact_phone,
                     contact_email: theater.result.contact_email,
-                    description: theater.result.description
+                    description: theater.result.description,
                   });
                   setFormErrors({});
                 }
@@ -884,7 +972,8 @@ const TheaterInfo = () => {
                   No Theater Found
                 </h3>
                 <p className="text-slate-300 mb-6">
-                  You haven't created a theater yet. Create your first theater to start managing your cinema business.
+                  You haven't created a theater yet. Create your first theater
+                  to start managing your cinema business.
                 </p>
                 <button
                   onClick={() => {
@@ -922,32 +1011,43 @@ const TheaterInfo = () => {
                     }`}
                   >
                     <CheckCircle size={16} className="inline mr-1" />
-                    {theater.result.status.charAt(0).toUpperCase() + theater.result.status.slice(1)}
+                    {theater.result.status.charAt(0).toUpperCase() +
+                      theater.result.status.slice(1)}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                   <div className="bg-slate-700/30 p-4 rounded-lg">
                     <p className="text-slate-400 text-sm">Screens</p>
-                    <p className="text-white font-bold text-xl">{theater.result.screens}</p>
+                    <p className="text-white font-bold text-xl">
+                      {theater.result.screens}
+                    </p>
                   </div>
                   <div className="bg-slate-700/30 p-4 rounded-lg">
                     <p className="text-slate-400 text-sm">City</p>
-                    <p className="text-white font-bold">{theater.result.city}</p>
+                    <p className="text-white font-bold">
+                      {theater.result.city}
+                    </p>
                   </div>
                   <div className="bg-slate-700/30 p-4 rounded-lg">
                     <p className="text-slate-400 text-sm">Pin Code</p>
-                    <p className="text-white font-bold">{theater.result.pincode}</p>
+                    <p className="text-white font-bold">
+                      {theater.result.pincode}
+                    </p>
                   </div>
                   <div className="bg-slate-700/30 p-4 rounded-lg">
                     <p className="text-slate-400 text-sm">Created</p>
-                    <p className="text-orange-400 font-bold text-sm">{formatDate(theater.result.created_at)}</p>
+                    <p className="text-orange-400 font-bold text-sm">
+                      {formatDate(theater.result.created_at)}
+                    </p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-3">Contact Information</h4>
+                    <h4 className="text-lg font-semibold text-white mb-3">
+                      Contact Information
+                    </h4>
                     <div className="space-y-3">
                       <div className="flex items-center text-slate-300">
                         <Phone size={16} className="mr-3 text-orange-400" />
@@ -958,17 +1058,25 @@ const TheaterInfo = () => {
                         {theater.result.contact_email}
                       </div>
                       <div className="flex items-start text-slate-300">
-                        <MapPin size={16} className="mr-3 text-orange-400 mt-0.5" />
+                        <MapPin
+                          size={16}
+                          className="mr-3 text-orange-400 mt-0.5"
+                        />
                         <div>
                           <p>{theater.result.address}</p>
-                          <p>{theater.result.city}, {theater.result.state} {theater.result.pincode}</p>
+                          <p>
+                            {theater.result.city}, {theater.result.state}{" "}
+                            {theater.result.pincode}
+                          </p>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-3">Description</h4>
+                    <h4 className="text-lg font-semibold text-white mb-3">
+                      Description
+                    </h4>
                     <p className="text-slate-300 leading-relaxed">
                       {theater.result.description}
                     </p>
@@ -976,7 +1084,9 @@ const TheaterInfo = () => {
                 </div>
 
                 <div>
-                  <h4 className="text-lg font-semibold text-white mb-3">Amenities</h4>
+                  <h4 className="text-lg font-semibold text-white mb-3">
+                    Amenities
+                  </h4>
                   <div className="flex flex-wrap gap-2">
                     {theater.result.amenities.map((amenity, index) => (
                       <span

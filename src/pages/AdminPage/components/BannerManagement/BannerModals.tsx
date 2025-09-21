@@ -34,7 +34,7 @@ const BannerTypes = {
   HOME_SLIDER: "home_slider" as const, // Banner slider trang chủ
   PROMOTION: "promotion" as const, // Banner khuyến mãi
   ANNOUNCEMENT: "announcement" as const, // Banner thông báo
-  MOVIE_PROMOTION: "movie_promotion" as const, // Banner quảng cáo phim
+  MOVIE_PROMOTION: "movie_promotion" as const, // Banner quảng cáo Buổi biểu diễn
 } as const;
 
 type BannerStatusType = (typeof BannerStatus)[keyof typeof BannerStatus];
@@ -383,7 +383,10 @@ export const CreateBannerModal: React.FC<CreateBannerModalProps> = ({
         link_url: formData.link_url,
         type: formData.type as any, // Type casting for API compatibility
         position: formData.position,
-        status: formData.status === BannerStatus.SCHEDULED ? BannerStatus.ACTIVE : formData.status, // Map scheduled to active for API
+        status:
+          formData.status === BannerStatus.SCHEDULED
+            ? BannerStatus.ACTIVE
+            : formData.status, // Map scheduled to active for API
         start_date: formData.start_date,
         end_date: formData.end_date,
       };
@@ -704,7 +707,10 @@ export const EditBannerModal: React.FC<EditBannerModalProps> = ({
         link_url: formData.link_url,
         type: formData.type as any, // Type casting for API compatibility
         position: formData.position,
-        status: formData.status === BannerStatus.SCHEDULED ? BannerStatus.ACTIVE : formData.status, // Map scheduled to active for API
+        status:
+          formData.status === BannerStatus.SCHEDULED
+            ? BannerStatus.ACTIVE
+            : formData.status, // Map scheduled to active for API
         start_date: formData.start_date,
         end_date: formData.end_date,
       };

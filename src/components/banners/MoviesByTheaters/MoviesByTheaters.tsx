@@ -30,7 +30,11 @@ const MoviesByTheaters = () => {
       <div className="flex flex-col gap-3 items-start border-b border-gray-600 w-full">
         <div className="flex p-3 gap-2 items-center">
           <p>Vị trí</p>
-          <select name="" id="" className="pl-1 pr-20 py-2 rounded-lg bg-white/10 hover:bg-white/30 transition-colors duration-300">
+          <select
+            name=""
+            id=""
+            className="pl-1 pr-20 py-2 rounded-lg bg-white/10 hover:bg-white/30 transition-colors duration-300"
+          >
             <option value="">
               <div>
                 <GoLocation />
@@ -64,7 +68,9 @@ const MoviesByTheaters = () => {
                 alt=""
               />
               <div className="flex flex-col justify-start items-start text-black">
-                <h1 className="text-lg">Lịch chiếu phim Beta Đan Phượng</h1>
+                <h1 className="text-lg">
+                  Lịch chiếu Buổi biểu diễn Beta Đan Phượng
+                </h1>
                 <div className="flex items-center gap-3 ">
                   <p className="text-sm text-gray-600">
                     Tầng 2 Tòa nhà HHA, Khu Đô Thị XPHomes (Tân Tây Đô), Xã Tân

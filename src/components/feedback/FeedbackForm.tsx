@@ -245,7 +245,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
           {/* Rating Section */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-3">
-              Rate this movie (optional)
+              Rate (optional)
               {userExistingRating && (
                 <span className="text-yellow-400 text-sm ml-2">
                   (You already rated: {userExistingRating.rating}/5 ⭐)

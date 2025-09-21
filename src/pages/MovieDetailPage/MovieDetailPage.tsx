@@ -80,7 +80,7 @@ export default function MovieDetailsPage() {
     const fetchTheater = async () => {
       try {
         setIsLoadingTheaters(true);
-        // Lấy các rạp có lịch chiếu cho phim này
+        // Lấy các rạp có lịch chiếu cho Buổi biểu diễn này
         const theaterData = await getTheatersWithShowtimes(id);
         setTheater(theaterData);
         const firstId = theaterData.result?.theaters?.[0]?._id;
@@ -148,7 +148,7 @@ export default function MovieDetailsPage() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400 mx-auto mb-4" />
-          <p className="text-gray-300">Loading movie information...</p>
+          <p className="text-gray-300">Loading information...</p>
         </div>
       </div>
     );
