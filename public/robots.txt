@@ -1,0 +1,14 @@
+User-agent: *
+Disallow: /admin
+Disallow: /partner
+Disallow: /payment
+Disallow: /checkout
+Disallow: /my-bookings
+Disallow: /favourite
+Disallow: /profile
+Disallow: /payment-history
+Disallow: /payment/success
+Disallow: /payment/failed
+Disallow: /movies/*/screenId
+
+Sitemap: https://dangianvietnam.com/sitemap.xml
