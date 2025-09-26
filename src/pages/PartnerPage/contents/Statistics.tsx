@@ -35,6 +35,18 @@ const Statistics: React.FC = () => {
     end_date: new Date().toISOString().split("T")[0],
   });
 
+  const periodLabels: Record<string, string> = {
+    day: "ngày",
+    week: "tuần",
+    month: "tháng",
+  };
+
+  const groupByLabels: Record<string, string> = {
+    date: "Ngày",
+    theater: "Rạp chiếu",
+    movie: "Phim",
+  };
+
   // Fetch revenue statistics
   const {
     data: revenueStats,
@@ -74,7 +86,7 @@ const Statistics: React.FC = () => {
       <div className="p-6">
         <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-6 text-center">
           <p className="text-red-400">
-            Failed to load statistics: {error.message}
+            Không thể tải thống kê: {error.message}
           </p>
         </div>
       </div>
@@ -90,15 +102,15 @@ const Statistics: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-white mb-2">
-            Revenue Statistics
+            Thống Kê Doanh Thu
           </h1>
           <p className="text-slate-400">
-            Comprehensive revenue analysis and insights
+            Phân tích doanh thu toàn diện và thông tin chi tiết
           </p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
           <Download className="h-4 w-4" />
-          Export Data
+          Xuất Dữ Liệu
         </button>
       </div>
 
@@ -111,7 +123,7 @@ const Statistics: React.FC = () => {
         <div className="flex items-center gap-3 mb-4">
           <Filter className="h-5 w-5 text-purple-400" />
           <h2 className="text-lg font-semibold text-white">
-            Filters & Options
+            Bộ Lọc & Tùy Chọn
           </h2>
         </div>
 
@@ -119,7 +131,7 @@ const Statistics: React.FC = () => {
           {/* Date Range */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
-              Start Date
+              Ngày Bắt Đầu
             </label>
             <input
               type="date"
@@ -132,7 +144,7 @@ const Statistics: React.FC = () => {
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
-              End Date
+              Ngày Kết Thúc
             </label>
             <input
               type="date"
@@ -147,32 +159,32 @@ const Statistics: React.FC = () => {
           {/* Period */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
-              Period
+              Chu Kỳ
             </label>
             <select
               value={filters.period}
               onChange={(e) => handleFilterChange("period", e.target.value)}
               className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white"
             >
-              <option value="day">Daily</option>
-              <option value="week">Weekly</option>
-              <option value="month">Monthly</option>
+              <option value="day">Theo ngày</option>
+              <option value="week">Theo tuần</option>
+              <option value="month">Theo tháng</option>
             </select>
           </div>
 
           {/* Group By */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
-              Group By
+              Nhóm Theo
             </label>
             <select
               value={filters.group_by}
               onChange={(e) => handleFilterChange("group_by", e.target.value)}
               className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white"
             >
-              <option value="date">Date</option>
-              <option value="theater">Theater</option>
-              <option value="movie">Movie</option>
+              <option value="date">Ngày</option>
+              <option value="theater">Rạp</option>
+              <option value="movie">Phim</option>
             </select>
           </div>
         </div>
@@ -190,7 +202,7 @@ const Statistics: React.FC = () => {
             <div className="flex items-center justify-between mb-4">
               <DollarSign className="h-8 w-8 text-green-400" />
               <span className="text-green-400 text-sm font-medium">
-                Total Revenue
+                Tổng Doanh Thu
               </span>
             </div>
             <div className="space-y-1">
@@ -198,8 +210,8 @@ const Statistics: React.FC = () => {
                 {formatRevenueShort(summary.total_revenue)}
               </p>
               <p className="text-green-400 text-sm">
-                Avg: {formatRevenueShort(summary.average_revenue_per_period)}/
-                {filters.period}
+                Trung bình: {formatRevenueShort(summary.average_revenue_per_period)}/
+                {periodLabels[filters.period as string] || filters.period}
               </p>
             </div>
           </div>
@@ -208,7 +220,7 @@ const Statistics: React.FC = () => {
             <div className="flex items-center justify-between mb-4">
               <Users className="h-8 w-8 text-blue-400" />
               <span className="text-blue-400 text-sm font-medium">
-                Total Bookings
+                Tổng Số Đặt Vé
               </span>
             </div>
             <div className="space-y-1">
@@ -216,7 +228,7 @@ const Statistics: React.FC = () => {
                 {summary.total_bookings.toLocaleString()}
               </p>
               <p className="text-blue-400 text-sm">
-                {summary.total_tickets_sold.toLocaleString()} tickets sold
+                {summary.total_tickets_sold.toLocaleString()} vé đã bán
               </p>
             </div>
           </div>
@@ -225,7 +237,7 @@ const Statistics: React.FC = () => {
             <div className="flex items-center justify-between mb-4">
               <Percent className="h-8 w-8 text-purple-400" />
               <span className="text-purple-400 text-sm font-medium">
-                Occupancy Rate
+                Tỷ Lệ Lấp Đầy
               </span>
             </div>
             <div className="space-y-1">
@@ -233,7 +245,7 @@ const Statistics: React.FC = () => {
                 {summary.average_occupancy_rate.toFixed(1)}%
               </p>
               <p className="text-purple-400 text-sm">
-                Average across all shows
+                Trung bình trên tất cả suất chiếu
               </p>
             </div>
           </div>
@@ -242,15 +254,15 @@ const Statistics: React.FC = () => {
             <div className="flex items-center justify-between mb-4">
               <Building2 className="h-8 w-8 text-orange-400" />
               <span className="text-orange-400 text-sm font-medium">
-                Performance
+                Hiệu Suất
               </span>
             </div>
             <div className="space-y-1">
               <p className="text-lg font-bold text-white">
-                {summary.theaters_count} Theaters
+                {summary.theaters_count} Rạp
               </p>
               <p className="text-orange-400 text-sm">
-                {summary.movies_count} Movies
+                {summary.movies_count} Phim
               </p>
             </div>
           </div>
@@ -269,18 +281,18 @@ const Statistics: React.FC = () => {
             <div className="flex items-center gap-3 mb-4">
               <Building2 className="h-5 w-5 text-blue-400" />
               <h3 className="text-lg font-semibold text-white">
-                Top Performing Theater
+                Rạp Có Hiệu Suất Cao Nhất
               </h3>
             </div>
             <div className="space-y-3">
               <div>
-                <p className="text-slate-400 text-sm">Theater Name</p>
+                <p className="text-slate-400 text-sm">Tên Rạp</p>
                 <p className="text-white font-medium">
                   {summary.top_performing_theater.theater_name}
                 </p>
               </div>
               <div>
-                <p className="text-slate-400 text-sm">Revenue</p>
+                <p className="text-slate-400 text-sm">Doanh Thu</p>
                 <p className="text-green-400 font-bold text-xl">
                   {formatRevenue(summary.top_performing_theater.revenue)}
                 </p>
@@ -292,18 +304,18 @@ const Statistics: React.FC = () => {
             <div className="flex items-center gap-3 mb-4">
               <Film className="h-5 w-5 text-purple-400" />
               <h3 className="text-lg font-semibold text-white">
-                Top Performing Movie
+                Phim Có Hiệu Suất Cao Nhất
               </h3>
             </div>
             <div className="space-y-3">
               <div>
-                <p className="text-slate-400 text-sm">Movie Title</p>
+                <p className="text-slate-400 text-sm">Tên Phim</p>
                 <p className="text-white font-medium">
                   {summary.top_performing_movie.movie_title}
                 </p>
               </div>
               <div>
-                <p className="text-slate-400 text-sm">Revenue</p>
+                <p className="text-slate-400 text-sm">Doanh Thu</p>
                 <p className="text-green-400 font-bold text-xl">
                   {formatRevenue(summary.top_performing_movie.revenue)}
                 </p>
@@ -323,7 +335,7 @@ const Statistics: React.FC = () => {
         <div className="p-6 border-b border-slate-700">
           <div className="flex items-center gap-3">
             <BarChart3 className="h-5 w-5 text-green-400" />
-            <h3 className="text-lg font-semibold text-white">Revenue Data</h3>
+            <h3 className="text-lg font-semibold text-white">Dữ Liệu Doanh Thu</h3>
           </div>
         </div>
 
@@ -332,26 +344,22 @@ const Statistics: React.FC = () => {
             <thead className="bg-slate-700/50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                  {filters.group_by === "theater"
-                    ? "Theater"
-                    : filters.group_by === "movie"
-                    ? "Movie"
-                    : "Date"}
+                  {groupByLabels[filters.group_by as string] || "Ngày"}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                  Revenue
+                  Doanh Thu
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                  Bookings
+                  Đặt Vé
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                  Tickets
+                  Vé
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                  Occupancy
+                  Tỷ Lệ Lấp Đầy
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-slate-300 uppercase tracking-wider">
-                  Avg Value
+                  Giá Trị Trung Bình
                 </th>
               </tr>
             </thead>

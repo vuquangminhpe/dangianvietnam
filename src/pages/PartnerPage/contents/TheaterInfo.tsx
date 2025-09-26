@@ -20,8 +20,6 @@ import {
   type TheaterCreateRequest,
 } from "../../../apis/staff.api";
 import { toast } from "sonner";
-
-// ✅ Di chuyển TheaterForm ra ngoài component chính
 const TheaterForm = ({
   isEdit = false,
   onSubmit,
@@ -71,8 +69,8 @@ const TheaterForm = ({
           <Edit3 size={24} className="mr-2 text-orange-400" />
         ) : (
           <Plus size={24} className="mr-2 text-orange-400" />
-        )}
-        {isEdit ? "Edit Theater" : "Create New Theater"}
+    )}
+    {isEdit ? "Chỉnh Sửa Thông Tin Rạp" : "Tạo Rạp Mới"}
       </h3>
       <button
         onClick={onCancel}
@@ -86,7 +84,7 @@ const TheaterForm = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-slate-300 text-sm font-medium mb-2">
-            Theater Name
+            Tên Rạp
           </label>
           <input
             type="text"
@@ -99,7 +97,7 @@ const TheaterForm = ({
                 ? "border-red-500 focus:border-red-400"
                 : "border-slate-600 focus:border-orange-500"
             }`}
-            placeholder="Cinema Name / Rạp Chiếu Buổi biểu diễn"
+            placeholder="Tên rạp chiếu phim"
             required
           />
           {formErrors.name && (
@@ -111,7 +109,7 @@ const TheaterForm = ({
         </div>
         <div>
           <label className="block text-slate-300 text-sm font-medium mb-2">
-            Location
+            Khu Vực
           </label>
           <input
             type="text"
@@ -124,7 +122,7 @@ const TheaterForm = ({
                 ? "border-red-500 focus:border-red-400"
                 : "border-slate-600 focus:border-orange-500"
             }`}
-            placeholder="Downtown, City Center / Trung tâm thành phố"
+            placeholder="Ví dụ: Trung tâm thành phố"
             required
           />
           {formErrors.location && (
@@ -138,7 +136,7 @@ const TheaterForm = ({
 
       <div>
         <label className="block text-slate-300 text-sm font-medium mb-2">
-          Address
+          Địa Chỉ
         </label>
         <input
           type="text"
@@ -151,7 +149,7 @@ const TheaterForm = ({
               ? "border-red-500 focus:border-red-400"
               : "border-slate-600 focus:border-orange-500"
           }`}
-          placeholder="123 Main Street / 123 Đường Chính"
+          placeholder="Ví dụ: 123 Đường Chính"
           required
         />
         {formErrors.address && (
@@ -165,7 +163,7 @@ const TheaterForm = ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
           <label className="block text-slate-300 text-sm font-medium mb-2">
-            City
+            Thành Phố
           </label>
           <input
             type="text"
@@ -190,7 +188,7 @@ const TheaterForm = ({
         </div>
         <div>
           <label className="block text-slate-300 text-sm font-medium mb-2">
-            State
+            Tỉnh/Thành
           </label>
           <input
             type="text"
@@ -215,7 +213,7 @@ const TheaterForm = ({
         </div>
         <div>
           <label className="block text-slate-300 text-sm font-medium mb-2">
-            Pin Code
+            Mã Bưu Chính
           </label>
           <input
             type="text"
@@ -243,7 +241,7 @@ const TheaterForm = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-slate-300 text-sm font-medium mb-2">
-            Number of Screens
+            Số Phòng Chiếu
           </label>
           <input
             type="number"
@@ -269,7 +267,7 @@ const TheaterForm = ({
         </div>
         <div>
           <label className="block text-slate-300 text-sm font-medium mb-2">
-            Contact Phone
+            Số Điện Thoại Liên Hệ
           </label>
           <input
             type="tel"
@@ -296,7 +294,7 @@ const TheaterForm = ({
 
       <div>
         <label className="block text-slate-300 text-sm font-medium mb-2">
-          Contact Email
+          Email Liên Hệ
         </label>
         <input
           type="email"
@@ -309,7 +307,7 @@ const TheaterForm = ({
               ? "border-red-500 focus:border-red-400"
               : "border-slate-600 focus:border-orange-500"
           }`}
-          placeholder="theater@example.com"
+          placeholder="rap@example.com"
           required
         />
         {formErrors.contact_email && (
@@ -322,7 +320,7 @@ const TheaterForm = ({
 
       <div>
         <label className="block text-slate-300 text-sm font-medium mb-2">
-          Description
+          Mô Tả
         </label>
         <textarea
           name="description"
@@ -335,7 +333,7 @@ const TheaterForm = ({
               ? "border-red-500 focus:border-red-400"
               : "border-slate-600 focus:border-orange-500"
           }`}
-          placeholder="Premium cinema experience... / Trải nghiệm rạp chiếu Buổi biểu diễn cao cấp..."
+          placeholder="Mô tả ngắn gọn về rạp..."
           required
         />
         {formErrors.description && (
@@ -348,7 +346,7 @@ const TheaterForm = ({
 
       <div>
         <label className="block text-slate-300 text-sm font-medium mb-2">
-          Amenities
+          Tiện Ích
         </label>
         <div className="flex flex-wrap gap-2 mb-3">
           {formData.amenities.map((amenity, index) => (
@@ -373,7 +371,7 @@ const TheaterForm = ({
             value={amenityInput}
             onChange={(e) => setAmenityInput(e.target.value)}
             className="flex-1 bg-slate-700/50 border border-slate-600 rounded-lg px-3 py-2 text-white focus:border-orange-500 focus:outline-none"
-            placeholder="Add amenity... / Thêm tiện ích..."
+            placeholder="Nhập tiện ích và nhấn Enter"
             onKeyPress={(e) =>
               e.key === "Enter" &&
               (e.preventDefault(), addAmenity(amenityInput))
@@ -384,7 +382,7 @@ const TheaterForm = ({
             onClick={() => addAmenity(amenityInput)}
             className="px-4 py-2 bg-orange-500/20 text-orange-400 rounded-lg hover:bg-orange-500/30 transition-colors"
           >
-            Add
+            Thêm
           </button>
         </div>
         {formErrors.amenities && (
@@ -420,14 +418,14 @@ const TheaterForm = ({
           ) : (
             <Save size={18} className="mr-2" />
           )}
-          {isEdit ? "Update Theater" : "Create Theater"}
+          {isEdit ? "Cập Nhật Rạp" : "Tạo Rạp"}
         </button>
         <button
           type="button"
           onClick={onCancel}
           className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-medium transition-colors"
         >
-          Cancel
+          Hủy
         </button>
       </div>
     </form>
@@ -458,32 +456,40 @@ const TheaterInfo = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const availableAmenities = [
-    "Parking",
-    "Food Court",
-    "AC",
-    "3D",
+    "Bãi đỗ xe",
+    "Khu ẩm thực",
+    "Hệ thống điều hòa",
+    "Công nghệ 3D",
     "IMAX",
     "Dolby Atmos",
-    "VIP Seats",
-    "Premium Sound",
-    "Recliner Seats",
-    "4DX",
-    "VIP Lounge",
-    "Concession Stand",
-    "Bar & Grill",
-    "Bãi đậu xe",
-    "Khu ăn uống",
-    "Điều hòa",
     "Ghế VIP",
     "Âm thanh cao cấp",
-    "Ghế nằm",
+    "Ghế ngả",
+    "4DX",
     "Phòng chờ VIP",
-    "Quầy bán đồ ăn",
+    "Quầy bắp nước",
+    "Khu Bar & Grill",
     "WiFi miễn phí",
     "Thang máy",
   ];
 
-  // Validation patterns
+  const statusLabels: Record<string, string> = {
+    active: "Đang hoạt động",
+    inactive: "Ngừng hoạt động",
+    pending: "Đang chờ",
+  };
+
+  const statusBadgeClasses: Record<string, string> = {
+    active:
+      "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30",
+    pending: "bg-amber-500/20 text-amber-400 border border-amber-500/30",
+    inactive: "bg-red-500/20 text-red-400 border border-red-500/30",
+  };
+
+  const getStatusBadgeClass = (status: string) =>
+    statusBadgeClasses[status] || "bg-slate-600/30 text-slate-300 border border-slate-600/50";
+
+  // Các biểu thức kiểm tra
   const validationPatterns = {
     email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     phone: /^(\+84|0)[3-9]\d{8}$/,
@@ -520,102 +526,102 @@ const TheaterInfo = () => {
       }
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to fetch theater data";
+        err instanceof Error ? err.message : "Không thể tải thông tin rạp";
       setError(errorMessage);
-      console.error("Error fetching theater:", err);
+      console.error("Lỗi tải thông tin rạp:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  // Validation functions
+  // Hàm kiểm tra tính hợp lệ
   const validateField = (name: string, value: string): string => {
     const trimmedValue = value.trim();
 
     switch (name) {
       case "name":
-        if (!trimmedValue) return "Theater name is required";
+        if (!trimmedValue) return "Tên rạp là bắt buộc";
         if (trimmedValue.length < 2)
-          return "Theater name must be at least 2 characters";
+          return "Tên rạp phải có ít nhất 2 ký tự";
         if (trimmedValue.length > 50)
-          return "Theater name must be less than 50 characters";
+          return "Tên rạp phải ít hơn 50 ký tự";
         if (!validationPatterns.name.test(trimmedValue))
-          return "Theater name contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)";
+          return "Tên rạp chứa ký tự không hợp lệ (chỉ cho phép chữ cái, số, dấu cách và một số ký tự đặc biệt cơ bản)";
         return "";
 
       case "location":
-        if (!trimmedValue) return "Location is required";
+        if (!trimmedValue) return "Khu vực là bắt buộc";
         if (trimmedValue.length < 2)
-          return "Location must be at least 2 characters";
+          return "Khu vực phải có ít nhất 2 ký tự";
         if (trimmedValue.length > 100)
-          return "Location must be less than 100 characters";
+          return "Khu vực phải ít hơn 100 ký tự";
         if (!validationPatterns.text.test(trimmedValue))
-          return "Location contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)";
+          return "Khu vực chứa ký tự không hợp lệ (chỉ cho phép chữ cái, số, dấu cách và một số ký tự đặc biệt cơ bản)";
         return "";
 
       case "address":
-        if (!trimmedValue) return "Address is required";
+        if (!trimmedValue) return "Địa chỉ là bắt buộc";
         if (trimmedValue.length < 5)
-          return "Address must be at least 5 characters";
+          return "Địa chỉ phải có ít nhất 5 ký tự";
         if (trimmedValue.length > 100)
-          return "Address must be less than 100 characters";
+          return "Địa chỉ phải ít hơn 100 ký tự";
         if (!validationPatterns.text.test(trimmedValue))
-          return "Address contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)";
+          return "Địa chỉ chứa ký tự không hợp lệ (chỉ cho phép chữ cái, số, dấu cách và một số ký tự đặc biệt cơ bản)";
         return "";
 
       case "city":
-        if (!trimmedValue) return "City is required";
+        if (!trimmedValue) return "Thành phố là bắt buộc";
         if (trimmedValue.length < 2)
-          return "City must be at least 2 characters";
+          return "Thành phố phải có ít nhất 2 ký tự";
         if (trimmedValue.length > 50)
-          return "City must be less than 50 characters";
+          return "Thành phố phải ít hơn 50 ký tự";
         if (!validationPatterns.name.test(trimmedValue))
-          return "City contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)";
+          return "Thành phố chứa ký tự không hợp lệ (chỉ cho phép chữ cái, số, dấu cách và một số ký tự đặc biệt cơ bản)";
         return "";
 
       case "state":
-        if (!trimmedValue) return "State is required";
+        if (!trimmedValue) return "Tỉnh/thành là bắt buộc";
         if (trimmedValue.length < 2)
-          return "State must be at least 2 characters";
+          return "Tỉnh/thành phải có ít nhất 2 ký tự";
         if (trimmedValue.length > 50)
-          return "State must be less than 50 characters";
+          return "Tỉnh/thành phải ít hơn 50 ký tự";
         if (!validationPatterns.name.test(trimmedValue))
-          return "State contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)";
+          return "Tỉnh/thành chứa ký tự không hợp lệ (chỉ cho phép chữ cái, số, dấu cách và một số ký tự đặc biệt cơ bản)";
         return "";
 
       case "pincode":
-        if (!trimmedValue) return "Pin code is required";
+        if (!trimmedValue) return "Mã bưu chính là bắt buộc";
         if (!validationPatterns.pincode.test(trimmedValue))
-          return "Pin code must be 4-6 digits";
+          return "Mã bưu chính phải gồm 4-6 chữ số";
         return "";
 
       case "contact_phone":
-        if (!trimmedValue) return "Contact phone is required";
+        if (!trimmedValue) return "Số điện thoại liên hệ là bắt buộc";
         if (!validationPatterns.phone.test(trimmedValue))
-          return "Please enter a valid Vietnamese phone number (e.g., 0947679302 or +84947679302)";
+          return "Vui lòng nhập số điện thoại Việt Nam hợp lệ (ví dụ: 0947679302 hoặc +84947679302)";
         return "";
 
       case "contact_email":
-        if (!trimmedValue) return "Contact email is required";
+        if (!trimmedValue) return "Email liên hệ là bắt buộc";
         if (!validationPatterns.email.test(trimmedValue))
-          return "Please enter a valid email address";
+          return "Vui lòng nhập địa chỉ email hợp lệ";
         return "";
 
       case "description":
-        if (!trimmedValue) return "Description is required";
+        if (!trimmedValue) return "Mô tả là bắt buộc";
         if (trimmedValue.length < 10)
-          return "Description must be at least 10 characters";
+          return "Mô tả phải có ít nhất 10 ký tự";
         if (trimmedValue.length > 500)
-          return "Description must be less than 500 characters";
+          return "Mô tả phải ít hơn 500 ký tự";
         if (!validationPatterns.description.test(trimmedValue))
-          return "Description contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)";
+          return "Mô tả chứa ký tự không hợp lệ (chỉ cho phép chữ cái, số, dấu cách và một số ký tự đặc biệt cơ bản)";
         return "";
 
       case "screens":
         const screenCount = parseInt(trimmedValue);
         if (!screenCount || screenCount < 1)
-          return "Number of screens must be at least 1";
-        if (screenCount > 50) return "Number of screens cannot exceed 50";
+          return "Số phòng chiếu phải từ 1 trở lên";
+        if (screenCount > 50) return "Số phòng chiếu không được vượt quá 50";
         return "";
 
       default:
@@ -627,7 +633,7 @@ const TheaterInfo = () => {
     const errors: Record<string, string> = {};
     const trimmedFormData: any = {};
 
-    // Process all fields
+  // Xử lý tất cả các trường
     Object.keys(formData).forEach((key) => {
       if (key !== "amenities") {
         const value = formData[key as keyof TheaterCreateRequest];
@@ -648,12 +654,12 @@ const TheaterInfo = () => {
       }
     });
 
-    // Update form data with trimmed values
+  // Cập nhật dữ liệu biểu mẫu với giá trị đã loại bỏ khoảng trắng
     setFormData(trimmedFormData);
 
-    // Validate amenities
+  // Kiểm tra danh sách tiện ích
     if (formData.amenities.length === 0) {
-      errors.amenities = "At least one amenity is required";
+      errors.amenities = "Cần ít nhất một tiện ích";
     }
 
     setFormErrors(errors);
@@ -667,13 +673,13 @@ const TheaterInfo = () => {
   ) => {
     const { name, value } = e.target;
 
-    // Update form data without trimming during typing
+    // Cập nhật dữ liệu biểu mẫu trong khi người dùng nhập
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
 
-    // Clear error for this field if it exists
+    // Xóa lỗi cho trường hiện tại nếu có
     if (formErrors[name]) {
       setFormErrors((prev) => {
         const newErrors = { ...prev };
@@ -683,32 +689,32 @@ const TheaterInfo = () => {
     }
   };
 
-  // Handle field blur (when user leaves the input)
+  // Xử lý khi người dùng rời khỏi trường nhập liệu
   const handleInputBlur = (
     e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
 
-    // Trim the value on blur and handle special cases
+    // Loại bỏ khoảng trắng và xử lý các trường hợp đặc biệt
     const stringValue = String(value);
     const trimmedValue = stringValue.trim();
 
     let finalValue: string | number;
     if (name === "screens") {
-      // For screens, ensure minimum value of 1
+      // Với số phòng chiếu, đảm bảo tối thiểu là 1
       const numValue = parseInt(trimmedValue) || 1;
       finalValue = Math.max(1, numValue);
     } else {
       finalValue = trimmedValue;
     }
 
-    // Update form data with processed value
+    // Cập nhật dữ liệu biểu mẫu với giá trị đã xử lý
     setFormData((prev) => ({
       ...prev,
       [name]: finalValue,
     }));
 
-    // Validate field on blur
+    // Kiểm tra tính hợp lệ khi rời khỏi trường
     const error = validateField(name, trimmedValue);
     if (error) {
       setFormErrors((prev) => ({
@@ -722,16 +728,16 @@ const TheaterInfo = () => {
     const trimmedAmenity = amenity.trim();
     if (trimmedAmenity && !formData.amenities.includes(trimmedAmenity)) {
       if (trimmedAmenity.length < 2) {
-        toast.error("Amenity must be at least 2 characters");
+        toast.error("Tiện ích phải có ít nhất 2 ký tự");
         return;
       }
       if (trimmedAmenity.length > 30) {
-        toast.error("Amenity must be less than 30 characters");
+        toast.error("Tiện ích phải ít hơn 30 ký tự");
         return;
       }
       if (!/^[a-zA-ZÀ-ỹĐđ0-9\s\-&.()]{2,30}$/.test(trimmedAmenity)) {
         toast.error(
-          "Amenity contains invalid characters (only Vietnamese, English letters, numbers, spaces, and basic punctuation allowed)"
+          "Tiện ích chứa ký tự không hợp lệ (chỉ cho phép chữ cái, số, dấu cách và một số ký tự đặc biệt cơ bản)"
         );
         return;
       }
@@ -741,7 +747,7 @@ const TheaterInfo = () => {
         amenities: [...prev.amenities, trimmedAmenity],
       }));
 
-      // Clear amenities error if it exists
+      // Xóa lỗi tiện ích nếu đã tồn tại
       if (formErrors.amenities) {
         setFormErrors((prev) => {
           const newErrors = { ...prev };
@@ -750,7 +756,7 @@ const TheaterInfo = () => {
         });
       }
     } else if (formData.amenities.includes(trimmedAmenity)) {
-      toast.error("This amenity already exists");
+      toast.error("Tiện ích này đã tồn tại");
     }
     setAmenityInput("");
   };
@@ -768,7 +774,7 @@ const TheaterInfo = () => {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error("Please fix all validation errors before submitting");
+      toast.error("Vui lòng sửa tất cả lỗi trước khi gửi");
       return;
     }
 
@@ -776,13 +782,13 @@ const TheaterInfo = () => {
       setIsSubmitting(true);
       setLoading(true);
       await createTheater(formData);
-      toast.success("Theater created successfully!");
+      toast.success("Tạo rạp thành công!");
       setShowCreateForm(false);
       setFormErrors({});
-      await fetchTheaterData(); // Refresh data
+      await fetchTheaterData(); // Tải lại dữ liệu
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to create theater";
+        err instanceof Error ? err.message : "Không thể tạo rạp";
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -795,7 +801,7 @@ const TheaterInfo = () => {
     if (!theater?.result?._id) return;
 
     if (!validateForm()) {
-      toast.error("Please fix all validation errors before submitting");
+      toast.error("Vui lòng sửa tất cả lỗi trước khi gửi");
       return;
     }
 
@@ -803,13 +809,13 @@ const TheaterInfo = () => {
       setIsSubmitting(true);
       setLoading(true);
       await updateTheater(theater.result._id, formData);
-      toast.success("Theater updated successfully!");
+      toast.success("Cập nhật rạp thành công!");
       setShowEditForm(false);
       setFormErrors({});
-      await fetchTheaterData(); // Refresh data
+      await fetchTheaterData(); // Tải lại dữ liệu
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to update theater";
+        err instanceof Error ? err.message : "Không thể cập nhật rạp";
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -837,10 +843,10 @@ const TheaterInfo = () => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
+    return new Date(dateString).toLocaleDateString("vi-VN", {
+      day: "2-digit",
       month: "long",
-      day: "numeric",
+      year: "numeric",
     });
   };
 
@@ -855,7 +861,7 @@ const TheaterInfo = () => {
         <div className="flex items-center justify-center min-h-96">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-            <p className="text-slate-300">Loading theater information...</p>
+            <p className="text-slate-300">Đang tải thông tin rạp...</p>
           </div>
         </div>
       </motion.div>
@@ -871,11 +877,11 @@ const TheaterInfo = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-white">Theater Management</h2>
+          <h2 className="text-2xl font-bold text-white">Quản Lý Rạp</h2>
           {theater?.result && !showEditForm && !showCreateForm && (
             <button
               onClick={() => {
-                // Initialize form with current theater data when editing
+                // Khởi tạo biểu mẫu với dữ liệu rạp hiện tại khi chỉnh sửa
                 if (theater.result) {
                   setFormData({
                     name: theater.result.name,
@@ -897,7 +903,7 @@ const TheaterInfo = () => {
               className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors flex items-center"
             >
               <Edit3 size={18} className="mr-2" />
-              Edit Theater
+              Chỉnh Sửa Rạp
             </button>
           )}
         </div>
@@ -969,11 +975,11 @@ const TheaterInfo = () => {
               >
                 <Building2 size={64} className="text-orange-400 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-white mb-2">
-                  No Theater Found
+                  Chưa Có Rạp
                 </h3>
                 <p className="text-slate-300 mb-6">
-                  You haven't created a theater yet. Create your first theater
-                  to start managing your cinema business.
+                  Bạn chưa tạo rạp nào. Hãy tạo rạp đầu tiên để bắt đầu quản
+                  lý hệ thống của bạn.
                 </p>
                 <button
                   onClick={() => {
@@ -983,7 +989,7 @@ const TheaterInfo = () => {
                   className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors flex items-center mx-auto"
                 >
                   <Plus size={18} className="mr-2" />
-                  Create Theater
+                  Tạo Rạp
                 </button>
               </motion.div>
             ) : (
@@ -1004,39 +1010,37 @@ const TheaterInfo = () => {
                     </p>
                   </div>
                   <span
-                    className={`px-4 py-2 rounded-full text-sm font-medium ${
-                      theater.result.status === "active"
-                        ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-                        : "bg-red-500/20 text-red-400 border border-red-500/30"
-                    }`}
+                    className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusBadgeClass(
+                      theater.result.status
+                    )}`}
                   >
                     <CheckCircle size={16} className="inline mr-1" />
-                    {theater.result.status.charAt(0).toUpperCase() +
-                      theater.result.status.slice(1)}
+                    {statusLabels[theater.result.status] ||
+                      theater.result.status}
                   </span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                   <div className="bg-slate-700/30 p-4 rounded-lg">
-                    <p className="text-slate-400 text-sm">Screens</p>
+                    <p className="text-slate-400 text-sm">Phòng chiếu</p>
                     <p className="text-white font-bold text-xl">
                       {theater.result.screens}
                     </p>
                   </div>
                   <div className="bg-slate-700/30 p-4 rounded-lg">
-                    <p className="text-slate-400 text-sm">City</p>
+                    <p className="text-slate-400 text-sm">Thành phố</p>
                     <p className="text-white font-bold">
                       {theater.result.city}
                     </p>
                   </div>
                   <div className="bg-slate-700/30 p-4 rounded-lg">
-                    <p className="text-slate-400 text-sm">Pin Code</p>
+                    <p className="text-slate-400 text-sm">Mã bưu chính</p>
                     <p className="text-white font-bold">
                       {theater.result.pincode}
                     </p>
                   </div>
                   <div className="bg-slate-700/30 p-4 rounded-lg">
-                    <p className="text-slate-400 text-sm">Created</p>
+                    <p className="text-slate-400 text-sm">Ngày tạo</p>
                     <p className="text-orange-400 font-bold text-sm">
                       {formatDate(theater.result.created_at)}
                     </p>
@@ -1046,7 +1050,7 @@ const TheaterInfo = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                   <div>
                     <h4 className="text-lg font-semibold text-white mb-3">
-                      Contact Information
+                      Thông Tin Liên Hệ
                     </h4>
                     <div className="space-y-3">
                       <div className="flex items-center text-slate-300">
@@ -1075,7 +1079,7 @@ const TheaterInfo = () => {
 
                   <div>
                     <h4 className="text-lg font-semibold text-white mb-3">
-                      Description
+                      Mô Tả
                     </h4>
                     <p className="text-slate-300 leading-relaxed">
                       {theater.result.description}
@@ -1085,7 +1089,7 @@ const TheaterInfo = () => {
 
                 <div>
                   <h4 className="text-lg font-semibold text-white mb-3">
-                    Amenities
+                    Tiện Ích
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {theater.result.amenities.map((amenity, index) => (
@@ -1101,13 +1105,13 @@ const TheaterInfo = () => {
 
                 <div className="flex justify-between items-center mt-6 pt-6 border-t border-slate-700/50">
                   <div className="text-sm text-slate-400">
-                    <p>Last updated: {formatDate(theater.result.updated_at)}</p>
+                    <p>Cập nhật lần cuối: {formatDate(theater.result.updated_at)}</p>
                   </div>
                   <button
                     onClick={fetchTheaterData}
                     className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
                   >
-                    Refresh
+                    Làm Mới
                   </button>
                 </div>
               </motion.div>

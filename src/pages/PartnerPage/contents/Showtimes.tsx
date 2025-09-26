@@ -38,19 +38,19 @@ import {
   ShowtimeStatusValues,
 } from "../../../apis/showtime_staff.api";
 
-import { getMyTheater, type TheaterResponse } from "../../../apis/staff.api";
-
-import {
-  searchAvailableMovies,
-  getPopularMovies,
-  getMovieById,
+import { 
+  getMyTheater, 
+  getMyMovies,
   formatMovieDuration,
-  getMovieStatusDisplay,
-  getMovieStatusColor,
-  isMovieAvailableForShowtime,
-  type StaffMovie,
-  type MovieSearchParams,
-} from "../../../apis/movie_staff.api";
+  getMovieStatusDisplay as getStaffMovieStatusDisplay,
+  type TheaterResponse,
+  type Movie as StaffMovie 
+} from "../../../apis/staff.api";
+
+import { getMovieStatusColor } from "../../../apis/movie_staff.api";
+import { getMyMovieById } from "../../../apis/staff.api";
+
+// Note: Using getMyMovies from staff.api instead of movie_staff.api for partner-specific movies
 
 import { getTheaterScreens, type Screen } from "../../../apis/staff_screen.api";
 
@@ -95,7 +95,7 @@ const MovieSelectItem = ({
               movie.status
             )}`}
           >
-            {getMovieStatusDisplay(movie.status)}
+            {getStaffMovieStatusDisplay(movie.status)}
           </span>
           <span className="text-slate-400 text-xs">
             ⭐ {movie.average_rating.toFixed(1)} ({movie.ratings_count})
@@ -117,13 +117,14 @@ const Showtimes = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
-  const limit = 10;
+  const limit = 10; // 10 showtimes per page for better pagination
 
   // Movie search states
   const [movieSearchTerm, setMovieSearchTerm] = useState("");
   const [movieLoading, setMovieLoading] = useState(false);
   const [popularMovies, setPopularMovies] = useState<StaffMovie[]>([]);
   const [searchResults, setSearchResults] = useState<StaffMovie[]>([]);
+  const [movieCache, setMovieCache] = useState<Map<string, StaffMovie[]>>(new Map());
 
   // Modal states
   const [showAddModal, setShowAddModal] = useState(false);
@@ -170,10 +171,10 @@ const Showtimes = () => {
       setTheater(theaterResponse);
 
       if (theaterResponse.result?._id) {
-        // Get popular movies, screens, and showtimes in parallel
-        const [popularMoviesResponse, screensResponse, showtimesResponse] =
+        // Get my movies, screens, and showtimes in parallel
+        const [myMoviesResponse, screensResponse, showtimesResponse] =
           await Promise.all([
-            getPopularMovies(20), // Get popular movies for quick selection
+            getMyMovies(1, 100), // Get all movies owned by this partner
             getTheaterScreens(theaterResponse.result._id, 1, 100), // Get all screens
             getMyShowtimes(
               page,
@@ -185,7 +186,7 @@ const Showtimes = () => {
             ),
           ]);
 
-        setPopularMovies(popularMoviesResponse.result.movies);
+        setPopularMovies(myMoviesResponse.result.movies);
         setScreens(screensResponse.result.screens);
         setShowtimes(showtimesResponse.result.showtimes);
         setTotalPages(showtimesResponse.result.total_pages);
@@ -193,7 +194,7 @@ const Showtimes = () => {
       }
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to fetch data";
+        err instanceof Error ? err.message : "Không thể tải dữ liệu";
       setError(errorMessage);
       console.error("Error fetching data:", err);
     } finally {
@@ -201,31 +202,55 @@ const Showtimes = () => {
     }
   };
 
-  // Search movies function
+  // Search movies function with caching
   const searchMovies = async (searchTerm: string) => {
     if (!searchTerm.trim()) {
       setSearchResults([]);
       return;
     }
 
+    // Check cache first
+    const cacheKey = `search_${searchTerm}_now_showing`;
+    if (movieCache.has(cacheKey)) {
+      setSearchResults(movieCache.get(cacheKey)!);
+      return;
+    }
+
     try {
       setMovieLoading(true);
-      const params: MovieSearchParams = {
-        search: searchTerm,
-        limit: 10,
-        status: "now_showing", // Only show movies that are currently showing or coming soon
-      };
-
-      const response = await searchAvailableMovies(params);
-      setSearchResults(
-        response.result.movies.filter(isMovieAvailableForShowtime)
+      
+      // Search through partner's own movies only
+      const response = await getMyMovies(1, 50, searchTerm, "now_showing");
+      const filteredMovies = response.result.movies.filter((movie) => 
+        movie.status === "now_showing" || movie.status === "coming_soon"
       );
+      
+      // Cache results
+      setMovieCache(prev => new Map(prev.set(cacheKey, filteredMovies)));
+      setSearchResults(filteredMovies);
     } catch (err) {
       console.error("Error searching movies:", err);
-      toast.error("Failed to search movies");
+      toast.error("Không thể tìm kiếm phim");
     } finally {
       setMovieLoading(false);
     }
+  };
+
+  // Helper function to generate pagination numbers
+  const getPaginationNumbers = (): number[] => {
+    if (totalPages <= 7) {
+      return [...Array(totalPages)].map((_, i) => i + 1);
+    }
+
+    if (page <= 4) {
+      return [1, 2, 3, 4, 5, -1, totalPages];
+    }
+
+    if (page >= totalPages - 3) {
+      return [1, -1, totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+
+    return [1, -1, page - 1, page, page + 1, -1, totalPages];
   };
 
   // Helper function to format date for input fields
@@ -354,23 +379,23 @@ const Showtimes = () => {
       // Check if showtime can be modified with latest data
       if (!canModifyShowtime(latestShowtime)) {
         if (hasBookings(latestShowtime)) {
-          toast.error("Cannot delete showtime with existing bookings");
+          toast.error("Không thể xóa lịch chiếu có đặt vé");
         } else if (new Date(latestShowtime.start_time) <= new Date()) {
-          toast.error("Cannot delete past showtimes");
+          toast.error("Không thể xóa lịch chiếu đã qua");
         } else {
-          toast.error("Cannot delete this showtime");
+          toast.error("Không thể xóa lịch chiếu này");
         }
         return;
       }
 
       setShowtimeToDelete({
         id: latestShowtime._id,
-        movie: latestShowtime.movie?.title || "Unknown",
+        movie: latestShowtime.movie?.title || "Không xác định",
       });
       setShowDeleteModal(true);
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to fetch showtime details";
+        err instanceof Error ? err.message : "Không thể tải chi tiết lịch chiếu";
       toast.error(errorMessage);
     }
   };
@@ -382,13 +407,13 @@ const Showtimes = () => {
     try {
       setIsSubmitting(true);
       await deleteShowtime(showtimeToDelete.id);
-      toast.success("Showtime deleted successfully");
+      toast.success("Xóa lịch chiếu thành công");
       setShowDeleteModal(false);
       setShowtimeToDelete(null);
       await fetchData(); // Refresh the list
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to delete showtime";
+        err instanceof Error ? err.message : "Không thể xóa lịch chiếu";
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -405,14 +430,14 @@ const Showtimes = () => {
   const handleAddShowtime = () => {
     // Check if theater exists
     if (!theater?.result) {
-      toast.error("Please create a theater first before adding showtimes");
+      toast.error("Vui lòng tạo rạp phim trước khi thêm lịch chiếu");
       return;
     }
 
     // Check if screens exist
     if (!screens || screens.length === 0) {
       toast.error(
-        "Please create at least one screen for your theater before adding showtimes"
+        "Vui lòng tạo ít nhất một phòng chiếu cho rạp của bạn trước khi thêm lịch chiếu"
       );
       return;
     }
@@ -445,11 +470,11 @@ const Showtimes = () => {
       // Check if showtime can be modified with latest data
       if (!canModifyShowtime(latestShowtime)) {
         if (hasBookings(latestShowtime)) {
-          toast.error("Cannot edit showtime with existing bookings");
+          toast.error("Không thể chỉnh sửa lịch chiếu có đặt vé");
         } else if (new Date(latestShowtime.start_time) <= new Date()) {
-          toast.error("Cannot edit past showtimes");
+          toast.error("Không thể chỉnh sửa lịch chiếu đã qua");
         } else {
-          toast.error("Cannot edit this showtime");
+          toast.error("Không thể chỉnh sửa lịch chiếu này");
         }
         return;
       }
@@ -468,7 +493,7 @@ const Showtimes = () => {
 
       // Fetch movie details and find screen
       const [movieResponse] = await Promise.all([
-        getMovieById(latestShowtime.movie_id),
+        getMyMovieById(latestShowtime.movie_id),
       ]);
 
       const screen = screens.find((s) => s._id === latestShowtime.screen_id);
@@ -485,7 +510,7 @@ const Showtimes = () => {
       setShowEditModal(true);
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to fetch showtime details";
+        err instanceof Error ? err.message : "Không thể tải chi tiết lịch chiếu";
       toast.error(errorMessage);
     }
   };
@@ -497,7 +522,7 @@ const Showtimes = () => {
       setShowViewModal(true);
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to fetch showtime details";
+        err instanceof Error ? err.message : "Không thể tải chi tiết lịch chiếu";
       toast.error(errorMessage);
     }
   };
@@ -521,18 +546,18 @@ const Showtimes = () => {
   const validateForm = (): string[] => {
     const errors = validateShowtimeData(formData);
 
-    if (!selectedMovie) errors.push("Please select a movie");
-    if (!selectedScreen) errors.push("Please select a screen");
-    if (!showDate) errors.push("Please select a date");
-    if (!showTime) errors.push("Please select a time");
-    if (!formData.end_time) errors.push("End time is required");
+  if (!selectedMovie) errors.push("Vui lòng chọn phim");
+  if (!selectedScreen) errors.push("Vui lòng chọn phòng chiếu");
+  if (!showDate) errors.push("Vui lòng chọn ngày chiếu");
+  if (!showTime) errors.push("Vui lòng chọn giờ chiếu");
+  if (!formData.end_time) errors.push("Giờ kết thúc là bắt buộc");
 
     // Check if start time is in the future
     if (formData.start_time) {
       const startTime = new Date(formData.start_time);
       const now = new Date();
       if (startTime <= now) {
-        errors.push("Start time must be in the future");
+  errors.push("Giờ bắt đầu phải ở trong tương lai");
       }
     }
 
@@ -541,7 +566,7 @@ const Showtimes = () => {
       const startTime = new Date(formData.start_time);
       const endTime = new Date(formData.end_time);
       if (endTime <= startTime) {
-        errors.push("End time must be after start time");
+  errors.push("Giờ kết thúc phải sau giờ bắt đầu");
       }
     }
 
@@ -590,13 +615,22 @@ const Showtimes = () => {
 
       // Debug log to check if end_time is included
 
+      // Create showtime
       await createShowtime(showtimeData);
-      toast.success("Showtime created successfully");
+      toast.success("Tạo lịch chiếu thành công");
       closeModals();
-      await fetchData(); // Refresh the list
+      
+      // Navigate to page 1 to see the new showtime (since it should appear first)
+      if (page !== 1) {
+        setPage(1);
+        // setPage will trigger useEffect to fetch data, so we don't need to call fetchData here
+      } else {
+        // If already on page 1, fetch data to update the list
+        await fetchData();
+      }
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to create showtime";
+        err instanceof Error ? err.message : "Không thể tạo lịch chiếu";
       toast.error(errorMessage);
       setFormErrors([errorMessage]);
     } finally {
@@ -630,7 +664,7 @@ const Showtimes = () => {
     }
 
     if (!selectedShowtime) {
-      toast.error("Showtime information not available");
+      toast.error("Thông tin lịch chiếu không có sẵn");
       return;
     }
 
@@ -649,12 +683,12 @@ const Showtimes = () => {
       // Debug log to check if end_time is included in update
 
       await updateShowtime(selectedShowtime._id, updateData);
-      toast.success("Showtime updated successfully");
+      toast.success("Cập nhật lịch chiếu thành công");
       closeModals();
       await fetchData(); // Refresh the list
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to update showtime";
+        err instanceof Error ? err.message : "Không thể cập nhật lịch chiếu";
       toast.error(errorMessage);
       setFormErrors([errorMessage]);
     } finally {
@@ -679,6 +713,24 @@ const Showtimes = () => {
     fetchData();
   }, [page]);
 
+  // Keyboard shortcuts for pagination
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey) return; // Don't interfere with browser shortcuts
+      
+      if (e.key === 'ArrowLeft' && page > 1) {
+        e.preventDefault();
+        setPage(page - 1);
+      } else if (e.key === 'ArrowRight' && page < totalPages) {
+        e.preventDefault();
+        setPage(page + 1);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, [page, totalPages]);
+
   // Filter showtimes based on search term
   const filteredShowtimes = showtimes.filter(
     (showtime) =>
@@ -697,14 +749,12 @@ const Showtimes = () => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h2 className="text-2xl font-bold text-white">
-              Showtime Management
+              Quản Lý Lịch Chiếu
             </h2>
             <p className="text-slate-400 text-sm">
               {theater?.result
-                ? `${theater.result.name} - ${total} showtime${
-                    total !== 1 ? "s" : ""
-                  } found`
-                : "Loading theater info..."}
+                ? `${theater.result.name} - Tìm thấy ${total} lịch chiếu${totalPages > 1 ? ` (Trang ${page}/${totalPages})` : ""}`
+                : "Đang tải thông tin rạp..."}
             </p>
           </div>
           <motion.button
@@ -729,14 +779,14 @@ const Showtimes = () => {
             }
             title={
               !theater?.result
-                ? "Please create a theater first"
+                ? "Vui lòng tạo rạp chiếu phim trước"
                 : !screens || screens.length === 0
-                ? "Please create at least one screen first"
-                : "Add new showtime"
+                ? "Vui lòng tạo ít nhất một phòng chiếu trước"
+                : "Thêm lịch chiếu mới"
             }
           >
             <Plus size={18} className="mr-2" />
-            Add Showtime
+            Thêm Lịch Chiếu
           </motion.button>
         </div>
 
@@ -750,7 +800,7 @@ const Showtimes = () => {
               />
               <input
                 type="text"
-                placeholder="Search showtimes for event or screen..."
+                placeholder="Tìm kiếm lịch chiếu theo phim hoặc phòng chiếu..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full bg-slate-800/60 border border-slate-700/50 rounded-lg pl-10 pr-4 py-2 text-white placeholder-slate-400 focus:border-orange-500 focus:outline-none"
@@ -781,25 +831,25 @@ const Showtimes = () => {
                 <thead className="bg-slate-700/50">
                   <tr>
                     <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                      Movie
+                      Phim
                     </th>
                     <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                      Screen
+                      Phòng Chiếu
                     </th>
                     <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                      Date & Time
+                      Ngày & Giờ
                     </th>
                     <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                      Price
+                      Giá Vé
                     </th>
                     <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                      Seats
+                      Ghế Ngồi
                     </th>
                     <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                      Status
+                      Trạng Thái
                     </th>
                     <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                      Actions
+                      Hành Động
                     </th>
                   </tr>
                 </thead>
@@ -850,12 +900,11 @@ const Showtimes = () => {
                   className="text-yellow-400 mx-auto mb-4"
                 />
                 <h3 className="text-xl font-semibold text-white mb-2">
-                  Theater Required
+                  Cần Có Thông Tin Rạp
                 </h3>
                 <p className="text-slate-300 mb-6">
-                  You need to create a theater first before you can manage
-                  showtimes. Please set up your theater information to get
-                  started.
+                  Bạn cần tạo thông tin rạp trước khi quản lý lịch chiếu. Hãy
+                  thiết lập thông tin rạp của bạn để bắt đầu.
                 </p>
               </motion.div>
             ) : !screens || screens.length === 0 ? (
@@ -866,17 +915,16 @@ const Showtimes = () => {
               >
                 <MonitorPlay size={64} className="text-blue-400 mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-white mb-2">
-                  No Screens Available
+                  Chưa Có Phòng Chiếu
                 </h3>
                 <p className="text-slate-300 mb-6">
-                  You need to create at least one screen (màn chiếu) for your
-                  theater before creating showtimes. Screens define the viewing
-                  areas where movies will be shown.
+                  Bạn cần tạo ít nhất một phòng chiếu cho rạp trước khi tạo
+                  lịch chiếu. Phòng chiếu xác định khu vực trình chiếu phim.
                 </p>
                 <motion.button
                   onClick={() => {
                     toast.info(
-                      "Please navigate to Screen Management to create screens for your theater"
+                      "Vui lòng chuyển đến trang Quản Lý Phòng Chiếu để tạo phòng cho rạp của bạn"
                     );
                   }}
                   className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors flex items-center mx-auto"
@@ -884,7 +932,7 @@ const Showtimes = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <Settings size={18} className="mr-2" />
-                  Manage Screens
+                  Quản Lý Phòng Chiếu
                 </motion.button>
               </motion.div>
             ) : /* Showtimes Table */
@@ -895,25 +943,25 @@ const Showtimes = () => {
                     <thead className="bg-slate-700/50">
                       <tr>
                         <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                          Movie
+                          Phim
                         </th>
                         <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                          Screen
+                          Phòng Chiếu
                         </th>
                         <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                          Date & Time
+                          Ngày & Giờ
                         </th>
                         <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                          Price
+                          Giá Vé
                         </th>
                         <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                          Seats
+                          Ghế Ngồi
                         </th>
                         <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                          Status
+                          Trạng Thái
                         </th>
                         <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
-                          Actions
+                          Hành Động
                         </th>
                       </tr>
                     </thead>
@@ -937,7 +985,7 @@ const Showtimes = () => {
                               )}
                               <div>
                                 <div className="font-medium text-white">
-                                  {showtime.movie?.title || "Unknown Movie"}
+                                  {showtime.movie?.title || "Phim chưa xác định"}
                                 </div>
                                 <div className="text-sm text-slate-400">
                                   {showtime.movie?.genre?.join(", ")}
@@ -950,7 +998,7 @@ const Showtimes = () => {
                               {showtime.screen?.name}
                             </div>
                             <div className="text-sm text-slate-400">
-                              Capacity: {showtime.screen?.capacity}
+                              Sức chứa: {showtime.screen?.capacity}
                             </div>
                           </td>
                           <td className="px-6 py-4">
@@ -968,7 +1016,7 @@ const Showtimes = () => {
                             </div>
                             {showtime.price.premium && (
                               <div className="text-sm text-slate-400">
-                                Premium: {formatPrice(showtime.price.premium)}
+                                Cao cấp: {formatPrice(showtime.price.premium)}
                               </div>
                             )}
                           </td>
@@ -1000,15 +1048,15 @@ const Showtimes = () => {
                               {hasBookings(showtime) && (
                                 <div className="flex items-center text-xs text-amber-400">
                                   <Users size={12} className="mr-1" />
-                                  Has bookings
+                                  Có đặt vé
                                 </div>
                               )}
                               {!canModifyShowtime(showtime) &&
                                 !hasBookings(showtime) && (
                                   <div className="text-xs text-gray-400">
                                     {new Date(showtime.start_time) <= new Date()
-                                      ? "Past showtime"
-                                      : "Cannot modify"}
+                                      ? "Lịch chiếu đã qua"
+                                      : "Không thể chỉnh sửa"}
                                   </div>
                                 )}
                             </div>
@@ -1036,16 +1084,16 @@ const Showtimes = () => {
                                 title={
                                   !canModifyShowtime(showtime)
                                     ? hasBookings(showtime)
-                                      ? "Cannot edit showtime with existing bookings"
+                                      ? "Không thể chỉnh sửa lịch chiếu có đặt vé"
                                       : new Date(showtime.start_time) <=
                                         new Date()
-                                      ? "Cannot edit past showtimes"
-                                      : "Cannot edit this showtime"
-                                    : "Edit showtime"
+                                      ? "Không thể chỉnh sửa lịch chiếu đã qua"
+                                      : "Không thể chỉnh sửa lịch chiếu này"
+                                    : "Chỉnh sửa lịch chiếu"
                                 }
                               >
                                 <Edit size={14} className="mr-1" />
-                                Edit
+                                Sửa
                               </motion.button>
                               <motion.button
                                 onClick={() => handleViewDetails(showtime)}
@@ -1054,7 +1102,7 @@ const Showtimes = () => {
                                 whileTap={{ scale: 0.95 }}
                               >
                                 <Eye size={14} className="mr-1" />
-                                View
+                                Xem
                               </motion.button>
                               <motion.button
                                 onClick={() => handleDeleteShowtime(showtime)}
@@ -1077,12 +1125,12 @@ const Showtimes = () => {
                                 title={
                                   !canModifyShowtime(showtime)
                                     ? hasBookings(showtime)
-                                      ? "Cannot delete showtime with existing bookings"
+                                      ? "Không thể xóa lịch chiếu có đặt vé"
                                       : new Date(showtime.start_time) <=
                                         new Date()
-                                      ? "Cannot delete past showtimes"
-                                      : "Cannot delete this showtime"
-                                    : "Delete showtime"
+                                      ? "Không thể xóa lịch chiếu đã qua"
+                                      : "Không thể xóa lịch chiếu này"
+                                    : "Xóa lịch chiếu"
                                 }
                               >
                                 <Trash2 size={14} />
@@ -1107,14 +1155,14 @@ const Showtimes = () => {
                     className="text-orange-400 mx-auto mb-4"
                   />
                   <h3 className="text-xl font-semibold text-white mb-2">
-                    No Showtimes Found
+                    Không Tìm Thấy Lịch Chiếu
                   </h3>
                   <p className="text-slate-300 mb-6">
                     {searchTerm
-                      ? "No showtimes match your search criteria. Try adjusting your search."
+                      ? "Không có lịch chiếu nào khớp với từ khóa tìm kiếm. Hãy thử điều chỉnh tìm kiếm."
                       : !screens || screens.length === 0
-                      ? "You need to create at least one screen before adding showtimes. Screens define the viewing areas for your movies."
-                      : "You haven't created any showtimes yet. Create your first showtime to get started."}
+                      ? "Bạn cần tạo ít nhất một phòng chiếu trước khi thêm lịch chiếu. Phòng chiếu xác định khu vực xem phim."
+                      : "Bạn chưa tạo lịch chiếu nào. Hãy tạo lịch chiếu đầu tiên để bắt đầu."}
                   </p>
                   <motion.button
                     onClick={handleAddShowtime}
@@ -1138,16 +1186,16 @@ const Showtimes = () => {
                     }
                     title={
                       !theater?.result
-                        ? "Please create a theater first"
+                        ? "Vui lòng tạo rạp phim trước"
                         : !screens || screens.length === 0
-                        ? "Please create at least one screen first"
-                        : "Add new showtime"
+                        ? "Vui lòng tạo ít nhất một phòng chiếu trước"
+                        : "Thêm lịch chiếu mới"
                     }
                   >
                     <Plus size={18} className="mr-2" />
                     {!screens || screens.length === 0
-                      ? "Create Screen First"
-                      : "Add Showtime"}
+                      ? "Tạo Phòng Chiếu Trước"
+                      : "Thêm Lịch Chiếu"}
                   </motion.button>
                 </motion.div>
               )
@@ -1161,12 +1209,18 @@ const Showtimes = () => {
                   disabled={page <= 1}
                   className="px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700/60 transition-colors"
                 >
-                  Previous
+                  Trước
                 </button>
 
                 <div className="flex gap-1">
-                  {[...Array(totalPages)].map((_, index) => {
-                    const pageNum = index + 1;
+                  {getPaginationNumbers().map((pageNum, index) => {
+                    if (pageNum === -1) {
+                      return (
+                        <span key={index} className="px-3 py-2 text-slate-400">
+                          ...
+                        </span>
+                      );
+                    }
                     return (
                       <button
                         key={pageNum}
@@ -1188,7 +1242,7 @@ const Showtimes = () => {
                   disabled={page >= totalPages}
                   className="px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700/60 transition-colors"
                 >
-                  Next
+                  Sau
                 </button>
               </div>
             )}
@@ -1207,7 +1261,7 @@ const Showtimes = () => {
           >
             <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-6 flex justify-between items-center">
               <h3 className="text-2xl font-bold text-white">
-                Add New Showtime
+                Thêm Lịch Chiếu Mới
               </h3>
               <button
                 onClick={closeModals}
@@ -1229,7 +1283,7 @@ const Showtimes = () => {
                     />
                     <div>
                       <p className="text-red-300 font-medium mb-2">
-                        Please fix the following errors:
+                        Vui lòng sửa các lỗi sau:
                       </p>
                       <ul className="list-disc list-inside text-red-300 text-sm space-y-1">
                         {formErrors.map((error, index) => (
@@ -1246,7 +1300,7 @@ const Showtimes = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Select Movie <span className="text-red-400">*</span>
+                      Chọn Phim <span className="text-red-400">*</span>
                     </label>
 
                     {/* Movie Search */}
@@ -1258,7 +1312,7 @@ const Showtimes = () => {
                         />
                         <input
                           type="text"
-                          placeholder="Search movies..."
+                          placeholder="Tìm kiếm phim..."
                           value={movieSearchTerm}
                           onChange={(e) => {
                             setMovieSearchTerm(e.target.value);
@@ -1274,7 +1328,7 @@ const Showtimes = () => {
                       {movieLoading ? (
                         <div className="p-4 text-center text-slate-400">
                           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-400 mx-auto"></div>
-                          <p className="mt-2">Searching movies...</p>
+                          <p className="mt-2">Đang tìm kiếm phim...</p>
                         </div>
                       ) : (
                         <>
@@ -1282,7 +1336,7 @@ const Showtimes = () => {
                           {movieSearchTerm && searchResults.length > 0 && (
                             <div>
                               <div className="px-3 py-2 bg-slate-600/50 text-slate-300 text-xs font-medium">
-                                Search Results
+                                Kết Quả Tìm Kiếm
                               </div>
                               {searchResults.map((movie) => (
                                 <MovieSelectItem
@@ -1299,7 +1353,7 @@ const Showtimes = () => {
                           {(!movieSearchTerm || searchResults.length === 0) && (
                             <div>
                               <div className="px-3 py-2 bg-slate-600/50 text-slate-300 text-xs font-medium">
-                                Popular Movies
+                                Phim Phổ Biến
                               </div>
                               {popularMovies.map((movie) => (
                                 <MovieSelectItem
@@ -1318,7 +1372,7 @@ const Showtimes = () => {
                             !movieLoading && (
                               <div className="p-4 text-center text-slate-400">
                                 <p>
-                                  No movies found matching "{movieSearchTerm}"
+                                  Không tìm thấy phim khớp với "{movieSearchTerm}"
                                 </p>
                               </div>
                             )}
@@ -1330,7 +1384,7 @@ const Showtimes = () => {
                   {/* Screen Selection */}
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Select Screen <span className="text-red-400">*</span>
+                      Chọn Phòng Chiếu <span className="text-red-400">*</span>
                     </label>
                     <div className="space-y-2">
                       {screens.map((screen) => (
@@ -1347,7 +1401,7 @@ const Showtimes = () => {
                             <div>
                               <h4 className="font-medium">{screen.name}</h4>
                               <p className="text-sm opacity-70">
-                                Capacity: {screen.capacity} seats
+                                Sức chứa: {screen.capacity} ghế
                               </p>
                             </div>
                             <MonitorPlay size={20} />
@@ -1362,7 +1416,7 @@ const Showtimes = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Show Date <span className="text-red-400">*</span>
+                      Ngày Chiếu <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="date"
@@ -1378,7 +1432,7 @@ const Showtimes = () => {
 
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Show Time <span className="text-red-400">*</span>
+                      Giờ Chiếu <span className="text-red-400">*</span>
                     </label>
                     <select
                       value={showTime}
@@ -1388,7 +1442,7 @@ const Showtimes = () => {
                       className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
                       disabled={isSubmitting}
                     >
-                      <option value="">Select time</option>
+                      <option value="">Chọn giờ chiếu</option>
                       {timeSlots.map((time) => (
                         <option key={time} value={time}>
                           {time}
@@ -1400,12 +1454,12 @@ const Showtimes = () => {
                   {/* Price Configuration */}
                   <div className="space-y-3">
                     <label className="block text-slate-300 text-sm font-medium">
-                      Ticket Pricing <span className="text-red-400">*</span>
+                      Giá Vé <span className="text-red-400">*</span>
                     </label>
 
                     <div>
                       <label className="block text-slate-400 text-xs mb-1">
-                        Regular Seats
+                        Ghế Thường
                       </label>
                       <input
                         type="number"
@@ -1419,13 +1473,13 @@ const Showtimes = () => {
                         min="0"
                         className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
                         disabled={isSubmitting}
-                        placeholder="Price in VND"
+                        placeholder="Giá (VND)"
                       />
                     </div>
 
                     <div>
                       <label className="block text-slate-400 text-xs mb-1">
-                        Premium Seats
+                        Ghế Cao Cấp
                       </label>
                       <input
                         type="number"
@@ -1439,14 +1493,14 @@ const Showtimes = () => {
                         min="0"
                         className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
                         disabled={isSubmitting}
-                        placeholder="Price in VND"
+                        placeholder="Giá (VND)"
                       />
                     </div>
 
                     {formData.price.vip !== undefined && (
                       <div>
                         <label className="block text-slate-400 text-xs mb-1">
-                          VIP Seats
+                          Ghế VIP
                         </label>
                         <input
                           type="number"
@@ -1460,7 +1514,7 @@ const Showtimes = () => {
                           min="0"
                           className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
                           disabled={isSubmitting}
-                          placeholder="Price in VND"
+                          placeholder="Giá (VND)"
                         />
                       </div>
                     )}
@@ -1470,30 +1524,30 @@ const Showtimes = () => {
                   {selectedMovie && selectedScreen && showDate && showTime && (
                     <div className="bg-slate-700/30 p-4 rounded-lg">
                       <h4 className="text-white font-medium mb-2">
-                        Showtime Summary
+                        Tóm Tắt Lịch Chiếu
                       </h4>
                       <div className="space-y-1 text-sm">
                         <p className="text-slate-300">
-                          <span className="text-slate-400">Movie:</span>{" "}
+                          <span className="text-slate-400">Phim:</span>{" "}
                           {selectedMovie.title}
                         </p>
                         <p className="text-slate-300">
-                          <span className="text-slate-400">Screen:</span>{" "}
+                          <span className="text-slate-400">Phòng Chiếu:</span>{" "}
                           {selectedScreen.name}
                         </p>
                         <p className="text-slate-300">
-                          <span className="text-slate-400">Duration:</span>{" "}
-                          {selectedMovie.duration} minutes
+                          <span className="text-slate-400">Thời Lượng:</span>{" "}
+                          {selectedMovie.duration} phút
                         </p>
                         <p className="text-slate-300">
                           <span className="text-slate-400">
-                            Available Seats:
+                            Ghế Trống:
                           </span>{" "}
                           {formData.available_seats}
                         </p>
                         {formData.end_time && (
                           <p className="text-slate-300">
-                            <span className="text-slate-400">End Time:</span>{" "}
+                            <span className="text-slate-400">Giờ Kết Thúc:</span>{" "}
                             {formatShowtimeTime(formData.end_time)}
                           </p>
                         )}
@@ -1507,7 +1561,7 @@ const Showtimes = () => {
               <div className="px-6 pb-4">
                 <div>
                   <label className="block text-slate-300 text-sm font-medium mb-2">
-                    Showtime Status <span className="text-red-400">*</span>
+                    Trạng Thái Lịch Chiếu <span className="text-red-400">*</span>
                   </label>
                   <select
                     value={formData.status || ShowtimeStatusValues.SCHEDULED}
@@ -1541,7 +1595,7 @@ const Showtimes = () => {
                     </option>
                   </select>
                   <p className="text-slate-400 text-xs mt-1">
-                    Set the initial status for this showtime
+                    Đặt trạng thái ban đầu cho lịch chiếu này
                   </p>
                 </div>
               </div>
@@ -1554,7 +1608,7 @@ const Showtimes = () => {
                   className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-6 py-3 rounded-lg font-medium transition-colors"
                   disabled={isSubmitting}
                 >
-                  Cancel
+                  Hủy
                 </button>
                 <button
                   type="submit"
@@ -1564,12 +1618,12 @@ const Showtimes = () => {
                   {isSubmitting ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Creating...
+                      Đang tạo...
                     </>
                   ) : (
                     <>
                       <Plus size={18} className="mr-2" />
-                      Create Showtime
+                      Tạo Lịch Chiếu
                     </>
                   )}
                 </button>
@@ -1597,12 +1651,12 @@ const Showtimes = () => {
                 </div>
                 <div className="ml-4 flex-1">
                   <h3 className="text-lg font-semibold text-white mb-2">
-                    Delete Showtime
+                    Xóa Lịch Chiếu
                   </h3>
                   <p className="text-slate-300 mb-4">
-                    Are you sure you want to delete the showtime for "
-                    {showtimeToDelete.movie}"? This action cannot be undone and
-                    will permanently remove the showtime.
+                    Bạn có chắc chắn muốn xóa lịch chiếu cho phim "
+                    {showtimeToDelete.movie}"? Hành động này không thể hoàn tác và
+                    sẽ xóa vĩnh viễn lịch chiếu.
                   </p>
                 </div>
               </div>
@@ -1613,7 +1667,7 @@ const Showtimes = () => {
                   className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                   disabled={isSubmitting}
                 >
-                  Cancel
+                  Hủy
                 </button>
                 <button
                   onClick={confirmDeleteShowtime}
@@ -1623,12 +1677,12 @@ const Showtimes = () => {
                   {isSubmitting ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Deleting...
+                      Đang xóa...
                     </>
                   ) : (
                     <>
                       <Trash2 size={16} className="mr-2" />
-                      Delete Showtime
+                      Xóa Lịch Chiếu
                     </>
                   )}
                 </button>
@@ -1648,7 +1702,7 @@ const Showtimes = () => {
             exit={{ opacity: 0, scale: 0.9 }}
           >
             <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-6 flex justify-between items-center">
-              <h3 className="text-2xl font-bold text-white">Edit Showtime</h3>
+              <h3 className="text-2xl font-bold text-white">Chỉnh Sửa Lịch Chiếu</h3>
               <button
                 onClick={closeModals}
                 className="text-slate-400 hover:text-white transition-colors"
@@ -1669,7 +1723,7 @@ const Showtimes = () => {
                     />
                     <div>
                       <p className="text-red-300 font-medium mb-2">
-                        Please fix the following errors:
+                        Vui lòng sửa các lỗi sau:
                       </p>
                       <ul className="list-disc list-inside text-red-300 text-sm space-y-1">
                         {formErrors.map((error, index) => (
@@ -1686,9 +1740,9 @@ const Showtimes = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Selected Movie{" "}
+                      Phim Đã Chọn{" "}
                       <span className="text-slate-400">
-                        (Cannot be changed)
+                        (Không thể thay đổi)
                       </span>
                     </label>
                     <div className="bg-slate-700/30 rounded-lg border border-slate-600 p-4">
@@ -1718,7 +1772,7 @@ const Showtimes = () => {
                                   selectedMovie.status
                                 )}`}
                               >
-                                {getMovieStatusDisplay(selectedMovie.status)}
+                                {getStaffMovieStatusDisplay(selectedMovie.status)}
                               </span>
                               <span className="text-slate-400 text-xs">
                                 ⭐ {selectedMovie.average_rating.toFixed(1)} (
@@ -1728,7 +1782,7 @@ const Showtimes = () => {
                           </div>
                         </div>
                       ) : (
-                        <p className="text-slate-400">Loading information...</p>
+                        <p className="text-slate-400">Đang tải thông tin...</p>
                       )}
                     </div>
                   </div>
@@ -1736,7 +1790,7 @@ const Showtimes = () => {
                   {/* Screen Selection */}
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Select Screen <span className="text-red-400">*</span>
+                      Chọn Phòng Chiếu <span className="text-red-400">*</span>
                     </label>
                     <div className="space-y-2">
                       {screens.map((screen) => (
@@ -1753,7 +1807,7 @@ const Showtimes = () => {
                             <div>
                               <h4 className="font-medium">{screen.name}</h4>
                               <p className="text-sm opacity-70">
-                                Capacity: {screen.capacity} seats
+                                Sức chứa: {screen.capacity} ghế
                               </p>
                             </div>
                             <MonitorPlay size={20} />
@@ -1768,7 +1822,7 @@ const Showtimes = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Show Date <span className="text-red-400">*</span>
+                      Ngày Chiếu <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="date"
@@ -1784,7 +1838,7 @@ const Showtimes = () => {
 
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Show Time <span className="text-red-400">*</span>
+                      Giờ Chiếu <span className="text-red-400">*</span>
                     </label>
                     <select
                       value={showTime}
@@ -1794,7 +1848,7 @@ const Showtimes = () => {
                       className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
                       disabled={isSubmitting}
                     >
-                      <option value="">Select time</option>
+                      <option value="">Chọn giờ chiếu</option>
                       {timeSlots.map((time) => (
                         <option key={time} value={time}>
                           {time}
@@ -1806,12 +1860,12 @@ const Showtimes = () => {
                   {/* Price Configuration */}
                   <div className="space-y-3">
                     <label className="block text-slate-300 text-sm font-medium">
-                      Ticket Pricing <span className="text-red-400">*</span>
+                      Giá Vé <span className="text-red-400">*</span>
                     </label>
 
                     <div>
                       <label className="block text-slate-400 text-xs mb-1">
-                        Regular Seats
+                        Ghế Thường
                       </label>
                       <input
                         type="number"
@@ -1825,13 +1879,13 @@ const Showtimes = () => {
                         min="0"
                         className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
                         disabled={isSubmitting}
-                        placeholder="Price in VND"
+                        placeholder="Giá (VND)"
                       />
                     </div>
 
                     <div>
                       <label className="block text-slate-400 text-xs mb-1">
-                        Premium Seats
+                        Ghế Cao Cấp
                       </label>
                       <input
                         type="number"
@@ -1845,14 +1899,14 @@ const Showtimes = () => {
                         min="0"
                         className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
                         disabled={isSubmitting}
-                        placeholder="Price in VND"
+                        placeholder="Giá (VND)"
                       />
                     </div>
 
                     {formData.price.vip !== undefined && (
                       <div>
                         <label className="block text-slate-400 text-xs mb-1">
-                          VIP Seats
+                          Ghế VIP
                         </label>
                         <input
                           type="number"
@@ -1866,7 +1920,7 @@ const Showtimes = () => {
                           min="0"
                           className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
                           disabled={isSubmitting}
-                          placeholder="Price in VND"
+                          placeholder="Giá (VND)"
                         />
                       </div>
                     )}
@@ -1876,30 +1930,30 @@ const Showtimes = () => {
                   {selectedMovie && selectedScreen && showDate && showTime && (
                     <div className="bg-slate-700/30 p-4 rounded-lg">
                       <h4 className="text-white font-medium mb-2">
-                        Showtime Summary
+                        Tóm Tắt Lịch Chiếu
                       </h4>
                       <div className="space-y-1 text-sm">
                         <p className="text-slate-300">
-                          <span className="text-slate-400">Movie:</span>{" "}
+                          <span className="text-slate-400">Phim:</span>{" "}
                           {selectedMovie.title}
                         </p>
                         <p className="text-slate-300">
-                          <span className="text-slate-400">Screen:</span>{" "}
+                          <span className="text-slate-400">Phòng Chiếu:</span>{" "}
                           {selectedScreen.name}
                         </p>
                         <p className="text-slate-300">
-                          <span className="text-slate-400">Duration:</span>{" "}
-                          {selectedMovie.duration} minutes
+                          <span className="text-slate-400">Thời Lượng:</span>{" "}
+                          {selectedMovie.duration} phút
                         </p>
                         <p className="text-slate-300">
                           <span className="text-slate-400">
-                            Available Seats:
+                            Ghế Trống:
                           </span>{" "}
                           {formData.available_seats}
                         </p>
                         {formData.end_time && (
                           <p className="text-slate-300">
-                            <span className="text-slate-400">End Time:</span>{" "}
+                            <span className="text-slate-400">Giờ Kết Thúc:</span>{" "}
                             {formatShowtimeTime(formData.end_time)}
                           </p>
                         )}
@@ -1913,7 +1967,7 @@ const Showtimes = () => {
               <div className="px-6 pb-4">
                 <div>
                   <label className="block text-slate-300 text-sm font-medium mb-2">
-                    Showtime Status <span className="text-red-400">*</span>
+                    Trạng Thái Lịch Chiếu <span className="text-red-400">*</span>
                   </label>
                   <select
                     value={formData.status || ShowtimeStatusValues.SCHEDULED}
@@ -1947,7 +2001,7 @@ const Showtimes = () => {
                     </option>
                   </select>
                   <p className="text-slate-400 text-xs mt-1">
-                    Update the status of this showtime
+                    Cập nhật trạng thái của lịch chiếu này
                   </p>
                 </div>
               </div>
@@ -1960,7 +2014,7 @@ const Showtimes = () => {
                   className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-6 py-3 rounded-lg font-medium transition-colors"
                   disabled={isSubmitting}
                 >
-                  Cancel
+                  Hủy
                 </button>
                 <button
                   type="submit"
@@ -1970,12 +2024,12 @@ const Showtimes = () => {
                   {isSubmitting ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Updating...
+                      Đang cập nhật...
                     </>
                   ) : (
                     <>
                       <Edit size={18} className="mr-2" />
-                      Update Showtime
+                      Cập Nhật Lịch Chiếu
                     </>
                   )}
                 </button>
@@ -1996,7 +2050,7 @@ const Showtimes = () => {
           >
             <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-6 flex justify-between items-center">
               <h3 className="text-2xl font-bold text-white">
-                Showtime Details
+                Chi Tiết Lịch Chiếu
               </h3>
               <button
                 onClick={closeModals}
@@ -2015,7 +2069,7 @@ const Showtimes = () => {
                       selectedShowtime.movie?.poster_url ||
                       "/placeholder-movie.jpg"
                     }
-                    alt={selectedShowtime.movie?.title || "Movie"}
+                    alt={selectedShowtime.movie?.title || "Phim"}
                     className="w-20 h-28 object-cover rounded-lg"
                   />
                   <div className="flex-1">
@@ -2024,8 +2078,8 @@ const Showtimes = () => {
                     </h4>
                     <div className="space-y-1 text-sm">
                       <p className="text-slate-300">
-                        <span className="text-slate-400">Duration:</span>{" "}
-                        {selectedShowtime.movie?.duration} minutes
+                        <span className="text-slate-400">Thời Lượng:</span>{" "}
+                        {selectedShowtime.movie?.duration} phút
                       </p>
                     </div>
                   </div>
@@ -2035,17 +2089,17 @@ const Showtimes = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
                     <h5 className="text-lg font-semibold text-white border-b border-slate-700 pb-2">
-                      Schedule Details
+                      Thông Tin Lịch Chiếu
                     </h5>
                     <div className="space-y-3">
                       <div className="flex items-center text-slate-300">
                         <Calendar size={16} className="mr-2 text-slate-400" />
-                        <span className="text-slate-400 mr-2">Date:</span>
+                        <span className="text-slate-400 mr-2">Ngày:</span>
                         {formatShowtimeDate(selectedShowtime.start_time)}
                       </div>
                       <div className="flex items-center text-slate-300">
                         <Clock size={16} className="mr-2 text-slate-400" />
-                        <span className="text-slate-400 mr-2">Time:</span>
+                        <span className="text-slate-400 mr-2">Giờ:</span>
                         {formatShowtimeTime(selectedShowtime.start_time)} -{" "}
                         {formatShowtimeTime(selectedShowtime.end_time)}
                       </div>
@@ -2054,7 +2108,7 @@ const Showtimes = () => {
                           size={16}
                           className="mr-2 text-slate-400"
                         />
-                        <span className="text-slate-400 mr-2">Screen:</span>
+                        <span className="text-slate-400 mr-2">Phòng Chiếu:</span>
                         {selectedShowtime.screen?.name}
                       </div>
                     </div>
@@ -2062,45 +2116,45 @@ const Showtimes = () => {
 
                   <div className="space-y-4">
                     <h5 className="text-lg font-semibold text-white border-b border-slate-700 pb-2">
-                      Seating & Pricing
+                      Ghế Ngồi & Giá Vé
                     </h5>
                     <div className="space-y-3">
                       <div className="flex items-center text-slate-300">
                         <Users size={16} className="mr-2 text-slate-400" />
-                        <span className="text-slate-400 mr-2">Available:</span>
-                        {selectedShowtime.available_seats} seats
+                        <span className="text-slate-400 mr-2">Ghế trống:</span>
+                        {selectedShowtime.available_seats} ghế
                       </div>
                       <div className="flex items-center text-slate-300">
                         <Users size={16} className="mr-2 text-slate-400" />
                         <span className="text-slate-400 mr-2">
-                          Total Capacity:
+                          Tổng sức chứa:
                         </span>
-                        {selectedShowtime.screen?.capacity} seats
+                        {selectedShowtime.screen?.capacity} ghế
                       </div>
                       {selectedShowtime.booked_seats &&
                         selectedShowtime.booked_seats.length > 0 && (
                           <div className="flex items-center text-amber-400">
                             <Users size={16} className="mr-2" />
-                            <span className="text-slate-400 mr-2">Booked:</span>
-                            {selectedShowtime.booked_seats.length} seats
+                            <span className="text-slate-400 mr-2">Đã đặt:</span>
+                            {selectedShowtime.booked_seats.length} ghế
                           </div>
                         )}
                       <div className="space-y-2">
                         <div className="flex justify-between text-slate-300">
-                          <span className="text-slate-400">Regular:</span>
+                          <span className="text-slate-400">Ghế Thường:</span>
                           <span>
                             {formatPrice(selectedShowtime.price.regular)}
                           </span>
                         </div>
                         <div className="flex justify-between text-slate-300">
-                          <span className="text-slate-400">Premium:</span>
+                          <span className="text-slate-400">Ghế Cao Cấp:</span>
                           <span>
                             {formatPrice(selectedShowtime.price.premium)}
                           </span>
                         </div>
                         {selectedShowtime.price.vip && (
                           <div className="flex justify-between text-slate-300">
-                            <span className="text-slate-400">VIP:</span>
+                            <span className="text-slate-400">Ghế VIP:</span>
                             <span>
                               {formatPrice(selectedShowtime.price.vip)}
                             </span>
@@ -2116,7 +2170,7 @@ const Showtimes = () => {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                       <div className="flex items-center">
-                        <span className="text-slate-400 mr-2">Status:</span>
+                        <span className="text-slate-400 mr-2">Trạng thái:</span>
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${getShowtimeStatusColor(
                             selectedShowtime.status
@@ -2130,7 +2184,7 @@ const Showtimes = () => {
                         <div className="flex items-center text-amber-400">
                           <Users size={16} className="mr-1" />
                           <span className="text-sm font-medium">
-                            Has Active Bookings
+                            Đang có vé đặt
                           </span>
                         </div>
                       )}
@@ -2139,7 +2193,7 @@ const Showtimes = () => {
                         <div className="flex items-center text-red-400">
                           <AlertTriangle size={16} className="mr-1" />
                           <span className="text-sm font-medium">
-                            Cannot Edit/Delete
+                            Không thể chỉnh sửa/xóa
                           </span>
                         </div>
                       )}
@@ -2156,12 +2210,12 @@ const Showtimes = () => {
                         disabled={!canModifyShowtime(selectedShowtime)}
                         title={
                           !canModifyShowtime(selectedShowtime)
-                            ? "Cannot edit showtime with existing bookings or past showtimes"
-                            : "Edit showtime"
+                            ? "Không thể chỉnh sửa lịch chiếu có đặt vé hoặc đã qua"
+                            : "Chỉnh sửa lịch chiếu"
                         }
                       >
                         <Edit size={16} className="mr-2" />
-                        Edit
+                        Chỉnh Sửa
                       </button>
                     </div>
                   </div>

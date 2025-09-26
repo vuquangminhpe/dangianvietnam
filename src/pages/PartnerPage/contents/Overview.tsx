@@ -106,10 +106,10 @@ const Overview = () => {
   // Calculate stats from real data
   const stats = [
     {
-      label: "Total Revenue",
+      label: "Tổng Doanh Thu",
       value: myTheaterAnalytics
         ? formatRevenueShort(myTheaterAnalytics.result.analytics.total_revenue)
-        : "Loading...",
+        : "Đang tải...",
       change: myTheaterAnalytics
         ? `${
             myTheaterAnalytics.result.analytics.total_revenue > 0 ? "+" : ""
@@ -122,12 +122,12 @@ const Overview = () => {
       changeType: "positive" as const,
     },
     {
-      label: "My Theater",
+      label: "Rạp Của Tôi",
       value: myTheaterAnalytics ? "1" : "0",
       change:
         myTheaterAnalytics?.result.theater_info.status === "active"
-          ? "Active"
-          : "Inactive",
+          ? "Hoạt động"
+          : "Không hoạt động",
       icon: Building2,
       changeType:
         myTheaterAnalytics?.result.theater_info.status === "active"
@@ -135,25 +135,25 @@ const Overview = () => {
           : ("negative" as const),
     },
     {
-      label: "Movies Managed",
+      label: "Phim Quản Lý",
       value: myMovies ? myMovies.result.total.toString() : "0",
       change: myMovies
         ? `${
             myMovies.result.movies.filter((m) => m.status === "now_showing")
               .length
-          } showing`
-        : "0 showing",
+          } đang chiếu`
+        : "0 đang chiếu",
       icon: Film,
       changeType: "positive" as const,
     },
     {
-      label: "Total Bookings",
+      label: "Tổng Đặt Vé",
       value: myTheaterAnalytics
         ? myTheaterAnalytics.result.analytics.total_bookings.toString()
         : "0",
       change: myTheaterAnalytics
-        ? `${myTheaterAnalytics.result.analytics.total_customers} customers`
-        : "0 customers",
+        ? `${myTheaterAnalytics.result.analytics.total_customers} khách hàng`
+        : "0 khách hàng",
       icon: Calendar,
       changeType: "positive" as const,
     },
@@ -165,7 +165,7 @@ const Overview = () => {
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-orange-500 mx-auto mb-4" />
-          <p className="text-slate-400">Loading overview data...</p>
+          <p className="text-slate-400">Đang tải dữ liệu tổng quan...</p>
         </div>
       </div>
     );
@@ -177,7 +177,7 @@ const Overview = () => {
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
           <AlertTriangle className="w-8 h-8 text-red-500 mx-auto mb-4" />
-          <p className="text-red-400 mb-2">Failed to load overview data</p>
+          <p className="text-red-400 mb-2">Không thể tải dữ liệu tổng quan</p>
           <p className="text-slate-400 text-sm">{error}</p>
         </div>
       </div>
@@ -236,7 +236,7 @@ const Overview = () => {
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-white">
-                Recent Bookings
+                Đặt Vé Gần Đây
               </h3>
               <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-2 rounded-lg shadow-lg shadow-orange-500/30">
                 <Calendar size={20} className="text-white" />
@@ -256,7 +256,7 @@ const Overview = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <p className="text-white font-medium">
-                          Booking #{booking.ticket_code}
+                          Đặt vé #{booking.ticket_code}
                         </p>
                         <div className="flex items-center gap-1">
                           <span
@@ -273,7 +273,7 @@ const Overview = () => {
                         </div>
                       </div>
                       <p className="text-slate-400 text-sm">
-                        {booking.seats.length} seats •{" "}
+                        {booking.seats.length} ghế •{" "}
                         {new Date(booking.booking_time).toLocaleDateString(
                           "vi-VN"
                         )}
@@ -292,7 +292,7 @@ const Overview = () => {
               ) : (
                 <div className="text-center py-8">
                   <Calendar className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-                  <p className="text-slate-400">No recent bookings found</p>
+                  <p className="text-slate-400">Không có đặt vé gần đây</p>
                 </div>
               )}
             </div>
@@ -307,7 +307,7 @@ const Overview = () => {
           >
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-xl font-semibold text-white">
-                Theater Analytics
+                Phân Tích Rạp Chiếu
               </h3>
               <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-2 rounded-lg shadow-lg shadow-orange-500/30">
                 <BarChart3 size={20} className="text-white" />
@@ -340,7 +340,7 @@ const Overview = () => {
                           myTheaterAnalytics.result.analytics.total_revenue
                         )}
                       </span>
-                      <p className="text-slate-400 text-xs">Total Revenue</p>
+                      <p className="text-slate-400 text-xs">Tổng Doanh Thu</p>
                     </div>
                   </div>
 
@@ -350,13 +350,13 @@ const Overview = () => {
                       <p className="text-2xl font-bold text-white">
                         {myTheaterAnalytics.result.analytics.total_bookings}
                       </p>
-                      <p className="text-slate-400 text-xs">Bookings</p>
+                      <p className="text-slate-400 text-xs">Đặt Vé</p>
                     </div>
                     <div className="text-center">
                       <p className="text-2xl font-bold text-white">
                         {myTheaterAnalytics.result.analytics.total_customers}
                       </p>
-                      <p className="text-slate-400 text-xs">Customers</p>
+                      <p className="text-slate-400 text-xs">Khách Hàng</p>
                     </div>
                     <div className="text-center">
                       <p
@@ -375,7 +375,7 @@ const Overview = () => {
                           )
                         )}
                       </p>
-                      <p className="text-slate-400 text-xs">Performance</p>
+                      <p className="text-slate-400 text-xs">Hiệu Suất</p>
                     </div>
                   </div>
 
@@ -402,7 +402,7 @@ const Overview = () => {
                   allTheatersAnalytics.result.length > 1 && (
                     <div className="mt-4">
                       <h4 className="text-white font-medium mb-3">
-                        Market Comparison
+                        So Sánh Thị Trường
                       </h4>
                       <div className="space-y-2">
                         {allTheatersAnalytics.result
@@ -446,7 +446,7 @@ const Overview = () => {
             ) : (
               <div className="text-center py-8">
                 <BarChart3 className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-                <p className="text-slate-400">No analytics data available</p>
+                <p className="text-slate-400">Không có dữ liệu phân tích</p>
               </div>
             )}
           </motion.div>
@@ -460,33 +460,33 @@ const Overview = () => {
           transition={{ duration: 0.5, delay: 0.6 }}
         >
           <h3 className="text-xl font-semibold text-white mb-4">
-            Quick Actions
+            Thao Tác Nhanh
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               {
-                label: "Add Movie",
+                label: "Thêm Phim",
                 icon: Film,
                 color: "from-orange-500 to-red-500",
-                description: "Create new movie",
+                description: "Tạo phim mới",
               },
               {
-                label: "Manage Theater",
+                label: "Quản Lý Rạp",
                 icon: Building2,
                 color: "from-amber-500 to-yellow-500",
-                description: "Theater settings",
+                description: "Cài đặt rạp chiếu",
               },
               {
-                label: "View Bookings",
+                label: "Xem Đặt Vé",
                 icon: Calendar,
                 color: "from-emerald-500 to-green-500",
-                description: "Recent bookings",
+                description: "Đặt vé gần đây",
               },
               {
-                label: "Analytics",
+                label: "Phân Tích",
                 icon: BarChart3,
                 color: "from-blue-500 to-cyan-500",
-                description: "Detailed reports",
+                description: "Báo cáo chi tiết",
               },
             ].map((action, index) => (
               <motion.button
@@ -521,7 +521,7 @@ const Overview = () => {
             transition={{ duration: 0.5, delay: 0.7 }}
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-white">My Movies</h3>
+              <h3 className="text-xl font-semibold text-white">Phim Của Tôi</h3>
               <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-2 rounded-lg shadow-lg shadow-orange-500/30">
                 <Film size={20} className="text-white" />
               </div>
@@ -589,7 +589,7 @@ const Overview = () => {
             {myMovies.result.total > 6 && (
               <div className="text-center mt-4">
                 <p className="text-slate-400 text-sm">
-                  Showing 6 of {myMovies.result.total} movies
+                  Hiển thị 6 trong tổng {myMovies.result.total} phim
                 </p>
               </div>
             )}

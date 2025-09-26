@@ -159,7 +159,7 @@ export interface ShowtimeResponse {
 
 export interface ShowtimeCreateResponse {
   message: string;
-  result: {
+  result: Showtime | {
     showtime_id: string;
   };
 }
@@ -201,7 +201,12 @@ export const getMyShowtimes = async (
 ): Promise<ShowtimeListResponse> => {
   try {
     const staffApi = createStaffRequest();
-    const params: Record<string, any> = { page, limit };
+    const params: Record<string, any> = { 
+      page, 
+      limit,
+      sort: "start_time",
+      order: "desc"
+    };
 
     if (movieId) params.movie_id = movieId;
     if (status) params.status = status;
@@ -209,6 +214,27 @@ export const getMyShowtimes = async (
     if (endDate) params.end_date = endDate;
 
     const response = await staffApi.get("/staff/showtimes", { params });
+    
+    // Sort locally to ensure future showtimes appear first, then by start_time descending
+    if (response.data.result && response.data.result.showtimes) {
+      const now = new Date();
+      response.data.result.showtimes.sort((a: Showtime, b: Showtime) => {
+        const startTimeA = new Date(a.start_time);
+        const startTimeB = new Date(b.start_time);
+        
+        // Separate future and past showtimes
+        const aIsFuture = startTimeA > now;
+        const bIsFuture = startTimeB > now;
+        
+        // Future showtimes first
+        if (aIsFuture && !bIsFuture) return -1;
+        if (!aIsFuture && bIsFuture) return 1;
+        
+        // Within same category, sort by start_time descending (newest first)
+        return startTimeB.getTime() - startTimeA.getTime();
+      });
+    }
+    
     return response.data;
   } catch (error) {
     throw handleStaffError(error);

@@ -48,13 +48,13 @@ const PartnerPage = () => {
             transition={{ duration: 0.5 }}
           >
             <p className="text-slate-400 text-lg">
-              This section is under development.
+              Mục này đang được phát triển.
             </p>
             <div className="mt-6">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 border border-orange-500/30 rounded-lg">
                 <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse" />
                 <span className="text-orange-300 text-sm font-medium">
-                  Coming Soon
+                  Sắp Ra Mắt
                 </span>
               </div>
             </div>
@@ -65,14 +65,14 @@ const PartnerPage = () => {
 
   return (
     <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col overflow-y-hidden">
-      {/* Header */}
+      {/* Thanh tiêu đề */}
       <Header />
 
       <div className="flex mt-24 h-screen overflow-hidden">
-        {/* Sidebar */}
+        {/* Thanh điều hướng */}
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-        {/* Main Content */}
+        {/* Nội dung chính */}
         <motion.main
           className="flex-1 p-7 overflow-auto"
           transition={{ duration: 0.3 }}

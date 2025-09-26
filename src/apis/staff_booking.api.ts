@@ -126,8 +126,8 @@ export interface Booking {
   movie_info: {
     title: string;
   };
-  status: "confirmed" | "cancelled" | "pending";
-  payment_status: "paid" | "failed" | "pending";
+  status: "pending" | "confirmed" | "cancelled" | "completed" | "used";
+  payment_status: "pending" | "completed" | "failed" | "refunded" | "cancelled";
   created_at: string;
   updated_at: string;
 }
@@ -164,8 +164,8 @@ export interface BookingDetailResponse {
 export const getTheaterBookings = async (
   page: number = 1,
   limit: number = 20,
-  status?: "confirmed" | "cancelled" | "pending",
-  paymentStatus?: "paid" | "failed" | "pending"
+  status?: "pending" | "confirmed" | "cancelled" | "completed" | "used",
+  paymentStatus?: "pending" | "completed" | "failed" | "refunded" | "cancelled"
 ): Promise<BookingListResponse> => {
   try {
     const staffApi = createStaffRequest();
@@ -245,26 +245,30 @@ export const getEnrichedBookingDetails = async (
 // Helper function to validate booking status
 export const isValidBookingStatus = (
   status: string
-): status is "confirmed" | "cancelled" | "pending" => {
-  return ["confirmed", "cancelled", "pending"].includes(status);
+): status is "pending" | "confirmed" | "cancelled" | "completed" | "used" => {
+  return ["pending", "confirmed", "cancelled", "completed", "used"].includes(status);
 };
 
 // Helper function to validate payment status
 export const isValidPaymentStatus = (
   status: string
-): status is "paid" | "failed" | "pending" => {
-  return ["paid", "failed", "pending"].includes(status);
+): status is "pending" | "completed" | "failed" | "refunded" | "cancelled" => {
+  return ["pending", "completed", "failed", "refunded", "cancelled"].includes(status);
 };
 
 // Helper function to get booking status display text
 export const getBookingStatusDisplay = (status: string): string => {
   switch (status) {
+    case "pending":
+      return "Pending";
     case "confirmed":
       return "Confirmed";
     case "cancelled":
       return "Cancelled";
-    case "pending":
-      return "Pending";
+    case "completed":
+      return "Completed";
+    case "used":
+      return "Used";
     default:
       return status;
   }
@@ -273,12 +277,16 @@ export const getBookingStatusDisplay = (status: string): string => {
 // Helper function to get payment status display text
 export const getPaymentStatusDisplay = (status: string): string => {
   switch (status) {
-    case "paid":
-      return "Paid";
-    case "failed":
-      return "Failed";
     case "pending":
       return "Pending";
+    case "completed":
+      return "Completed";
+    case "failed":
+      return "Failed";
+    case "refunded":
+      return "Refunded";
+    case "cancelled":
+      return "Cancelled";
     default:
       return status;
   }

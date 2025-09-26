@@ -216,7 +216,7 @@ const Screen = () => {
     }
 
     if (!theater?.result?._id) {
-      toast.error('Theater information not available');
+      toast.error('Thông tin rạp không có sẵn');
       return;
     }
 
@@ -248,7 +248,7 @@ const Screen = () => {
     }
 
     if (!selectedScreen) {
-      toast.error('Screen information not available');
+      toast.error('Thông tin phòng chiếu không có sẵn');
       return;
     }
 
@@ -435,9 +435,9 @@ const Screen = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-white">Screen Management</h2>
+            <h2 className="text-2xl font-bold text-white">Quản Lý Phòng Chiếu</h2>
             <p className="text-slate-400 text-sm">
-              {theater?.result ? `${theater.result.name} - ${total} screen${total !== 1 ? 's' : ''} found` : 'Loading theater info...'}
+              {theater?.result ? `${theater.result.name} - Tìm thấy ${total} phòng chiếu` : 'Đang tải thông tin rạp...'}
             </p>
           </div>
           <motion.button
@@ -448,7 +448,7 @@ const Screen = () => {
             disabled={loading || !theater?.result}
           >
             <Plus size={18} className="mr-2" />
-            Add Screen
+            Thêm Phòng Chiếu
           </motion.button>
         </div>
 
@@ -459,7 +459,7 @@ const Screen = () => {
               <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search screens..."
+                placeholder="Tìm kiếm phòng chiếu..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full bg-slate-800/60 border border-slate-700/50 rounded-lg pl-10 pr-4 py-2 text-white placeholder-slate-400 focus:border-orange-500 focus:outline-none"
@@ -532,19 +532,19 @@ const Screen = () => {
 
                       <div className="grid grid-cols-2 gap-3 mb-4">
                         <div className="bg-slate-700/30 p-3 rounded-lg">
-                          <p className="text-slate-400 text-xs">Capacity</p>
+                          <p className="text-slate-400 text-xs">Sức chứa</p>
                           <div className="flex items-center">
                             <Users size={14} className="text-orange-400 mr-1" />
                             <span className="text-white font-bold">
                               {screen.capacity}
                             </span>
-                            <span className="text-slate-400 text-xs ml-1">seats</span>
+                            <span className="text-slate-400 text-xs ml-1">ghế</span>
                           </div>
                         </div>
                         <div className="bg-slate-700/30 p-3 rounded-lg">
-                          <p className="text-slate-400 text-xs">Layout</p>
+                          <p className="text-slate-400 text-xs">Bố cục</p>
                           <p className="text-orange-400 font-bold text-sm">
-                            {screen.seat_layout.length} rows
+                            {screen.seat_layout.length} hàng
                           </p>
                         </div>
                       </div>
@@ -552,11 +552,11 @@ const Screen = () => {
                       {screen.statistics && (
                         <div className="bg-slate-700/30 p-3 rounded-lg mb-4">
                           <div className="flex justify-between items-center text-xs">
-                            <span className="text-slate-400">Showtimes</span>
+                            <span className="text-slate-400">Suất chiếu</span>
                             <span className="text-white font-medium">{screen.statistics.total_showtimes}</span>
                           </div>
                           <div className="flex justify-between items-center text-xs">
-                            <span className="text-slate-400">Active Bookings</span>
+                            <span className="text-slate-400">Đặt vé đang hoạt động</span>
                             <span className="text-white font-medium">{screen.statistics.active_bookings}</span>
                           </div>
                         </div>
@@ -570,7 +570,7 @@ const Screen = () => {
                           whileTap={{ scale: 0.98 }}
                         >
                           <Edit size={14} className="mr-1" />
-                          Edit
+                          Sửa
                         </motion.button>
                         <motion.button
                           onClick={() => handleViewDetails(screen)}
@@ -579,7 +579,7 @@ const Screen = () => {
                           whileTap={{ scale: 0.98 }}
                         >
                           <Eye size={14} className="mr-1" />
-                          Details
+                          Chi tiết
                         </motion.button>
                         <motion.button
                           onClick={() => handleDeleteScreen(screen._id, screen.name)}
@@ -603,12 +603,12 @@ const Screen = () => {
                 >
                   <MonitorPlay size={64} className="text-orange-400 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-white mb-2">
-                    No Screens Found
+                    Không Tìm Thấy Phòng Chiếu
                   </h3>
                   <p className="text-slate-300 mb-6">
                     {searchTerm 
-                      ? "No screens match your search criteria. Try adjusting your search."
-                      : "You haven't created any screens yet. Create your first screen to get started."
+                      ? "Không có phòng chiếu nào khớp với tiêu chí tìm kiếm. Hãy thử điều chỉnh tìm kiếm."
+                      : "Bạn chưa tạo phòng chiếu nào. Tạo phòng chiếu đầu tiên để bắt đầu."
                     }
                   </p>
                   <motion.button
@@ -619,7 +619,7 @@ const Screen = () => {
                     disabled={!theater?.result}
                   >
                     <Plus size={18} className="mr-2" />
-                    Add Screen
+                    Thêm Phòng Chiếu
                   </motion.button>
                 </motion.div>
               )
@@ -633,7 +633,7 @@ const Screen = () => {
                   disabled={page <= 1}
                   className="px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700/60 transition-colors"
                 >
-                  Previous
+                  Trước
                 </button>
                 
                 <div className="flex gap-1">
@@ -660,7 +660,7 @@ const Screen = () => {
                   disabled={page >= totalPages}
                   className="px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700/60 transition-colors"
                 >
-                  Next
+                  Sau
                 </button>
               </div>
             )}
@@ -678,7 +678,7 @@ const Screen = () => {
             exit={{ opacity: 0, scale: 0.9 }}
           >
             <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-6 flex justify-between items-center">
-              <h3 className="text-2xl font-bold text-white">Add New Screen</h3>
+              <h3 className="text-2xl font-bold text-white">Thêm Phòng Chiếu Mới</h3>
               <button
                 onClick={closeModals}
                 className="text-slate-400 hover:text-white transition-colors"
@@ -695,7 +695,7 @@ const Screen = () => {
                   <div className="flex items-start">
                     <AlertTriangle size={20} className="text-red-400 mr-2 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="text-red-300 font-medium mb-2">Please fix the following errors:</p>
+                      <p className="text-red-300 font-medium mb-2">Vui lòng sửa các lỗi sau:</p>
                       <ul className="list-disc list-inside text-red-300 text-sm space-y-1">
                         {formErrors.map((error, index) => (
                           <li key={index}>{error}</li>
@@ -711,21 +711,21 @@ const Screen = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Screen Name <span className="text-red-400">*</span>
+                      Tên Phòng Chiếu <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
                       value={formData.name}
                       onChange={(e) => handleFormChange('name', e.target.value)}
                       className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:border-orange-500 focus:outline-none"
-                      placeholder="Enter screen name"
+                      placeholder="Nhập tên phòng chiếu"
                       disabled={isSubmitting}
                     />
                   </div>
 
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Screen Type <span className="text-red-400">*</span>
+                      Loại Phòng Chiếu <span className="text-red-400">*</span>
                     </label>
                     <select
                       value={formData.screen_type}
@@ -733,8 +733,8 @@ const Screen = () => {
                       className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
                       disabled={isSubmitting}
                     >
-                      <option value="standard">Standard</option>
-                      <option value="premium">Premium</option>
+                      <option value="standard">Tiêu Chuẩn</option>
+                      <option value="premium">Cao Cấp</option>
                       <option value="imax">IMAX</option>
                       <option value="dolby">Dolby Atmos</option>
                     </select>
@@ -742,22 +742,22 @@ const Screen = () => {
 
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Total Capacity <span className="text-red-400">*</span>
+                      Tổng Sức Chứa <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="number"
                       value={formData.capacity || ''}
                       readOnly
                       className="w-full bg-slate-700/30 border border-slate-600 rounded-lg px-4 py-2 text-slate-300"
-                      placeholder="Auto-calculated from seat layout"
+                      placeholder="Tự động tính từ sơ đồ ghế"
                     />
-                    <p className="text-slate-400 text-xs mt-1">Automatically calculated from seat layout</p>
+                    <p className="text-slate-400 text-xs mt-1">Tự động tính từ sơ đồ ghế ngồi</p>
                   </div>
 
                   {/* Seat Type Selector */}
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Seat Type for New Seats
+                      Loại Ghế Cho Ghế Mới
                     </label>
                     <div className="grid grid-cols-2 gap-2">
                       {(['regular', 'premium'] as const).map((type) => (
@@ -765,7 +765,7 @@ const Screen = () => {
                           key={type}
                           type="button"
                           onClick={() => setSelectedSeatType(type)}
-                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${
+                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                             selectedSeatType === type
                               ? type === 'regular' 
                                 ? 'bg-green-500 text-white'
@@ -774,7 +774,7 @@ const Screen = () => {
                           }`}
                           disabled={isSubmitting}
                         >
-                          {type}
+                          {type === 'regular' ? 'Thường' : 'Cao Cấp'}
                         </button>
                       ))}
                     </div>
@@ -782,7 +782,7 @@ const Screen = () => {
 
                   {/* Quick Layout Controls */}
                   <div className="bg-slate-700/30 p-4 rounded-lg space-y-3">
-                    <h5 className="text-white font-medium">Quick Layout Controls</h5>
+                    <h5 className="text-white font-medium">Điều Khiển Bố Cục Nhanh</h5>
                     
                     <div className="flex gap-2">
                       <button
@@ -791,7 +791,7 @@ const Screen = () => {
                         className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-400 px-3 py-2 rounded text-sm font-medium transition-colors"
                         disabled={isSubmitting || formData.seat_layout.length >= 26}
                       >
-                        + Add Row
+                        + Thêm Hàng
                       </button>
                       <button
                         type="button"
@@ -799,7 +799,7 @@ const Screen = () => {
                         className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-2 rounded text-sm font-medium transition-colors"
                         disabled={isSubmitting || formData.seat_layout.length <= 1}
                       >
-                        - Remove Row
+                        - Xóa Hàng
                       </button>
                     </div>
 
@@ -810,7 +810,7 @@ const Screen = () => {
                         className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 px-3 py-2 rounded text-sm font-medium transition-colors"
                         disabled={isSubmitting || (formData.seat_layout[0]?.length || 0) >= 50}
                       >
-                        + Add Column
+                        + Thêm Cột
                       </button>
                       <button
                         type="button"
@@ -818,7 +818,7 @@ const Screen = () => {
                         className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-2 rounded text-sm font-medium transition-colors"
                         disabled={isSubmitting || (formData.seat_layout[0]?.length || 0) <= 1}
                       >
-                        - Remove Column
+                        - Xóa Cột
                       </button>
                     </div>
 
@@ -828,7 +828,7 @@ const Screen = () => {
                       className="w-full bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 px-3 py-2 rounded text-sm font-medium transition-colors"
                       disabled={isSubmitting}
                     >
-                      Reset Layout
+                      Đặt Lại Bố Cục
                     </button>
                   </div>
                 </div>
@@ -836,23 +836,23 @@ const Screen = () => {
                 {/* Interactive Seat Layout Editor */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-semibold text-white">Interactive Seat Layout</h4>
+                    <h4 className="text-lg font-semibold text-white">Sơ Đồ Ghế Tương Tác</h4>
                     <div className="text-sm text-slate-400">
-                      {formData.seat_layout.length} × {formData.seat_layout[0]?.length || 0} = {formData.capacity} seats
+                      {formData.seat_layout.length} × {formData.seat_layout[0]?.length || 0} = {formData.capacity} ghế
                     </div>
                   </div>
                   
                   {/* Legend */}
                   <div className="bg-slate-700/30 p-3 rounded-lg">
-                    <p className="text-slate-400 text-xs mb-2">Click seats to toggle, right-click to change type</p>
+                    <p className="text-slate-400 text-xs mb-2">Nhấp để bật/tắt ghế, chuột phải để đổi loại</p>
                     <div className="flex gap-3 text-xs">
                       <div className="flex items-center">
                         <div className="w-3 h-3 bg-green-500/80 rounded mr-1"></div>
-                        <span className="text-slate-300">Regular</span>
+                        <span className="text-slate-300">Thường</span>
                       </div>
                       <div className="flex items-center">
                         <div className="w-3 h-3 bg-blue-500/80 rounded mr-1"></div>
-                        <span className="text-slate-300">Premium</span>
+                        <span className="text-slate-300">Cao Cấp</span>
                       </div>
                       <div className="flex items-center">
                         <div className="w-3 h-3 bg-purple-500/80 rounded mr-1"></div>
@@ -860,7 +860,7 @@ const Screen = () => {
                       </div>
                       <div className="flex items-center">
                         <div className="w-3 h-3 bg-slate-600/30 border border-slate-500/50 rounded mr-1"></div>
-                        <span className="text-slate-300">Disabled</span>
+                        <span className="text-slate-300">Vô Hiệu</span>
                       </div>
                     </div>
                   </div>
@@ -913,7 +913,7 @@ const Screen = () => {
                     
                     {formData.seat_layout.length === 0 && (
                       <div className="text-center py-8">
-                        <p className="text-slate-400">No seats configured</p>
+                        <p className="text-slate-400">Chưa cấu hình ghế</p>
                         <button
                           type="button"
                           onClick={() => {
@@ -925,7 +925,7 @@ const Screen = () => {
                           className="mt-2 px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 rounded text-sm transition-colors"
                           disabled={isSubmitting}
                         >
-                          Generate Default Layout
+                          Tạo Bố Cục Mặc Định
                         </button>
                       </div>
                     )}
@@ -941,7 +941,7 @@ const Screen = () => {
                   className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-6 py-3 rounded-lg font-medium transition-colors"
                   disabled={isSubmitting}
                 >
-                  Cancel
+                  Hủy
                 </button>
                 <button
                   type="submit"
@@ -951,12 +951,12 @@ const Screen = () => {
                   {isSubmitting ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Creating...
+                      Đang tạo...
                     </>
                   ) : (
                     <>
                       <Plus size={18} className="mr-2" />
-                      Create Screen
+                      Tạo Phòng Chiếu
                     </>
                   )}
                 </button>
@@ -976,7 +976,7 @@ const Screen = () => {
             exit={{ opacity: 0, scale: 0.9 }}
           >
             <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-6 flex justify-between items-center">
-              <h3 className="text-2xl font-bold text-white">Edit Screen</h3>
+              <h3 className="text-2xl font-bold text-white">Chỉnh Sửa Phòng Chiếu</h3>
               <button
                 onClick={closeModals}
                 className="text-slate-400 hover:text-white transition-colors"
@@ -993,7 +993,7 @@ const Screen = () => {
                   <div className="flex items-start">
                     <AlertTriangle size={20} className="text-red-400 mr-2 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="text-red-300 font-medium mb-2">Please fix the following errors:</p>
+                      <p className="text-red-300 font-medium mb-2">Vui lòng sửa các lỗi sau:</p>
                       <ul className="list-disc list-inside text-red-300 text-sm space-y-1">
                         {formErrors.map((error, index) => (
                           <li key={index}>{error}</li>
@@ -1009,21 +1009,21 @@ const Screen = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Screen Name <span className="text-red-400">*</span>
+                      Tên Phòng Chiếu <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
                       value={formData.name}
                       onChange={(e) => handleFormChange('name', e.target.value)}
                       className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white placeholder-slate-400 focus:border-orange-500 focus:outline-none"
-                      placeholder="Enter screen name"
+                      placeholder="Nhập tên phòng chiếu"
                       disabled={isSubmitting}
                     />
                   </div>
 
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Screen Type <span className="text-red-400">*</span>
+                      Loại Phòng Chiếu <span className="text-red-400">*</span>
                     </label>
                     <select
                       value={formData.screen_type}
@@ -1031,8 +1031,8 @@ const Screen = () => {
                       className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
                       disabled={isSubmitting}
                     >
-                      <option value="standard">Standard</option>
-                      <option value="premium">Premium</option>
+                      <option value="standard">Tiêu Chuẩn</option>
+                      <option value="premium">Cao Cấp</option>
                       <option value="imax">IMAX</option>
                       <option value="dolby">Dolby Atmos</option>
                     </select>
@@ -1040,22 +1040,22 @@ const Screen = () => {
 
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Total Capacity <span className="text-red-400">*</span>
+                      Tổng Sức Chứa <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="number"
                       value={formData.capacity || ''}
                       readOnly
                       className="w-full bg-slate-700/30 border border-slate-600 rounded-lg px-4 py-2 text-slate-300"
-                      placeholder="Auto-calculated from seat layout"
+                      placeholder="Tự động tính từ sơ đồ ghế"
                     />
-                    <p className="text-slate-400 text-xs mt-1">Automatically calculated from seat layout</p>
+                    <p className="text-slate-400 text-xs mt-1">Tự động tính từ sơ đồ ghế ngồi</p>
                   </div>
 
                   {/* Seat Type Selector */}
                   <div>
                     <label className="block text-slate-300 text-sm font-medium mb-2">
-                      Seat Type for New Seats
+                      Loại Ghế Cho Ghế Mới
                     </label>
                     <div className="grid grid-cols-2 gap-2">
                       {(['regular', 'premium'] as const).map((type) => (
@@ -1063,7 +1063,7 @@ const Screen = () => {
                           key={type}
                           type="button"
                           onClick={() => setSelectedSeatType(type)}
-                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors capitalize ${
+                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                             selectedSeatType === type
                               ? type === 'regular' 
                                 ? 'bg-green-500 text-white'
@@ -1072,7 +1072,7 @@ const Screen = () => {
                           }`}
                           disabled={isSubmitting}
                         >
-                          {type}
+                          {type === 'regular' ? 'Thường' : 'Cao Cấp'}
                         </button>
                       ))}
                     </div>
@@ -1080,7 +1080,7 @@ const Screen = () => {
 
                   {/* Quick Layout Controls */}
                   <div className="bg-slate-700/30 p-4 rounded-lg space-y-3">
-                    <h5 className="text-white font-medium">Quick Layout Controls</h5>
+                    <h5 className="text-white font-medium">Điều Khiển Bố Cục Nhanh</h5>
                     
                     <div className="flex gap-2">
                       <button
@@ -1089,7 +1089,7 @@ const Screen = () => {
                         className="flex-1 bg-green-500/20 hover:bg-green-500/30 text-green-400 px-3 py-2 rounded text-sm font-medium transition-colors"
                         disabled={isSubmitting || formData.seat_layout.length >= 26}
                       >
-                        + Add Row
+                        + Thêm Hàng
                       </button>
                       <button
                         type="button"
@@ -1097,7 +1097,7 @@ const Screen = () => {
                         className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-2 rounded text-sm font-medium transition-colors"
                         disabled={isSubmitting || formData.seat_layout.length <= 1}
                       >
-                        - Remove Row
+                        - Xóa Hàng
                       </button>
                     </div>
 
@@ -1108,7 +1108,7 @@ const Screen = () => {
                         className="flex-1 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 px-3 py-2 rounded text-sm font-medium transition-colors"
                         disabled={isSubmitting || (formData.seat_layout[0]?.length || 0) >= 50}
                       >
-                        + Add Column
+                        + Thêm Cột
                       </button>
                       <button
                         type="button"
@@ -1116,7 +1116,7 @@ const Screen = () => {
                         className="flex-1 bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-2 rounded text-sm font-medium transition-colors"
                         disabled={isSubmitting || (formData.seat_layout[0]?.length || 0) <= 1}
                       >
-                        - Remove Column
+                        - Xóa Cột
                       </button>
                     </div>
 
@@ -1126,7 +1126,7 @@ const Screen = () => {
                       className="w-full bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 px-3 py-2 rounded text-sm font-medium transition-colors"
                       disabled={isSubmitting}
                     >
-                      Reset to Default Grid
+                      Đặt Lại Về Lưới Mặc Định
                     </button>
                   </div>
                 </div>
@@ -1134,23 +1134,23 @@ const Screen = () => {
                 {/* Interactive Seat Layout Editor */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h4 className="text-lg font-semibold text-white">Interactive Seat Layout</h4>
+                    <h4 className="text-lg font-semibold text-white">Sơ Đồ Ghế Tương Tác</h4>
                     <div className="text-sm text-slate-400">
-                      {formData.seat_layout.length} × {formData.seat_layout[0]?.length || 0} = {formData.capacity} seats
+                      {formData.seat_layout.length} × {formData.seat_layout[0]?.length || 0} = {formData.capacity} ghế
                     </div>
                   </div>
                   
                   {/* Legend */}
                   <div className="bg-slate-700/30 p-3 rounded-lg">
-                    <p className="text-slate-400 text-xs mb-2">Click seats to toggle, right-click to change type</p>
+                    <p className="text-slate-400 text-xs mb-2">Nhấp để bật/tắt ghế, chuột phải để đổi loại</p>
                     <div className="flex gap-3 text-xs">
                       <div className="flex items-center">
                         <div className="w-3 h-3 bg-green-500/80 rounded mr-1"></div>
-                        <span className="text-slate-300">Regular</span>
+                        <span className="text-slate-300">Thường</span>
                       </div>
                       <div className="flex items-center">
                         <div className="w-3 h-3 bg-blue-500/80 rounded mr-1"></div>
-                        <span className="text-slate-300">Premium</span>
+                        <span className="text-slate-300">Cao Cấp</span>
                       </div>
                       <div className="flex items-center">
                         <div className="w-3 h-3 bg-purple-500/80 rounded mr-1"></div>
@@ -1158,7 +1158,7 @@ const Screen = () => {
                       </div>
                       <div className="flex items-center">
                         <div className="w-3 h-3 bg-slate-600/30 border border-slate-500/50 rounded mr-1"></div>
-                        <span className="text-slate-300">Disabled</span>
+                        <span className="text-slate-300">Vô Hiệu</span>
                       </div>
                     </div>
                   </div>
@@ -1211,7 +1211,7 @@ const Screen = () => {
                     
                     {formData.seat_layout.length === 0 && (
                       <div className="text-center py-8">
-                        <p className="text-slate-400">No seats configured</p>
+                        <p className="text-slate-400">Chưa cấu hình ghế</p>
                         <button
                           type="button"
                           onClick={() => {
@@ -1223,7 +1223,7 @@ const Screen = () => {
                           className="mt-2 px-4 py-2 bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 rounded text-sm transition-colors"
                           disabled={isSubmitting}
                         >
-                          Generate Default Layout
+                          Tạo Bố Cục Mặc Định
                         </button>
                       </div>
                     )}
@@ -1239,7 +1239,7 @@ const Screen = () => {
                   className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-6 py-3 rounded-lg font-medium transition-colors"
                   disabled={isSubmitting}
                 >
-                  Cancel
+                  Hủy
                 </button>
                 <button
                   type="submit"
@@ -1249,12 +1249,12 @@ const Screen = () => {
                   {isSubmitting ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Updating...
+                      Đang cập nhật...
                     </>
                   ) : (
                     <>
                       <Edit size={18} className="mr-2" />
-                      Update Screen
+                      Cập Nhật Phòng Chiếu
                     </>
                   )}
                 </button>
@@ -1274,7 +1274,7 @@ const Screen = () => {
             exit={{ opacity: 0, scale: 0.9 }}
           >
             <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-6 flex justify-between items-center">
-              <h3 className="text-2xl font-bold text-white">Screen Details</h3>
+              <h3 className="text-2xl font-bold text-white">Chi Tiết Phòng Chiếu</h3>
               <button
                 onClick={closeModals}
                 className="text-slate-400 hover:text-white transition-colors"
@@ -1301,18 +1301,18 @@ const Screen = () => {
                 <div className="lg:col-span-2 space-y-6">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-slate-700/30 p-4 rounded-lg">
-                      <p className="text-slate-400 text-sm mb-1">Capacity</p>
-                      <p className="text-white font-bold text-lg">{selectedScreen.capacity} seats</p>
+                      <p className="text-slate-400 text-sm mb-1">Sức chứa</p>
+                      <p className="text-white font-bold text-lg">{selectedScreen.capacity} ghế</p>
                     </div>
                     <div className="bg-slate-700/30 p-4 rounded-lg">
-                      <p className="text-slate-400 text-sm mb-1">Layout</p>
-                      <p className="text-white font-bold text-lg">{selectedScreen.seat_layout.length} rows</p>
+                      <p className="text-slate-400 text-sm mb-1">Bố cục</p>
+                      <p className="text-white font-bold text-lg">{selectedScreen.seat_layout.length} hàng</p>
                     </div>
                   </div>
 
                   {selectedScreen.theater && (
                     <div>
-                      <p className="text-slate-400 text-sm mb-2">Theater Information</p>
+                      <p className="text-slate-400 text-sm mb-2">Thông tin rạp chiếu</p>
                       <div className="bg-slate-700/30 p-4 rounded-lg">
                         <h4 className="text-white font-semibold">{selectedScreen.theater.name}</h4>
                         <p className="text-slate-400 text-sm">{selectedScreen.theater.address}</p>
@@ -1323,18 +1323,18 @@ const Screen = () => {
 
                   {selectedScreen.statistics && (
                     <div>
-                      <p className="text-slate-400 text-sm mb-2">Statistics</p>
+                      <p className="text-slate-400 text-sm mb-2">Thống kê</p>
                       <div className="grid grid-cols-3 gap-3">
                         <div className="bg-slate-700/30 p-3 rounded-lg text-center">
-                          <p className="text-slate-400 text-xs">Total Showtimes</p>
+                          <p className="text-slate-400 text-xs">Tổng suất chiếu</p>
                           <p className="text-white font-bold">{selectedScreen.statistics.total_showtimes}</p>
                         </div>
                         <div className="bg-slate-700/30 p-3 rounded-lg text-center">
-                          <p className="text-slate-400 text-xs">Upcoming</p>
+                          <p className="text-slate-400 text-xs">Sắp tới</p>
                           <p className="text-white font-bold">{selectedScreen.statistics.upcoming_showtimes}</p>
                         </div>
                         <div className="bg-slate-700/30 p-3 rounded-lg text-center">
-                          <p className="text-slate-400 text-xs">Active Bookings</p>
+                          <p className="text-slate-400 text-xs">Đặt vé đang hoạt động</p>
                           <p className="text-white font-bold">{selectedScreen.statistics.active_bookings}</p>
                         </div>
                       </div>
@@ -1342,7 +1342,7 @@ const Screen = () => {
                   )}
 
                   <div>
-                    <p className="text-slate-400 text-sm mb-2">Seat Layout Preview</p>
+                    <p className="text-slate-400 text-sm mb-2">Xem trước bố cục ghế</p>
                     <div className="bg-slate-700/30 p-4 rounded-lg max-h-64 overflow-auto">
                       <div className="text-center mb-4">
                         <div className="bg-slate-600 text-white text-xs px-4 py-1 rounded inline-block">SCREEN</div>
@@ -1394,10 +1394,10 @@ const Screen = () => {
                 </div>
                 <div className="ml-4 flex-1">
                   <h3 className="text-lg font-semibold text-white mb-2">
-                    Delete Screen
+                    Xóa Phòng Chiếu
                   </h3>
                   <p className="text-slate-300 mb-4">
-                    Are you sure you want to delete "{screenToDelete.name}"? This action cannot be undone and will permanently remove the screen and all associated data.
+                    Bạn có chắc chắn muốn xóa "{screenToDelete.name}"? Hành động này không thể hoàn tác và sẽ xóa vĩnh viễn phòng chiếu cùng tất cả dữ liệu liên quan.
                   </p>
                 </div>
               </div>
@@ -1418,12 +1418,12 @@ const Screen = () => {
                   {isSubmitting ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      Deleting...
+                      Đang xóa...
                     </>
                   ) : (
                     <>
                       <Trash2 size={16} className="mr-2" />
-                      Delete Screen
+                      Xóa Phòng Chiếu
                     </>
                   )}
                 </button>

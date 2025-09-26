@@ -21,15 +21,15 @@ interface SidebarProps {
 const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
   const [sidebarCollapsed] = useState(false);
   const menuItems = [
-    { id: "statistics", label: "Statistics", icon: BarChart4 },
-    { id: "overview", label: "Overview", icon: BarChart3 },
-    { id: "theaters", label: "Theater", icon: Building2 },
-    { id: "movies", label: "Movies", icon: Film },
-    { id: "showtimes", label: "Showtimes", icon: Clock },
-    { id: "bookings", label: "Bookings", icon: Calendar },
-    { id: "contract", label: "My Contract", icon: FileText },
-    { id: "screen", label: "Screen", icon: MonitorPlay },
-    { id: "settings", label: "Settings", icon: Settings },
+    { id: "statistics", label: "Thống Kê", icon: BarChart4 },
+    { id: "overview", label: "Tổng Quan", icon: BarChart3 },
+    { id: "theaters", label: "Quản Lý Rạp", icon: Building2 },
+    { id: "movies", label: "Phim", icon: Film },
+    { id: "showtimes", label: "Lịch Chiếu", icon: Clock },
+    { id: "bookings", label: "Đặt Vé", icon: Calendar },
+    { id: "contract", label: "Hợp Đồng", icon: FileText },
+    { id: "screen", label: "Phòng Chiếu", icon: MonitorPlay },
+    { id: "settings", label: "Cài Đặt", icon: Settings },
   ];
   return (
     <div>
