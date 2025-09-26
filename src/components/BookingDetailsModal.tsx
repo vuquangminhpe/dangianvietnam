@@ -160,7 +160,7 @@ const BookingDetailsModal = ({ bookingId, isOpen, onClose }: BookingDetailsModal
                     <span className="text-sm text-slate-400">Payment:</span>
                     <span
                       className={`px-2 py-1 rounded text-xs ${
-                        booking.payment_status === "paid"
+                        booking.payment_status === "completed"
                           ? "bg-green-500/20 text-green-400"
                           : booking.payment_status === "pending"
                           ? "bg-yellow-500/20 text-yellow-400"
