@@ -52,7 +52,7 @@ const BookingDetailsModal = ({ bookingId, isOpen, onClose }: BookingDetailsModal
 
   const fetchBookingDetails = async () => {
     if (!bookingId) return;
-
+// try to fetch booking details
     try {
       setLoading(true);
       setError(null);
@@ -137,7 +137,6 @@ const BookingDetailsModal = ({ bookingId, isOpen, onClose }: BookingDetailsModal
                 </button>
               </div>
             )}
-
             {booking && !loading && !error && (
               <div className="space-y-6">
                 {/* Booking Status */}
