@@ -8,7 +8,7 @@ interface VideoPlayerProps {
   autoPlay?: boolean;
   showGlow?: boolean;
 }
-
+//Check video player
 const VideoPlayer = ({
   src,
   classNames,
