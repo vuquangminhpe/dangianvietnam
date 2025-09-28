@@ -9,6 +9,8 @@ export default {
         "robert-medium": ["robert-medium", "sanf-serif"],
         "circular-web": ["circular-web", "sanf-serif"],
         "robert-regular": ["robert-regular", "sanf-serif"],
+        heading: ["Merriweather", "serif"],
+        body: ["Roboto", "sans-serif"],
       },
       colors: {
         primary: "#f84565",

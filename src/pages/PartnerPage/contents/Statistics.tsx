@@ -96,15 +96,104 @@ const Statistics: React.FC = () => {
   const summary = revenueStats?.result.summary;
   const data = revenueStats?.result.data || [];
 
+  // Check if no data available - show empty state
+  if (!summary || !data.length) {
+    return (
+      <div className="p-6 space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-2">
+              Thống Kê Doanh Thu
+            </h1>
+            <p className="text-slate-400">
+              Phân tích doanh thu toàn diện và thông tin chi tiết
+            </p>
+          </div>
+        </div>
+
+        {/* Empty State */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-slate-800/50 rounded-xl border border-slate-700/50 p-12 text-center"
+        >
+          <div className="mx-auto w-24 h-24 bg-orange-500/10 rounded-full flex items-center justify-center mb-6">
+            <BarChart3 className="w-12 h-12 text-orange-400" />
+          </div>
+          
+          <h3 className="text-2xl font-semibold text-white mb-4 font-heading">
+            Chưa Có Dữ Liệu Thống Kê
+          </h3>
+          
+          <p className="text-slate-400 mb-6 max-w-md mx-auto font-body">
+            Hiện tại chưa có dữ liệu doanh thu để hiển thị. Điều này có thể do:
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div className="bg-slate-700/30 rounded-lg p-4 text-left">
+              <Building2 className="w-8 h-8 text-blue-400 mb-3" />
+              <h4 className="font-medium text-white mb-2 font-heading">Chưa Có Rạp</h4>
+              <p className="text-sm text-slate-400 font-body">
+                Bạn chưa được phân công quản lý rạp chiếu nào. Liên hệ admin để được hỗ trợ.
+              </p>
+            </div>
+            
+            <div className="bg-slate-700/30 rounded-lg p-4 text-left">
+              <Film className="w-8 h-8 text-purple-400 mb-3" />
+              <h4 className="font-medium text-white mb-2 font-heading">Chưa Có Doanh Thu</h4>
+              <p className="text-sm text-slate-400 font-body">
+                Rạp chưa có lịch chiếu hoặc chưa có khách hàng đặt vé trong khoảng thời gian này.
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4">
+              <h4 className="font-medium text-amber-400 mb-2">💡 Cần Làm Gì:</h4>
+              <ul className="text-sm text-amber-200 text-left space-y-1 max-w-md mx-auto">
+                <li>• Liên hệ quản trị viên để được phân công rạp</li>
+                <li>• Tạo lịch chiếu cho các bộ phim</li>
+                <li>• Đảm bảo rạp đang hoạt động và nhận đặt vé</li>
+                <li>• Kiểm tra lại khoảng thời gian lọc dữ liệu</li>
+              </ul>
+            </div>
+
+            <div className="flex gap-3 justify-center">
+              <button
+                onClick={() => window.location.reload()}
+                className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              >
+                🔄 Làm Mới Trang
+              </button>
+              
+              <button
+                onClick={() => {
+                  // Navigate to theater management
+                  const event = new CustomEvent('navigate-to-tab', { detail: 'theaters' });
+                  window.dispatchEvent(event);
+                }}
+                className="flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors"
+              >
+                <Building2 className="w-4 h-4" />
+                Quản Lý Rạp
+              </button>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">
+          <h1 className="text-3xl font-bold text-white mb-2 font-heading">
             Thống Kê Doanh Thu
           </h1>
-          <p className="text-slate-400">
+          <p className="text-slate-400 font-body">
             Phân tích doanh thu toàn diện và thông tin chi tiết
           </p>
         </div>
@@ -288,13 +377,16 @@ const Statistics: React.FC = () => {
               <div>
                 <p className="text-slate-400 text-sm">Tên Rạp</p>
                 <p className="text-white font-medium">
-                  {summary.top_performing_theater.theater_name}
+                  {summary?.top_performing_theater?.theater_name || "Chưa có dữ liệu"}
                 </p>
               </div>
               <div>
                 <p className="text-slate-400 text-sm">Doanh Thu</p>
                 <p className="text-green-400 font-bold text-xl">
-                  {formatRevenue(summary.top_performing_theater.revenue)}
+                  {summary?.top_performing_theater?.revenue 
+                    ? formatRevenue(summary.top_performing_theater.revenue)
+                    : "0 ₫"
+                  }
                 </p>
               </div>
             </div>
@@ -311,13 +403,16 @@ const Statistics: React.FC = () => {
               <div>
                 <p className="text-slate-400 text-sm">Tên Phim</p>
                 <p className="text-white font-medium">
-                  {summary.top_performing_movie.movie_title}
+                  {summary?.top_performing_movie?.movie_title || "Chưa có dữ liệu"}
                 </p>
               </div>
               <div>
                 <p className="text-slate-400 text-sm">Doanh Thu</p>
                 <p className="text-green-400 font-bold text-xl">
-                  {formatRevenue(summary.top_performing_movie.revenue)}
+                  {summary?.top_performing_movie?.revenue 
+                    ? formatRevenue(summary.top_performing_movie.revenue)
+                    : "0 ₫"
+                  }
                 </p>
               </div>
             </div>

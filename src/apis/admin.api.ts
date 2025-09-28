@@ -838,3 +838,127 @@ export const deleteConcierge = async (
     throw handleAdminError(error);
   }
 };
+
+// ================== THEATER MANAGEMENT ==================
+
+// Theater types
+export interface TheaterManager {
+  _id: string;
+  name: string;
+  email: string;
+  phone: string;
+  created_at?: string;
+}
+
+export interface Theater {
+  _id: string;
+  name: string;
+  location: string;
+  address: string;
+  city: string;
+  status: "active" | "inactive" | "maintenance";
+  created_at: string;
+  updated_at: string;
+  manager_info?: TheaterManager;
+  total_screens: number;
+  total_bookings: number;
+  completed_bookings: number;
+  total_revenue: number;
+}
+
+export interface TheaterDetails extends Theater {
+  screens: any[];
+  statistics: {
+    total_screens: number;
+    total_showtimes: number;
+    active_showtimes: number;
+    total_bookings: number;
+    completed_bookings: number;
+    pending_bookings: number;
+    cancelled_bookings: number;
+    total_revenue: number;
+    total_capacity: number;
+  };
+}
+
+export interface TheaterStats {
+  _id: null;
+  total_theaters: number;
+  active_theaters: number;
+  theaters_with_manager: number;
+  theaters_without_manager: number;
+  total_screens: number;
+  total_bookings: number;
+  total_revenue: number;
+}
+
+export interface TheaterQueryParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  city?: string;
+  status?: "active" | "inactive" | "maintenance";
+  has_manager?: boolean;
+  sort_by?: "created_at" | "name" | "city" | "total_revenue";
+  sort_order?: "asc" | "desc";
+}
+
+export interface GetTheatersResponse {
+  message: string;
+  result: {
+    theaters: Theater[];
+    total: number;
+    page: number;
+    limit: number;
+    total_pages: number;
+  };
+}
+
+export interface GetTheaterDetailsResponse {
+  message: string;
+  result: TheaterDetails;
+}
+
+export interface GetTheaterStatsResponse {
+  message: string;
+  result: TheaterStats;
+}
+
+// Theater API functions
+export const getTheaters = async (params?: TheaterQueryParams): Promise<GetTheatersResponse> => {
+  try {
+    const adminApi = createAdminRequest();
+    const response = await adminApi.get("/admin/theaters", { params });
+    return response.data;
+  } catch (error) {
+    throw handleAdminError(error);
+  }
+};
+
+export const getTheaterDetails = async (theaterId: string): Promise<GetTheaterDetailsResponse> => {
+  try {
+    const adminApi = createAdminRequest();
+    const response = await adminApi.get(`/admin/theaters/${theaterId}`);
+    return response.data;
+  } catch (error) {
+    throw handleAdminError(error);
+  }
+};
+
+export const getTheaterStats = async (): Promise<GetTheaterStatsResponse> => {
+  try {
+    const adminApi = createAdminRequest();
+    const response = await adminApi.get("/admin/theaters/stats");
+    return response.data;
+  } catch (error) {
+    throw handleAdminError(error);
+  }
+};
+
+// Format currency helper
+export const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(amount);
+};

@@ -43,10 +43,10 @@ export const AdminSidebar = ({ activeTab, onTabChange, isCollapsed }: AdminSideb
       count: 3421,
     },
     {
-      id: 'theaters',
-      label: 'Theaters',
+      id: 'theater-management',
+      label: 'Theater Management',
       icon: Building,
-      count: 8,
+      count: null,
     },
     {
       id: 'analytics',

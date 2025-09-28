@@ -11,6 +11,7 @@ import {
   ScanLine,
   Image,
   Tag,
+  Building2,
 } from "lucide-react";
 import { getDashboardStats, getPaymentStats } from "../../../../apis/admin.api";
 import { useQuery } from "@tanstack/react-query";
@@ -60,6 +61,13 @@ export const AdminSidebar = ({
       icon: Users,
       count: dataDashboard?.user_stats?.total_users || "0",
       color: "from-emerald-500 to-teal-500",
+    },
+     {
+      id: "theater-management",
+      label: "Theater Management",
+      icon: Building2,
+      count: null,
+      color: "from-amber-500 to-orange-500",
     },
     {
       id: "staff",

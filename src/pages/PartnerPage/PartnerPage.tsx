@@ -64,7 +64,7 @@ const PartnerPage = () => {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col overflow-y-hidden">
+    <div className="partner-page h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex flex-col overflow-y-hidden">
       {/* Thanh tiêu đề */}
       <Header />
 

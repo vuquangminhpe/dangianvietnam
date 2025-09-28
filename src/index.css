@@ -1,8 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --font-heading: 'Merriweather', serif;
+  --font-body: 'Roboto', sans-serif;
+}
 
 * {
   font-family: "Outfit", sans-serif;
@@ -51,6 +58,28 @@ body {
 
   .floating-nav {
     @apply bg-pink-950 rounded-lg border;
+  }
+
+  /* Partner Page Typography */
+  .partner-page {
+    font-family: var(--font-body);
+  }
+
+  .partner-page h1,
+  .partner-page h2, 
+  .partner-page h3,
+  .partner-page h4,
+  .partner-page h5,
+  .partner-page h6 {
+    font-family: var(--font-heading);
+  }
+
+  .partner-page .font-heading {
+    font-family: var(--font-heading) !important;
+  }
+
+  .partner-page .font-body {
+    font-family: var(--font-body) !important;
   }
 }
 

@@ -13,6 +13,7 @@ import {
   BannerManagement,
   BannerSliderHomeManagement,
   TicketVerification,
+  TheaterManagement,
 } from "./components";
 import { PaymentManagement } from "../../components/admin/PaymentManagement";
 import ConciergeManagement from "./components/ConciergeManagement";
@@ -54,6 +55,8 @@ const AdminPage = () => {
         return <TicketVerification />;
       case "add-concierge-qr":
         return <ConciergeManagement />;
+      case "theater-management":
+        return <TheaterManagement />;
       default:
         return <Dashboard />;
     }

@@ -79,7 +79,7 @@ const Sidebar = ({ activeTab, setActiveTab }: SidebarProps) => {
                           animate={{ opacity: 1, width: "auto" }}
                           exit={{ opacity: 0, width: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="font-medium"
+                          className="font-medium font-body"
                         >
                           {item.label}
                         </motion.span>

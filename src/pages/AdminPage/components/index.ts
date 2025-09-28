@@ -40,3 +40,6 @@ export { BannerSliderHomeManagement } from "./BannerSliderHomeManagement/BannerS
 
 // Ticket Verification Components
 export { TicketVerification } from "./TicketVerification";
+
+// Theater Management Components
+export { TheaterManagement } from "./TheaterManagement";

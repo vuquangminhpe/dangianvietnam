@@ -440,10 +440,10 @@ const Header = () => {
                 </svg>
               </motion.div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-amber-400 bg-clip-text text-transparent font-heading">
                   DANGIANVIETNAM
                 </h1>
-                <p className="text-slate-400">Partner Management Dashboard</p>
+                <p className="text-slate-400 font-body">Partner Management Dashboard</p>
               </div>
             </div>
           </div>
@@ -455,10 +455,10 @@ const Header = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <p className="font-medium text-white">
+              <p className="font-medium text-white font-body">
                 {user?.name || "Staff User"}
               </p>
-              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500 to-cyan-500 text-white">
+              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-body">
                 {user?.role?.toUpperCase() || "STAFF"}
               </span>
             </motion.div>
