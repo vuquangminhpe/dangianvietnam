@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import {
@@ -8,7 +8,6 @@ import {
   Eye,
   Search,
   Filter,
-  TrendingUp,
   DollarSign,
   Calendar,
   BarChart3,
@@ -18,9 +17,7 @@ import {
   getTheaterStats,
   getTheaterDetails,
   formatCurrency,
-  type Theater,
   type TheaterQueryParams,
-  type TheaterStats,
 } from "../../../../apis/admin.api";
 
 const TheaterManagement: React.FC = () => {
