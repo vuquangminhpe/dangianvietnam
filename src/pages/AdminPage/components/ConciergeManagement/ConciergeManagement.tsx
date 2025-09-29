@@ -348,10 +348,10 @@ export default function ConciergeManagement() {
               <Users className="h-6 w-6 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">
+              <h1 className="text-2xl font-bold text-white font-heading">
                 Quản lý nhân viên quét QR
               </h1>
-              <p className="text-gray-300">
+              <p className="text-gray-300 font-body">
                 Tạo tài khoản cho nhân viên quét mã QR tại rạp
               </p>
             </div>
@@ -367,7 +367,7 @@ export default function ConciergeManagement() {
                     : setShowForm(false)
                   : setShowForm(true)
               }
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-body"
             >
               <Plus className="h-5 w-5" />
               {showForm
@@ -395,12 +395,12 @@ export default function ConciergeManagement() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Tìm kiếm theo email hoặc tên..."
-              className="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-body"
             />
           </div>
           <button
             type="submit"
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-body"
           >
             Tìm kiếm
           </button>
@@ -414,10 +414,10 @@ export default function ConciergeManagement() {
         className="bg-slate-800/50 backdrop-blur-lg rounded-xl border border-slate-700 p-6 mb-6"
       >
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-white">
+          <h2 className="text-xl font-semibold text-white font-heading">
             Danh sách nhân viên
           </h2>
-          <span className="text-gray-400">
+          <span className="text-gray-400 font-body">
             {conciergeData?.result.total || 0} nhân viên
           </span>
         </div>
@@ -425,12 +425,12 @@ export default function ConciergeManagement() {
         {isLoadingConcierges ? (
           <div className="text-center py-8">
             <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-            <p className="text-gray-400">Đang tải...</p>
+            <p className="text-gray-400 font-body">Đang tải...</p>
           </div>
         ) : conciergeData?.result?.concierges.length === 0 ? (
           <div className="text-center py-8">
             <Users className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-            <p className="text-gray-400">Chưa có nhân viên nào</p>
+            <p className="text-gray-400 font-body">Chưa có nhân viên nào</p>
           </div>
         ) : (
           <>
@@ -449,11 +449,11 @@ export default function ConciergeManagement() {
                         <User className="h-6 w-6 text-white" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-white">
+                        <h3 className="font-semibold text-white font-heading">
                           {concierge.name || "Chưa cập nhật"}
                         </h3>
 
-                        <div className="flex items-center gap-4 text-sm text-gray-400">
+                        <div className="flex items-center gap-4 text-sm text-gray-400 font-body">
                           <div className="flex items-center gap-1">
                             <Mail className="h-4 w-4" />
                             <span>{concierge.email}</span>
@@ -497,7 +497,7 @@ export default function ConciergeManagement() {
                     <button
                       key={page}
                       onClick={() => handlePageChange(page)}
-                      className={`px-4 py-2 rounded-lg transition-colors ${
+                      className={`px-4 py-2 rounded-lg transition-colors font-body ${
                         page === currentPage
                           ? "bg-blue-600 text-white"
                           : "bg-slate-700 text-gray-300 hover:bg-slate-600"
@@ -537,12 +537,12 @@ export default function ConciergeManagement() {
                   )}
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white">
+                  <h3 className="text-lg font-semibold text-white font-heading">
                     {editingConcierge
                       ? "Chỉnh sửa nhân viên"
                       : "Thêm nhân viên mới"}
                   </h3>
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-gray-400 text-sm font-body">
                     {editingConcierge
                       ? "Cập nhật thông tin nhân viên"
                       : "Tạo tài khoản mới cho nhân viên quét QR"}
@@ -562,20 +562,20 @@ export default function ConciergeManagement() {
             {/* Creation Mode Selection - Only show for new accounts */}
             {!editingConcierge && (
               <div className="mb-6">
-                <h4 className="text-md font-semibold text-white mb-4">
+                <h4 className="text-md font-semibold text-white mb-4 font-heading">
                   Chọn phương thức tạo tài khoản
                 </h4>
                 <div className="grid md:grid-cols-3 gap-4">
                   <button
                     onClick={() => setCreationMode("auto")}
-                    className={`p-4 rounded-lg border-2 transition-all ${
+                    className={`p-4 rounded-lg border-2 transition-all font-body ${
                       creationMode === "auto"
                         ? "border-blue-500 bg-blue-500/20 text-blue-300"
                         : "border-slate-600 hover:border-slate-500 text-gray-300"
                     }`}
                   >
                     <Shuffle className="h-6 w-6 mx-auto mb-2" />
-                    <h3 className="font-medium">Tự động hoàn toàn</h3>
+                    <h3 className="font-medium font-heading">Tự động hoàn toàn</h3>
                     <p className="text-sm text-gray-400 mt-1">
                       Tự động tạo email và mật khẩu
                     </p>
@@ -583,14 +583,14 @@ export default function ConciergeManagement() {
 
                   <button
                     onClick={() => setCreationMode("semi-auto")}
-                    className={`p-4 rounded-lg border-2 transition-all ${
+                    className={`p-4 rounded-lg border-2 transition-all font-body ${
                       creationMode === "semi-auto"
                         ? "border-blue-500 bg-blue-500/20 text-blue-300"
                         : "border-slate-600 hover:border-slate-500 text-gray-300"
                     }`}
                   >
                     <User className="h-6 w-6 mx-auto mb-2" />
-                    <h3 className="font-medium">Bán tự động</h3>
+                    <h3 className="font-medium font-heading">Bán tự động</h3>
                     <p className="text-sm text-gray-400 mt-1">
                       Tự nhập email, tự động tạo mật khẩu
                     </p>
@@ -598,14 +598,14 @@ export default function ConciergeManagement() {
 
                   <button
                     onClick={() => setCreationMode("manual")}
-                    className={`p-4 rounded-lg border-2 transition-all ${
+                    className={`p-4 rounded-lg border-2 transition-all font-body ${
                       creationMode === "manual"
                         ? "border-blue-500 bg-blue-500/20 text-blue-300"
                         : "border-slate-600 hover:border-slate-500 text-gray-300"
                     }`}
                   >
                     <Lock className="h-6 w-6 mx-auto mb-2" />
-                    <h3 className="font-medium">Thủ công</h3>
+                    <h3 className="font-medium font-heading">Thủ công</h3>
                     <p className="text-sm text-gray-400 mt-1">
                       Tự nhập cả email và mật khẩu
                     </p>
@@ -623,7 +623,7 @@ export default function ConciergeManagement() {
                     <button
                       type="button"
                       onClick={generateAutoCredentials}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-body"
                     >
                       <Shuffle className="h-5 w-5" />
                       Tạo 1 tài khoản tự động
@@ -632,12 +632,12 @@ export default function ConciergeManagement() {
 
                   {/* Batch Creation Section */}
                   <div className="border-t border-slate-600 pt-6">
-                    <h3 className="text-lg font-semibold text-white mb-4 text-center">
+                    <h3 className="text-lg font-semibold text-white mb-4 text-center font-heading">
                       Tạo nhiều tài khoản cùng lúc
                     </h3>
                     <div className="flex items-center justify-center gap-4">
                       <div className="flex items-center gap-2">
-                        <label className="text-sm font-medium text-gray-300">
+                        <label className="text-sm font-medium text-gray-300 font-body">
                           Số lượng:
                         </label>
                         <input
@@ -648,7 +648,7 @@ export default function ConciergeManagement() {
                           onChange={(e) =>
                             setBatchCount(parseInt(e.target.value) || 1)
                           }
-                          className="w-20 px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                          className="w-20 px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-body"
                         />
                       </div>
                       <button
@@ -657,7 +657,7 @@ export default function ConciergeManagement() {
                         disabled={
                           isBatchCreating || batchCount < 1 || batchCount > 50
                         }
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-body"
                       >
                         {isBatchCreating ? (
                           <>
@@ -672,7 +672,7 @@ export default function ConciergeManagement() {
                         )}
                       </button>
                     </div>
-                    <p className="text-xs text-gray-400 text-center mt-2">
+                    <p className="text-xs text-gray-400 text-center mt-2 font-body">
                       Tối đa 50 tài khoản mỗi lần
                     </p>
                   </div>
@@ -681,7 +681,7 @@ export default function ConciergeManagement() {
 
               {/* Email Input */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2 font-body">
                   Email nhân viên
                 </label>
                 <div className="relative">
@@ -696,7 +696,7 @@ export default function ConciergeManagement() {
                       }))
                     }
                     disabled={!editingConcierge && creationMode === "auto"}
-                    className="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-slate-700/30 disabled:text-gray-400"
+                    className="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-slate-700/30 disabled:text-gray-400 font-body"
                     placeholder="staff@cinema.com"
                     required
                   />
@@ -704,7 +704,7 @@ export default function ConciergeManagement() {
               </div>
               {/* Name Input */}
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2 font-body">
                   Tên nhân viên
                 </label>
                 <div className="relative">
@@ -719,7 +719,7 @@ export default function ConciergeManagement() {
                       }))
                     }
                     disabled={!editingConcierge && creationMode === "auto"}
-                    className="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-slate-700/30 disabled:text-gray-400"
+                    className="w-full pl-10 pr-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-slate-700/30 disabled:text-gray-400 font-body"
                     placeholder="Tên nhân viên"
                     required
                   />
@@ -728,7 +728,7 @@ export default function ConciergeManagement() {
               {/* Password Input */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium text-gray-300">
+                  <label className="block text-sm font-medium text-gray-300 font-body">
                     {editingConcierge
                       ? "Mật khẩu mới (để trống nếu không đổi)"
                       : "Mật khẩu"}
@@ -739,7 +739,7 @@ export default function ConciergeManagement() {
                     <button
                       type="button"
                       onClick={generateAutoPassword}
-                      className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1"
+                      className="text-sm text-blue-400 hover:text-blue-300 flex items-center gap-1 font-body"
                     >
                       <Shuffle className="h-4 w-4" />
                       Tạo mật khẩu
@@ -753,7 +753,7 @@ export default function ConciergeManagement() {
                     value={formData.password}
                     onChange={(e) => handlePasswordChange(e.target.value)}
                     disabled={!editingConcierge && creationMode === "auto"}
-                    className="w-full pl-10 pr-12 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-slate-700/30 disabled:text-gray-400"
+                    className="w-full pl-10 pr-12 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-slate-700/30 disabled:text-gray-400 font-body"
                     placeholder={
                       editingConcierge
                         ? "Nhập mật khẩu mới..."
@@ -784,7 +784,7 @@ export default function ConciergeManagement() {
                         <X className="h-4 w-4 text-red-400" />
                       )}
                       <span
-                        className={`text-sm font-medium ${
+                        className={`text-sm font-medium font-body ${
                           passwordValidation.isValid
                             ? "text-green-400"
                             : "text-red-400"
@@ -800,7 +800,7 @@ export default function ConciergeManagement() {
                         {passwordValidation.errors.map((error, index) => (
                           <li
                             key={index}
-                            className="text-xs text-red-400 flex items-center gap-1"
+                            className="text-xs text-red-400 flex items-center gap-1 font-body"
                           >
                             <X className="h-3 w-3" />
                             {error}
@@ -819,7 +819,7 @@ export default function ConciergeManagement() {
                   onClick={() =>
                     editingConcierge ? handleCancelEdit() : setShowForm(false)
                   }
-                  className="px-4 py-2 text-gray-300 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
+                  className="px-4 py-2 text-gray-300 hover:text-white hover:bg-slate-700 rounded-lg transition-colors font-body"
                 >
                   Hủy
                 </button>
@@ -834,7 +834,7 @@ export default function ConciergeManagement() {
                     addConciergeMutation.isPending ||
                     updateConciergeMutation.isPending
                   }
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-body"
                 >
                   {addConciergeMutation.isPending ||
                   updateConciergeMutation.isPending ? (
@@ -878,10 +878,10 @@ export default function ConciergeManagement() {
                 <Trash2 className="h-6 w-6 text-red-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">
+                <h3 className="text-lg font-semibold text-white font-heading">
                   Xác nhận xóa nhân viên
                 </h3>
-                <p className="text-gray-400 text-sm">
+                <p className="text-gray-400 text-sm font-body">
                   Hành động này không thể hoàn tác
                 </p>
               </div>
@@ -893,17 +893,17 @@ export default function ConciergeManagement() {
                   <User className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-white font-medium">
+                  <p className="text-white font-medium font-heading">
                     {conciergeToDelete.name || "Chưa cập nhật"}
                   </p>
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-gray-400 text-sm font-body">
                     {conciergeToDelete.email}
                   </p>
                 </div>
               </div>
             </div>
 
-            <p className="text-gray-300 mb-6">
+            <p className="text-gray-300 mb-6 font-body">
               Bạn có chắc chắn muốn xóa nhân viên này? Tất cả dữ liệu liên quan
               sẽ bị xóa vĩnh viễn.
             </p>
@@ -914,14 +914,14 @@ export default function ConciergeManagement() {
                   setShowDeleteModal(false);
                   setConciergeToDelete(null);
                 }}
-                className="px-4 py-2 text-gray-300 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
+                className="px-4 py-2 text-gray-300 hover:text-white hover:bg-slate-700 rounded-lg transition-colors font-body"
               >
                 Hủy
               </button>
               <button
                 onClick={handleConfirmDelete}
                 disabled={deleteConciergeMutation.isPending}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-body"
               >
                 {deleteConciergeMutation.isPending ? (
                   <>

@@ -32,12 +32,12 @@ export const UserDetailModal = ({ user, onClose }: UserDetailModalProps) => (
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.3 }}
       >
-        <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-          User Details
+        <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent font-heading">
+          Chi tiết người dùng
         </h3>
         <motion.button 
           onClick={onClose} 
-          className="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-slate-700/50 transition-all duration-300"
+          className="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-slate-700/50 transition-all duration-300 font-body"
           whileHover={{ scale: 1.1, rotate: 90 }}
           whileTap={{ scale: 0.9 }}
         >
@@ -75,16 +75,16 @@ export const UserDetailModal = ({ user, onClose }: UserDetailModalProps) => (
             <div className="flex items-center space-x-3">
               <User size={20} className="text-blue-400" />
               <div>
-                <p className="text-gray-400 text-sm">Name</p>
-                <p className="text-white">{user.name}</p>
+                <p className="text-gray-400 text-sm font-body">Tên</p>
+                <p className="text-white font-body">{user.name}</p>
               </div>
             </div>
             
             <div className="flex items-center space-x-3">
               <Mail size={20} className="text-green-400" />
               <div>
-                <p className="text-gray-400 text-sm">Email</p>
-                <p className="text-white">{user.email}</p>
+                <p className="text-gray-400 text-sm font-body">Email</p>
+                <p className="text-white font-body">{user.email}</p>
               </div>
             </div>
             
@@ -92,8 +92,8 @@ export const UserDetailModal = ({ user, onClose }: UserDetailModalProps) => (
               <div className="flex items-center space-x-3">
                 <Phone size={20} className="text-yellow-400" />
                 <div>
-                  <p className="text-gray-400 text-sm">Phone</p>
-                  <p className="text-white">{user.phone}</p>
+                  <p className="text-gray-400 text-sm font-body">Điện thoại</p>
+                  <p className="text-white font-body">{user.phone}</p>
                 </div>
               </div>
             )}
@@ -101,16 +101,16 @@ export const UserDetailModal = ({ user, onClose }: UserDetailModalProps) => (
             <div className="flex items-center space-x-3">
               <Calendar size={20} className="text-purple-400" />
               <div>
-                <p className="text-gray-400 text-sm">Joined</p>
-                <p className="text-white">{new Date(user.created_at).toLocaleDateString()}</p>
+                <p className="text-gray-400 text-sm font-body">Ngày tham gia</p>
+                <p className="text-white font-body">{new Date(user.created_at).toLocaleDateString()}</p>
               </div>
             </div>
           </div>
           
           <div className="space-y-3">
             <div>
-              <p className="text-gray-400 text-sm">Role</p>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+              <p className="text-gray-400 text-sm font-body">Vai trò</p>
+              <span className={`px-2 py-1 rounded-full text-xs font-medium font-body ${
                 user.role === 'admin' ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
                 user.role === 'staff' ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30' :
                 'bg-green-500/20 text-green-400 border border-green-500/30'
@@ -120,41 +120,41 @@ export const UserDetailModal = ({ user, onClose }: UserDetailModalProps) => (
             </div>
             
             <div>
-              <p className="text-gray-400 text-sm">Status</p>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+              <p className="text-gray-400 text-sm font-body">Trạng thái</p>
+              <span className={`px-2 py-1 rounded-full text-xs font-medium font-body ${
                 user.verify === 1 
                   ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
                   : user.verify === 2
                   ? 'bg-red-500/20 text-red-400 border border-red-500/30'
                   : 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
               }`}>
-                {user.verify === 1 ? 'Verified' : user.verify === 2 ? 'Banned' : 'Unverified'}
+                {user.verify === 1 ? 'Đã xác minh' : user.verify === 2 ? 'Bị cấm' : 'Chưa xác minh'}
               </span>
             </div>
             
             {user.username && (
               <div>
-                <p className="text-gray-400 text-sm">Username</p>
-                <p className="text-white">{user.username}</p>
+                <p className="text-gray-400 text-sm font-body">Tên người dùng</p>
+                <p className="text-white font-body">{user.username}</p>
               </div>
             )}
             
             {user.date_of_birth && (
               <div>
-                <p className="text-gray-400 text-sm">Date of Birth</p>
-                <p className="text-white">{new Date(user.date_of_birth).toLocaleDateString()}</p>
+                <p className="text-gray-400 text-sm font-body">Ngày sinh</p>
+                <p className="text-white font-body">{new Date(user.date_of_birth).toLocaleDateString()}</p>
               </div>
             )}
             
             {user.stats && (
               <div>
-                <p className="text-gray-400 text-sm">Statistics</p>
-                <div className="text-white space-y-1">
-                  <p className="text-sm">Bookings: {user.stats.bookings_count}</p>
-                  <p className="text-sm">Ratings: {user.stats.ratings_count}</p>
-                  <p className="text-sm">Feedbacks: {user.stats.feedbacks_count}</p>
+                <p className="text-gray-400 text-sm font-body">Thống kê</p>
+                <div className="text-white space-y-1 font-body">
+                  <p className="text-sm">Lượt đặt vé: {user.stats.bookings_count}</p>
+                  <p className="text-sm">Lượt đánh giá: {user.stats.ratings_count}</p>
+                  <p className="text-sm">Lượt phản hồi: {user.stats.feedbacks_count}</p>
                   {user.stats.total_spent !== undefined && (
-                    <p className="text-sm">Total Spent: ${user.stats.total_spent}</p>
+                    <p className="text-sm">Tổng chi tiêu: ${user.stats.total_spent}</p>
                   )}
                 </div>
               </div>
@@ -167,8 +167,8 @@ export const UserDetailModal = ({ user, onClose }: UserDetailModalProps) => (
             <div className="flex items-start space-x-3">
               <MapPin size={20} className="text-orange-400 mt-1" />
               <div>
-                <p className="text-gray-400 text-sm">Address</p>
-                <div className="text-white">
+                <p className="text-gray-400 text-sm font-body">Địa chỉ</p>
+                <div className="text-white font-body">
                   <p>{user.address.street}</p>
                   <p>{user.address.city}, {user.address.state}</p>
                   <p>{user.address.country} {user.address.zipCode}</p>
@@ -212,7 +212,7 @@ export const EditUserModal = ({ user, onClose, onSave }: EditUserModalProps) => 
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-gray-800 rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-white">Edit User</h3>
+          <h3 className="text-xl font-bold text-white font-heading">Chỉnh sửa người dùng</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-white">
             <X size={24} />
           </button>
@@ -221,53 +221,53 @@ export const EditUserModal = ({ user, onClose, onSave }: EditUserModalProps) => 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">Name</label>
+              <label className="block text-sm font-medium text-gray-400 mb-1 font-body">Tên</label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500 font-body"
                 required
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">Email</label>
+              <label className="block text-sm font-medium text-gray-400 mb-1 font-body">Email</label>
               <input
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500 font-body"
                 required
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">Phone</label>
+              <label className="block text-sm font-medium text-gray-400 mb-1 font-body">Điện thoại</label>
               <input
                 type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500 font-body"
               />
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">Date of Birth</label>
+              <label className="block text-sm font-medium text-gray-400 mb-1 font-body">Ngày sinh</label>
               <input
                 type="date"
                 value={formData.date_of_birth}
                 onChange={(e) => setFormData({ ...formData, date_of_birth: e.target.value })}
-                className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500 font-body"
               />
             </div>
           </div>
           
           <div className="space-y-3">
-            <h4 className="text-lg font-medium text-white">Address</h4>
+            <h4 className="text-lg font-medium text-white font-heading">Địa chỉ</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-400 mb-1">Street</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1 font-body">Đường</label>
                 <input
                   type="text"
                   value={formData.address.street}
@@ -275,12 +275,12 @@ export const EditUserModal = ({ user, onClose, onSave }: EditUserModalProps) => 
                     ...formData, 
                     address: { ...formData.address, street: e.target.value }
                   })}
-                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500 font-body"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">City</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1 font-body">Thành phố</label>
                 <input
                   type="text"
                   value={formData.address.city}
@@ -288,12 +288,12 @@ export const EditUserModal = ({ user, onClose, onSave }: EditUserModalProps) => 
                     ...formData, 
                     address: { ...formData.address, city: e.target.value }
                   })}
-                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500 font-body"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">State</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1 font-body">Tỉnh</label>
                 <input
                   type="text"
                   value={formData.address.state}
@@ -301,12 +301,12 @@ export const EditUserModal = ({ user, onClose, onSave }: EditUserModalProps) => 
                     ...formData, 
                     address: { ...formData.address, state: e.target.value }
                   })}
-                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500 font-body"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Country</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1 font-body">Quốc gia</label>
                 <input
                   type="text"
                   value={formData.address.country}
@@ -314,12 +314,12 @@ export const EditUserModal = ({ user, onClose, onSave }: EditUserModalProps) => 
                     ...formData, 
                     address: { ...formData.address, country: e.target.value }
                   })}
-                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500 font-body"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-1">Zip Code</label>
+                <label className="block text-sm font-medium text-gray-400 mb-1 font-body">Mã bưu điện</label>
                 <input
                   type="text"
                   value={formData.address.zipCode}
@@ -327,7 +327,7 @@ export const EditUserModal = ({ user, onClose, onSave }: EditUserModalProps) => 
                     ...formData, 
                     address: { ...formData.address, zipCode: e.target.value }
                   })}
-                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500"
+                  className="w-full px-3 py-2 bg-gray-700 text-white rounded border border-gray-600 focus:outline-none focus:border-blue-500 font-body"
                 />
               </div>
             </div>
@@ -337,15 +337,15 @@ export const EditUserModal = ({ user, onClose, onSave }: EditUserModalProps) => 
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+              className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors font-body"
             >
-              Cancel
+              Hủy
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors font-body"
             >
-              Save Changes
+              Lưu thay đổi
             </button>
           </div>
         </form>
@@ -364,37 +364,37 @@ export const DeleteConfirmModal = ({ user, onClose, onConfirm }: DeleteConfirmMo
   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
     <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-bold text-white">Confirm Delete</h3>
+        <h3 className="text-xl font-bold text-white font-heading">Xác nhận xóa</h3>
         <button onClick={onClose} className="text-gray-400 hover:text-white">
           <X size={24} />
         </button>
       </div>
       
       <div className="mb-6">
-        <p className="text-gray-300 mb-2">
-          Are you sure you want to delete this user?
+        <p className="text-gray-300 mb-2 font-body">
+          Bạn có chắc chắn muốn xóa người dùng này không?
         </p>
         <div className="bg-gray-700 p-3 rounded">
-          <p className="text-white font-medium">{user.name}</p>
-          <p className="text-gray-400 text-sm">{user.email}</p>
+          <p className="text-white font-medium font-body">{user.name}</p>
+          <p className="text-gray-400 text-sm font-body">{user.email}</p>
         </div>
-        <p className="text-red-400 text-sm mt-2">
-          This action cannot be undone.
+        <p className="text-red-400 text-sm mt-2 font-body">
+          Hành động này không thể hoàn tác.
         </p>
       </div>
       
       <div className="flex justify-end space-x-3">
         <button
           onClick={onClose}
-          className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors"
+          className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors font-body"
         >
-          Cancel
+          Hủy
         </button>
         <button
           onClick={onConfirm}
-          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-body"
         >
-          Delete User
+          Xóa người dùng
         </button>
       </div>
     </div>

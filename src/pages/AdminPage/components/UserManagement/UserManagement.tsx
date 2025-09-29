@@ -68,9 +68,9 @@ export const UserManagement = () => {
       
       // Only show toast error for actual errors, not for empty responses
       if (error instanceof Error) {
-        toast.error(`Failed to load users: ${error.message}`);
+        toast.error(`Tải người dùng thất bại: ${error.message}`);
       } else {
-        toast.error('Failed to load users');
+        toast.error('Tải người dùng thất bại');
       }
     } finally {
       setUsersLoading(false);
@@ -84,7 +84,7 @@ export const UserManagement = () => {
       setShowUserModal(true);
     } catch (error) {
       console.error('Failed to fetch user details:', error);
-      toast.error('Failed to load user details');
+      toast.error('Tải chi tiết người dùng thất bại');
     }
   };
 
@@ -96,12 +96,12 @@ export const UserManagement = () => {
   const handleUpdateUser = async (userId: string, userData: UpdateUserRequest) => {
     try {
       await updateUser(userId, userData);
-      toast.success('User updated successfully');
+      toast.success('Cập nhật người dùng thành công');
       setShowEditModal(false);
       fetchUsers();
     } catch (error) {
       console.error('Failed to update user:', error);
-      toast.error('Failed to update user');
+      toast.error('Cập nhật người dùng thất bại');
     }
   };
 
@@ -109,11 +109,11 @@ export const UserManagement = () => {
     try {
       const action = isCurrentlyActive ? 'ban' : 'unban';
       await toggleUserStatus(userId, action);
-      toast.success(`User ${action === 'ban' ? 'banned' : 'unbanned'} successfully`);
+      toast.success(`Người dùng đã ${action === 'ban' ? 'bị chặn' : 'được bỏ chặn'} thành công`);
       fetchUsers();
     } catch (error) {
       console.error('Failed to toggle user status:', error);
-      toast.error('Failed to update user status');
+      toast.error('Cập nhật trạng thái người dùng thất bại');
     }
   };
 
@@ -122,13 +122,13 @@ export const UserManagement = () => {
     
     try {
       await deleteUser(userToDelete._id);
-      toast.success('User deleted successfully');
+      toast.success('Xóa người dùng thành công');
       setShowDeleteModal(false);
       setUserToDelete(null);
       fetchUsers();
     } catch (error) {
       console.error('Failed to delete user:', error);
-      toast.error('Failed to delete user');
+      toast.error('Xóa người dùng thất bại');
     }
   };
 

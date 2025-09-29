@@ -89,14 +89,14 @@ export const ContractManagement = () => {
         setTotalContracts(0);
       }
     } catch (error) {
-      console.error('Failed to fetch contracts:', error);
+      console.error('Lấy danh sách hợp đồng thất bại:', error);
       setContracts([]);
       setTotalContracts(0);
       
       if (error instanceof Error) {
-        toast.error(`Failed to load contracts: ${error.message}`);
+        toast.error(`Tải hợp đồng thất bại: ${error.message}`);
       } else {
-        toast.error('Failed to load contracts');
+        toast.error('Tải hợp đồng thất bại');
       }
     } finally {
       setContractsLoading(false);
@@ -109,8 +109,8 @@ export const ContractManagement = () => {
       setSelectedContract(contractDetails.result);
       setShowContractModal(true);
     } catch (error) {
-      console.error('Failed to fetch contract details:', error);
-      toast.error('Failed to load contract details');
+      console.error('Lấy chi tiết hợp đồng thất bại:', error);
+      toast.error('Tải chi tiết hợp đồng thất bại');
     }
   };
 
@@ -130,23 +130,23 @@ export const ContractManagement = () => {
   }) => {
     try {
       await updateContract(contractId, contractData);
-      toast.success('Contract updated successfully');
+      toast.success('Cập nhật hợp đồng thành công');
       setShowEditModal(false);
       fetchContracts();
     } catch (error) {
-      console.error('Failed to update contract:', error);
-      toast.error('Failed to update contract');
+      console.error('Cập nhật hợp đồng thất bại:', error);
+      toast.error('Cập nhật hợp đồng thất bại');
     }
   };
 
   const handleActivateContract = async (contractId: string) => {
     try {
       await activateContract(contractId);
-      toast.success('Contract activated successfully');
+      toast.success('Kích hoạt hợp đồng thành công');
       fetchContracts();
     } catch (error) {
-      console.error('Failed to activate contract:', error);
-      toast.error('Failed to activate contract');
+      console.error('Kích hoạt hợp đồng thất bại:', error);
+      toast.error('Kích hoạt hợp đồng thất bại');
     }
   };
 
@@ -155,13 +155,13 @@ export const ContractManagement = () => {
     
     try {
       await terminateContract(contractToTerminate._id, reason);
-      toast.success('Contract terminated successfully');
+      toast.success('Chấm dứt hợp đồng thành công');
       setShowTerminateModal(false);
       setContractToTerminate(null);
       fetchContracts();
     } catch (error) {
-      console.error('Failed to terminate contract:', error);
-      toast.error('Failed to terminate contract');
+      console.error('Chấm dứt hợp đồng thất bại:', error);
+      toast.error('Chấm dứt hợp đồng thất bại');
     }
   };
 
@@ -173,11 +173,11 @@ export const ContractManagement = () => {
   const handleCheckExpiredContracts = async () => {
     try {
       const response = await checkExpiredContracts();
-      toast.success(`Checked expired contracts. Found ${response.result.expired_count} expired contracts.`);
+      toast.success(`Đã kiểm tra hợp đồng hết hạn. Tìm thấy ${response.result.expired_count} hợp đồng đã hết hạn.`);
       fetchContracts();
     } catch (error) {
-      console.error('Failed to check expired contracts:', error);
-      toast.error('Failed to check expired contracts');
+      console.error('Kiểm tra hợp đồng hết hạn thất bại:', error);
+      toast.error('Kiểm tra hợp đồng hết hạn thất bại');
     }
   };
 
@@ -222,7 +222,7 @@ export const ContractManagement = () => {
 
   return (
     <motion.div 
-      className="space-y-6"
+      className="space-y-6 font-body"
       variants={containerVariants}
       initial="hidden"
       animate="visible"

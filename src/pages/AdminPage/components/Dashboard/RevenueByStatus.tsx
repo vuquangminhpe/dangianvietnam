@@ -11,7 +11,7 @@ export const RevenueByStatus = ({ dashboardData }: RevenueByStatusProps) => {
     return (
       <div className="text-center py-8">
         <Activity size={48} className="mx-auto text-gray-500 mb-4" />
-        <p className="text-gray-400">No revenue data available</p>
+        <p className="text-gray-400 font-body">Không có dữ liệu doanh thu</p>
       </div>
     );
   }
@@ -21,19 +21,22 @@ export const RevenueByStatus = ({ dashboardData }: RevenueByStatusProps) => {
       color: 'from-emerald-500 to-green-600',
       bgColor: 'bg-emerald-500/20',
       icon: CheckCircle,
-      iconColor: 'text-emerald-400'
+      iconColor: 'text-emerald-400',
+      label: 'Đã xác nhận'
     },
     pending: {
       color: 'from-amber-500 to-yellow-600',
       bgColor: 'bg-amber-500/20',
       icon: Clock,
-      iconColor: 'text-amber-400'
+      iconColor: 'text-amber-400',
+      label: 'Đang chờ xử lý'
     },
     cancelled: {
       color: 'from-red-500 to-rose-600',
       bgColor: 'bg-red-500/20',
       icon: XCircle,
-      iconColor: 'text-red-400'
+      iconColor: 'text-red-400',
+      label: 'Đã hủy'
     }
   };
 
@@ -43,7 +46,7 @@ export const RevenueByStatus = ({ dashboardData }: RevenueByStatusProps) => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-white flex items-center">
+        <h3 className="text-lg font-semibold text-white flex items-center font-heading">
           <motion.div
             className="p-2 rounded-lg bg-blue-500/20 mr-3 border border-blue-500/30"
             whileHover={{ scale: 1.1 }}
@@ -51,11 +54,11 @@ export const RevenueByStatus = ({ dashboardData }: RevenueByStatusProps) => {
           >
             <Activity size={20} className="text-blue-400" />
           </motion.div>
-          Revenue by Status
+          Doanh thu theo trạng thái
         </h3>
-        <div className="flex items-center text-sm text-gray-300">
+        <div className="flex items-center text-sm text-gray-300 font-body">
           <Banknote size={14} className="mr-1" />
-          <span>Total: {totalRevenue.toLocaleString()} VNĐ</span>
+          <span>Tổng cộng: {totalRevenue.toLocaleString()} VNĐ</span>
         </div>
       </div>
       
@@ -81,12 +84,12 @@ export const RevenueByStatus = ({ dashboardData }: RevenueByStatusProps) => {
                     <Icon size={16} className={config.iconColor} />
                   </div>
                   <div>
-                    <span className="font-medium text-white capitalize">{status._id}</span>
-                    <p className="text-sm text-gray-400">{percentage}% of total</p>
+                    <span className="font-medium text-white capitalize font-heading">{config.label}</span>
+                    <p className="text-sm text-gray-400 font-body">{percentage}% trên tổng số</p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <span className="text-lg font-bold text-white">
+                  <span className="text-lg font-bold text-white font-heading">
                     {status.total.toLocaleString()} VNĐ
                   </span>
                 </div>
@@ -114,12 +117,12 @@ export const RevenueByStatus = ({ dashboardData }: RevenueByStatusProps) => {
       >
         <div className="flex items-center justify-between">
           <div>
-            <h4 className="font-medium text-white">Revenue Performance</h4>
-            <p className="text-sm text-gray-300">Based on booking status distribution</p>
+            <h4 className="font-medium text-white font-heading">Hiệu suất doanh thu</h4>
+            <p className="text-sm text-gray-300 font-body">Dựa trên phân phối trạng thái đặt vé</p>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold text-blue-400">{totalRevenue.toLocaleString()} VNĐ</p>
-            <p className="text-sm text-blue-300">Total Revenue</p>
+            <p className="text-2xl font-bold text-blue-400 font-heading">{totalRevenue.toLocaleString()} VNĐ</p>
+            <p className="text-sm text-blue-300 font-body">Tổng doanh thu</p>
           </div>
         </div>
       </motion.div>

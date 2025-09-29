@@ -43,10 +43,10 @@ const Modal: React.FC<{
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          className="bg-slate-800 rounded-xl border border-slate-700 max-w-2xl w-full max-h-[90vh] overflow-hidden"
+          className="bg-slate-800 rounded-xl border border-slate-700 max-w-2xl w-full max-h-[90vh] overflow-hidden font-body"
         >
           <div className="flex items-center justify-between p-6 border-b border-slate-700">
-            <h2 className="text-xl font-semibold text-white">{title}</h2>
+            <h2 className="text-xl font-semibold text-white font-heading">{title}</h2>
             <button
               onClick={onClose}
               className="text-slate-400 hover:text-white transition-colors"
@@ -71,7 +71,7 @@ const FormField: React.FC<{
   children: React.ReactNode;
 }> = ({ label, icon, required, children }) => (
   <div className="space-y-2">
-    <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
+    <label className="flex items-center gap-2 text-sm font-medium text-slate-300 font-body">
       {icon}
       {label}
       {required && <span className="text-red-400">*</span>}
@@ -112,12 +112,12 @@ export const CreateBannerSliderHomeModal: React.FC<{
         !formData.title ||
         !formData.description
       ) {
-        throw new Error("Please fill in all required fields");
+        throw new Error("Vui lòng điền tất cả các trường bắt buộc");
       }
 
       // Validate auto-active logic
       if (formData.auto_active && !formData.time_active) {
-        throw new Error("Time active is required when auto-active is enabled");
+        throw new Error("Thời gian kích hoạt là bắt buộc khi bật tự động kích hoạt");
       }
 
       // Validate future time
@@ -125,7 +125,7 @@ export const CreateBannerSliderHomeModal: React.FC<{
         const activationTime = new Date(formData.time_active);
         const now = new Date();
         if (activationTime <= now) {
-          throw new Error("Activation time must be in the future");
+          throw new Error("Thời gian kích hoạt phải ở trong tương lai");
         }
       }
 
@@ -140,7 +140,7 @@ export const CreateBannerSliderHomeModal: React.FC<{
       await createBannerSliderHome(submitData);
       onSuccess();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create banner");
+      setError(err instanceof Error ? err.message : "Tạo banner thất bại");
     } finally {
       setLoading(false);
     }
@@ -155,11 +155,11 @@ export const CreateBannerSliderHomeModal: React.FC<{
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Create New Banner Slider">
+    <Modal isOpen={isOpen} onClose={onClose} title="Tạo Banner Slider Mới">
       <form onSubmit={handleSubmit} className="p-6 space-y-6">
         {error && (
           <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-            <div className="flex items-center gap-2 text-red-400">
+            <div className="flex items-center gap-2 text-red-400 font-body">
               <AlertTriangle size={16} />
               {error}
             </div>
@@ -170,51 +170,51 @@ export const CreateBannerSliderHomeModal: React.FC<{
           <ImageUploadField
             value={formData.image}
             onChange={(url) => handleChange("image", url)}
-            label="Banner Image"
+            label="Ảnh Banner"
             required
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField label="Author" icon={<User size={16} />} required>
+          <FormField label="Tác giả" icon={<User size={16} />} required>
             <input
               type="text"
               value={formData.author}
               onChange={(e) => handleChange("author", e.target.value)}
-              placeholder="Author name"
-              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+              placeholder="Tên tác giả"
+              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 font-body"
             />
           </FormField>
 
-          <FormField label="Title" icon={<Type size={16} />} required>
+          <FormField label="Tiêu đề" icon={<Type size={16} />} required>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => handleChange("title", e.target.value)}
-              placeholder="Banner title"
-              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+              placeholder="Tiêu đề banner"
+              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 font-body"
               required
             />
           </FormField>
 
-          <FormField label="Topic" icon={<Type size={16} />}>
+          <FormField label="Chủ đề" icon={<Type size={16} />}>
             <input
               type="text"
               value={formData.topic}
               onChange={(e) => handleChange("topic", e.target.value)}
-              placeholder="Banner topic (optional)"
-              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+              placeholder="Chủ đề banner (tùy chọn)"
+              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 font-body"
             />
           </FormField>
         </div>
 
-        <FormField label="Description" icon={<FileText size={16} />} required>
+        <FormField label="Mô tả" icon={<FileText size={16} />} required>
           <textarea
             value={formData.description}
             onChange={(e) => handleChange("description", e.target.value)}
-            placeholder="Banner description"
+            placeholder="Mô tả banner"
             rows={3}
-            className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 resize-none"
+            className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 resize-none font-body"
             required
           />
         </FormField>
@@ -232,7 +232,7 @@ export const CreateBannerSliderHomeModal: React.FC<{
                 ) : (
                   <ToggleLeft size={20} className="text-slate-400" />
                 )}
-                <span className="text-slate-300">Active Status</span>
+                <span className="text-slate-300 font-body">Trạng thái hoạt động</span>
               </button>
             </div>
 
@@ -249,13 +249,13 @@ export const CreateBannerSliderHomeModal: React.FC<{
                 ) : (
                   <ToggleLeft size={20} className="text-slate-400" />
                 )}
-                <span className="text-slate-300">Auto-Active</span>
+                <span className="text-slate-300 font-body">Tự động kích hoạt</span>
               </button>
             </div>
           </div>
 
           <FormField
-            label="Activation Time"
+            label="Thời gian kích hoạt"
             icon={<Clock size={16} />}
             required={formData.auto_active}
           >
@@ -263,7 +263,7 @@ export const CreateBannerSliderHomeModal: React.FC<{
               type="datetime-local"
               value={formData.time_active}
               onChange={(e) => handleChange("time_active", e.target.value)}
-              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500/50 font-body"
               min={new Date().toISOString().slice(0, 16)}
             />
           </FormField>
@@ -273,21 +273,21 @@ export const CreateBannerSliderHomeModal: React.FC<{
           <button
             type="button"
             onClick={onClose}
-            className="px-6 py-3 text-slate-400 hover:text-white transition-colors"
+            className="px-6 py-3 text-slate-400 hover:text-white transition-colors font-body"
           >
-            Cancel
+            Hủy
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white px-6 py-3 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white px-6 py-3 rounded-lg transition-colors font-body"
           >
             {loading ? (
               <Loader size={18} className="animate-spin" />
             ) : (
               <Save size={18} />
             )}
-            {loading ? "Creating..." : "Create Banner"}
+            {loading ? "Đang tạo..." : "Tạo Banner"}
           </button>
         </div>
       </form>
@@ -329,7 +329,7 @@ export const EditBannerSliderHomeModal: React.FC<{
     try {
       // Validate auto-active logic
       if (formData.auto_active && !formData.time_active) {
-        throw new Error("Time active is required when auto-active is enabled");
+        throw new Error("Thời gian kích hoạt là bắt buộc khi bật tự động kích hoạt");
       }
 
       // Validate future time
@@ -337,7 +337,7 @@ export const EditBannerSliderHomeModal: React.FC<{
         const activationTime = new Date(formData.time_active);
         const now = new Date();
         if (activationTime <= now) {
-          throw new Error("Activation time must be in the future");
+          throw new Error("Thời gian kích hoạt phải ở trong tương lai");
         }
       }
 
@@ -349,7 +349,7 @@ export const EditBannerSliderHomeModal: React.FC<{
       await updateBannerSliderHome(banner._id, submitData);
       onSuccess();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update banner");
+      setError(err instanceof Error ? err.message : "Cập nhật banner thất bại");
     } finally {
       setLoading(false);
     }
@@ -364,11 +364,11 @@ export const EditBannerSliderHomeModal: React.FC<{
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Edit Banner Slider">
+    <Modal isOpen={isOpen} onClose={onClose} title="Chỉnh sửa Banner Slider">
       <form onSubmit={handleSubmit} className="p-6 space-y-6">
         {error && (
           <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4">
-            <div className="flex items-center gap-2 text-red-400">
+            <div className="flex items-center gap-2 text-red-400 font-body">
               <AlertTriangle size={16} />
               {error}
             </div>
@@ -379,49 +379,49 @@ export const EditBannerSliderHomeModal: React.FC<{
           <ImageUploadField
             value={formData.image || ""}
             onChange={(url) => handleChange("image", url)}
-            label="Banner Image"
+            label="Ảnh Banner"
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <FormField label="Author" icon={<User size={16} />}>
+          <FormField label="Tác giả" icon={<User size={16} />}>
             <input
               type="text"
               value={formData.author || ""}
               onChange={(e) => handleChange("author", e.target.value)}
-              placeholder="Author name"
-              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+              placeholder="Tên tác giả"
+              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 font-body"
             />
           </FormField>
 
-          <FormField label="Title" icon={<Type size={16} />}>
+          <FormField label="Tiêu đề" icon={<Type size={16} />}>
             <input
               type="text"
               value={formData.title || ""}
               onChange={(e) => handleChange("title", e.target.value)}
-              placeholder="Banner title"
-              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+              placeholder="Tiêu đề banner"
+              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 font-body"
             />
           </FormField>
 
-          <FormField label="Topic" icon={<Type size={16} />}>
+          <FormField label="Chủ đề" icon={<Type size={16} />}>
             <input
               type="text"
               value={formData.topic || ""}
               onChange={(e) => handleChange("topic", e.target.value)}
-              placeholder="Banner topic"
-              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+              placeholder="Chủ đề banner"
+              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 font-body"
             />
           </FormField>
         </div>
 
-        <FormField label="Description" icon={<FileText size={16} />}>
+        <FormField label="Mô tả" icon={<FileText size={16} />}>
           <textarea
             value={formData.description || ""}
             onChange={(e) => handleChange("description", e.target.value)}
-            placeholder="Banner description"
+            placeholder="Mô tả banner"
             rows={3}
-            className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 resize-none"
+            className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/50 resize-none font-body"
           />
         </FormField>
 
@@ -438,7 +438,7 @@ export const EditBannerSliderHomeModal: React.FC<{
                 ) : (
                   <ToggleLeft size={20} className="text-slate-400" />
                 )}
-                <span className="text-slate-300">Active Status</span>
+                <span className="text-slate-300 font-body">Trạng thái hoạt động</span>
               </button>
             </div>
 
@@ -455,13 +455,13 @@ export const EditBannerSliderHomeModal: React.FC<{
                 ) : (
                   <ToggleLeft size={20} className="text-slate-400" />
                 )}
-                <span className="text-slate-300">Auto-Active</span>
+                <span className="text-slate-300 font-body">Tự động kích hoạt</span>
               </button>
             </div>
           </div>
 
           <FormField
-            label="Activation Time"
+            label="Thời gian kích hoạt"
             icon={<Clock size={16} />}
             required={formData.auto_active}
           >
@@ -469,7 +469,7 @@ export const EditBannerSliderHomeModal: React.FC<{
               type="datetime-local"
               value={formData.time_active || ""}
               onChange={(e) => handleChange("time_active", e.target.value)}
-              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+              className="w-full px-4 py-3 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500/50 font-body"
               min={new Date().toISOString().slice(0, 16)}
             />
           </FormField>
@@ -479,21 +479,21 @@ export const EditBannerSliderHomeModal: React.FC<{
           <button
             type="button"
             onClick={onClose}
-            className="px-6 py-3 text-slate-400 hover:text-white transition-colors"
+            className="px-6 py-3 text-slate-400 hover:text-white transition-colors font-body"
           >
-            Cancel
+            Hủy
           </button>
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white px-6 py-3 rounded-lg transition-colors"
+            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white px-6 py-3 rounded-lg transition-colors font-body"
           >
             {loading ? (
               <Loader size={18} className="animate-spin" />
             ) : (
               <Save size={18} />
             )}
-            {loading ? "Updating..." : "Update Banner"}
+            {loading ? "Đang cập nhật..." : "Cập nhật Banner"}
           </button>
         </div>
       </form>
@@ -508,7 +508,7 @@ export const PreviewBannerSliderHomeModal: React.FC<{
   onClose: () => void;
 }> = ({ isOpen, banner, onClose }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Banner Preview">
+    <Modal isOpen={isOpen} onClose={onClose} title="Xem trước Banner">
       <div className="p-6">
         <div className="space-y-6">
           {/* Banner Image */}
@@ -527,85 +527,77 @@ export const PreviewBannerSliderHomeModal: React.FC<{
           {/* Banner Info */}
           <div className="space-y-4">
             <div>
-              <h3 className="text-2xl font-bold text-white mb-2">
+              <h3 className="text-2xl font-bold text-white mb-2 font-heading">
                 {banner.title}
               </h3>
               {banner.topic && (
-                <span className="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-sm">
+                <span className="px-3 py-1 bg-orange-500/20 text-orange-300 rounded-full text-sm font-body">
                   {banner.topic}
                 </span>
               )}
             </div>
 
-            <div className="text-slate-300">
-              <strong>Author:</strong> {banner.author}
+            <div className="text-slate-300 font-body">
+              <strong className="font-semibold">Tác giả:</strong> {banner.author}
             </div>
 
-            <div className="text-slate-300">
-              <strong>Description:</strong>
+            <div className="text-slate-300 font-body">
+              <strong className="font-semibold">Mô tả:</strong>
               <p className="mt-1 text-slate-400">{banner.description}</p>
             </div>
 
             <div className="grid grid-cols-2 gap-4 pt-4">
               <div>
-                <strong className="text-slate-300">Status:</strong>
+                <strong className="text-slate-300 font-semibold">Trạng thái:</strong>
                 <div className="flex items-center gap-2 mt-1">
                   {banner.active ? (
                     <ToggleRight size={18} className="text-green-400" />
                   ) : (
                     <ToggleLeft size={18} className="text-slate-400" />
                   )}
-                  <span
-                    className={
-                      banner.active ? "text-green-400" : "text-slate-400"
-                    }
-                  >
-                    {banner.active ? "Active" : "Inactive"}
+                  <span className={`font-body ${banner.active ? "text-green-400" : "text-slate-400"}`}>
+                    {banner.active ? "Hoạt động" : "Không hoạt động"}
                   </span>
                 </div>
               </div>
 
               <div>
-                <strong className="text-slate-300">Auto-Active:</strong>
+                <strong className="text-slate-300 font-semibold">Tự động kích hoạt:</strong>
                 <div className="flex items-center gap-2 mt-1">
                   {banner.auto_active ? (
                     <ToggleRight size={18} className="text-blue-400" />
                   ) : (
                     <ToggleLeft size={18} className="text-slate-400" />
                   )}
-                  <span
-                    className={
-                      banner.auto_active ? "text-blue-400" : "text-slate-400"
-                    }
-                  >
-                    {banner.auto_active ? "Enabled" : "Disabled"}
+                  <span className={`font-body ${banner.auto_active ? "text-blue-400" : "text-slate-400"}`}>
+                    {banner.auto_active ? "Đã bật" : "Đã tắt"}
                   </span>
                 </div>
               </div>
 
               {banner.time_active && (
                 <div className="col-span-2">
-                  <strong className="text-slate-300">Activation Time:</strong>
+                  <strong className="text-slate-300 font-semibold">Thời gian kích hoạt:</strong>
                   <div className="flex items-center gap-2 mt-1">
                     <Calendar size={16} className="text-slate-400" />
-                    <span className="text-slate-400">
-                      {format(new Date(banner.time_active), "PPP 'at' p")}
+                    <span className="text-slate-400 font-body">
+                      {format(new Date(banner.time_active), "dd/MM/yyyy 'lúc' p")}
                     </span>
                   </div>
                 </div>
               )}
 
               <div>
-                <strong className="text-slate-300">Created:</strong>
-                <div className="text-slate-400 mt-1">
-                  {format(new Date(banner.created_at), "PPP")}
+                <strong className="text-slate-300 font-semibold">Đã tạo:</strong>
+                <div className="text-slate-400 mt-1 font-body">
+                  {format(new Date(banner.created_at), "dd/MM/yyyy")}
                 </div>
               </div>
 
               <div>
-                <strong className="text-slate-300">Updated:</strong>
-                <div className="text-slate-400 mt-1">
-                  {format(new Date(banner.updated_at), "PPP")}
+                <strong className="text-slate-300 font-semibold">Cập nhật:</strong>
+                <div className="text-slate-400 mt-1 font-body">
+                  {format(new Date(banner.updated_at), "dd/MM/yyyy")}
                 </div>
               </div>
             </div>
@@ -625,16 +617,16 @@ export const DeleteBannerSliderHomeModal: React.FC<{
   isDeleting: boolean;
 }> = ({ isOpen, banner, onClose, onConfirm, isDeleting }) => {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Delete Banner">
+    <Modal isOpen={isOpen} onClose={onClose} title="Xóa Banner">
       <div className="p-6">
         <div className="space-y-4">
           <div className="flex items-center gap-3 text-red-400">
             <AlertTriangle size={20} />
-            <span className="font-semibold">Are you sure?</span>
+            <span className="font-semibold font-heading">Bạn có chắc không?</span>
           </div>
 
-          <p className="text-slate-300">
-            This action cannot be undone. This will permanently delete the
+          <p className="text-slate-300 font-body">
+            Hành động này không thể hoàn tác. Thao tác này sẽ xóa vĩnh viễn
             banner:
           </p>
 
@@ -650,8 +642,8 @@ export const DeleteBannerSliderHomeModal: React.FC<{
                 }}
               />
               <div>
-                <div className="font-semibold text-white">{banner.title}</div>
-                <div className="text-sm text-slate-400">by {banner.author}</div>
+                <div className="font-semibold text-white font-heading">{banner.title}</div>
+                <div className="text-sm text-slate-400 font-body">bởi {banner.author}</div>
               </div>
             </div>
           </div>
@@ -660,21 +652,21 @@ export const DeleteBannerSliderHomeModal: React.FC<{
             <button
               onClick={onClose}
               disabled={isDeleting}
-              className="px-6 py-3 text-slate-400 hover:text-white transition-colors disabled:opacity-50"
+              className="px-6 py-3 text-slate-400 hover:text-white transition-colors disabled:opacity-50 font-body"
             >
-              Cancel
+              Hủy
             </button>
             <button
               onClick={onConfirm}
               disabled={isDeleting}
-              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white px-6 py-3 rounded-lg transition-colors"
+              className="flex items-center gap-2 bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white px-6 py-3 rounded-lg transition-colors font-body"
             >
               {isDeleting ? (
                 <Loader size={18} className="animate-spin" />
               ) : (
                 <AlertTriangle size={18} />
               )}
-              {isDeleting ? "Deleting..." : "Delete Banner"}
+              {isDeleting ? "Đang xóa..." : "Xóa Banner"}
             </button>
           </div>
         </div>

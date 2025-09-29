@@ -25,12 +25,12 @@ export const StaffList = ({ staff, loading, onRefresh }: StaffListProps) => {
             <Loader2 size={32} className="text-blue-400" />
           </motion.div>
           <motion.span 
-            className="ml-3 text-gray-300"
+            className="ml-3 text-gray-300 font-body"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            Loading staff...
+            Đang tải danh sách nhân viên...
           </motion.span>
         </div>
       </motion.div>
@@ -47,17 +47,17 @@ export const StaffList = ({ staff, loading, onRefresh }: StaffListProps) => {
       {/* Header */}
       <div className="px-6 py-4 bg-gradient-to-r from-slate-700/80 to-slate-800/80 border-b border-slate-700/50 flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-white">Current Staff Members</h3>
-          <p className="text-sm text-gray-400">Manage and view staff information</p>
+          <h3 className="text-lg font-semibold text-white font-heading">Thành viên nhân viên hiện tại</h3>
+          <p className="text-sm text-gray-400 font-body">Quản lý và xem thông tin nhân viên</p>
         </div>
         <motion.button
           onClick={onRefresh}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600/20 text-blue-400 rounded-lg border border-blue-500/30 hover:bg-blue-600/30 transition-all duration-300"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600/20 text-blue-400 rounded-lg border border-blue-500/30 hover:bg-blue-600/30 transition-all duration-300 font-body"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <RefreshCw size={16} />
-          Refresh
+          Làm mới
         </motion.button>
       </div>
 
@@ -67,8 +67,8 @@ export const StaffList = ({ staff, loading, onRefresh }: StaffListProps) => {
           <div className="text-center py-12">
             <div className="text-gray-400 mb-4">
               <Briefcase size={48} className="mx-auto mb-4 opacity-50" />
-              <p className="text-lg">No staff members found</p>
-              <p className="text-sm">Promote some customers to staff to see them here.</p>
+              <p className="text-lg font-heading">Không tìm thấy thành viên nhân viên nào</p>
+              <p className="text-sm font-body">Thăng chức cho một số khách hàng thành nhân viên để thấy họ ở đây.</p>
             </div>
           </div>
         ) : (
@@ -76,11 +76,11 @@ export const StaffList = ({ staff, loading, onRefresh }: StaffListProps) => {
             <table className="w-full">
               <thead className="bg-gradient-to-r from-slate-700/80 to-slate-800/80">
                 <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Staff Member</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Role</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Stats</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Joined</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Thành viên nhân viên</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Vai trò</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Trạng thái</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Thống kê</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Ngày tham gia</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-700/50">
@@ -116,22 +116,22 @@ export const StaffList = ({ staff, loading, onRefresh }: StaffListProps) => {
                           </span>
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-white">{staffMember.name || 'No name'}</div>
-                          <div className="text-sm text-gray-400">{staffMember.email}</div>
+                          <div className="text-sm font-medium text-white font-body">{staffMember.name || 'Không có tên'}</div>
+                          <div className="text-sm text-gray-400 font-body">{staffMember.email}</div>
                           {staffMember.phone && (
-                            <div className="text-xs text-gray-500">{staffMember.phone}</div>
+                            <div className="text-xs text-gray-500 font-body">{staffMember.phone}</div>
                           )}
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-3 py-1 rounded-full text-xs font-medium capitalize bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                      <span className="px-3 py-1 rounded-full text-xs font-medium capitalize bg-blue-500/20 text-blue-400 border border-blue-500/30 font-body">
                         {staffMember.role}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <motion.button
-                        className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ${
+                        className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 font-body ${
                           staffMember.verify === 1
                             ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                             : staffMember.verify === 2
@@ -141,18 +141,18 @@ export const StaffList = ({ staff, loading, onRefresh }: StaffListProps) => {
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        {staffMember.verify === 1 ? 'Active' : staffMember.verify === 2 ? 'Inactive' : 'Pending'}
+                        {staffMember.verify === 1 ? 'Hoạt động' : staffMember.verify === 2 ? 'Không hoạt động' : 'Đang chờ xử lý'}
                       </motion.button>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-body">
                       {staffMember.stats && (
                         <div className="text-xs space-y-1">
-                          <div>Bookings: {staffMember.stats.bookings_count}</div>
-                          <div>Ratings: {staffMember.stats.ratings_count}</div>
+                          <div>Lượt đặt vé: {staffMember.stats.bookings_count}</div>
+                          <div>Lượt đánh giá: {staffMember.stats.ratings_count}</div>
                         </div>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-body">
                       {new Date(staffMember.created_at).toLocaleDateString()}
                     </td>
                   </motion.tr>

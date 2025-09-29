@@ -11,7 +11,7 @@ export const BookingsChart = ({ dashboardData }: BookingsChartProps) => {
     return (
       <div className="text-center py-8">
         <BarChart3 size={48} className="mx-auto text-gray-300 mb-4" />
-        <p className="text-gray-500">No booking data available</p>
+        <p className="text-gray-500 font-body">Không có dữ liệu đặt vé</p>
       </div>
     );
   }
@@ -22,7 +22,7 @@ export const BookingsChart = ({ dashboardData }: BookingsChartProps) => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-white flex items-center">
+        <h3 className="text-lg font-semibold text-white flex items-center font-heading">
           <motion.div
             className="p-2 rounded-lg bg-emerald-500/20 mr-3 border border-emerald-500/30"
             whileHover={{ scale: 1.1 }}
@@ -30,9 +30,9 @@ export const BookingsChart = ({ dashboardData }: BookingsChartProps) => {
           >
             <BarChart3 size={20} className="text-emerald-400" />
           </motion.div>
-          Daily Performance
+          Hiệu suất hàng ngày
         </h3>
-        <div className="flex items-center text-sm text-emerald-400">
+        <div className="flex items-center text-sm text-emerald-400 font-body">
           <TrendingUp size={14} className="mr-1" />
           <span>+12.5%</span>
         </div>
@@ -57,7 +57,7 @@ export const BookingsChart = ({ dashboardData }: BookingsChartProps) => {
                     height: `${(day.bookings / maxBookings) * 100}px`
                   }}
                   whileHover={{ scale: 1.05 }}
-                  title={`${day.bookings} bookings`}
+                  title={`${day.bookings} lượt đặt vé`}
                 />
                 
                 {/* Revenue Bar */}
@@ -67,14 +67,14 @@ export const BookingsChart = ({ dashboardData }: BookingsChartProps) => {
                     height: `${(day.revenue / maxRevenue) * 60}px`
                   }}
                   whileHover={{ scale: 1.05 }}
-                  title={`${day.revenue.toLocaleString()} VNĐ revenue`}
+                  title={`${day.revenue.toLocaleString()} VNĐ doanh thu`}
                 />
               </div>
               
               {/* Date Label */}
               <div className="mt-2 text-center">
-                <p className="text-xs text-gray-400 font-medium">
-                  {new Date(day.date).toLocaleDateString('en', { 
+                <p className="text-xs text-gray-400 font-medium font-body">
+                  {new Date(day.date).toLocaleDateString('vi-VN', { 
                     month: 'short', 
                     day: 'numeric' 
                   })}
@@ -88,25 +88,25 @@ export const BookingsChart = ({ dashboardData }: BookingsChartProps) => {
         <div className="flex justify-center space-x-6 p-4 bg-white/5 rounded-lg border border-white/10">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full"></div>
-            <span className="text-gray-300 text-sm font-medium">Bookings</span>
+            <span className="text-gray-300 text-sm font-medium font-body">Lượt đặt vé</span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-blue-400 rounded-full"></div>
-            <span className="text-gray-300 text-sm font-medium">Revenue</span>
+            <span className="text-gray-300 text-sm font-medium font-body">Doanh thu</span>
           </div>
         </div>
         
         {/* Summary Stats */}
         <div className="grid grid-cols-2 gap-4 mt-4">
           <div className="text-center p-3 bg-emerald-500/10 border border-emerald-500/20 rounded-lg">
-            <p className="text-sm text-gray-400">Total Bookings</p>
-            <p className="text-lg font-bold text-emerald-400">
+            <p className="text-sm text-gray-400 font-body">Tổng lượt đặt vé</p>
+            <p className="text-lg font-bold text-emerald-400 font-heading">
               {dashboardData.charts.bookings_per_day.reduce((sum, day) => sum + day.bookings, 0)}
             </p>
           </div>
           <div className="text-center p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-            <p className="text-sm text-gray-400">Total Revenue</p>
-            <p className="text-lg font-bold text-blue-400">
+            <p className="text-sm text-gray-400 font-body">Tổng doanh thu</p>
+            <p className="text-lg font-bold text-blue-400 font-heading">
               {dashboardData.charts.bookings_per_day.reduce((sum, day) => sum + day.revenue, 0).toLocaleString()} VNĐ
             </p>
           </div>

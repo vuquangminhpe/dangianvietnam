@@ -41,7 +41,7 @@ export const DashboardStatsComponent = ({ dashboardData }: DashboardStatsCompone
 
   const stats = [
     {
-      title: "Total Revenue",
+      title: "Tổng doanh thu",
       value: `${dashboardData?.booking_stats?.revenue?.toLocaleString() || '0'} VNĐ`,
       change: "+12.5%",
       changeType: "increase" as const,
@@ -52,7 +52,7 @@ export const DashboardStatsComponent = ({ dashboardData }: DashboardStatsCompone
       iconColor: "text-emerald-400"
     },
     {
-      title: "Total Users",
+      title: "Tổng người dùng",
       value: dashboardData?.user_stats?.total_users?.toLocaleString() || '0',
       change: "+8.2%",
       changeType: "increase" as const,
@@ -63,7 +63,7 @@ export const DashboardStatsComponent = ({ dashboardData }: DashboardStatsCompone
       iconColor: "text-blue-400"
     },
     {
-      title: "Total Bookings",
+      title: "Tổng lượt đặt vé",
       value: dashboardData?.booking_stats?.total_bookings?.toLocaleString() || '0',
       change: "+15.3%",
       changeType: "increase" as const,
@@ -74,7 +74,7 @@ export const DashboardStatsComponent = ({ dashboardData }: DashboardStatsCompone
       iconColor: "text-purple-400"
     },
     {
-      title: "Active Movies",
+      title: "Phim đang hoạt động",
       value: `${dashboardData?.content_stats?.total_movies?.toLocaleString() || '0'}`,
       change: "+0.2",
       changeType: "increase" as const,
@@ -153,14 +153,14 @@ export const DashboardStatsComponent = ({ dashboardData }: DashboardStatsCompone
                     ) : (
                       <TrendingDown size={12} />
                     )}
-                    {stat.change}
+                    <span className="font-body">{stat.change}</span>
                   </motion.div>
                 </div>
                 
                 {/* Content */}
                 <div className="space-y-2">
                   <motion.h3 
-                    className="text-3xl font-bold text-white group-hover:text-gray-100 transition-colors"
+                    className="text-3xl font-bold text-white group-hover:text-gray-100 transition-colors font-heading"
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: index * 0.1 + 0.3, type: "spring" }}
@@ -169,7 +169,7 @@ export const DashboardStatsComponent = ({ dashboardData }: DashboardStatsCompone
                   </motion.h3>
                   
                   <motion.p 
-                    className="text-sm text-gray-300 font-medium"
+                    className="text-sm text-gray-300 font-medium font-body"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1 + 0.4 }}
@@ -180,9 +180,9 @@ export const DashboardStatsComponent = ({ dashboardData }: DashboardStatsCompone
                 
                 {/* Progress Bar */}
                 <div className="mt-4 pt-4 border-t border-slate-700/50">
-                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <div className="flex items-center gap-2 text-xs text-gray-400 font-body">
                     <Activity size={12} />
-                    <span>Since last period</span>
+                    <span>So với kỳ trước</span>
                   </div>
                   <div className="mt-2 h-1.5 bg-slate-700/50 rounded-full overflow-hidden">
                     <motion.div

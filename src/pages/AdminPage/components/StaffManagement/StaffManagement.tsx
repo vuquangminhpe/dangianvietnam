@@ -44,7 +44,7 @@ export const StaffManagement = () => {
     } catch (error) {
       console.error('Failed to fetch customers:', error);
       setCustomers([]);
-      toast.error('Failed to load customers');
+      toast.error('Tải danh sách khách hàng thất bại');
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export const StaffManagement = () => {
     } catch (error) {
       console.error('Failed to fetch staff:', error);
       setStaff([]);
-      toast.error('Failed to load staff');
+      toast.error('Tải danh sách nhân viên thất bại');
     } finally {
       setLoading(false);
     }
@@ -95,7 +95,7 @@ export const StaffManagement = () => {
 
     try {
       await promoteUserToStaff(selectedCustomer._id, contractData);
-      toast.success('User promoted to staff successfully!');
+      toast.success('Thăng chức người dùng lên nhân viên thành công!');
       setShowPromoteModal(false);
       setSelectedCustomer(null);
       
@@ -104,7 +104,7 @@ export const StaffManagement = () => {
       fetchStaff();
     } catch (error) {
       console.error('Failed to promote user:', error);
-      toast.error('Failed to promote user to staff');
+      toast.error('Thăng chức người dùng lên nhân viên thất bại');
     }
   };
 
@@ -148,8 +148,8 @@ export const StaffManagement = () => {
       {/* Header */}
       <motion.div variants={itemVariants} className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Staff Management</h1>
-          <p className="text-gray-400">Promote customers to staff and manage staff contracts</p>
+          <h1 className="text-3xl font-bold text-white mb-2 font-heading">Quản lý nhân viên</h1>
+          <p className="text-gray-400 font-body">Thăng chức khách hàng lên nhân viên và quản lý hợp đồng nhân viên</p>
         </div>
       </motion.div>
 
@@ -158,23 +158,23 @@ export const StaffManagement = () => {
         <nav className="flex space-x-8">
           <button
             onClick={() => setActiveTab('promote')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors font-body ${
               activeTab === 'promote'
                 ? 'border-blue-500 text-blue-400'
                 : 'border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300'
             }`}
           >
-            Promote to Staff
+            Thăng chức thành nhân viên
           </button>
           <button
             onClick={() => setActiveTab('staff')}
-            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors ${
+            className={`py-2 px-1 border-b-2 font-medium text-sm transition-colors font-body ${
               activeTab === 'staff'
                 ? 'border-blue-500 text-blue-400'
                 : 'border-transparent text-gray-400 hover:text-gray-300 hover:border-gray-300'
             }`}
           >
-            Current Staff ({staff.length})
+            Nhân viên hiện tại ({staff.length})
           </button>
         </nav>
       </motion.div>

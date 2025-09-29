@@ -79,9 +79,9 @@ export const CouponManagement = () => {
       setTotalCoupons(0);
 
       if (error instanceof Error) {
-        toast.error(`Failed to load coupons: ${error.message}`);
+        toast.error(`Tải mã giảm giá thất bại: ${error.message}`);
       } else {
-        toast.error("Failed to load coupons");
+        toast.error("Tải mã giảm giá thất bại");
       }
     } finally {
       setCouponsLoading(false);
@@ -95,22 +95,22 @@ export const CouponManagement = () => {
       setShowCouponModal(true);
     } catch (error) {
       console.error("Failed to fetch coupon details:", error);
-      toast.error("Failed to load coupon details");
+      toast.error("Tải chi tiết mã giảm giá thất bại");
     }
   };
 
   const handleCreateCoupon = async (couponData: CreateCouponRequest) => {
     try {
       await createCoupon(couponData);
-      toast.success("Coupon created successfully");
+      toast.success("Tạo mã giảm giá thành công");
       setShowCreateModal(false);
       fetchCoupons();
     } catch (error) {
       console.error("Failed to create coupon:", error);
       if (error instanceof Error) {
-        toast.error(`Failed to create coupon: ${error.message}`);
+        toast.error(`Tạo mã giảm giá thất bại: ${error.message}`);
       } else {
-        toast.error("Failed to create coupon");
+        toast.error("Tạo mã giảm giá thất bại");
       }
     }
   };
@@ -126,15 +126,15 @@ export const CouponManagement = () => {
   ) => {
     try {
       await updateCoupon(couponId, couponData);
-      toast.success("Coupon updated successfully");
+      toast.success("Cập nhật mã giảm giá thành công");
       setShowEditModal(false);
       fetchCoupons();
     } catch (error) {
       console.error("Failed to update coupon:", error);
       if (error instanceof Error) {
-        toast.error(`Failed to update coupon: ${error.message}`);
+        toast.error(`Cập nhật mã giảm giá thất bại: ${error.message}`);
       } else {
-        toast.error("Failed to update coupon");
+        toast.error("Cập nhật mã giảm giá thất bại");
       }
     }
   };
@@ -149,16 +149,16 @@ export const CouponManagement = () => {
 
     try {
       await deleteCoupon(couponToDelete._id);
-      toast.success("Coupon deleted successfully");
+      toast.success("Xóa mã giảm giá thành công");
       setShowDeleteModal(false);
       setCouponToDelete(null);
       fetchCoupons();
     } catch (error) {
       console.error("Failed to delete coupon:", error);
       if (error instanceof Error) {
-        toast.error(`Failed to delete coupon: ${error.message}`);
+        toast.error(`Xóa mã giảm giá thất bại: ${error.message}`);
       } else {
-        toast.error("Failed to delete coupon");
+        toast.error("Xóa mã giảm giá thất bại");
       }
     }
   };
@@ -166,7 +166,7 @@ export const CouponManagement = () => {
   // Bulk operations
   const handleBulkStatusUpdate = async (status: "active" | "inactive") => {
     if (selectedCoupons.length === 0) {
-      toast.warning("Please select coupons to update");
+      toast.warning("Vui lòng chọn các mã giảm giá để cập nhật");
       return;
     }
 
@@ -183,15 +183,15 @@ export const CouponManagement = () => {
       });
 
       await Promise.all(updatePromises);
-      toast.success(`${selectedCoupons.length} coupons updated successfully`);
+      toast.success(`Đã cập nhật ${selectedCoupons.length} mã giảm giá thành công`);
       setSelectedCoupons([]);
       fetchCoupons();
     } catch (error) {
       console.error("Failed to bulk update coupons:", error);
       if (error instanceof Error) {
-        toast.error(`Failed to update coupons: ${error.message}`);
+        toast.error(`Cập nhật hàng loạt thất bại: ${error.message}`);
       } else {
-        toast.error("Failed to update coupons");
+        toast.error("Cập nhật hàng loạt thất bại");
       }
     } finally {
       setBulkLoading(false);
@@ -231,9 +231,9 @@ export const CouponManagement = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">Coupon Management</h1>
-          <p className="text-gray-300 mt-1">
-            Manage discount coupons and promotional codes
+          <h1 className="text-3xl font-bold text-white font-heading">Quản lý Mã giảm giá</h1>
+          <p className="text-gray-300 mt-1 font-body">
+            Quản lý các mã giảm giá và mã khuyến mãi
           </p>
         </div>
 
@@ -241,9 +241,9 @@ export const CouponManagement = () => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setShowCreateModal(true)}
-          className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-6 py-2.5 rounded-lg font-medium transition-all duration-200 shadow-lg"
+          className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-6 py-2.5 rounded-lg font-medium transition-all duration-200 shadow-lg font-body"
         >
-          Create New Coupon
+          Tạo mã giảm giá mới
         </motion.button>
       </div>
 

@@ -73,7 +73,7 @@ export const Dashboard = () => {
       <div className="min-h-96 flex items-center justify-center">
         <div className="text-center">
           <Loader2 size={32} className="animate-spin text-blue-500 mx-auto mb-4" />
-          <p className="text-gray-500">Loading dashboard...</p>
+          <p className="text-gray-500 font-body">Đang tải bảng điều khiển...</p>
         </div>
       </div>
     );
@@ -109,21 +109,21 @@ export const Dashboard = () => {
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
             <motion.h2 
-              className="text-3xl font-bold bg-gradient-to-r from-purple-200 to-blue-200 bg-clip-text text-transparent"
+              className="text-3xl font-bold bg-gradient-to-r from-purple-200 to-blue-200 bg-clip-text text-transparent font-heading"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              Dashboard Overview
+              Tổng quan bảng điều khiển
             </motion.h2>
             <motion.p 
-              className="text-gray-300 mt-2 flex items-center gap-2"
+              className="text-gray-300 mt-2 flex items-center gap-2 font-body"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
               <Activity size={16} />
-              Monitor system performance and statistics
+              Theo dõi hiệu suất và thống kê hệ thống
             </motion.p>
           </div>
           
@@ -136,23 +136,23 @@ export const Dashboard = () => {
             <select
               value={selectedPeriod}
               onChange={(e) => setSelectedPeriod(e.target.value as DashboardQueryParams['period'])}
-              className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+              className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2 text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all font-body"
             >
-              <option value="today" className="bg-gray-800 text-white">Today</option>
-              <option value="week" className="bg-gray-800 text-white">This Week</option>
-              <option value="month" className="bg-gray-800 text-white">This Month</option>
-              <option value="year" className="bg-gray-800 text-white">This Year</option>
-              <option value="all" className="bg-gray-800 text-white">All Time</option>
+              <option value="today" className="bg-gray-800 text-white">Hôm nay</option>
+              <option value="week" className="bg-gray-800 text-white">Tuần này</option>
+              <option value="month" className="bg-gray-800 text-white">Tháng này</option>
+              <option value="year" className="bg-gray-800 text-white">Năm nay</option>
+              <option value="all" className="bg-gray-800 text-white">Tất cả</option>
             </select>
             
             <Button
               onClick={handleRefreshData}
               size="sm"
-              className="bg-blue-500 hover:bg-blue-600 text-white border-0"
+              className="bg-blue-500 hover:bg-blue-600 text-white border-0 font-body"
               disabled={isLoading}
             >
               <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
-              <span className="ml-2">Refresh</span>
+              <span className="ml-2">Làm mới</span>
             </Button>
           </motion.div>
         </div>
@@ -172,21 +172,21 @@ export const Dashboard = () => {
           variants={itemVariants}
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">Quick Stats</h3>
+            <h3 className="text-lg font-semibold text-white font-heading">Thống kê nhanh</h3>
             <Users size={20} className="text-gray-400" />
           </div>
           
-          <div className="space-y-4">
+          <div className="space-y-4 font-body">
             <div className="flex items-center justify-between">
-              <span className="text-gray-300">Active Users</span>
+              <span className="text-gray-300">Người dùng hoạt động</span>
               <span className="font-semibold text-white">1,420</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-300">New Bookings</span>
+              <span className="text-gray-300">Lượt đặt vé mới</span>
               <span className="font-semibold text-white">89</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-300">Pending Reviews</span>
+              <span className="text-gray-300">Đánh giá chờ duyệt</span>
               <span className="font-semibold text-white">23</span>
             </div>
           </div>
@@ -206,16 +206,16 @@ export const Dashboard = () => {
           variants={itemVariants}
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">Recent Activity</h3>
+            <h3 className="text-lg font-semibold text-white font-heading">Hoạt động gần đây</h3>
             <Activity size={20} className="text-gray-400" />
           </div>
           
           <div className="space-y-3">
             {[
-              { action: 'New user registered', time: '5 minutes ago', type: 'user' },
-              { action: 'Movie booking completed', time: '12 minutes ago', type: 'booking' },
-              { action: 'Review submitted', time: '1 hour ago', type: 'review' },
-              { action: 'Payment processed', time: '2 hours ago', type: 'payment' }
+              { action: 'Người dùng mới đăng ký', time: '5 phút trước', type: 'user' },
+              { action: 'Đặt vé xem phim thành công', time: '12 phút trước', type: 'booking' },
+              { action: 'Đánh giá đã được gửi', time: '1 giờ trước', type: 'review' },
+              { action: 'Thanh toán đã được xử lý', time: '2 giờ trước', type: 'payment' }
             ].map((activity, index) => (
               <motion.div 
                 key={index}
@@ -230,15 +230,15 @@ export const Dashboard = () => {
                   activity.type === 'review' ? 'bg-yellow-500' : 'bg-purple-500'
                 }`} />
                 <div className="flex-1">
-                  <p className="text-sm text-white">{activity.action}</p>
-                  <p className="text-xs text-gray-400">{activity.time}</p>
+                  <p className="text-sm text-white font-body">{activity.action}</p>
+                  <p className="text-xs text-gray-400 font-body">{activity.time}</p>
                 </div>
               </motion.div>
             ))}
           </div>
           
-          <button className="w-full mt-4 text-sm text-blue-400 hover:text-blue-300 flex items-center justify-center">
-            View all activity
+          <button className="w-full mt-4 text-sm text-blue-400 hover:text-blue-300 flex items-center justify-center font-body">
+            Xem tất cả hoạt động
             <ChevronRight size={16} className="ml-1" />
           </button>
         </motion.div>

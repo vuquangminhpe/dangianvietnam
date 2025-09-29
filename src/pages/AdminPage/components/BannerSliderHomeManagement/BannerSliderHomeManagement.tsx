@@ -89,8 +89,8 @@ export const BannerSliderHomeManagement: React.FC = () => {
       setTotalPages(response.result.total_pages);
       setTotalBanners(response.result.total);
     } catch (err) {
-      console.error("Error fetching banner slider home:", err);
-      setError(err instanceof Error ? err.message : "Failed to fetch banners");
+      console.error("Lỗi khi lấy banner slider home:", err);
+      setError(err instanceof Error ? err.message : "Lấy banner thất bại");
     } finally {
       setLoading(false);
     }
@@ -103,7 +103,7 @@ export const BannerSliderHomeManagement: React.FC = () => {
       const status = await getBannerSliderHomeStatus();
       setSchedulerStatus(status.data);
     } catch (err) {
-      console.error("Error fetching scheduler status:", err);
+      console.error("Lỗi khi lấy trạng thái bộ lập lịch:", err);
     } finally {
       setStatusLoading(false);
     }
@@ -163,7 +163,7 @@ export const BannerSliderHomeManagement: React.FC = () => {
       setBannerToDelete(null);
       fetchBanners(); // Refresh data
     } catch (err) {
-      console.error("Error deleting banner slider home:", err);
+      console.error("Lỗi khi xóa banner slider home:", err);
     } finally {
       setIsDeleting(false);
     }
@@ -182,14 +182,14 @@ export const BannerSliderHomeManagement: React.FC = () => {
       const result = await manualActivateBannerSliderHome();
 
       // Show success message or handle result
-      console.log("Manual activation result:", result);
+      console.log("Kết quả kích hoạt thủ công:", result);
 
       // Refresh banners and status
       fetchBanners();
       fetchSchedulerStatus();
     } catch (err) {
-      console.error("Error during manual activation:", err);
-      setError(err instanceof Error ? err.message : "Manual activation failed");
+      console.error("Lỗi trong quá trình kích hoạt thủ công:", err);
+      setError(err instanceof Error ? err.message : "Kích hoạt thủ công thất bại");
     } finally {
       setIsActivating(false);
     }
@@ -243,7 +243,7 @@ export const BannerSliderHomeManagement: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 font-body">
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -251,11 +251,11 @@ export const BannerSliderHomeManagement: React.FC = () => {
         className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
       >
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Banner Slider Home Management
+          <h1 className="text-3xl font-bold text-white mb-2 font-heading">
+            Quản lý Banner Slider Trang chủ
           </h1>
-          <p className="text-slate-400">
-            Manage home page slider banners with auto-activation scheduling
+          <p className="text-slate-400 font-body">
+            Quản lý banner slider trang chủ với lịch trình kích hoạt tự động
           </p>
         </div>
         <div className="flex gap-3">
@@ -264,23 +264,23 @@ export const BannerSliderHomeManagement: React.FC = () => {
             whileTap={{ scale: 0.98 }}
             onClick={handleManualActivation}
             disabled={isActivating}
-            className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-lg font-semibold shadow-lg hover:shadow-green-500/25 transition-all duration-300 disabled:opacity-50"
+            className="flex items-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-lg font-semibold shadow-lg hover:shadow-green-500/25 transition-all duration-300 disabled:opacity-50 font-body"
           >
             {isActivating ? (
               <RefreshCw size={18} className="animate-spin" />
             ) : (
               <Play size={18} />
             )}
-            Manual Activate
+            Kích hoạt thủ công
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleCreate}
-            className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-orange-500/25 transition-all duration-300"
+            className="flex items-center gap-2 bg-gradient-to-r from-orange-500 to-amber-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:shadow-orange-500/25 transition-all duration-300 font-body"
           >
             <Plus size={20} />
-            Create Banner
+            Tạo Banner
           </motion.button>
         </div>
       </motion.div>
@@ -295,7 +295,7 @@ export const BannerSliderHomeManagement: React.FC = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Settings size={20} className="text-slate-400" />
-            <span className="text-white font-medium">Auto-Activation System</span>
+            <span className="text-white font-medium font-heading">Hệ thống Tự động Kích hoạt</span>
           </div>
           <div className="flex items-center gap-4">
             {statusLoading ? (
@@ -306,16 +306,16 @@ export const BannerSliderHomeManagement: React.FC = () => {
                   <div className={`w-2 h-2 rounded-full ${
                     schedulerStatus?.is_running ? 'bg-green-500' : 'bg-red-500'
                   }`} />
-                  <span className="text-sm text-slate-300">
-                    {schedulerStatus?.is_running ? 'Running' : 'Stopped'}
+                  <span className="text-sm text-slate-300 font-body">
+                    {schedulerStatus?.is_running ? 'Đang chạy' : 'Đã dừng'}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className={`w-2 h-2 rounded-full ${
                     schedulerStatus?.socket_connected ? 'bg-green-500' : 'bg-red-500'
                   }`} />
-                  <span className="text-sm text-slate-300">
-                    Socket {schedulerStatus?.socket_connected ? 'Connected' : 'Disconnected'}
+                  <span className="text-sm text-slate-300 font-body">
+                    Socket {schedulerStatus?.socket_connected ? 'Đã kết nối' : 'Đã ngắt kết nối'}
                   </span>
                 </div>
                 <button
@@ -329,7 +329,7 @@ export const BannerSliderHomeManagement: React.FC = () => {
           </div>
         </div>
         {schedulerStatus?.next_check && (
-          <p className="text-sm text-slate-400 mt-2">
+          <p className="text-sm text-slate-400 mt-2 font-body">
             {schedulerStatus.next_check}
           </p>
         )}
@@ -339,25 +339,25 @@ export const BannerSliderHomeManagement: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {[
           {
-            label: "Total Banners",
+            label: "Tổng số Banner",
             value: totalBanners,
             icon: Image,
             color: "from-blue-500 to-cyan-500",
           },
           {
-            label: "Active Banners",
+            label: "Banner đang hoạt động",
             value: banners.filter((b) => b.active).length,
             icon: ToggleRight,
             color: "from-green-500 to-emerald-500",
           },
           {
-            label: "Auto-Active Enabled",
+            label: "Đã bật tự động kích hoạt",
             value: banners.filter((b) => b.auto_active).length,
             icon: Calendar,
             color: "from-orange-500 to-amber-500",
           },
           {
-            label: "Scheduled",
+            label: "Đã lên lịch",
             value: banners.filter((b) => b.auto_active && !b.active && b.time_active).length,
             icon: AlertCircle,
             color: "from-purple-500 to-pink-500",
@@ -372,10 +372,10 @@ export const BannerSliderHomeManagement: React.FC = () => {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-slate-400 text-sm font-medium">
+                <p className="text-slate-400 text-sm font-medium font-body">
                   {stat.label}
                 </p>
-                <p className="text-2xl font-bold text-white mt-1">
+                <p className="text-2xl font-bold text-white mt-1 font-heading">
                   {stat.value}
                 </p>
               </div>
@@ -396,7 +396,7 @@ export const BannerSliderHomeManagement: React.FC = () => {
         >
           <div className="flex items-center gap-3">
             <AlertCircle size={20} className="text-red-400" />
-            <span className="text-red-400">{error}</span>
+            <span className="text-red-400 font-body">{error}</span>
             <button
               onClick={() => setError(null)}
               className="ml-auto text-red-400 hover:text-red-300"

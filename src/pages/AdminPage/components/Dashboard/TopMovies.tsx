@@ -11,7 +11,7 @@ export const TopMovies = ({ dashboardData }: TopMoviesProps) => {
     return (
       <div className="text-center py-8">
         <Film size={48} className="mx-auto text-gray-300 mb-4" />
-        <p className="text-gray-500">No movie data available</p>
+        <p className="text-gray-500 font-body">Không có dữ liệu phim</p>
       </div>
     );
   }
@@ -19,7 +19,7 @@ export const TopMovies = ({ dashboardData }: TopMoviesProps) => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-white flex items-center">
+        <h3 className="text-lg font-semibold text-white flex items-center font-heading">
           <motion.div
             className="p-2 rounded-lg bg-purple-500/20 mr-3 border border-purple-500/30"
             whileHover={{ scale: 1.1 }}
@@ -27,9 +27,9 @@ export const TopMovies = ({ dashboardData }: TopMoviesProps) => {
           >
             <Film size={20} className="text-purple-400" />
           </motion.div>
-          Top Movies
+          Phim hàng đầu
         </h3>
-        <span className="text-sm text-gray-400">This month</span>
+        <span className="text-sm text-gray-400 font-body">Tháng này</span>
       </div>
       
       <div className="space-y-3">
@@ -52,16 +52,16 @@ export const TopMovies = ({ dashboardData }: TopMoviesProps) => {
                     (e.target as HTMLImageElement).src = '/placeholder-movie.png';
                   }}
                 />
-                <div className="absolute -top-1 -right-1 w-5 h-5 bg-purple-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
+                <div className="absolute -top-1 -right-1 w-5 h-5 bg-purple-500 text-white text-xs rounded-full flex items-center justify-center font-bold font-heading">
                   {index + 1}
                 </div>
               </div>
               
               <div className="flex-1 min-w-0">
-                <h4 className="font-medium text-white truncate">{movie.title}</h4>
+                <h4 className="font-medium text-white truncate font-heading">{movie.title}</h4>
                 <div className="flex items-center space-x-4 mt-1">
-                  <span className="text-sm text-gray-400">{movie.bookings_count} bookings</span>
-                  <span className="text-sm font-medium text-green-400">{movie.revenue.toLocaleString()} VNĐ</span>
+                  <span className="text-sm text-gray-400 font-body">{movie.bookings_count} lượt đặt vé</span>
+                  <span className="text-sm font-medium text-green-400 font-body">{movie.revenue.toLocaleString()} VNĐ</span>
                 </div>
                 
                 <div className="mt-2 w-full bg-white/10 rounded-full h-1.5">

@@ -43,7 +43,7 @@ export const AdminHeader = ({ user, onLogout, isSidebarCollapsed, onToggleSideba
             className="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors group"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+            title={isSidebarCollapsed ? "Mở rộng thanh bên" : "Thu gọn thanh bên"}
           >
             <motion.div
               animate={{ rotate: isSidebarCollapsed ? 0 : 180 }}
@@ -74,20 +74,20 @@ export const AdminHeader = ({ user, onLogout, isSidebarCollapsed, onToggleSideba
           </motion.div>
           <div>
             <motion.h1 
-              className="text-2xl font-bold bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent"
+              className="text-2xl font-bold bg-gradient-to-r from-white via-blue-200 to-purple-200 bg-clip-text text-transparent font-heading"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              Cinema Admin Console
+              Bảng điều khiển quản trị
             </motion.h1>
             <motion.p 
-              className="text-gray-300 text-sm"
+              className="text-gray-300 text-sm font-body"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              Manage your cinema ecosystem
+              Quản lý hệ sinh thái rạp chiếu phim của bạn
             </motion.p>
           </div>
         </motion.div>
@@ -103,8 +103,8 @@ export const AdminHeader = ({ user, onLogout, isSidebarCollapsed, onToggleSideba
             <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <motion.input
               type="text"
-              placeholder="Search users, movies, bookings..."
-              className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all"
+              placeholder="Tìm kiếm người dùng, phim, đặt vé..."
+              className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all font-body"
               whileFocus={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
             />
@@ -148,9 +148,9 @@ export const AdminHeader = ({ user, onLogout, isSidebarCollapsed, onToggleSideba
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <p className="font-medium text-white">{user?.name || 'Administrator'}</p>
+            <p className="font-medium text-white font-body">{user?.name || 'Quản trị viên'}</p>
             <motion.span 
-              className="inline-block bg-gradient-to-r from-purple-500 to-blue-500 text-white text-xs px-3 py-1 rounded-full font-medium"
+              className="inline-block bg-gradient-to-r from-purple-500 to-blue-500 text-white text-xs px-3 py-1 rounded-full font-medium font-body"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ duration: 0.3, delay: 0.5, type: "spring" }}

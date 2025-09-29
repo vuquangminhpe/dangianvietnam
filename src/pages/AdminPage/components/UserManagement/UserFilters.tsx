@@ -43,28 +43,28 @@ export const UserFilters = ({
         transition={{ delay: 0.2, duration: 0.5 }}
       >
         <motion.h2 
-          className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent"
+          className="text-2xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent font-heading"
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
         >
-          User Management
+          Quản lý người dùng
         </motion.h2>
         
         <div className="flex items-center gap-4">
           <motion.span 
-            className="text-gray-300 flex items-center gap-2"
+            className="text-gray-300 flex items-center gap-2 font-body"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
           >
             <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-            Total Users: {totalUsers}
+            Tổng số người dùng: {totalUsers}
           </motion.span>
           
           <motion.button
             onClick={onRefresh}
-            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-xl transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-blue-500/25"
+            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-xl transition-all duration-300 flex items-center gap-2 shadow-lg hover:shadow-blue-500/25 font-body"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, x: 20 }}
@@ -78,7 +78,7 @@ export const UserFilters = ({
             >
               <RefreshCw size={16} />
             </motion.div>
-            Refresh
+            Làm mới
           </motion.button>
         </div>
       </motion.div>
@@ -109,14 +109,14 @@ export const UserFilters = ({
         >
           <input
             type="text"
-            placeholder="Search users..."
+            placeholder="Tìm kiếm người dùng..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="flex-1 px-4 py-3 bg-slate-700/50 text-white rounded-l-xl border border-slate-600/50 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 backdrop-blur-sm"
+            className="flex-1 px-4 py-3 bg-slate-700/50 text-white rounded-l-xl border border-slate-600/50 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 backdrop-blur-sm font-body"
           />
           <motion.button
             type="submit"
-            className="px-4 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-r-xl transition-all duration-300 shadow-lg"
+            className="px-4 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-r-xl transition-all duration-300 shadow-lg font-body"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -127,47 +127,47 @@ export const UserFilters = ({
         <motion.select
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
-          className="px-4 py-3 bg-slate-700/50 text-white rounded-xl border border-slate-600/50 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 backdrop-blur-sm cursor-pointer"
+          className="px-4 py-3 bg-slate-700/50 text-white rounded-xl border border-slate-600/50 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 backdrop-blur-sm cursor-pointer font-body"
           variants={{
             hidden: { opacity: 0, x: -20 },
             visible: { opacity: 1, x: 0 }
           }}
           whileHover={{ scale: 1.02 }}
         >
-          <option value="">All Roles</option>
-          <option value="admin">Admin</option>
-          <option value="customer">Customer</option>
-          <option value="staff">Staff</option>
+          <option value="">Tất cả vai trò</option>
+          <option value="admin">Quản trị viên</option>
+          <option value="customer">Khách hàng</option>
+          <option value="staff">Nhân viên</option>
         </motion.select>
 
         <motion.select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value)}
-          className="px-4 py-3 bg-slate-700/50 text-white rounded-xl border border-slate-600/50 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 backdrop-blur-sm cursor-pointer"
+          className="px-4 py-3 bg-slate-700/50 text-white rounded-xl border border-slate-600/50 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 backdrop-blur-sm cursor-pointer font-body"
           variants={{
             hidden: { opacity: 0, x: -20 },
             visible: { opacity: 1, x: 0 }
           }}
           whileHover={{ scale: 1.02 }}
         >
-          <option value="created_at">Created Date</option>
-          <option value="name">Name</option>
+          <option value="created_at">Ngày tạo</option>
+          <option value="name">Tên</option>
           <option value="email">Email</option>
-          <option value="role">Role</option>
+          <option value="role">Vai trò</option>
         </motion.select>
 
         <motion.select
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
-          className="px-4 py-3 bg-slate-700/50 text-white rounded-xl border border-slate-600/50 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 backdrop-blur-sm cursor-pointer"
+          className="px-4 py-3 bg-slate-700/50 text-white rounded-xl border border-slate-600/50 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 transition-all duration-300 backdrop-blur-sm cursor-pointer font-body"
           variants={{
             hidden: { opacity: 0, x: -20 },
             visible: { opacity: 1, x: 0 }
           }}
           whileHover={{ scale: 1.02 }}
         >
-          <option value="desc">Descending</option>
-          <option value="asc">Ascending</option>
+          <option value="desc">Giảm dần</option>
+          <option value="asc">Tăng dần</option>
         </motion.select>
       </motion.div>
     </motion.div>

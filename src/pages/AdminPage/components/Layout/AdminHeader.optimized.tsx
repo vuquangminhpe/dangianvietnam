@@ -17,7 +17,7 @@ export const AdminHeader = ({ user, onLogout, isSidebarCollapsed, onToggleSideba
           <button
             onClick={onToggleSidebar}
             className="p-2 rounded-lg bg-slate-700/50 hover:bg-slate-600/50 transition-colors duration-200"
-            title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+            title={isSidebarCollapsed ? "Mở rộng thanh bên" : "Thu gọn thanh bên"}
           >
             {isSidebarCollapsed ? <Menu size={20} className="text-slate-300" /> : <X size={20} className="text-slate-300" />}
           </button>
@@ -27,11 +27,11 @@ export const AdminHeader = ({ user, onLogout, isSidebarCollapsed, onToggleSideba
               <Shield size={24} className="text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-white">
-                Cinema Admin Console
+              <h1 className="text-xl font-bold text-white font-heading">
+                Bảng điều khiển quản trị
               </h1>
-              <p className="text-slate-400 text-sm">
-                Manage your cinema ecosystem
+              <p className="text-slate-400 text-sm font-body">
+                Quản lý hệ sinh thái rạp chiếu phim của bạn
               </p>
             </div>
           </div>
@@ -43,8 +43,8 @@ export const AdminHeader = ({ user, onLogout, isSidebarCollapsed, onToggleSideba
             <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="Search users, analytics..."
-              className="w-full pl-10 pr-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all duration-200"
+              placeholder="Tìm kiếm người dùng, phân tích..."
+              className="w-full pl-10 pr-4 py-2 bg-slate-700/50 border border-slate-600/50 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all duration-200 font-body"
             />
           </div>
         </div>
@@ -65,10 +65,10 @@ export const AdminHeader = ({ user, onLogout, isSidebarCollapsed, onToggleSideba
           {/* User Profile */}
           <div className="flex items-center space-x-3">
             <div className="text-right">
-              <p className="text-sm font-medium text-white">{user?.name || 'Admin User'}</p>
-              <p className="text-xs text-slate-400">{user?.role?.toUpperCase() || 'ADMIN'}</p>
+              <p className="text-sm font-medium text-white font-body">{user?.name || 'Quản trị viên'}</p>
+              <p className="text-xs text-slate-400 font-body">{user?.role?.toUpperCase() || 'ADMIN'}</p>
             </div>
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-medium">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full flex items-center justify-center text-white font-medium font-body">
               {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
             </div>
           </div>
@@ -78,10 +78,10 @@ export const AdminHeader = ({ user, onLogout, isSidebarCollapsed, onToggleSideba
             onClick={onLogout}
             variant="outline"
             size="sm"
-            className="text-slate-300 border-slate-600/50 hover:bg-slate-700/50 hover:text-white transition-colors duration-200"
+            className="text-slate-300 border-slate-600/50 hover:bg-slate-700/50 hover:text-white transition-colors duration-200 font-body"
           >
             <LogOut size={16} className="mr-2" />
-            Logout
+            Đăng xuất
           </Button>
         </div>
       </div>

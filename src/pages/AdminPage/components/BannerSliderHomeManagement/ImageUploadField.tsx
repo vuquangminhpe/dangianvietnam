@@ -23,19 +23,19 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
   const validateFile = (file: File): string | null => {
     // Check file type
     if (!file.type.startsWith("image/")) {
-      return "Please select an image file";
+      return "Vui lòng chọn một tệp hình ảnh";
     }
 
     // Check file size (10MB limit)
     const maxSize = 10 * 1024 * 1024; // 10MB in bytes
     if (file.size > maxSize) {
-      return "Image size must be less than 10MB";
+      return "Kích thước hình ảnh phải nhỏ hơn 10MB";
     }
 
     // Check file format
     const allowedTypes = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
     if (!allowedTypes.includes(file.type)) {
-      return "Only JPEG, JPG, PNG, and WebP formats are supported";
+      return "Chỉ hỗ trợ các định dạng JPEG, JPG, PNG và WebP";
     }
 
     return null;
@@ -58,11 +58,11 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
         const uploadedUrl = response.data.result[0].url;
         onChange(uploadedUrl);
       } else {
-        throw new Error("No URL returned from upload");
+        throw new Error("Không có URL nào được trả về từ quá trình tải lên");
       }
     } catch (err) {
       console.error("Upload error:", err);
-      setError(err instanceof Error ? err.message : "Upload failed");
+      setError(err instanceof Error ? err.message : "Tải lên thất bại");
     } finally {
       setUploading(false);
     }
@@ -109,7 +109,7 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 font-body">
       <label className="flex items-center gap-2 text-sm font-medium text-slate-300">
         <ImageIcon size={16} />
         {label}
@@ -132,7 +132,7 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
         {uploading ? (
           <div className="flex flex-col items-center justify-center py-8">
             <Loader size={32} className="animate-spin text-orange-400 mb-3" />
-            <p className="text-slate-400">Uploading image...</p>
+            <p className="text-slate-400 font-body">Đang tải ảnh lên...</p>
           </div>
         ) : value ? (
           <div className="space-y-4">
@@ -140,7 +140,7 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
             <div className="relative w-full h-40 rounded-lg overflow-hidden bg-slate-700">
               <img
                 src={value}
-                alt="Banner preview"
+                alt="Xem trước banner"
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
@@ -151,7 +151,7 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
                 type="button"
                 onClick={handleRemoveImage}
                 className="absolute top-2 right-2 p-1 bg-red-500 hover:bg-red-600 text-white rounded-full transition-colors"
-                title="Remove image"
+                title="Xóa ảnh"
               >
                 <Trash2 size={14} />
               </button>
@@ -159,39 +159,39 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
 
             {/* URL Display */}
             <div className="space-y-2">
-              <label className="text-xs text-slate-400">Image URL:</label>
+              <label className="text-xs text-slate-400 font-body">URL hình ảnh:</label>
               <input
                 type="url"
                 value={value}
                 onChange={handleUrlChange}
-                className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600/50 rounded text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500/50"
-                placeholder="Or paste image URL directly"
+                className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600/50 rounded text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500/50 font-body"
+                placeholder="Hoặc dán trực tiếp URL hình ảnh"
               />
             </div>
           </div>
         ) : (
           <div className="text-center py-8">
             <Upload size={32} className="mx-auto text-slate-400 mb-3" />
-            <p className="text-slate-300 mb-2">Drop image here or click to upload</p>
-            <p className="text-sm text-slate-500 mb-4">
-              Supports JPEG, PNG, WebP • Max 10MB
+            <p className="text-slate-300 mb-2 font-body">Kéo thả ảnh vào đây hoặc nhấp để tải lên</p>
+            <p className="text-sm text-slate-500 mb-4 font-body">
+              Hỗ trợ JPEG, PNG, WebP • Tối đa 10MB
             </p>
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors"
+              className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors font-body"
             >
-              Choose File
+              Chọn tệp
             </button>
 
             {/* Manual URL Input */}
             <div className="mt-4 pt-4 border-t border-slate-600">
-              <p className="text-xs text-slate-400 mb-2">Or paste image URL:</p>
+              <p className="text-xs text-slate-400 mb-2 font-body">Hoặc dán URL hình ảnh:</p>
               <input
                 type="url"
                 value={value}
                 onChange={handleUrlChange}
-                className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600/50 rounded text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500/50"
+                className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600/50 rounded text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500/50 font-body"
                 placeholder="https://example.com/image.jpg"
               />
             </div>
@@ -210,17 +210,17 @@ export const ImageUploadField: React.FC<ImageUploadFieldProps> = ({
 
       {/* Error Display */}
       {error && (
-        <div className="flex items-center gap-2 text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded p-3">
+        <div className="flex items-center gap-2 text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded p-3 font-body">
           <AlertTriangle size={16} />
           {error}
         </div>
       )}
 
       {/* Upload Specs */}
-      <div className="text-xs text-slate-500">
-        <p>• Maximum file size: 10MB</p>
-        <p>• Supported formats: JPEG, PNG, WebP</p>
-        <p>• Recommended dimensions: 1920x1080 or higher</p>
+      <div className="text-xs text-slate-500 font-body">
+        <p>• Kích thước tệp tối đa: 10MB</p>
+        <p>• Các định dạng được hỗ trợ: JPEG, PNG, WebP</p>
+        <p>• Kích thước đề xuất: 1920x1080 hoặc cao hơn</p>
       </div>
     </div>
   );

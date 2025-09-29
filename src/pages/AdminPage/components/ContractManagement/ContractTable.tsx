@@ -63,18 +63,33 @@ export const ContractTable = ({
 }: ContractTableProps) => {
   const totalPages = Math.ceil(totalContracts / limit);
 
-  const getStatusColor = (status: string) => {
+  const getStatusInfo = (status: string) => {
     switch (status) {
       case 'draft':
-        return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+        return {
+          text: 'Bản nháp',
+          className: 'bg-gray-500/20 text-gray-400 border-gray-500/30'
+        };
       case 'active':
-        return 'bg-green-500/20 text-green-400 border-green-500/30';
+        return {
+          text: 'Đang hoạt động',
+          className: 'bg-green-500/20 text-green-400 border-green-500/30'
+        };
       case 'terminated':
-        return 'bg-red-500/20 text-red-400 border-red-500/30';
+        return {
+          text: 'Đã chấm dứt',
+          className: 'bg-red-500/20 text-red-400 border-red-500/30'
+        };
       case 'expired':
-        return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
+        return {
+          text: 'Đã hết hạn',
+          className: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30'
+        };
       default:
-        return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+        return {
+          text: 'Không xác định',
+          className: 'bg-gray-500/20 text-gray-400 border-gray-500/30'
+        };
     }
   };
 
@@ -106,7 +121,7 @@ export const ContractTable = ({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            Loading contracts...
+            Đang tải hợp đồng...
           </motion.span>
         </div>
       </motion.div>
@@ -121,7 +136,7 @@ export const ContractTable = ({
       transition={{ duration: 0.5, ease: "easeOut" }}
     >
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full font-body">
           <motion.thead 
             className="bg-gradient-to-r from-slate-700/80 to-slate-800/80"
             initial={{ opacity: 0 }}
@@ -129,12 +144,12 @@ export const ContractTable = ({
             transition={{ delay: 0.2, duration: 0.5 }}
           >
             <tr>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Contract</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Staff</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Salary</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Duration</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Hợp đồng</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Nhân viên</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Trạng thái</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Lương</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Thời hạn</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Hành động</th>
             </tr>
           </motion.thead>
           <tbody className="divide-y divide-slate-700/50">
@@ -160,7 +175,7 @@ export const ContractTable = ({
                     <div>
                       <div className="text-sm font-medium text-white">{contract.contract_number}</div>
                       <div className="text-xs text-gray-400">
-                        Created: {new Date(contract.created_at).toLocaleDateString()}
+                        Tạo lúc: {new Date(contract.created_at).toLocaleDateString()}
                       </div>
                     </div>
                   </td>
@@ -178,14 +193,14 @@ export const ContractTable = ({
                         )}
                       </div>
                       <div className="ml-4">
-                        <div className="text-sm font-medium text-white">{contract.staff.name}</div>
-                        <div className="text-sm text-gray-400">{contract.staff.email}</div>
+                        <div className="text-sm font-medium text-white font-heading">{contract.staff.name}</div>
+                        <div className="text-sm text-gray-400 font-body">{contract.staff.email}</div>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium capitalize border ${getStatusColor(contract.status)}`}>
-                      {contract.status}
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium capitalize border ${getStatusInfo(contract.status).className}`}>
+                      {getStatusInfo(contract.status).text}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -197,7 +212,7 @@ export const ContractTable = ({
                     <div className="text-sm text-gray-300">
                       <div>{new Date(contract.start_date).toLocaleDateString()}</div>
                       <div className="text-xs text-gray-400">
-                        to {new Date(contract.end_date).toLocaleDateString()}
+                        đến {new Date(contract.end_date).toLocaleDateString()}
                       </div>
                     </div>
                   </td>
@@ -206,7 +221,7 @@ export const ContractTable = ({
                       <motion.button
                         onClick={() => onViewContract(contract._id)}
                         className="text-blue-400 hover:text-blue-300 transition-colors p-1 rounded-lg hover:bg-blue-500/10"
-                        title="View Details"
+                        title="Xem chi tiết"
                         whileHover={{ scale: 1.2, rotate: 5 }}
                         whileTap={{ scale: 0.9 }}
                       >
@@ -216,7 +231,7 @@ export const ContractTable = ({
                       <motion.button
                         onClick={() => onEditContract(contract)}
                         className="text-yellow-400 hover:text-yellow-300 transition-colors p-1 rounded-lg hover:bg-yellow-500/10"
-                        title="Edit Contract"
+                        title="Chỉnh sửa hợp đồng"
                         whileHover={{ scale: 1.2, rotate: 5 }}
                         whileTap={{ scale: 0.9 }}
                       >
@@ -227,7 +242,7 @@ export const ContractTable = ({
                         <motion.button
                           onClick={() => onActivateContract(contract._id)}
                           className="text-green-400 hover:text-green-300 transition-colors p-1 rounded-lg hover:bg-green-500/10"
-                          title="Activate Contract"
+                          title="Kích hoạt hợp đồng"
                           whileHover={{ scale: 1.2, rotate: 5 }}
                           whileTap={{ scale: 0.9 }}
                         >
@@ -239,7 +254,7 @@ export const ContractTable = ({
                         <motion.button
                           onClick={() => onTerminateContract(contract)}
                           className="text-red-400 hover:text-red-300 transition-colors p-1 rounded-lg hover:bg-red-500/10"
-                          title="Terminate Contract"
+                          title="Chấm dứt hợp đồng"
                           whileHover={{ scale: 1.2, rotate: 5 }}
                           whileTap={{ scale: 0.9 }}
                         >
@@ -263,9 +278,9 @@ export const ContractTable = ({
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <div className="flex items-center gap-2 text-sm text-gray-400">
+          <div className="flex items-center gap-2 text-sm text-gray-400 font-body">
             <span>
-              Showing {(currentPage - 1) * limit + 1} to {Math.min(currentPage * limit, totalContracts)} of {totalContracts} contracts
+              Hiển thị {(currentPage - 1) * limit + 1} đến {Math.min(currentPage * limit, totalContracts)} của {totalContracts} hợp đồng
             </span>
           </div>
           
@@ -284,7 +299,7 @@ export const ContractTable = ({
               <motion.button
                 key={page}
                 onClick={() => onPageChange(page)}
-                className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 ${
+                className={`px-3 py-1 rounded-lg text-sm font-medium transition-all duration-300 font-body ${
                   page === currentPage
                     ? 'bg-teal-500 text-white'
                     : 'bg-slate-600/50 text-gray-400 hover:bg-slate-600 hover:text-white'

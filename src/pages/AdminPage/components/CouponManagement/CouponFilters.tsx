@@ -35,22 +35,22 @@ export const CouponFilters = ({
   bulkLoading
 }: CouponFiltersProps) => {
   const statusOptions = [
-    { value: '', label: 'All Status' },
-    { value: 'active', label: 'Active' },
-    { value: 'inactive', label: 'Inactive' },
-    { value: 'expired', label: 'Expired' }
+    { value: '', label: 'Tất cả trạng thái' },
+    { value: 'active', label: 'Đang hoạt động' },
+    { value: 'inactive', label: 'Không hoạt động' },
+    { value: 'expired', label: 'Đã hết hạn' }
   ];
 
   const sortOptions = [
-    { value: 'created_at', label: 'Created Date' },
-    { value: 'code', label: 'Coupon Code' },
-    { value: 'start_date', label: 'Start Date' },
-    { value: 'end_date', label: 'End Date' },
-    { value: 'usage_count', label: 'Usage Count' }
+    { value: 'created_at', label: 'Ngày tạo' },
+    { value: 'code', label: 'Mã giảm giá' },
+    { value: 'start_date', label: 'Ngày bắt đầu' },
+    { value: 'end_date', label: 'Ngày kết thúc' },
+    { value: 'usage_count', label: 'Lượt sử dụng' }
   ];
 
   return (
-    <div className="bg-slate-800 rounded-xl shadow-sm border border-slate-700 p-6">
+    <div className="bg-slate-800 rounded-xl shadow-sm border border-slate-700 p-6 font-body">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
         {/* Search */}
         <div className="relative">
@@ -59,10 +59,10 @@ export const CouponFilters = ({
           </div>
           <input
             type="text"
-            placeholder="Search coupons..."
+            placeholder="Tìm kiếm mã giảm giá..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="block w-full pl-10 pr-3 py-2.5 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 text-white placeholder-gray-400"
+            className="block w-full pl-10 pr-3 py-2.5 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200 text-white placeholder-gray-400 font-body"
           />
         </div>
 
@@ -74,10 +74,10 @@ export const CouponFilters = ({
           <select
             value={statusFilter}
             onChange={(e) => onStatusFilterChange(e.target.value)}
-            className="block w-full pl-10 pr-8 py-2.5 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none transition-colors duration-200 text-white"
+            className="block w-full pl-10 pr-8 py-2.5 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none transition-colors duration-200 text-white font-body"
           >
             {statusOptions.map((option) => (
-              <option key={option.value} value={option.value} className="bg-slate-700 text-white">
+              <option key={option.value} value={option.value} className="bg-slate-700 text-white font-body">
                 {option.label}
               </option>
             ))}
@@ -89,11 +89,11 @@ export const CouponFilters = ({
           <select
             value={sortBy}
             onChange={(e) => onSortByChange(e.target.value)}
-            className="block w-full px-3 py-2.5 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none transition-colors duration-200 text-white"
+            className="block w-full px-3 py-2.5 bg-slate-700 border border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none transition-colors duration-200 text-white font-body"
           >
             {sortOptions.map((option) => (
-              <option key={option.value} value={option.value} className="bg-slate-700 text-white">
-                Sort by {option.label}
+              <option key={option.value} value={option.value} className="bg-slate-700 text-white font-body">
+                Sắp xếp theo {option.label}
               </option>
             ))}
           </select>
@@ -105,7 +105,7 @@ export const CouponFilters = ({
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => onSortOrderChange(sortOrder === 'asc' ? 'desc' : 'asc')}
-            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border transition-colors duration-200 ${
+            className={`flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-lg border transition-colors duration-200 font-body ${
               sortOrder === 'asc'
                 ? 'bg-blue-600 border-blue-500 text-white'
                 : 'bg-slate-700 border-slate-600 text-gray-300 hover:bg-slate-600'
@@ -116,7 +116,7 @@ export const CouponFilters = ({
             ) : (
               <SortDesc className="h-4 w-4" />
             )}
-            {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
+            {sortOrder === 'asc' ? 'Tăng dần' : 'Giảm dần'}
           </motion.button>
         </div>
       </div>
@@ -138,14 +138,14 @@ export const CouponFilters = ({
               activeOnly ? 'translate-x-5' : 'translate-x-0'
             }`} />
           </div>
-          <span className="text-sm font-medium text-gray-300">Active Only</span>
+          <span className="text-sm font-medium text-gray-300 font-body">Chỉ đang hoạt động</span>
         </label>
 
         {/* Bulk Actions */}
         {selectedCount > 0 && (
           <div className="flex items-center gap-2 ml-auto">
-            <span className="text-sm text-gray-300">
-              {selectedCount} selected
+            <span className="text-sm text-gray-300 font-body">
+              Đã chọn {selectedCount}
             </span>
             
             <motion.button
@@ -153,10 +153,10 @@ export const CouponFilters = ({
               whileTap={{ scale: 0.95 }}
               onClick={onBulkActivate}
               disabled={bulkLoading}
-              className="flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200 disabled:opacity-50"
+              className="flex items-center gap-1 px-3 py-1.5 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 font-body"
             >
               <Check className="h-4 w-4" />
-              Activate
+              Kích hoạt
             </motion.button>
 
             <motion.button
@@ -164,10 +164,10 @@ export const CouponFilters = ({
               whileTap={{ scale: 0.95 }}
               onClick={onBulkDeactivate}
               disabled={bulkLoading}
-              className="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 disabled:opacity-50"
+              className="flex items-center gap-1 px-3 py-1.5 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors duration-200 disabled:opacity-50 font-body"
             >
               <X className="h-4 w-4" />
-              Deactivate
+              Vô hiệu hóa
             </motion.button>
           </div>
         )}

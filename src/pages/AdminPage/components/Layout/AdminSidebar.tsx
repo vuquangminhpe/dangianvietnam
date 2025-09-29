@@ -9,7 +9,6 @@ import {
   FileText,
   CreditCard,
   ScanLine,
-  Image,
   Tag,
   Building2,
 } from "lucide-react";
@@ -50,70 +49,63 @@ export const AdminSidebar = ({
   const menuItems = [
     {
       id: "dashboard",
-      label: "Dashboard",
+      label: "Bảng điều khiển",
       icon: Home,
       count: null,
       color: "from-blue-500 to-cyan-500",
     },
     {
       id: "users",
-      label: "User Management",
+      label: "Quản lý người dùng",
       icon: Users,
       count: dataDashboard?.user_stats?.total_users || "0",
       color: "from-emerald-500 to-teal-500",
     },
      {
       id: "theater-management",
-      label: "Theater Management",
+      label: "Quản lý rạp",
       icon: Building2,
       count: null,
       color: "from-amber-500 to-orange-500",
     },
     {
       id: "staff",
-      label: "Staff Management",
+      label: "Quản lý nhân viên",
       icon: Users,
       count: dataDashboard?.hr_stats?.total_staff || 0,
       color: "from-indigo-500 to-purple-500",
     },
     {
       id: "contracts",
-      label: "Manager Contracts",
+      label: "Hợp đồng quản lý",
       icon: FileText,
       count: dataDashboard?.hr_stats?.total_contracts || 0,
       color: "from-teal-500 to-green-500",
     },
     {
-      id: "banners",
-      label: "Banner Management",
-      icon: Image,
-      count: null,
-      color: "from-pink-500 to-rose-500",
-    },
-    {
       id: "banner-slider-home",
-      label: "Home Slider Banners",
+      label: "Banner trang chủ",
       icon: Film,
       count: null,
       color: "from-orange-500 to-amber-500",
     },
     {
       id: "coupons",
-      label: "Coupon Management",
+      label: "Quản lý mã giảm giá",
       icon: Tag,
       count: null,
       color: "from-yellow-500 to-orange-500",
     },
     {
       id: "payments",
-      label: "Payment Management",
+      label: "Quản lý thanh toán",
       icon: CreditCard,
       count: statsData?.result.overview.total_payments.toLocaleString() || 0,
       color: "from-green-500 to-emerald-500",
     },
     {
       id: "ticket-verification",
-      label: "Ticket Verification",
+      label: "Xác thực vé",
       icon: ScanLine,
       count: null,
       color: "from-cyan-500 to-blue-500",
@@ -121,7 +113,7 @@ export const AdminSidebar = ({
    
     {
       id: "add-concierge-qr",
-      label: "Add Concierge QR",
+      label: "Thêm nhân viên QR",
       icon: BiSolidUserAccount,
       count: null,
       color: "from-gray-500 to-slate-500",
@@ -131,7 +123,7 @@ export const AdminSidebar = ({
   const bottomMenuItems = [
     {
       id: "settings",
-      label: "Settings",
+      label: "Cài đặt",
       icon: Settings,
       color: "from-gray-500 to-slate-500",
     },
@@ -215,10 +207,10 @@ export const AdminSidebar = ({
                 animate="expanded"
                 exit="collapsed"
               >
-                <h1 className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                  Cinema Admin
+                <h1 className="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent font-heading">
+                  Quản trị viên rạp chiếu
                 </h1>
-                <p className="text-xs text-gray-400">Management Panel</p>
+                <p className="text-xs text-gray-400 font-body">Bảng điều khiển quản lý</p>
               </motion.div>
             )}
           </AnimatePresence>

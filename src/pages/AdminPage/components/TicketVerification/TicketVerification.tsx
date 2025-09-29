@@ -93,7 +93,7 @@ const TicketVerification: React.FC = () => {
 
               // Show visual feedback
               toast.info(
-                `QR Code detected: ${decodedText.substring(0, 20)}...`
+                `Đã phát hiện mã QR: ${decodedText.substring(0, 20)}...`
               );
 
               // Verify ticket
@@ -126,7 +126,7 @@ const TicketVerification: React.FC = () => {
 
                 // Show visual feedback
                 toast.info(
-                  `QR Code detected: ${decodedText.substring(0, 20)}...`
+                  `Đã phát hiện mã QR: ${decodedText.substring(0, 20)}...`
                 );
 
                 // Verify ticket
@@ -254,7 +254,7 @@ const TicketVerification: React.FC = () => {
   // Verify ticket code
   const handleVerifyTicket = async (ticketCode: string) => {
     if (!ticketCode.trim()) {
-      toast.error("Please enter a ticket code");
+      toast.error("Vui lòng nhập mã vé");
       return;
     }
 
@@ -272,10 +272,10 @@ const TicketVerification: React.FC = () => {
         result.result.payment_status === "completed";
 
       if (isValid) {
-        toast.success("Valid Ticket - Allow Entry!");
+        toast.success("Vé hợp lệ - Cho phép vào!");
         playSound(true);
       } else {
-        toast.error("Invalid Ticket - Deny Entry!");
+        toast.error("Vé không hợp lệ - Từ chối vào!");
         playSound(false);
       }
 
@@ -286,7 +286,7 @@ const TicketVerification: React.FC = () => {
         setLastScannedCode(""); // Allow rescanning the same code
       }, 10000);
     } catch (err: any) {
-      const errorMessage = err.message || "Failed to verify ticket";
+      const errorMessage = err.message || "Xác thực vé thất bại";
       setError(errorMessage);
       toast.error(`${errorMessage}`);
       playSound(false);
@@ -314,7 +314,7 @@ const TicketVerification: React.FC = () => {
       color: isValid ? "text-green-500" : "text-red-500",
       bgColor: isValid ? "bg-green-50" : "bg-red-50",
       borderColor: isValid ? "border-green-200" : "border-red-200",
-      message: isValid ? "Valid Ticket" : "Invalid Ticket",
+      message: isValid ? "Vé hợp lệ" : "Vé không hợp lệ",
     };
   };
 
@@ -347,11 +347,11 @@ const TicketVerification: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Ticket Verification
+          <h1 className="text-3xl font-bold text-white mb-2 font-heading">
+            Xác thực vé
           </h1>
-          <p className="text-gray-400">
-            Scan or enter ticket codes to verify customer entries
+          <p className="text-gray-400 font-body">
+            Quét hoặc nhập mã vé để xác thực khách hàng vào cửa
           </p>
         </motion.div>
 
@@ -364,7 +364,7 @@ const TicketVerification: React.FC = () => {
           >
             <div className="flex items-center gap-3 mb-6">
               <Camera className="h-6 w-6 text-blue-400" />
-              <h2 className="text-xl font-semibold text-white">QR Scanner</h2>
+              <h2 className="text-xl font-semibold text-white font-heading">Máy quét QR</h2>
             </div>
 
             {/* Camera View */}
@@ -392,7 +392,7 @@ const TicketVerification: React.FC = () => {
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center">
                       <RefreshCw className="h-16 w-16 text-blue-400 mx-auto mb-4 animate-spin" />
-                      <p className="text-blue-400">Starting camera...</p>
+                      <p className="text-blue-400 font-body">Bắt đầu camera...</p>
                     </div>
                   </div>
                 )}
@@ -424,10 +424,10 @@ const TicketVerification: React.FC = () => {
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center">
                       <Camera className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-                      <p className="text-gray-400">
+                      <p className="text-gray-400 font-body">
                         {cameraStatus === "error"
-                          ? "Camera error"
-                          : "Camera not active"}
+                          ? "Lỗi camera"
+                          : "Camera không hoạt động"}
                       </p>
                       {cameraStatus === "error" && error && (
                         <p className="text-red-400 text-sm mt-2 max-w-xs mx-auto">
@@ -440,15 +440,15 @@ const TicketVerification: React.FC = () => {
               </div>
 
               {/* Debug info */}
-              <div className="mt-2 text-xs text-gray-500 bg-slate-800 p-2 rounded">
+              <div className="mt-2 text-xs text-gray-500 bg-slate-800 p-2 rounded font-body">
                 <div>
-                  Status: {cameraStatus} | Scanning: {isScanning ? "Yes" : "No"}
+                  Trạng thái: {cameraStatus} | Đang quét: {isScanning ? "Có" : "Không"}
                 </div>
                 <div>
-                  Last Code:{" "}
+                  Mã cuối:{" "}
                   {lastScannedCode
                     ? lastScannedCode.substring(0, 15) + "..."
-                    : "None"}
+                    : "Không có"}
                 </div>
               </div>
             </div>
@@ -458,18 +458,18 @@ const TicketVerification: React.FC = () => {
                 <button
                   onClick={startCamera}
                   disabled={cameraStatus === ("starting" as any)}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg transition-colors"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg transition-colors font-body"
                 >
                   <Camera className="h-5 w-5" />
-                  Start Scanner
+                  Bắt đầu quét
                 </button>
               ) : (
                 <button
                   onClick={stopCamera}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors font-body"
                 >
                   <XCircle className="h-5 w-5" />
-                  Stop Scanner
+                  Dừng quét
                 </button>
               )}
 
@@ -480,27 +480,27 @@ const TicketVerification: React.FC = () => {
                     setScanResult(null);
                     setError(null);
                     setLastScannedCode("");
-                    toast.info("Results cleared");
+                    toast.info("Đã xóa kết quả");
                   }}
-                  className="px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors text-sm"
+                  className="px-4 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors text-sm font-body"
                 >
-                  Clear
+                  Xóa
                 </button>
               )}
             </div>
 
             {/* Manual Input */}
             <div className="mt-6 pt-6 border-t border-slate-700">
-              <h3 className="text-lg font-medium text-white mb-4">
-                Manual Input
+              <h3 className="text-lg font-medium text-white mb-4 font-heading">
+                Nhập thủ công
               </h3>
               <div className="flex gap-3">
                 <input
                   type="text"
                   value={manualInput}
                   onChange={(e) => setManualInput(e.target.value)}
-                  placeholder="Enter ticket code manually"
-                  className="flex-1 px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Nhập mã vé thủ công"
+                  className="flex-1 px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 font-body"
                   onKeyPress={(e) => {
                     if (e.key === "Enter") {
                       handleVerifyTicket(manualInput);
@@ -510,14 +510,14 @@ const TicketVerification: React.FC = () => {
                 <button
                   onClick={() => handleVerifyTicket(manualInput)}
                   disabled={isVerifying}
-                  className="px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2"
+                  className="px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2 font-body"
                 >
                   {isVerifying ? (
                     <RefreshCw className="h-5 w-5 animate-spin" />
                   ) : (
                     <CheckCircle className="h-5 w-5" />
                   )}
-                  Verify
+                  Xác thực
                 </button>
               </div>
             </div>
@@ -531,8 +531,8 @@ const TicketVerification: React.FC = () => {
           >
             <div className="flex items-center gap-3 mb-6">
               <Ticket className="h-6 w-6 text-purple-400" />
-              <h2 className="text-xl font-semibold text-white">
-                Verification Result
+              <h2 className="text-xl font-semibold text-white font-heading">
+                Kết quả xác thực
               </h2>
             </div>
 
@@ -547,10 +547,10 @@ const TicketVerification: React.FC = () => {
                   <div className="flex items-center gap-3">
                     <AlertTriangle className="h-6 w-6 text-red-500" />
                     <div>
-                      <h3 className="font-medium text-red-800">
-                        Verification Failed
+                      <h3 className="font-medium text-red-800 font-heading">
+                        Xác thực thất bại
                       </h3>
-                      <p className="text-red-600 text-sm">{error}</p>
+                      <p className="text-red-600 text-sm font-body">{error}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -567,11 +567,11 @@ const TicketVerification: React.FC = () => {
                   <div className="flex items-center gap-3 mb-4">
                     <status.icon className={`h-8 w-8 ${status.color}`} />
                     <div>
-                      <h3 className={`text-lg font-semibold ${status.color}`}>
+                      <h3 className={`text-lg font-semibold ${status.color} font-heading`}>
                         {status.message}
                       </h3>
-                      <p className="text-black text-sm">
-                        Verified at {formatDate(scanResult.verified_at)}
+                      <p className="text-black text-sm font-body">
+                        Đã xác thực tại {formatDate(scanResult.verified_at)}
                       </p>
                     </div>
                   </div>
@@ -581,7 +581,7 @@ const TicketVerification: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <Ticket className="h-5 w-5 text-gray-500" />
                       <div>
-                        <p className="text-sm text-black">Ticket Code</p>
+                        <p className="text-sm text-black font-body">Mã vé</p>
                         <p className="font-mono text-black font-medium">
                           {scanResult.ticket_code}
                         </p>
@@ -591,7 +591,7 @@ const TicketVerification: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <User className="h-5 w-5 text-gray-500" />
                       <div>
-                        <p className="text-sm text-gray-600">Booking ID</p>
+                        <p className="text-sm text-gray-600 font-body">ID đặt vé</p>
                         <p className="font-mono text-black font-medium">
                           {scanResult.booking_id}
                         </p>
@@ -601,8 +601,8 @@ const TicketVerification: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <Clock className="h-5 w-5 text-gray-500" />
                       <div>
-                        <p className="text-sm text-gray-600">Booking Time</p>
-                        <p className="font-medium text-black">
+                        <p className="text-sm text-gray-600 font-body">Thời gian đặt vé</p>
+                        <p className="font-medium text-black font-body">
                           {formatDate(scanResult.booking_time)}
                         </p>
                       </div>
@@ -610,9 +610,9 @@ const TicketVerification: React.FC = () => {
 
                     <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200">
                       <div>
-                        <p className="text-sm text-gray-600">Status</p>
+                        <p className="text-sm text-gray-600 font-body">Trạng thái</p>
                         <p
-                          className={`font-medium capitalize ${
+                          className={`font-medium capitalize font-body ${
                             scanResult.status === "confirmed"
                               ? "text-green-600"
                               : "text-red-600"
@@ -622,9 +622,9 @@ const TicketVerification: React.FC = () => {
                         </p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Payment</p>
+                        <p className="text-sm text-gray-600 font-body">Thanh toán</p>
                         <p
-                          className={`font-medium capitalize ${
+                          className={`font-medium capitalize font-body ${
                             scanResult.payment_status === "completed"
                               ? "text-green-600"
                               : "text-red-600"
@@ -641,8 +641,8 @@ const TicketVerification: React.FC = () => {
               {!scanResult && !error && (
                 <div className="text-center py-12">
                   <ScanLine className="h-16 w-16 text-gray-500 mx-auto mb-4" />
-                  <p className="text-gray-400">
-                    Scan a QR code or enter a ticket code to verify
+                  <p className="text-gray-400 font-body">
+                    Quét mã QR hoặc nhập mã vé để xác thực
                   </p>
                 </div>
               )}
@@ -660,32 +660,32 @@ const TicketVerification: React.FC = () => {
           <div className="flex items-start gap-3">
             <AlertTriangle className="h-6 w-6 text-blue-500 mt-1" />
             <div>
-              <h3 className="font-medium text-blue-800 mb-2">
-                Verification Instructions
+              <h3 className="font-medium text-blue-800 mb-2 font-heading">
+                Hướng dẫn xác thực
               </h3>
-              <ul className="text-blue-700 text-sm space-y-1">
+              <ul className="text-blue-700 text-sm space-y-1 font-body">
                 <li>
-                  • Only tickets with "confirmed" status and "completed" payment
-                  are valid
+                  • Chỉ những vé có trạng thái "đã xác nhận" và thanh toán "hoàn tất"
+                  là hợp lệ
                 </li>
                 <li>
-                  • Use the camera scanner for QR codes or enter ticket codes
-                  manually
+                  • Sử dụng máy quét camera cho mã QR hoặc nhập mã vé
+                  thủ công
                 </li>
-                <li>• Green result = Valid ticket, allow entry</li>
+                <li>• Kết quả màu xanh = Vé hợp lệ, cho phép vào</li>
                 <li>
-                  • Red result = Invalid ticket or used ticked, deny entry
+                  • Kết quả màu đỏ = Vé không hợp lệ hoặc đã sử dụng, từ chối vào
                 </li>
                 <li className="text-orange-600 font-medium">
-                  QR Scanning Tips:
+                  Mẹo quét QR:
                 </li>
                 <li className="ml-4">
-                  - Hold QR code 10-30cm away from camera
+                  - Giữ mã QR cách camera 10-30cm
                 </li>
-                <li className="ml-4">- Ensure good lighting (avoid shadows)</li>
-                <li className="ml-4">- Keep QR code flat and steady</li>
+                <li className="ml-4">- Đảm bảo đủ ánh sáng (tránh bóng tối)</li>
+                <li className="ml-4">- Giữ mã QR phẳng và ổn định</li>
                 <li className="ml-4">
-                  - If camera shows black screen, try refreshing page
+                  - Nếu camera hiển thị màn hình đen, hãy thử làm mới trang
                 </li>
               </ul>
             </div>

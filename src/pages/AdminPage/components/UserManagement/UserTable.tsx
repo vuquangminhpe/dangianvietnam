@@ -50,7 +50,7 @@ export const UserTable = ({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            Loading users...
+            Đang tải người dùng...
           </motion.span>
         </div>
       </motion.div>
@@ -73,12 +73,12 @@ export const UserTable = ({
             transition={{ delay: 0.2, duration: 0.5 }}
           >
             <tr>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">User</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Role</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Stats</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Joined</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Người dùng</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Vai trò</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Trạng thái</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Thống kê</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Ngày tham gia</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Hành động</th>
             </tr>
           </motion.thead>
           <tbody className="divide-y divide-slate-700/50">
@@ -120,16 +120,16 @@ export const UserTable = ({
                       </span>
                     </div>
                     <div className="ml-4">
-                      <div className="text-sm font-medium text-white">{userData.name || 'No name'}</div>
-                      <div className="text-sm text-gray-400">{userData.email}</div>
+                      <div className="text-sm font-medium text-white font-body">{userData.name || 'Không có tên'}</div>
+                      <div className="text-sm text-gray-400 font-body">{userData.email}</div>
                       {userData.phone && (
-                        <div className="text-xs text-gray-500">{userData.phone}</div>
+                        <div className="text-xs text-gray-500 font-body">{userData.phone}</div>
                       )}
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium capitalize font-body ${
                     userData.role === 'admin'
                       ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
                       : userData.role === 'staff'
@@ -142,7 +142,7 @@ export const UserTable = ({
                 <td className="px-6 py-4 whitespace-nowrap">
                   <motion.button
                     onClick={() => onToggleUserStatus(userData._id, userData.verify === 1)}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 ${
+                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 font-body ${
                       userData.verify === 1
                         ? 'bg-green-500/20 text-green-400 border border-green-500/30 hover:bg-green-500/30'
                         : userData.verify === 2
@@ -152,18 +152,18 @@ export const UserTable = ({
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    {userData.verify === 1 ? 'Verified' : userData.verify === 2 ? 'Banned' : 'Unverified'}
+                    {userData.verify === 1 ? 'Đã xác minh' : userData.verify === 2 ? 'Bị cấm' : 'Chưa xác minh'}
                   </motion.button>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-body">
                   {userData.stats && (
                     <div className="text-xs space-y-1">
-                      <div>Bookings: {userData.stats.bookings_count}</div>
-                      <div>Ratings: {userData.stats.ratings_count}</div>
+                      <div>Lượt đặt vé: {userData.stats.bookings_count}</div>
+                      <div>Lượt đánh giá: {userData.stats.ratings_count}</div>
                     </div>
                   )}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-body">
                   {new Date(userData.created_at).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -171,7 +171,7 @@ export const UserTable = ({
                     <motion.button
                       onClick={() => onViewUser(userData._id)}
                       className="text-blue-400 hover:text-blue-300 transition-colors p-1 rounded-lg hover:bg-blue-500/10"
-                      title="View Details"
+                      title="Xem chi tiết"
                       whileHover={{ scale: 1.2, rotate: 5 }}
                       whileTap={{ scale: 0.9 }}
                     >
@@ -180,7 +180,7 @@ export const UserTable = ({
                     <motion.button
                       onClick={() => onEditUser(userData)}
                       className="text-yellow-400 hover:text-yellow-300 transition-colors p-1 rounded-lg hover:bg-yellow-500/10"
-                      title="Edit User"
+                      title="Chỉnh sửa người dùng"
                       whileHover={{ scale: 1.2, rotate: -5 }}
                       whileTap={{ scale: 0.9 }}
                     >
@@ -189,7 +189,7 @@ export const UserTable = ({
                     <motion.button
                       onClick={() => onDeleteUser(userData)}
                       className="text-red-400 hover:text-red-300 transition-colors p-1 rounded-lg hover:bg-red-500/10"
-                      title="Delete User"
+                      title="Xóa người dùng"
                       whileHover={{ scale: 1.2, rotate: 5 }}
                       whileTap={{ scale: 0.9 }}
                     >
@@ -218,37 +218,37 @@ export const UserTable = ({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
           >
-            Showing {((currentPage - 1) * limit) + 1} to {Math.min(currentPage * limit, totalUsers)} of {totalUsers} users
+            Hiển thị {((currentPage - 1) * limit) + 1} đến {Math.min(currentPage * limit, totalUsers)} của {totalUsers} người dùng
           </motion.div>
           <div className="flex items-center gap-2">
             <motion.button
               onClick={() => onPageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-3 py-2 bg-slate-600/50 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-500/50 transition-all duration-300 flex items-center gap-1"
+              className="px-3 py-2 bg-slate-600/50 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-500/50 transition-all duration-300 flex items-center gap-1 font-body"
               whileHover={{ scale: currentPage === 1 ? 1 : 1.05 }}
               whileTap={{ scale: currentPage === 1 ? 1 : 0.95 }}
             >
               <ChevronLeft size={16} />
-              Previous
+              Trước
             </motion.button>
             
             <motion.span 
-              className="text-sm px-3 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg text-white font-medium"
+              className="text-sm px-3 py-2 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg text-white font-medium font-body"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.6, type: "spring" }}
             >
-              Page {currentPage} of {totalPages}
+              Trang {currentPage} của {totalPages}
             </motion.span>
             
             <motion.button
               onClick={() => onPageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="px-3 py-2 bg-slate-600/50 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-500/50 transition-all duration-300 flex items-center gap-1"
+              className="px-3 py-2 bg-slate-600/50 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-500/50 transition-all duration-300 flex items-center gap-1 font-body"
               whileHover={{ scale: currentPage === totalPages ? 1 : 1.05 }}
               whileTap={{ scale: currentPage === totalPages ? 1 : 0.95 }}
             >
-              Next
+              Sau
               <ChevronRight size={16} />
             </motion.button>
           </div>

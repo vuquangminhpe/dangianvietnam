@@ -59,7 +59,7 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
   }> = ({ field, children }) => (
     <th
       onClick={() => onSortChange(field)}
-      className="px-3 py-3 text-left text-xs font-semibold text-slate-300 cursor-pointer hover:text-white transition-colors"
+      className="px-3 py-3 text-left text-xs font-semibold text-slate-300 cursor-pointer hover:text-white transition-colors font-heading"
     >
       <div className="flex items-center gap-1">
         {children}
@@ -72,7 +72,7 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
     if (banner.active) {
       return {
         icon: CheckCircle,
-        text: "Active",
+        text: "Hoạt động",
         className: "text-green-400",
         bgClassName: "bg-green-500/20",
       };
@@ -85,14 +85,14 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
       if (activationTime > now) {
         return {
           icon: Clock,
-          text: "Scheduled",
+          text: "Đã lên lịch",
           className: "text-blue-400",
           bgClassName: "bg-blue-500/20",
         };
       } else {
         return {
           icon: AlertTriangle,
-          text: "Pending",
+          text: "Đang chờ",
           className: "text-yellow-400",
           bgClassName: "bg-yellow-500/20",
         };
@@ -101,7 +101,7 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
 
     return {
       icon: XCircle,
-      text: "Inactive",
+      text: "Không hoạt động",
       className: "text-slate-400",
       bgClassName: "bg-slate-500/20",
     };
@@ -112,11 +112,11 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-slate-800/60 backdrop-blur-sm rounded-xl border border-slate-700/50 p-8"
+        className="bg-slate-800/60 backdrop-blur-sm rounded-xl border border-slate-700/50 p-8 font-body"
       >
         <div className="flex items-center justify-center">
           <RefreshCw size={24} className="animate-spin text-orange-400 mr-3" />
-          <span className="text-white">Loading banners...</span>
+          <span className="text-white">Đang tải banner...</span>
         </div>
       </motion.div>
     );
@@ -127,20 +127,20 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-slate-800/60 backdrop-blur-sm rounded-xl border border-slate-700/50 p-8"
+        className="bg-slate-800/60 backdrop-blur-sm rounded-xl border border-slate-700/50 p-8 font-body"
       >
         <div className="text-center">
           <XCircle size={48} className="text-red-400 mx-auto mb-4" />
-          <h3 className="text-xl font-semibold text-white mb-2">
-            Error Loading Banners
+          <h3 className="text-xl font-semibold text-white mb-2 font-heading">
+            Lỗi khi tải Banner
           </h3>
           <p className="text-slate-400 mb-4">{error}</p>
           <button
             onClick={onRefresh}
-            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg mx-auto transition-colors"
+            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg mx-auto transition-colors font-body"
           >
             <RefreshCw size={18} />
-            Retry
+            Thử lại
           </button>
         </div>
       </motion.div>
@@ -151,31 +151,31 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-slate-800/60 backdrop-blur-sm rounded-xl border border-slate-700/50 overflow-hidden"
+      className="bg-slate-800/60 backdrop-blur-sm rounded-xl border border-slate-700/50 overflow-hidden font-body"
     >
       {/* Table Header */}
       <div className="flex items-center justify-between p-6 border-b border-slate-700/50">
-        <h3 className="text-lg font-semibold text-white">
-          Banner Slider Home ({banners.length})
+        <h3 className="text-lg font-semibold text-white font-heading">
+          Banner Trang chủ ({banners.length})
         </h3>
         <button
           onClick={onRefresh}
-          className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors"
+          className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors font-body"
         >
           <RefreshCw size={18} />
-          Refresh
+          Làm mới
         </button>
       </div>
 
       {/* Table */}
       {banners.length === 0 ? (
         <div className="p-8 text-center">
-          <div className="text-slate-400 mb-4">No banners found</div>
+          <div className="text-slate-400 mb-4 font-body">Không tìm thấy banner nào</div>
           <button
             onClick={onRefresh}
-            className="text-orange-400 hover:text-orange-300 transition-colors"
+            className="text-orange-400 hover:text-orange-300 transition-colors font-body"
           >
-            Refresh to try again
+            Làm mới để thử lại
           </button>
         </div>
       ) : (
@@ -183,26 +183,26 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
           <table className="w-full min-w-[800px]">
             <thead className="bg-slate-900/50">
               <tr>
-                <th className="px-3 py-3 text-left text-xs font-semibold text-slate-300">
-                  Preview
+                <th className="px-3 py-3 text-left text-xs font-semibold text-slate-300 font-heading">
+                  Xem trước
                 </th>
-                <SortableHeader field="title">Title</SortableHeader>
-                <SortableHeader field="author">Author</SortableHeader>
-                <th className="px-3 py-3 text-left text-xs font-semibold text-slate-300">
-                  Topic
+                <SortableHeader field="title">Tiêu đề</SortableHeader>
+                <SortableHeader field="author">Tác giả</SortableHeader>
+                <th className="px-3 py-3 text-left text-xs font-semibold text-slate-300 font-heading">
+                  Chủ đề
                 </th>
-                <th className="px-3 py-3 text-left text-xs font-semibold text-slate-300">
-                  Status
+                <th className="px-3 py-3 text-left text-xs font-semibold text-slate-300 font-heading">
+                  Trạng thái
                 </th>
                 <SortableHeader field="time_active">
-                  Activation
+                  Kích hoạt
                 </SortableHeader>
-                <th className="px-3 py-3 text-left text-xs font-semibold text-slate-300">
-                  Auto
+                <th className="px-3 py-3 text-left text-xs font-semibold text-slate-300 font-heading">
+                  Tự động
                 </th>
-                <SortableHeader field="created_at">Created</SortableHeader>
-                <th className="px-3 py-3 text-left text-xs font-semibold text-slate-300">
-                  Actions
+                <SortableHeader field="created_at">Ngày tạo</SortableHeader>
+                <th className="px-3 py-3 text-left text-xs font-semibold text-slate-300 font-heading">
+                  Hành động
                 </th>
               </tr>
             </thead>
@@ -240,10 +240,10 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
                       {/* Title */}
                       <td className="px-3 py-3">
                         <div className="max-w-[150px]">
-                          <div className="font-semibold text-white truncate text-xs">
+                          <div className="font-semibold text-white truncate text-xs font-body">
                             {banner.title}
                           </div>
-                          <div className="text-[10px] text-slate-400 truncate">
+                          <div className="text-[10px] text-slate-400 truncate font-body">
                             {banner.description}
                           </div>
                         </div>
@@ -252,14 +252,14 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
                       {/* Author */}
                       <td className="px-3 py-3">
                         <div className="max-w-[100px]">
-                          <span className="text-slate-300 text-xs truncate block">{banner.author}</span>
+                          <span className="text-slate-300 text-xs truncate block font-body">{banner.author}</span>
                         </div>
                       </td>
 
                       {/* Topic */}
                       <td className="px-3 py-3">
                         <div className="max-w-[80px]">
-                          <span className="px-2 py-1 bg-orange-500/20 text-orange-300 rounded-full text-[10px] truncate block">
+                          <span className="px-2 py-1 bg-orange-500/20 text-orange-300 rounded-full text-[10px] truncate block font-body">
                             {banner.topic || "—"}
                           </span>
                         </div>
@@ -271,7 +271,7 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
                           className={`flex items-center gap-1 px-2 py-1 rounded-full w-fit ${status.bgClassName}`}
                         >
                           <StatusIcon size={12} className={status.className} />
-                          <span className={`text-[10px] ${status.className}`}>
+                          <span className={`text-[10px] ${status.className} font-body`}>
                             {status.text}
                           </span>
                         </div>
@@ -282,18 +282,18 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
                         <div className="max-w-[100px]">
                           {banner.time_active ? (
                             <div className="text-[10px]">
-                              <div className="text-slate-300 truncate">
+                              <div className="text-slate-300 truncate font-body">
                                 {format(
                                   new Date(banner.time_active),
-                                  "MMM dd"
+                                  "dd/MM"
                                 )}
                               </div>
-                              <div className="text-slate-400">
+                              <div className="text-slate-400 font-body">
                                 {format(new Date(banner.time_active), "HH:mm")}
                               </div>
                             </div>
                           ) : (
-                            <span className="text-slate-400 text-xs">—</span>
+                            <span className="text-slate-400 text-xs font-body">—</span>
                           )}
                         </div>
                       </td>
@@ -312,8 +312,8 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
                       {/* Created */}
                       <td className="px-3 py-3">
                         <div className="max-w-[80px]">
-                          <div className="text-[10px] text-slate-400 truncate">
-                            {format(new Date(banner.created_at), "MMM dd")}
+                          <div className="text-[10px] text-slate-400 truncate font-body">
+                            {format(new Date(banner.created_at), "dd/MM/yy")}
                           </div>
                         </div>
                       </td>
@@ -324,21 +324,21 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
                           <button
                             onClick={() => onPreview(banner)}
                             className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-blue-500/10 rounded transition-all duration-200"
-                            title="Preview Banner"
+                            title="Xem trước Banner"
                           >
                             <Eye size={12} />
                           </button>
                           <button
                             onClick={() => onEdit(banner)}
                             className="p-1.5 text-slate-400 hover:text-orange-400 hover:bg-orange-500/10 rounded transition-all duration-200"
-                            title="Edit Banner"
+                            title="Sửa Banner"
                           >
                             <Edit3 size={12} />
                           </button>
                           <button
                             onClick={() => onDelete(banner._id)}
                             className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-all duration-200"
-                            title="Delete Banner"
+                            title="Xóa Banner"
                           >
                             <Trash2 size={12} />
                           </button>
@@ -355,9 +355,9 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between p-6 border-t border-slate-700/50">
+        <div className="flex items-center justify-between p-6 border-t border-slate-700/50 font-body">
           <div className="text-sm text-slate-400">
-            Page {currentPage} of {totalPages}
+            Trang {currentPage} của {totalPages}
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -376,7 +376,7 @@ export const BannerSliderHomeTable: React.FC<BannerSliderHomeTableProps> = ({
                 <button
                   key={page}
                   onClick={() => onPageChange(page)}
-                  className={`px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                  className={`px-3 py-2 rounded-lg text-sm transition-all duration-200 font-body ${
                     page === currentPage
                       ? "bg-orange-500 text-white"
                       : "text-slate-400 hover:text-white hover:bg-slate-700/50"
