@@ -94,49 +94,49 @@ const Bookings = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="flex justify-between items-start p-4">
+        <div className="flex justify-between items-center p-4">
           <div>
-            <h2 className="text-2xl font-bold text-white">Quản Lý Đặt Vé</h2>
-            <p className="text-slate-400 text-sm mt-1">
-              Quản lý đặt vé của khách hàng và theo dõi trạng thái thanh toán & vé cho rạp của bạn
+            <h2 className="text-2xl font-bold text-white font-heading">Quản Lý Đặt Vé</h2>
+            <p className="text-slate-400 text-sm mt-1 font-body">
+              Theo dõi và quản lý đặt vé của rạp
             </p>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex items-center gap-3">
             {/* Ticket Status Filter */}
             <div className="flex items-center gap-2">
-              <label className="text-sm text-slate-400 font-medium">
-                🎫 Trạng thái vé:
+              <label className="text-sm text-white font-medium font-body">
+                Trạng thái vé:
               </label>
               <select
                 value={statusFilter}
                 onChange={(e) => handleStatusFilter(e.target.value as any)}
-                className="bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg font-medium transition-colors duration-300 border border-slate-600/50 focus:border-orange-500/50 focus:outline-none min-w-[140px]"
+                className="bg-slate-700/50 hover:bg-slate-700 text-slate-200 hover:text-slate-100 px-4 py-2 rounded-lg font-medium transition-colors duration-300 border border-slate-600 focus:border-orange-500/50 focus:outline-none min-w-[140px] font-body"
               >
                 <option value="">Tất cả vé</option>
-                <option value="pending">⏳ Chờ xử lý</option>
-                <option value="confirmed">✅ Đã xác nhận</option>
-                <option value="cancelled">❌ Đã hủy</option>
-                <option value="completed">🎉 Hoàn thành</option>
-                <option value="used">🎫 Đã sử dụng</option>
+                <option value="pending">Chờ xử lý</option>
+                <option value="confirmed">Đã xác nhận</option>
+                <option value="cancelled">Đã hủy</option>
+                <option value="completed">Hoàn thành</option>
+                <option value="used">Đã sử dụng</option>
               </select>
             </div>
 
             {/* Payment Status Filter */}
             <div className="flex items-center gap-2">
-              <label className="text-sm text-slate-400 font-medium">
-                💰 Thanh toán:
+              <label className="text-sm text-white font-medium font-body">
+                Thanh toán:
               </label>
               <select
                 value={paymentFilter}
                 onChange={(e) => handlePaymentFilter(e.target.value as any)}
-                className="bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg font-medium transition-colors duration-300 border border-slate-600/50 focus:border-orange-500/50 focus:outline-none min-w-[140px]"
+                className="bg-slate-700/50 hover:bg-slate-700 text-slate-200 hover:text-slate-100 px-4 py-2 rounded-lg font-medium transition-colors duration-300 border border-slate-600/50 focus:border-orange-500/50 focus:outline-none min-w-[140px] font-body"
               >
                 <option value="">Tất cả thanh toán</option>
-                <option value="pending">⏳ Chờ thanh toán</option>
-                <option value="completed">✅ Đã thanh toán</option>
-                <option value="failed">❌ Thất bại</option>
-                <option value="refunded">💰 Đã hoàn tiền</option>
-                <option value="cancelled">⚫ Đã hủy</option>
+                <option value="pending">Chờ thanh toán</option>
+                <option value="completed">Đã thanh toán</option>
+                <option value="failed">Thất bại</option>
+                <option value="refunded">Đã hoàn tiền</option>
+                <option value="cancelled">Đã hủy</option>
               </select>
             </div>
 
@@ -148,21 +148,21 @@ const Bookings = () => {
                   setPaymentFilter("");
                   setCurrentPage(1);
                 }}
-                className="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-4 py-2 rounded-lg font-medium transition-colors duration-300 border border-red-500/30"
+                className="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-4 py-2 rounded-lg font-medium transition-colors duration-300 border border-red-500/30 font-body"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                🗑️ Xóa bộ lọc
+                Xóa bộ lọc
               </motion.button>
             )}
 
             <motion.button
               onClick={fetchBookings}
-              className="bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg font-medium transition-colors duration-300"
+              className="bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg font-medium transition-colors duration-300 font-body"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              🔄 Làm mới
+              Làm mới
             </motion.button>
           </div>
         </div>
@@ -171,17 +171,17 @@ const Bookings = () => {
         {loading && (
           <div className="flex justify-center items-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500"></div>
-            <span className="ml-3 text-slate-300">Đang tải danh sách đặt vé...</span>
+            <span className="ml-3 text-slate-300 font-body">Đang tải danh sách đặt vé...</span>
           </div>
         )}
 
         {/* Error state */}
         {error && (
           <div className="bg-red-500/20 border border-red-500/30 text-red-400 px-4 py-3 rounded-lg">
-            <p>Lỗi: {error}</p>
+            <p className="font-body">Lỗi: {error}</p>
             <button
               onClick={fetchBookings}
-              className="mt-2 text-sm underline hover:no-underline"
+              className="mt-2 text-sm underline hover:no-underline font-body"
             >
               Thử lại
             </button>
@@ -194,68 +194,68 @@ const Bookings = () => {
             {/* Payment Stats Row */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
               <div className="bg-emerald-500/20 border border-emerald-500/30 rounded-lg p-4">
-                <div className="text-emerald-400 font-bold text-lg">
+                <div className="text-emerald-400 font-bold text-lg font-heading">
                   {bookings.filter(b => b.payment_status === "completed").length}
                 </div>
-                <div className="text-emerald-300 text-sm">✅ Đã thanh toán</div>
+                <div className="text-emerald-300 text-sm font-body">Đã thanh toán</div>
               </div>
               <div className="bg-amber-500/20 border border-amber-500/30 rounded-lg p-4">
-                <div className="text-amber-400 font-bold text-lg">
+                <div className="text-amber-400 font-bold text-lg font-heading">
                   {bookings.filter(b => b.payment_status === "pending").length}
                 </div>
-                <div className="text-amber-300 text-sm">⏳ Chờ thanh toán</div>
+                <div className="text-amber-300 text-sm font-body">Chờ thanh toán</div>
               </div>
               <div className="bg-rose-500/20 border border-rose-500/30 rounded-lg p-4">
-                <div className="text-rose-400 font-bold text-lg">
+                <div className="text-rose-400 font-bold text-lg font-heading">
                   {bookings.filter(b => b.payment_status === "failed").length}
                 </div>
-                <div className="text-rose-300 text-sm">❌ Thất bại</div>
+                <div className="text-rose-300 text-sm font-body">Thất bại</div>
               </div>
               <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-4">
-                <div className="text-blue-400 font-bold text-lg">
+                <div className="text-blue-400 font-bold text-lg font-heading">
                   {bookings.filter(b => b.payment_status === "refunded").length}
                 </div>
-                <div className="text-blue-300 text-sm">💰 Đã hoàn tiền</div>
+                <div className="text-blue-300 text-sm font-body">Đã hoàn tiền</div>
               </div>
               <div className="bg-gray-500/20 border border-gray-500/30 rounded-lg p-4">
-                <div className="text-gray-400 font-bold text-lg">
+                <div className="text-gray-400 font-bold text-lg font-heading">
                   {bookings.filter(b => b.payment_status === "cancelled").length}
                 </div>
-                <div className="text-gray-300 text-sm">⚫ Đã hủy TT</div>
+                <div className="text-gray-300 text-sm font-body">Đã hủy TT</div>
               </div>
             </div>
 
             {/* Booking Status Stats Row */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
               <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-4">
-                <div className="text-yellow-400 font-bold text-lg">
+                <div className="text-yellow-400 font-bold text-lg font-heading">
                   {bookings.filter(b => b.status === "pending").length}
                 </div>
-                <div className="text-yellow-300 text-sm">⏳ Chờ xử lý</div>
+                <div className="text-yellow-300 text-sm font-body">Chờ xử lý</div>
               </div>
               <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-4">
-                <div className="text-green-400 font-bold text-lg">
+                <div className="text-green-400 font-bold text-lg font-heading">
                   {bookings.filter(b => b.status === "confirmed").length}
                 </div>
-                <div className="text-green-300 text-sm">✅ Đã xác nhận</div>
+                <div className="text-green-300 text-sm font-body">Đã xác nhận</div>
               </div>
               <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-4">
-                <div className="text-red-400 font-bold text-lg">
+                <div className="text-red-400 font-bold text-lg font-heading">
                   {bookings.filter(b => b.status === "cancelled").length}
                 </div>
-                <div className="text-red-300 text-sm">❌ Đã hủy vé</div>
+                <div className="text-red-300 text-sm font-body">Đã hủy vé</div>
               </div>
               <div className="bg-indigo-500/20 border border-indigo-500/30 rounded-lg p-4">
-                <div className="text-indigo-400 font-bold text-lg">
+                <div className="text-indigo-400 font-bold text-lg font-heading">
                   {bookings.filter(b => b.status === "completed").length}
                 </div>
-                <div className="text-indigo-300 text-sm">🎉 Hoàn thành</div>
+                <div className="text-indigo-300 text-sm font-body">Hoàn thành</div>
               </div>
               <div className="bg-purple-500/20 border border-purple-500/30 rounded-lg p-4">
-                <div className="text-purple-400 font-bold text-lg">
+                <div className="text-purple-400 font-bold text-lg font-heading">
                   {bookings.filter(b => b.status === "used").length}
                 </div>
-                <div className="text-purple-300 text-sm">🎫 Đã sử dụng</div>
+                <div className="text-purple-300 text-sm font-body">Đã sử dụng</div>
               </div>
             </div>
           </>
@@ -268,32 +268,32 @@ const Bookings = () => {
               <table className="w-full">
                 <thead className="bg-slate-700/50">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Mã vé
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Khách hàng
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Phim
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Rạp chiếu
                     </th>
 
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Ghế ngồi
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Tổng tiền
                     </th>
-                    <th className="px-6 py-4 text-center text-sm font-medium text-slate-300">
-                      💰 Trạng thái thanh toán
+                    <th className="px-6 py-4 text-center text-sm font-medium text-slate-300 font-heading">
+                      Trạng thái thanh toán
                     </th>
-                    <th className="px-6 py-4 text-center text-sm font-medium text-slate-300">
-                      🎫 Trạng thái vé
+                    <th className="px-6 py-4 text-center text-sm font-medium text-slate-300 font-heading">
+                      Trạng thái vé
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Thao tác
                     </th>
                   </tr>
@@ -303,7 +303,7 @@ const Bookings = () => {
                     <tr>
                       <td
                         colSpan={10}
-                        className="px-6 py-12 text-center text-slate-400"
+                        className="px-6 py-12 text-center text-slate-400 font-body"
                       >
                         Không tìm thấy đặt vé nào
                       </td>
@@ -318,30 +318,30 @@ const Bookings = () => {
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                       >
                         <td className="px-6 py-4">
-                          <div className="font-medium text-orange-400">
+                          <div className="font-medium text-orange-400 font-body">
                             {booking.ticket_code}
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="font-medium text-white">
+                          <div className="font-medium text-white font-body">
                             {booking?.user_info?.name}
                           </div>
-                          <div className="text-sm text-slate-400">
+                          <div className="text-sm text-slate-400 font-body">
                             {formatBookingTime(booking.booking_time)}
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-slate-300">
+                          <div className="text-slate-300 font-body">
                             {booking?.movie_info?.title}
                           </div>
                         </td>
                         <td className="px-6 py-4 flex flex-col">
-                          <div className="text-slate-300">
+                          <div className="text-slate-300 font-body">
                             {booking.theater_info.name.length > 20
                               ? booking.theater_info.name.slice(0, 20) + "..."
                               : booking.theater_info.name}
                           </div>
-                          <div className="text-sm text-slate-400">
+                          <div className="text-sm text-slate-400 font-body">
                             {booking.theater_info.location.length > 20
                               ? booking.theater_info.location.slice(0, 20) +
                                 "..."
@@ -354,7 +354,7 @@ const Bookings = () => {
                             {booking.seats.map((seat, idx) => (
                               <span
                                 key={idx}
-                                className="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded border border-orange-500/30"
+                                className="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded border border-orange-500/30 font-body"
                               >
                                 {seat.row}
                                 {seat.number}
@@ -363,7 +363,7 @@ const Bookings = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-emerald-400 font-medium">
+                          <div className="text-emerald-400 font-medium font-body">
                             {formatPrice(booking.total_amount)}
                           </div>
                         </td>
@@ -371,7 +371,7 @@ const Bookings = () => {
                           {/* Payment Status Column */}
                           <div className="flex items-center justify-center">
                             <span
-                              className={`px-3 py-2 rounded-full text-sm font-bold border-2 ${
+                              className={`px-3 py-2 rounded-full text-sm font-bold border-2 font-body ${
                                 booking.payment_status === "completed"
                                   ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/50"
                                   : booking.payment_status === "pending" 
@@ -386,11 +386,7 @@ const Bookings = () => {
                               }`}
                               title={`Trạng thái thanh toán: ${booking.payment_status}`}
                             >
-                              {booking.payment_status === "completed" && "✅ "} 
-                              {booking.payment_status === "pending" && "⏳ "} 
-                              {booking.payment_status === "failed" && "❌ "} 
-                              {booking.payment_status === "refunded" && "💰 "} 
-                              {booking.payment_status === "cancelled" && "⚫ "} 
+ 
                               {getPaymentStatusDisplay(booking.payment_status)}
                             </span>
                           </div>
@@ -399,7 +395,7 @@ const Bookings = () => {
                           {/* Ticket Status Column */}
                           <div className="flex items-center justify-center">
                             <span
-                              className={`px-3 py-1 rounded-lg text-sm font-medium border ${
+                              className={`px-3 py-1 rounded-lg text-sm font-medium border font-body ${
                                 booking.status === "pending"
                                   ? "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
                                   : booking.status === "confirmed"
@@ -414,11 +410,7 @@ const Bookings = () => {
                               }`}
                               title={`Trạng thái vé: ${booking.status}`}
                             >
-                              {booking.status === "pending" && "⏳ "} 
-                              {booking.status === "confirmed" && "✅ "} 
-                              {booking.status === "cancelled" && "❌ "} 
-                              {booking.status === "completed" && "🎉 "} 
-                              {booking.status === "used" && "🎫 "} 
+ 
                               {getBookingStatusDisplay(booking.status)}
                             </span>
                           </div>
@@ -427,7 +419,7 @@ const Bookings = () => {
                           <div className="flex gap-2">
                             <motion.button
                               onClick={() => handleViewBooking(booking._id)}
-                              className="bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 px-3 py-1 rounded text-sm font-medium transition-colors duration-300"
+                              className="bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 px-3 py-1 rounded text-sm font-medium transition-colors duration-300 font-body"
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                             >
@@ -445,14 +437,14 @@ const Bookings = () => {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="px-6 py-4 border-t border-slate-700/50 flex items-center justify-between">
-                <div className="text-sm text-slate-400">
+                <div className="text-sm text-slate-400 font-body">
                   Trang {currentPage} / {totalPages}
                 </div>
                 <div className="flex gap-2">
                   <motion.button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className="px-3 py-1 bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 rounded text-sm font-medium transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-1 bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 rounded text-sm font-medium transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-body"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -461,7 +453,7 @@ const Bookings = () => {
                   <motion.button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className="px-3 py-1 bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 rounded text-sm font-medium transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-3 py-1 bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 rounded text-sm font-medium transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed font-body"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >

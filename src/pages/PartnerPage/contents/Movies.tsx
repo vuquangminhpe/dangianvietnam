@@ -224,24 +224,31 @@ const Movies = () => {
   };
 
   return (
-    <div>
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-2 font-heading">
+            Quản Lý Phim
+          </h1>
+          <p className="text-slate-400 font-body">
+            {total > 0 ? `Tìm thấy ${total} phim` : 'Không tìm thấy phim nào'}
+          </p>
+        </div>
+      </div>
+
       <motion.div
         className="space-y-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        {/* Header */}
+        {/* Action Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-          <div>
-            <h2 className="text-2xl font-bold text-white">Quản Lý Phim</h2>
-            <p className="text-slate-400 text-sm">
-              {total > 0 ? `Tìm thấy ${total} phim` : 'Không tìm thấy phim nào'}
-            </p>
-          </div>
+          <div></div>
           <motion.button
             onClick={handleAddMovie}
-            className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-6 py-2 rounded-lg font-medium shadow-lg hover:shadow-orange-500/30 transition-all duration-300 flex items-center"
+            className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-6 py-2 rounded-lg font-medium shadow-lg hover:shadow-orange-500/30 transition-all duration-300 flex items-center font-body"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -251,7 +258,7 @@ const Movies = () => {
         </div>
 
         {/* Search and Filter */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex flex-col sm:flex-row gap-4 font-body">
           <form onSubmit={handleSearch} className="flex-1">
             <div className="relative">
               <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
@@ -260,7 +267,7 @@ const Movies = () => {
                 placeholder="Tìm kiếm phim..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-slate-800/60 border border-slate-700/50 rounded-lg pl-10 pr-4 py-2 text-white placeholder-slate-400 focus:border-orange-500 focus:outline-none"
+                className="w-full bg-slate-800/60 border border-slate-700/50 rounded-lg pl-10 pr-4 py-2 text-white placeholder-slate-400 focus:border-orange-500 focus:outline-none font-body"
               />
             </div>
           </form>
@@ -269,7 +276,7 @@ const Movies = () => {
             <select
               value={statusFilter}
               onChange={(e) => handleFilterChange(e.target.value as any)}
-              className="bg-slate-800/60 border border-slate-700/50 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+              className="bg-slate-800/60 border border-slate-700/50 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
             >
               <option value="">Tất cả trạng thái</option>
               <option value="now_showing">Đang chiếu</option>
@@ -340,43 +347,43 @@ const Movies = () => {
                     </div>
 
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-white mb-2 line-clamp-2">
+                      <h3 className="text-xl font-bold text-white mb-2 line-clamp-2 font-heading">
                         {movie.title}
                       </h3>
-                      <p className="text-slate-400 text-sm mb-3">
+                      <p className="text-slate-400 text-sm mb-3 font-body">
                         {movie.genre.join(', ')} • {formatMovieDuration(movie.duration)}
                       </p>
 
                       <div className="grid grid-cols-2 gap-3 mb-4">
                         <div className="bg-slate-700/30 p-3 rounded-lg">
-                          <p className="text-slate-400 text-xs">Đánh giá</p>
+                          <p className="text-slate-400 text-xs font-body">Đánh giá</p>
                           <div className="flex items-center">
                             <Star size={14} className="text-yellow-400 fill-current mr-1" />
-                            <span className="text-white font-bold">
+                            <span className="text-white font-bold font-heading">
                               {movie.average_rating.toFixed(1)}
                             </span>
-                            <span className="text-slate-400 text-xs ml-1">
+                            <span className="text-slate-400 text-xs ml-1 font-body">
                               ({movie.ratings_count})
                             </span>
                           </div>
                         </div>
                         <div className="bg-slate-700/30 p-3 rounded-lg">
-                          <p className="text-slate-400 text-xs">Ngày khởi chiếu</p>
-                          <p className="text-orange-400 font-bold text-sm">
+                          <p className="text-slate-400 text-xs font-body">Ngày khởi chiếu</p>
+                          <p className="text-orange-400 font-bold text-sm font-body">
                             {formatMovieReleaseDate(movie.release_date)}
                           </p>
                         </div>
                       </div>
 
                       <div className="mb-4">
-                        <p className="text-slate-400 text-xs mb-2">Đạo diễn</p>
-                        <p className="text-white text-sm">{movie.director}</p>
+                        <p className="text-slate-400 text-xs mb-2 font-body">Đạo diễn</p>
+                        <p className="text-white text-sm font-body">{movie.director}</p>
                       </div>
 
                       <div className="flex gap-2">
                         <motion.button
                           onClick={() => handleEditMovie(movie)}
-                          className="flex-1 bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center justify-center"
+                          className="flex-1 bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center justify-center font-body"
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
@@ -385,7 +392,7 @@ const Movies = () => {
                         </motion.button>
                         <motion.button
                           onClick={() => handleViewDetails(movie)}
-                          className="flex-1 bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center justify-center"
+                          className="flex-1 bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-300 flex items-center justify-center font-body"
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
@@ -394,7 +401,7 @@ const Movies = () => {
                         </motion.button>
                         <motion.button
                           onClick={() => handleDeleteMovie(movie._id, movie.title)}
-                          className="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-300"
+                          className="bg-red-500/20 hover:bg-red-500/30 text-red-400 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-300 font-body"
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
@@ -413,10 +420,10 @@ const Movies = () => {
                   animate={{ opacity: 1, y: 0 }}
                 >
                   <Calendar size={64} className="text-orange-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-white mb-2">
+                  <h3 className="text-xl font-semibold text-white mb-2 font-heading">
                     Không Tìm Thấy Phim
                   </h3>
-                  <p className="text-slate-300 mb-6">
+                  <p className="text-slate-300 mb-6 font-body">
                     {searchTerm || statusFilter 
                       ? "Không có phim nào khớp với tiêu chí tìm kiếm. Hãy thử điều chỉnh bộ lọc."
                       : "Bạn chưa tạo phim nào. Tạo phim đầu tiên để bắt đầu."
@@ -424,7 +431,7 @@ const Movies = () => {
                   </p>
                   <motion.button
                     onClick={handleAddMovie}
-                    className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors flex items-center mx-auto"
+                    className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors flex items-center mx-auto font-body"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -441,7 +448,7 @@ const Movies = () => {
                 <button
                   onClick={() => setPage(page - 1)}
                   disabled={page <= 1}
-                  className="px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700/60 transition-colors"
+                  className="px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700/60 transition-colors font-body"
                 >
                   Trước
                 </button>
@@ -453,7 +460,7 @@ const Movies = () => {
                       <button
                         key={pageNum}
                         onClick={() => setPage(pageNum)}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors font-body ${
                           page === pageNum
                             ? 'bg-orange-500 text-white'
                             : 'bg-slate-800/60 border border-slate-700/50 text-slate-300 hover:bg-slate-700/60'
@@ -468,7 +475,7 @@ const Movies = () => {
                 <button
                   onClick={() => setPage(page + 1)}
                   disabled={page >= totalPages}
-                  className="px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700/60 transition-colors"
+                  className="px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700/60 transition-colors font-body"
                 >
                   Sau
                 </button>
@@ -487,7 +494,7 @@ const Movies = () => {
               exit={{ opacity: 0, scale: 0.9 }}
             >
               <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-6 flex justify-between items-center">
-                <h3 className="text-2xl font-bold text-white">Chi Tiết Phim</h3>
+                <h3 className="text-2xl font-bold text-white font-heading">Chi Tiết Phim</h3>
                 <button
                   onClick={closeModals}
                   className="text-slate-400 hover:text-white transition-colors"
@@ -511,17 +518,17 @@ const Movies = () => {
                   
                   <div className="lg:col-span-2 space-y-6">
                     <div>
-                      <h1 className="text-3xl font-bold text-white mb-2">{selectedMovie.title}</h1>
+                      <h1 className="text-3xl font-bold text-white mb-2 font-heading">{selectedMovie.title}</h1>
                       <div className="flex items-center gap-4 mb-4">
-                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusStyle(selectedMovie.status)}`}>
+                        <span className={`px-3 py-1 rounded-full text-sm font-medium font-body ${getStatusStyle(selectedMovie.status)}`}>
                           {getMovieStatusDisplay(selectedMovie.status)}
                         </span>
                         <div className="flex items-center">
                           <Star size={16} className="text-yellow-400 fill-current mr-1" />
-                          <span className="text-white font-bold">
+                          <span className="text-white font-bold font-heading">
                             {selectedMovie.average_rating.toFixed(1)}
                           </span>
-                          <span className="text-slate-400 text-sm ml-1">
+                          <span className="text-slate-400 text-sm ml-1 font-body">
                             ({selectedMovie.ratings_count} đánh giá)
                           </span>
                         </div>
@@ -530,28 +537,28 @@ const Movies = () => {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="bg-slate-700/30 p-4 rounded-lg">
-                        <p className="text-slate-400 text-sm mb-1">Thời lượng</p>
-                        <p className="text-white font-medium">{formatMovieDuration(selectedMovie.duration)}</p>
+                        <p className="text-slate-400 text-sm mb-1 font-body">Thời lượng</p>
+                        <p className="text-white font-medium font-body">{formatMovieDuration(selectedMovie.duration)}</p>
                       </div>
                       <div className="bg-slate-700/30 p-4 rounded-lg">
-                        <p className="text-slate-400 text-sm mb-1">Ngày khởi chiếu</p>
-                        <p className="text-white font-medium">{formatMovieReleaseDate(selectedMovie.release_date)}</p>
+                        <p className="text-slate-400 text-sm mb-1 font-body">Ngày khởi chiếu</p>
+                        <p className="text-white font-medium font-body">{formatMovieReleaseDate(selectedMovie.release_date)}</p>
                       </div>
                       <div className="bg-slate-700/30 p-4 rounded-lg">
-                        <p className="text-slate-400 text-sm mb-1">Đạo diễn</p>
-                        <p className="text-white font-medium">{selectedMovie.director}</p>
+                        <p className="text-slate-400 text-sm mb-1 font-body">Đạo diễn</p>
+                        <p className="text-white font-medium font-body">{selectedMovie.director}</p>
                       </div>
                       <div className="bg-slate-700/30 p-4 rounded-lg">
-                        <p className="text-slate-400 text-sm mb-1">Ngôn ngữ</p>
-                        <p className="text-white font-medium">{selectedMovie.language}</p>
+                        <p className="text-slate-400 text-sm mb-1 font-body">Ngôn ngữ</p>
+                        <p className="text-white font-medium font-body">{selectedMovie.language}</p>
                       </div>
                     </div>
 
                     <div>
-                      <p className="text-slate-400 text-sm mb-2">Thể loại</p>
+                      <p className="text-slate-400 text-sm mb-2 font-body">Thể loại</p>
                       <div className="flex flex-wrap gap-2">
                         {selectedMovie.genre.map((g, index) => (
-                          <span key={index} className="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-full text-sm">
+                          <span key={index} className="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-full text-sm font-body">
                             {g}
                           </span>
                         ))}
@@ -559,13 +566,13 @@ const Movies = () => {
                     </div>
 
                     <div>
-                      <p className="text-slate-400 text-sm mb-2">Mô tả</p>
-                      <p className="text-white leading-relaxed">{selectedMovie.description}</p>
+                      <p className="text-slate-400 text-sm mb-2 font-body">Mô tả</p>
+                      <p className="text-white leading-relaxed font-body">{selectedMovie.description}</p>
                     </div>
 
                     {selectedMovie.cast && selectedMovie.cast.length > 0 && (
                       <div>
-                        <p className="text-slate-400 text-sm mb-3">Diễn viên</p>
+                        <p className="text-slate-400 text-sm mb-3 font-body">Diễn viên</p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           {selectedMovie.cast.map((actor, index) => (
                             <div key={index} className="bg-slate-700/30 p-3 rounded-lg flex items-center space-x-3">
@@ -580,10 +587,10 @@ const Movies = () => {
                                 />
                               )}
                               <div className="flex-1 min-w-0">
-                                <p className="text-white font-medium truncate">{actor.name}</p>
-                                <p className="text-slate-400 text-sm truncate">{actor.character}</p>
+                                <p className="text-white font-medium truncate font-body">{actor.name}</p>
+                                <p className="text-slate-400 text-sm truncate font-body">{actor.character}</p>
                                 {actor.gender !== undefined && (
-                                  <p className="text-slate-500 text-xs">
+                                  <p className="text-slate-500 text-xs font-body">
                                     {actor.gender === 0 ? 'Nam' : actor.gender === 1 ? 'Nữ' : 'Khác'}
                                   </p>
                                 )}
@@ -661,10 +668,10 @@ const Movies = () => {
                   </div>
                 </div>
                 <div className="ml-4 flex-1">
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-white mb-2 font-heading">
                     Xóa Phim
                   </h3>
-                  <p className="text-slate-300 mb-4">
+                  <p className="text-slate-300 mb-4 font-body">
                     Bạn có chắc chắn muốn xóa "{movieToDelete.title}"? Hành động này không thể hoàn tác và sẽ xóa vĩnh viễn phim khỏi bộ sưu tập của bạn.
                   </p>
                 </div>
@@ -673,14 +680,14 @@ const Movies = () => {
               <div className="flex gap-3">
                 <button
                   onClick={cancelDeleteMovie}
-                  className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                  className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-lg font-medium transition-colors font-body"
                   disabled={isSubmitting}
                 >
                   Hủy
                 </button>
                 <button
                   onClick={confirmDeleteMovie}
-                  className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center"
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center font-body"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

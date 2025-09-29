@@ -64,7 +64,7 @@ const TheaterForm = ({
     transition={{ duration: 0.5 }}
   >
     <div className="flex items-center justify-between mb-6">
-      <h3 className="text-xl font-bold text-white flex items-center">
+      <h3 className="text-xl font-bold text-white flex items-center font-heading">
         {isEdit ? (
           <Edit3 size={24} className="mr-2 text-orange-400" />
         ) : (
@@ -83,7 +83,7 @@ const TheaterForm = ({
     <form onSubmit={onSubmit} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">
+          <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
             Tên Rạp
           </label>
           <input
@@ -108,7 +108,7 @@ const TheaterForm = ({
           )}
         </div>
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">
+          <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
             Khu Vực
           </label>
           <input
@@ -135,7 +135,7 @@ const TheaterForm = ({
       </div>
 
       <div>
-        <label className="block text-slate-300 text-sm font-medium mb-2">
+        <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
           Địa Chỉ
         </label>
         <input
@@ -162,7 +162,7 @@ const TheaterForm = ({
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">
+          <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
             Thành Phố
           </label>
           <input
@@ -187,7 +187,7 @@ const TheaterForm = ({
           )}
         </div>
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">
+          <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
             Tỉnh/Thành
           </label>
           <input
@@ -212,7 +212,7 @@ const TheaterForm = ({
           )}
         </div>
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">
+          <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
             Mã Bưu Chính
           </label>
           <input
@@ -240,7 +240,7 @@ const TheaterForm = ({
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">
+          <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
             Số Phòng Chiếu
           </label>
           <input
@@ -266,7 +266,7 @@ const TheaterForm = ({
           )}
         </div>
         <div>
-          <label className="block text-slate-300 text-sm font-medium mb-2">
+          <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
             Số Điện Thoại Liên Hệ
           </label>
           <input
@@ -293,7 +293,7 @@ const TheaterForm = ({
       </div>
 
       <div>
-        <label className="block text-slate-300 text-sm font-medium mb-2">
+        <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
           Email Liên Hệ
         </label>
         <input
@@ -319,7 +319,7 @@ const TheaterForm = ({
       </div>
 
       <div>
-        <label className="block text-slate-300 text-sm font-medium mb-2">
+        <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
           Mô Tả
         </label>
         <textarea
@@ -345,7 +345,7 @@ const TheaterForm = ({
       </div>
 
       <div>
-        <label className="block text-slate-300 text-sm font-medium mb-2">
+        <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
           Tiện Ích
         </label>
         <div className="flex flex-wrap gap-2 mb-3">
@@ -380,7 +380,7 @@ const TheaterForm = ({
           <button
             type="button"
             onClick={() => addAmenity(amenityInput)}
-            className="px-4 py-2 bg-orange-500/20 text-orange-400 rounded-lg hover:bg-orange-500/30 transition-colors"
+            className="px-4 py-2 bg-orange-500/20 text-orange-400 rounded-lg hover:bg-orange-500/30 transition-colors font-body"
           >
             Thêm
           </button>
@@ -411,7 +411,7 @@ const TheaterForm = ({
         <button
           type="submit"
           disabled={isSubmitting || loading}
-          className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-500/50 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
+          className="flex-1 bg-orange-500 hover:bg-orange-600 disabled:bg-orange-500/50 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center font-body"
         >
           {isSubmitting || loading ? (
             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
@@ -423,7 +423,7 @@ const TheaterForm = ({
         <button
           type="button"
           onClick={onCancel}
-          className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-medium transition-colors"
+          className="px-6 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-medium transition-colors font-body"
         >
           Hủy
         </button>
@@ -861,7 +861,7 @@ const TheaterInfo = () => {
         <div className="flex items-center justify-center min-h-96">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-            <p className="text-slate-300">Đang tải thông tin rạp...</p>
+            <p className="text-slate-300 font-body">Đang tải thông tin rạp...</p>
           </div>
         </div>
       </motion.div>
@@ -869,7 +869,19 @@ const TheaterInfo = () => {
   }
 
   return (
-    <div>
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-2 font-heading">
+            Quản Lý Rạp Chiếu
+          </h1>
+          <p className="text-slate-400 font-body">
+            Quản lý thông tin và cài đặt rạp chiếu của bạn
+          </p>
+        </div>
+      </div>
+
       <motion.div
         className="space-y-6"
         initial={{ opacity: 0, y: 20 }}
@@ -877,7 +889,7 @@ const TheaterInfo = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-white">Quản Lý Rạp</h2>
+          <h2 className="text-xl font-semibold text-white font-heading">Thông Tin Rạp</h2>
           {theater?.result && !showEditForm && !showCreateForm && (
             <button
               onClick={() => {
@@ -900,7 +912,7 @@ const TheaterInfo = () => {
                 }
                 setShowEditForm(true);
               }}
-              className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors flex items-center"
+              className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors flex items-center font-body"
             >
               <Edit3 size={18} className="mr-2" />
               Chỉnh Sửa Rạp
@@ -974,10 +986,10 @@ const TheaterInfo = () => {
                 transition={{ duration: 0.5 }}
               >
                 <Building2 size={64} className="text-orange-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl font-semibold text-white mb-2 font-heading">
                   Chưa Có Rạp
                 </h3>
-                <p className="text-slate-300 mb-6">
+                <p className="text-slate-300 mb-6 font-body">
                   Bạn chưa tạo rạp nào. Hãy tạo rạp đầu tiên để bắt đầu quản
                   lý hệ thống của bạn.
                 </p>
@@ -986,7 +998,7 @@ const TheaterInfo = () => {
                     resetForm();
                     setShowCreateForm(true);
                   }}
-                  className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors flex items-center mx-auto"
+                  className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors flex items-center mx-auto font-body"
                 >
                   <Plus size={18} className="mr-2" />
                   Tạo Rạp
@@ -1001,10 +1013,10 @@ const TheaterInfo = () => {
               >
                 <div className="flex items-start justify-between mb-6">
                   <div>
-                    <h3 className="text-2xl font-bold text-white mb-2">
+                    <h3 className="text-2xl font-bold text-white mb-2 font-heading">
                       {theater.result.name}
                     </h3>
-                    <p className="text-slate-400 flex items-center">
+                    <p className="text-slate-400 flex items-center font-body">
                       <MapPin size={16} className="mr-1" />
                       {theater.result.location}
                     </p>
@@ -1022,26 +1034,26 @@ const TheaterInfo = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                   <div className="bg-slate-700/30 p-4 rounded-lg">
-                    <p className="text-slate-400 text-sm">Phòng chiếu</p>
-                    <p className="text-white font-bold text-xl">
+                    <p className="text-slate-400 text-sm font-body">Phòng chiếu</p>
+                    <p className="text-white font-bold text-xl font-heading">
                       {theater.result.screens}
                     </p>
                   </div>
                   <div className="bg-slate-700/30 p-4 rounded-lg">
-                    <p className="text-slate-400 text-sm">Thành phố</p>
-                    <p className="text-white font-bold">
+                    <p className="text-slate-400 text-sm font-body">Thành phố</p>
+                    <p className="text-white font-bold font-heading">
                       {theater.result.city}
                     </p>
                   </div>
                   <div className="bg-slate-700/30 p-4 rounded-lg">
-                    <p className="text-slate-400 text-sm">Mã bưu chính</p>
-                    <p className="text-white font-bold">
+                    <p className="text-slate-400 text-sm font-body">Mã bưu chính</p>
+                    <p className="text-white font-bold font-heading">
                       {theater.result.pincode}
                     </p>
                   </div>
                   <div className="bg-slate-700/30 p-4 rounded-lg">
-                    <p className="text-slate-400 text-sm">Ngày tạo</p>
-                    <p className="text-orange-400 font-bold text-sm">
+                    <p className="text-slate-400 text-sm font-body">Ngày tạo</p>
+                    <p className="text-orange-400 font-bold text-sm font-body">
                       {formatDate(theater.result.created_at)}
                     </p>
                   </div>
@@ -1049,7 +1061,7 @@ const TheaterInfo = () => {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-3">
+                    <h4 className="text-lg font-semibold text-white mb-3 font-heading">
                       Thông Tin Liên Hệ
                     </h4>
                     <div className="space-y-3">
@@ -1078,17 +1090,17 @@ const TheaterInfo = () => {
                   </div>
 
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-3">
+                    <h4 className="text-lg font-semibold text-white mb-3 font-heading">
                       Mô Tả
                     </h4>
-                    <p className="text-slate-300 leading-relaxed">
+                    <p className="text-slate-300 leading-relaxed font-body">
                       {theater.result.description}
                     </p>
                   </div>
                 </div>
 
                 <div>
-                  <h4 className="text-lg font-semibold text-white mb-3">
+                  <h4 className="text-lg font-semibold text-white mb-3 font-heading">
                     Tiện Ích
                   </h4>
                   <div className="flex flex-wrap gap-2">
@@ -1104,12 +1116,12 @@ const TheaterInfo = () => {
                 </div>
 
                 <div className="flex justify-between items-center mt-6 pt-6 border-t border-slate-700/50">
-                  <div className="text-sm text-slate-400">
+                  <div className="text-sm text-slate-400 font-body">
                     <p>Cập nhật lần cuối: {formatDate(theater.result.updated_at)}</p>
                   </div>
                   <button
                     onClick={fetchTheaterData}
-                    className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
+                    className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors font-body"
                   >
                     Làm Mới
                   </button>

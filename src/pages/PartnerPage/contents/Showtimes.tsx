@@ -14,6 +14,7 @@ import {
   X,
   MonitorPlay,
   Settings,
+  Star,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -129,7 +130,7 @@ const Showtimes = () => {
   // Modal states
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [showViewModal, setShowViewModal] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedShowtime, setSelectedShowtime] = useState<Showtime | null>(
     null
@@ -519,7 +520,7 @@ const Showtimes = () => {
     try {
       const response = await getShowtimeById(showtime._id);
       setSelectedShowtime(response.result);
-      setShowViewModal(true);
+      setShowDetailsModal(true);
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "Không thể tải chi tiết lịch chiếu";
@@ -530,7 +531,7 @@ const Showtimes = () => {
   const closeModals = () => {
     setShowAddModal(false);
     setShowEditModal(false);
-    setShowViewModal(false);
+    setShowDetailsModal(false);
     setShowDeleteModal(false);
     setSelectedShowtime(null);
     setShowtimeToDelete(null);
@@ -731,6 +732,14 @@ const Showtimes = () => {
     return () => document.removeEventListener('keydown', handleKeyPress);
   }, [page, totalPages]);
 
+  // Helper function to format currency
+  const formatCurrency = (amount: number): string => {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND'
+    }).format(amount);
+  };
+
   // Filter showtimes based on search term
   const filteredShowtimes = showtimes.filter(
     (showtime) =>
@@ -748,10 +757,10 @@ const Showtimes = () => {
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <h2 className="text-2xl font-bold text-white">
+            <h2 className="text-2xl font-bold text-white font-heading">
               Quản Lý Lịch Chiếu
             </h2>
-            <p className="text-slate-400 text-sm">
+            <p className="text-slate-400 text-sm font-body">
               {theater?.result
                 ? `${theater.result.name} - Tìm thấy ${total} lịch chiếu${totalPages > 1 ? ` (Trang ${page}/${totalPages})` : ""}`
                 : "Đang tải thông tin rạp..."}
@@ -759,7 +768,7 @@ const Showtimes = () => {
           </div>
           <motion.button
             onClick={handleAddShowtime}
-            className={`px-6 py-2 rounded-lg font-medium shadow-lg transition-all duration-300 flex items-center ${
+            className={`px-6 py-2 rounded-lg font-medium shadow-lg transition-all duration-300 flex items-center font-body ${
               loading || !theater?.result || !screens || screens.length === 0
                 ? "bg-gray-500/50 text-gray-400 cursor-not-allowed"
                 : "bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white hover:shadow-orange-500/30"
@@ -803,7 +812,7 @@ const Showtimes = () => {
                 placeholder="Tìm kiếm lịch chiếu theo phim hoặc phòng chiếu..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-slate-800/60 border border-slate-700/50 rounded-lg pl-10 pr-4 py-2 text-white placeholder-slate-400 focus:border-orange-500 focus:outline-none"
+                className="w-full bg-slate-800/60 border border-slate-700/50 rounded-lg pl-10 pr-4 py-2 text-white placeholder-slate-400 focus:border-orange-500 focus:outline-none font-body"
               />
             </div>
           </form>
@@ -830,25 +839,25 @@ const Showtimes = () => {
               <table className="w-full">
                 <thead className="bg-slate-700/50">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Phim
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Phòng Chiếu
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Ngày & Giờ
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Giá Vé
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Ghế Ngồi
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Trạng Thái
                     </th>
-                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                    <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                       Hành Động
                     </th>
                   </tr>
@@ -899,10 +908,10 @@ const Showtimes = () => {
                   size={64}
                   className="text-yellow-400 mx-auto mb-4"
                 />
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl font-semibold text-white mb-2 font-heading">
                   Cần Có Thông Tin Rạp
                 </h3>
-                <p className="text-slate-300 mb-6">
+                <p className="text-slate-300 mb-6 font-body">
                   Bạn cần tạo thông tin rạp trước khi quản lý lịch chiếu. Hãy
                   thiết lập thông tin rạp của bạn để bắt đầu.
                 </p>
@@ -914,10 +923,10 @@ const Showtimes = () => {
                 animate={{ opacity: 1, y: 0 }}
               >
                 <MonitorPlay size={64} className="text-blue-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-white mb-2">
+                <h3 className="text-xl font-semibold text-white mb-2 font-heading">
                   Chưa Có Phòng Chiếu
                 </h3>
-                <p className="text-slate-300 mb-6">
+                <p className="text-slate-300 mb-6 font-body">
                   Bạn cần tạo ít nhất một phòng chiếu cho rạp trước khi tạo
                   lịch chiếu. Phòng chiếu xác định khu vực trình chiếu phim.
                 </p>
@@ -927,7 +936,7 @@ const Showtimes = () => {
                       "Vui lòng chuyển đến trang Quản Lý Phòng Chiếu để tạo phòng cho rạp của bạn"
                     );
                   }}
-                  className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors flex items-center mx-auto"
+                  className="px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors flex items-center mx-auto font-body"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
@@ -942,25 +951,25 @@ const Showtimes = () => {
                   <table className="w-full">
                     <thead className="bg-slate-700/50">
                       <tr>
-                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                           Phim
                         </th>
-                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                           Phòng Chiếu
                         </th>
-                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                           Ngày & Giờ
                         </th>
-                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                           Giá Vé
                         </th>
-                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                           Ghế Ngồi
                         </th>
-                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                           Trạng Thái
                         </th>
-                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300">
+                        <th className="px-6 py-4 text-left text-sm font-medium text-slate-300 font-heading">
                           Hành Động
                         </th>
                       </tr>
@@ -984,44 +993,44 @@ const Showtimes = () => {
                                 />
                               )}
                               <div>
-                                <div className="font-medium text-white">
+                                <div className="font-medium text-white font-heading">
                                   {showtime.movie?.title || "Phim chưa xác định"}
                                 </div>
-                                <div className="text-sm text-slate-400">
+                                <div className="text-sm text-slate-400 font-body">
                                   {showtime.movie?.genre?.join(", ")}
                                 </div>
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4">
-                            <div className="text-slate-300">
+                            <div className="text-slate-300 font-body">
                               {showtime.screen?.name}
                             </div>
-                            <div className="text-sm text-slate-400">
+                            <div className="text-sm text-slate-400 font-body">
                               Sức chứa: {showtime.screen?.capacity}
                             </div>
                           </td>
                           <td className="px-6 py-4">
-                            <div className="text-slate-300">
+                            <div className="text-slate-300 font-body">
                               {formatShowtimeDate(showtime.start_time)}
                             </div>
-                            <div className="text-sm text-slate-400">
+                            <div className="text-sm text-slate-400 font-body">
                               {formatShowtimeTime(showtime.start_time)} -{" "}
                               {formatShowtimeTime(showtime.end_time)}
                             </div>
                           </td>
                           <td className="px-6 py-4">
-                            <div className="text-orange-400 font-medium">
+                            <div className="text-orange-400 font-medium font-body">
                               {formatPrice(showtime.price.regular)}
                             </div>
                             {showtime.price.premium && (
-                              <div className="text-sm text-slate-400">
+                              <div className="text-sm text-slate-400 font-body">
                                 Cao cấp: {formatPrice(showtime.price.premium)}
                               </div>
                             )}
                           </td>
                           <td className="px-6 py-4">
-                            <div className="text-slate-300">
+                            <div className="text-slate-300 font-body">
                               {showtime.available_seats}/
                               {showtime.screen?.capacity || 0}
                             </div>
@@ -1039,21 +1048,21 @@ const Showtimes = () => {
                           <td className="px-6 py-4">
                             <div className="space-y-1">
                               <span
-                                className={`px-3 py-1 rounded-full text-xs font-medium border ${getShowtimeStatusColor(
+                                className={`px-3 py-1 rounded-full text-xs font-medium border font-body ${getShowtimeStatusColor(
                                   showtime.status
                                 )}`}
                               >
                                 {getShowtimeStatusDisplay(showtime.status)}
                               </span>
                               {hasBookings(showtime) && (
-                                <div className="flex items-center text-xs text-amber-400">
+                                <div className="flex items-center text-xs text-amber-400 font-body">
                                   <Users size={12} className="mr-1" />
                                   Có đặt vé
                                 </div>
                               )}
                               {!canModifyShowtime(showtime) &&
                                 !hasBookings(showtime) && (
-                                  <div className="text-xs text-gray-400">
+                                  <div className="text-xs text-gray-400 font-body">
                                     {new Date(showtime.start_time) <= new Date()
                                       ? "Lịch chiếu đã qua"
                                       : "Không thể chỉnh sửa"}
@@ -1065,7 +1074,7 @@ const Showtimes = () => {
                             <div className="flex gap-2">
                               <motion.button
                                 onClick={() => handleEditShowtime(showtime)}
-                                className={`px-3 py-1 rounded text-sm font-medium transition-colors duration-300 flex items-center ${
+                                className={`px-3 py-1 rounded text-sm font-medium transition-colors duration-300 flex items-center font-body ${
                                   canModifyShowtime(showtime)
                                     ? "bg-orange-500/20 hover:bg-orange-500/30 text-orange-400 cursor-pointer"
                                     : "bg-gray-500/20 text-gray-400 cursor-not-allowed opacity-50"
@@ -1097,7 +1106,7 @@ const Showtimes = () => {
                               </motion.button>
                               <motion.button
                                 onClick={() => handleViewDetails(showtime)}
-                                className="bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 px-3 py-1 rounded text-sm font-medium transition-colors duration-300 flex items-center"
+                                className="bg-slate-700/50 hover:bg-slate-700/70 text-slate-300 px-3 py-1 rounded text-sm font-medium transition-colors duration-300 flex items-center font-body"
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                               >
@@ -1106,7 +1115,7 @@ const Showtimes = () => {
                               </motion.button>
                               <motion.button
                                 onClick={() => handleDeleteShowtime(showtime)}
-                                className={`px-3 py-1 rounded text-sm font-medium transition-colors duration-300 ${
+                                className={`px-3 py-1 rounded text-sm font-medium transition-colors duration-300 font-body ${
                                   canModifyShowtime(showtime)
                                     ? "bg-red-500/20 hover:bg-red-500/30 text-red-400 cursor-pointer"
                                     : "bg-gray-500/20 text-gray-400 cursor-not-allowed opacity-50"
@@ -1154,10 +1163,10 @@ const Showtimes = () => {
                     size={64}
                     className="text-orange-400 mx-auto mb-4"
                   />
-                  <h3 className="text-xl font-semibold text-white mb-2">
+                  <h3 className="text-xl font-semibold text-white mb-2 font-heading">
                     Không Tìm Thấy Lịch Chiếu
                   </h3>
-                  <p className="text-slate-300 mb-6">
+                  <p className="text-slate-300 mb-6 font-body">
                     {searchTerm
                       ? "Không có lịch chiếu nào khớp với từ khóa tìm kiếm. Hãy thử điều chỉnh tìm kiếm."
                       : !screens || screens.length === 0
@@ -1166,7 +1175,7 @@ const Showtimes = () => {
                   </p>
                   <motion.button
                     onClick={handleAddShowtime}
-                    className={`px-6 py-3 rounded-lg font-medium transition-colors flex items-center mx-auto ${
+                    className={`px-6 py-3 rounded-lg font-medium transition-colors flex items-center mx-auto font-body ${
                       !theater?.result || !screens || screens.length === 0
                         ? "bg-gray-500/50 text-gray-400 cursor-not-allowed"
                         : "bg-orange-500 hover:bg-orange-600 text-white"
@@ -1207,7 +1216,7 @@ const Showtimes = () => {
                 <button
                   onClick={() => setPage(page - 1)}
                   disabled={page <= 1}
-                  className="px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700/60 transition-colors"
+                  className="px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700/60 transition-colors font-body"
                 >
                   Trước
                 </button>
@@ -1216,7 +1225,7 @@ const Showtimes = () => {
                   {getPaginationNumbers().map((pageNum, index) => {
                     if (pageNum === -1) {
                       return (
-                        <span key={index} className="px-3 py-2 text-slate-400">
+                        <span key={index} className="px-3 py-2 text-slate-400 font-body">
                           ...
                         </span>
                       );
@@ -1225,7 +1234,7 @@ const Showtimes = () => {
                       <button
                         key={pageNum}
                         onClick={() => setPage(pageNum)}
-                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors font-body ${
                           page === pageNum
                             ? "bg-orange-500 text-white"
                             : "bg-slate-800/60 border border-slate-700/50 text-slate-300 hover:bg-slate-700/60"
@@ -1240,7 +1249,7 @@ const Showtimes = () => {
                 <button
                   onClick={() => setPage(page + 1)}
                   disabled={page >= totalPages}
-                  className="px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700/60 transition-colors"
+                  className="px-4 py-2 bg-slate-800/60 border border-slate-700/50 rounded-lg text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-slate-700/60 transition-colors font-body"
                 >
                   Sau
                 </button>
@@ -1260,7 +1269,7 @@ const Showtimes = () => {
             exit={{ opacity: 0, scale: 0.9 }}
           >
             <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-6 flex justify-between items-center">
-              <h3 className="text-2xl font-bold text-white">
+              <h3 className="text-2xl font-bold text-white font-heading">
                 Thêm Lịch Chiếu Mới
               </h3>
               <button
@@ -1282,10 +1291,10 @@ const Showtimes = () => {
                       className="text-red-400 mr-2 mt-0.5 flex-shrink-0"
                     />
                     <div>
-                      <p className="text-red-300 font-medium mb-2">
+                      <p className="text-red-300 font-medium mb-2 font-heading">
                         Vui lòng sửa các lỗi sau:
                       </p>
-                      <ul className="list-disc list-inside text-red-300 text-sm space-y-1">
+                      <ul className="list-disc list-inside text-red-300 text-sm space-y-1 font-body">
                         {formErrors.map((error, index) => (
                           <li key={index}>{error}</li>
                         ))}
@@ -1299,7 +1308,7 @@ const Showtimes = () => {
                 {/* Movie Selection */}
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-slate-300 text-sm font-medium mb-2">
+                    <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
                       Chọn Phim <span className="text-red-400">*</span>
                     </label>
 
@@ -1318,7 +1327,7 @@ const Showtimes = () => {
                             setMovieSearchTerm(e.target.value);
                             searchMovies(e.target.value);
                           }}
-                          className="w-full bg-slate-700/30 border border-slate-600 rounded-lg pl-10 pr-4 py-2 text-white placeholder-slate-400 focus:border-orange-500 focus:outline-none"
+                          className="w-full bg-slate-700/30 border border-slate-600 rounded-lg pl-10 pr-4 py-2 text-white placeholder-slate-400 focus:border-orange-500 focus:outline-none font-body"
                         />
                       </div>
                     </div>
@@ -1326,7 +1335,7 @@ const Showtimes = () => {
                     {/* Movie Selection */}
                     <div className="max-h-48 overflow-y-auto bg-slate-700/30 rounded-lg border border-slate-600">
                       {movieLoading ? (
-                        <div className="p-4 text-center text-slate-400">
+                        <div className="p-4 text-center text-slate-400 font-body">
                           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-400 mx-auto"></div>
                           <p className="mt-2">Đang tìm kiếm phim...</p>
                         </div>
@@ -1335,7 +1344,7 @@ const Showtimes = () => {
                           {/* Search Results */}
                           {movieSearchTerm && searchResults.length > 0 && (
                             <div>
-                              <div className="px-3 py-2 bg-slate-600/50 text-slate-300 text-xs font-medium">
+                              <div className="px-3 py-2 bg-slate-600/50 text-slate-300 text-xs font-medium font-heading">
                                 Kết Quả Tìm Kiếm
                               </div>
                               {searchResults.map((movie) => (
@@ -1352,7 +1361,7 @@ const Showtimes = () => {
                           {/* Popular Movies */}
                           {(!movieSearchTerm || searchResults.length === 0) && (
                             <div>
-                              <div className="px-3 py-2 bg-slate-600/50 text-slate-300 text-xs font-medium">
+                              <div className="px-3 py-2 bg-slate-600/50 text-slate-300 text-xs font-medium font-heading">
                                 Phim Phổ Biến
                               </div>
                               {popularMovies.map((movie) => (
@@ -1370,7 +1379,7 @@ const Showtimes = () => {
                           {movieSearchTerm &&
                             searchResults.length === 0 &&
                             !movieLoading && (
-                              <div className="p-4 text-center text-slate-400">
+                              <div className="p-4 text-center text-slate-400 font-body">
                                 <p>
                                   Không tìm thấy phim khớp với "{movieSearchTerm}"
                                 </p>
@@ -1383,7 +1392,7 @@ const Showtimes = () => {
 
                   {/* Screen Selection */}
                   <div>
-                    <label className="block text-slate-300 text-sm font-medium mb-2">
+                    <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
                       Chọn Phòng Chiếu <span className="text-red-400">*</span>
                     </label>
                     <div className="space-y-2">
@@ -1399,8 +1408,8 @@ const Showtimes = () => {
                         >
                           <div className="flex items-center justify-between">
                             <div>
-                              <h4 className="font-medium">{screen.name}</h4>
-                              <p className="text-sm opacity-70">
+                              <h4 className="font-medium font-heading">{screen.name}</h4>
+                              <p className="text-sm opacity-70 font-body">
                                 Sức chứa: {screen.capacity} ghế
                               </p>
                             </div>
@@ -1415,7 +1424,7 @@ const Showtimes = () => {
                 {/* Date, Time & Pricing */}
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-slate-300 text-sm font-medium mb-2">
+                    <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
                       Ngày Chiếu <span className="text-red-400">*</span>
                     </label>
                     <input
@@ -1425,13 +1434,13 @@ const Showtimes = () => {
                         handleDateTimeChange(e.target.value, showTime)
                       }
                       min={getMinDate()}
-                      className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                      className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
                       disabled={isSubmitting}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-300 text-sm font-medium mb-2">
+                    <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
                       Giờ Chiếu <span className="text-red-400">*</span>
                     </label>
                     <select
@@ -1439,7 +1448,7 @@ const Showtimes = () => {
                       onChange={(e) =>
                         handleDateTimeChange(showDate, e.target.value)
                       }
-                      className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                      className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
                       disabled={isSubmitting}
                     >
                       <option value="">Chọn giờ chiếu</option>
@@ -1453,12 +1462,12 @@ const Showtimes = () => {
 
                   {/* Price Configuration */}
                   <div className="space-y-3">
-                    <label className="block text-slate-300 text-sm font-medium">
+                    <label className="block text-slate-300 text-sm font-medium font-body">
                       Giá Vé <span className="text-red-400">*</span>
                     </label>
 
                     <div>
-                      <label className="block text-slate-400 text-xs mb-1">
+                      <label className="block text-slate-400 text-xs mb-1 font-body">
                         Ghế Thường
                       </label>
                       <input
@@ -1471,14 +1480,14 @@ const Showtimes = () => {
                           })
                         }
                         min="0"
-                        className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                        className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
                         disabled={isSubmitting}
                         placeholder="Giá (VND)"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-slate-400 text-xs mb-1">
+                      <label className="block text-slate-400 text-xs mb-1 font-body">
                         Ghế Cao Cấp
                       </label>
                       <input
@@ -1491,7 +1500,7 @@ const Showtimes = () => {
                           })
                         }
                         min="0"
-                        className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                        className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
                         disabled={isSubmitting}
                         placeholder="Giá (VND)"
                       />
@@ -1499,7 +1508,7 @@ const Showtimes = () => {
 
                     {formData.price.vip !== undefined && (
                       <div>
-                        <label className="block text-slate-400 text-xs mb-1">
+                        <label className="block text-slate-400 text-xs mb-1 font-body">
                           Ghế VIP
                         </label>
                         <input
@@ -1512,7 +1521,7 @@ const Showtimes = () => {
                             })
                           }
                           min="0"
-                          className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                          className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
                           disabled={isSubmitting}
                           placeholder="Giá (VND)"
                         />
@@ -1523,30 +1532,30 @@ const Showtimes = () => {
                   {/* Summary */}
                   {selectedMovie && selectedScreen && showDate && showTime && (
                     <div className="bg-slate-700/30 p-4 rounded-lg">
-                      <h4 className="text-white font-medium mb-2">
+                      <h4 className="text-white font-medium mb-2 font-heading">
                         Tóm Tắt Lịch Chiếu
                       </h4>
                       <div className="space-y-1 text-sm">
-                        <p className="text-slate-300">
+                        <p className="text-slate-300 font-body">
                           <span className="text-slate-400">Phim:</span>{" "}
                           {selectedMovie.title}
                         </p>
-                        <p className="text-slate-300">
+                        <p className="text-slate-300 font-body">
                           <span className="text-slate-400">Phòng Chiếu:</span>{" "}
                           {selectedScreen.name}
                         </p>
-                        <p className="text-slate-300">
+                        <p className="text-slate-300 font-body">
                           <span className="text-slate-400">Thời Lượng:</span>{" "}
                           {selectedMovie.duration} phút
                         </p>
-                        <p className="text-slate-300">
+                        <p className="text-slate-300 font-body">
                           <span className="text-slate-400">
                             Ghế Trống:
                           </span>{" "}
                           {formData.available_seats}
                         </p>
                         {formData.end_time && (
-                          <p className="text-slate-300">
+                          <p className="text-slate-300 font-body">
                             <span className="text-slate-400">Giờ Kết Thúc:</span>{" "}
                             {formatShowtimeTime(formData.end_time)}
                           </p>
@@ -1560,7 +1569,7 @@ const Showtimes = () => {
               {/* Status Selection */}
               <div className="px-6 pb-4">
                 <div>
-                  <label className="block text-slate-300 text-sm font-medium mb-2">
+                  <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
                     Trạng Thái Lịch Chiếu <span className="text-red-400">*</span>
                   </label>
                   <select
@@ -1571,7 +1580,7 @@ const Showtimes = () => {
                         e.target.value as ShowtimeStatus
                       )
                     }
-                    className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                    className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
                     disabled={isSubmitting}
                   >
                     <option value={ShowtimeStatusValues.SCHEDULED}>
@@ -1594,7 +1603,7 @@ const Showtimes = () => {
                       {getShowtimeStatusDisplay(ShowtimeStatusValues.COMPLETED)}
                     </option>
                   </select>
-                  <p className="text-slate-400 text-xs mt-1">
+                  <p className="text-slate-400 text-xs mt-1 font-body">
                     Đặt trạng thái ban đầu cho lịch chiếu này
                   </p>
                 </div>
@@ -1605,14 +1614,14 @@ const Showtimes = () => {
                 <button
                   type="button"
                   onClick={closeModals}
-                  className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                  className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-6 py-3 rounded-lg font-medium transition-colors font-body"
                   disabled={isSubmitting}
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
+                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center font-body"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -1650,10 +1659,10 @@ const Showtimes = () => {
                   </div>
                 </div>
                 <div className="ml-4 flex-1">
-                  <h3 className="text-lg font-semibold text-white mb-2">
+                  <h3 className="text-lg font-semibold text-white mb-2 font-heading">
                     Xóa Lịch Chiếu
                   </h3>
-                  <p className="text-slate-300 mb-4">
+                  <p className="text-slate-300 mb-4 font-body">
                     Bạn có chắc chắn muốn xóa lịch chiếu cho phim "
                     {showtimeToDelete.movie}"? Hành động này không thể hoàn tác và
                     sẽ xóa vĩnh viễn lịch chiếu.
@@ -1664,14 +1673,14 @@ const Showtimes = () => {
               <div className="flex gap-3">
                 <button
                   onClick={cancelDeleteShowtime}
-                  className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                  className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-4 py-2 rounded-lg font-medium transition-colors font-body"
                   disabled={isSubmitting}
                 >
                   Hủy
                 </button>
                 <button
                   onClick={confirmDeleteShowtime}
-                  className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center"
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center justify-center font-body"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -1702,7 +1711,7 @@ const Showtimes = () => {
             exit={{ opacity: 0, scale: 0.9 }}
           >
             <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-6 flex justify-between items-center">
-              <h3 className="text-2xl font-bold text-white">Chỉnh Sửa Lịch Chiếu</h3>
+              <h3 className="text-2xl font-bold text-white font-heading">Chỉnh Sửa Lịch Chiếu</h3>
               <button
                 onClick={closeModals}
                 className="text-slate-400 hover:text-white transition-colors"
@@ -1722,10 +1731,10 @@ const Showtimes = () => {
                       className="text-red-400 mr-2 mt-0.5 flex-shrink-0"
                     />
                     <div>
-                      <p className="text-red-300 font-medium mb-2">
+                      <p className="text-red-300 font-medium mb-2 font-heading">
                         Vui lòng sửa các lỗi sau:
                       </p>
-                      <ul className="list-disc list-inside text-red-300 text-sm space-y-1">
+                      <ul className="list-disc list-inside text-red-300 text-sm space-y-1 font-body">
                         {formErrors.map((error, index) => (
                           <li key={index}>{error}</li>
                         ))}
@@ -1739,7 +1748,7 @@ const Showtimes = () => {
                 {/* Movie Selection - Read Only in Edit Mode */}
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-slate-300 text-sm font-medium mb-2">
+                    <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
                       Phim Đã Chọn{" "}
                       <span className="text-slate-400">
                         (Không thể thay đổi)
@@ -1757,24 +1766,24 @@ const Showtimes = () => {
                             }}
                           />
                           <div className="flex-1">
-                            <h4 className="text-white font-medium">
+                            <h4 className="text-white font-medium font-heading">
                               {selectedMovie.title}
                             </h4>
-                            <p className="text-slate-400 text-sm">
+                            <p className="text-slate-400 text-sm font-body">
                               {formatMovieDuration(selectedMovie.duration)}
                             </p>
-                            <p className="text-slate-400 text-xs">
+                            <p className="text-slate-400 text-xs font-body">
                               {selectedMovie.genre.join(", ")}
                             </p>
                             <div className="flex items-center gap-2 mt-1">
                               <span
-                                className={`px-2 py-1 rounded text-xs ${getMovieStatusColor(
+                                className={`px-2 py-1 rounded text-xs font-body ${getMovieStatusColor(
                                   selectedMovie.status
                                 )}`}
                               >
                                 {getStaffMovieStatusDisplay(selectedMovie.status)}
                               </span>
-                              <span className="text-slate-400 text-xs">
+                              <span className="text-slate-400 text-xs font-body">
                                 ⭐ {selectedMovie.average_rating.toFixed(1)} (
                                 {selectedMovie.ratings_count})
                               </span>
@@ -1782,14 +1791,14 @@ const Showtimes = () => {
                           </div>
                         </div>
                       ) : (
-                        <p className="text-slate-400">Đang tải thông tin...</p>
+                        <p className="text-slate-400 font-body">Đang tải thông tin...</p>
                       )}
                     </div>
                   </div>
 
                   {/* Screen Selection */}
                   <div>
-                    <label className="block text-slate-300 text-sm font-medium mb-2">
+                    <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
                       Chọn Phòng Chiếu <span className="text-red-400">*</span>
                     </label>
                     <div className="space-y-2">
@@ -1805,8 +1814,8 @@ const Showtimes = () => {
                         >
                           <div className="flex items-center justify-between">
                             <div>
-                              <h4 className="font-medium">{screen.name}</h4>
-                              <p className="text-sm opacity-70">
+                              <h4 className="font-medium font-heading">{screen.name}</h4>
+                              <p className="text-sm opacity-70 font-body">
                                 Sức chứa: {screen.capacity} ghế
                               </p>
                             </div>
@@ -1821,7 +1830,7 @@ const Showtimes = () => {
                 {/* Date, Time & Pricing */}
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-slate-300 text-sm font-medium mb-2">
+                    <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
                       Ngày Chiếu <span className="text-red-400">*</span>
                     </label>
                     <input
@@ -1831,13 +1840,13 @@ const Showtimes = () => {
                         handleDateTimeChange(e.target.value, showTime)
                       }
                       min={getMinDate()}
-                      className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                      className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
                       disabled={isSubmitting}
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-300 text-sm font-medium mb-2">
+                    <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
                       Giờ Chiếu <span className="text-red-400">*</span>
                     </label>
                     <select
@@ -1845,7 +1854,7 @@ const Showtimes = () => {
                       onChange={(e) =>
                         handleDateTimeChange(showDate, e.target.value)
                       }
-                      className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                      className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
                       disabled={isSubmitting}
                     >
                       <option value="">Chọn giờ chiếu</option>
@@ -1859,12 +1868,12 @@ const Showtimes = () => {
 
                   {/* Price Configuration */}
                   <div className="space-y-3">
-                    <label className="block text-slate-300 text-sm font-medium">
+                    <label className="block text-slate-300 text-sm font-medium font-body">
                       Giá Vé <span className="text-red-400">*</span>
                     </label>
 
                     <div>
-                      <label className="block text-slate-400 text-xs mb-1">
+                      <label className="block text-slate-400 text-xs mb-1 font-body">
                         Ghế Thường
                       </label>
                       <input
@@ -1877,14 +1886,14 @@ const Showtimes = () => {
                           })
                         }
                         min="0"
-                        className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                        className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
                         disabled={isSubmitting}
                         placeholder="Giá (VND)"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-slate-400 text-xs mb-1">
+                      <label className="block text-slate-400 text-xs mb-1 font-body">
                         Ghế Cao Cấp
                       </label>
                       <input
@@ -1897,7 +1906,7 @@ const Showtimes = () => {
                           })
                         }
                         min="0"
-                        className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                        className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
                         disabled={isSubmitting}
                         placeholder="Giá (VND)"
                       />
@@ -1905,7 +1914,7 @@ const Showtimes = () => {
 
                     {formData.price.vip !== undefined && (
                       <div>
-                        <label className="block text-slate-400 text-xs mb-1">
+                        <label className="block text-slate-400 text-xs mb-1 font-body">
                           Ghế VIP
                         </label>
                         <input
@@ -1918,7 +1927,7 @@ const Showtimes = () => {
                             })
                           }
                           min="0"
-                          className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                          className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
                           disabled={isSubmitting}
                           placeholder="Giá (VND)"
                         />
@@ -1929,30 +1938,30 @@ const Showtimes = () => {
                   {/* Summary */}
                   {selectedMovie && selectedScreen && showDate && showTime && (
                     <div className="bg-slate-700/30 p-4 rounded-lg">
-                      <h4 className="text-white font-medium mb-2">
+                      <h4 className="text-white font-medium mb-2 font-heading">
                         Tóm Tắt Lịch Chiếu
                       </h4>
                       <div className="space-y-1 text-sm">
-                        <p className="text-slate-300">
+                        <p className="text-slate-300 font-body">
                           <span className="text-slate-400">Phim:</span>{" "}
                           {selectedMovie.title}
                         </p>
-                        <p className="text-slate-300">
+                        <p className="text-slate-300 font-body">
                           <span className="text-slate-400">Phòng Chiếu:</span>{" "}
                           {selectedScreen.name}
                         </p>
-                        <p className="text-slate-300">
+                        <p className="text-slate-300 font-body">
                           <span className="text-slate-400">Thời Lượng:</span>{" "}
                           {selectedMovie.duration} phút
                         </p>
-                        <p className="text-slate-300">
+                        <p className="text-slate-300 font-body">
                           <span className="text-slate-400">
                             Ghế Trống:
                           </span>{" "}
                           {formData.available_seats}
                         </p>
                         {formData.end_time && (
-                          <p className="text-slate-300">
+                          <p className="text-slate-300 font-body">
                             <span className="text-slate-400">Giờ Kết Thúc:</span>{" "}
                             {formatShowtimeTime(formData.end_time)}
                           </p>
@@ -1966,7 +1975,7 @@ const Showtimes = () => {
               {/* Status Selection */}
               <div className="px-6 pb-4">
                 <div>
-                  <label className="block text-slate-300 text-sm font-medium mb-2">
+                  <label className="block text-slate-300 text-sm font-medium mb-2 font-body">
                     Trạng Thái Lịch Chiếu <span className="text-red-400">*</span>
                   </label>
                   <select
@@ -1977,7 +1986,7 @@ const Showtimes = () => {
                         e.target.value as ShowtimeStatus
                       )
                     }
-                    className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none"
+                    className="w-full bg-slate-700/50 border border-slate-600 rounded-lg px-4 py-2 text-white focus:border-orange-500 focus:outline-none font-body"
                     disabled={isSubmitting}
                   >
                     <option value={ShowtimeStatusValues.SCHEDULED}>
@@ -2000,8 +2009,8 @@ const Showtimes = () => {
                       {getShowtimeStatusDisplay(ShowtimeStatusValues.COMPLETED)}
                     </option>
                   </select>
-                  <p className="text-slate-400 text-xs mt-1">
-                    Cập nhật trạng thái của lịch chiếu này
+                  <p className="text-slate-400 text-xs mt-1 font-body">
+                    Đặt trạng thái ban đầu cho lịch chiếu này
                   </p>
                 </div>
               </div>
@@ -2011,14 +2020,14 @@ const Showtimes = () => {
                 <button
                   type="button"
                   onClick={closeModals}
-                  className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                  className="flex-1 bg-slate-600 hover:bg-slate-500 text-white px-6 py-3 rounded-lg font-medium transition-colors font-body"
                   disabled={isSubmitting}
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
+                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center font-body"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -2040,7 +2049,7 @@ const Showtimes = () => {
       )}
 
       {/* View Showtime Modal */}
-      {showViewModal && selectedShowtime && (
+      {showDetailsModal && selectedShowtime && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <motion.div
             className="bg-slate-800 border border-slate-700 rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
@@ -2049,7 +2058,7 @@ const Showtimes = () => {
             exit={{ opacity: 0, scale: 0.9 }}
           >
             <div className="sticky top-0 bg-slate-800 border-b border-slate-700 p-6 flex justify-between items-center">
-              <h3 className="text-2xl font-bold text-white">
+              <h3 className="text-2xl font-bold text-white font-heading">
                 Chi Tiết Lịch Chiếu
               </h3>
               <button
@@ -2061,162 +2070,132 @@ const Showtimes = () => {
             </div>
 
             <div className="p-6">
-              <div className="space-y-6">
-                {/* Movie Info */}
-                <div className="flex items-start space-x-4">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Left Column: Movie Info */}
+                <div className="lg:col-span-1 space-y-4">
                   <img
-                    src={
-                      selectedShowtime.movie?.poster_url ||
-                      "/placeholder-movie.jpg"
-                    }
-                    alt={selectedShowtime.movie?.title || "Phim"}
-                    className="w-20 h-28 object-cover rounded-lg"
+                    src={selectedShowtime.movie?.poster_url || "/placeholder-movie.jpg"}
+                    alt={selectedShowtime.movie?.title || "Unknown Movie"}
+                    className="w-full h-auto object-cover rounded-lg"
+                    onError={(e) => {
+                      e.currentTarget.src = "/placeholder-movie.jpg";
+                    }}
                   />
-                  <div className="flex-1">
-                    <h4 className="text-xl font-bold text-white mb-2">
-                      {selectedShowtime.movie?.title}
-                    </h4>
-                    <div className="space-y-1 text-sm">
-                      <p className="text-slate-300">
-                        <span className="text-slate-400">Thời Lượng:</span>{" "}
-                        {selectedShowtime.movie?.duration} phút
-                      </p>
+                  <h4 className="text-xl font-bold text-white font-heading">
+                    {selectedShowtime.movie?.title || "Unknown Movie"}
+                  </h4>
+                  <p className="text-slate-400 text-sm font-body">
+                    {selectedShowtime.movie?.genre?.join(", ") || "N/A"}
+                  </p>
+                  <div className="flex items-center text-slate-400 text-sm gap-4 font-body">
+                    <div className="flex items-center gap-1">
+                      <Clock size={14} />
+                      <span>{selectedShowtime.movie?.duration || 0} phút</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Star size={14} />
+                      <span>
+                        {(selectedShowtime.movie as any)?.average_rating?.toFixed(1) || "0.0"}
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Showtime Info */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <h5 className="text-lg font-semibold text-white border-b border-slate-700 pb-2">
-                      Thông Tin Lịch Chiếu
+                {/* Right Column: Showtime Details */}
+                <div className="lg:col-span-2 space-y-4">
+                  <div className="bg-slate-700/30 p-4 rounded-lg">
+                    <h5 className="text-lg font-semibold text-white mb-3 font-heading">
+                      Thông Tin Chiếu
                     </h5>
-                    <div className="space-y-3">
-                      <div className="flex items-center text-slate-300">
-                        <Calendar size={16} className="mr-2 text-slate-400" />
-                        <span className="text-slate-400 mr-2">Ngày:</span>
-                        {formatShowtimeDate(selectedShowtime.start_time)}
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="font-body">
+                        <p className="text-slate-400">Phòng Chiếu</p>
+                        <p className="text-white font-medium">
+                          {selectedShowtime.screen?.name || "Unknown Screen"}
+                        </p>
                       </div>
-                      <div className="flex items-center text-slate-300">
-                        <Clock size={16} className="mr-2 text-slate-400" />
-                        <span className="text-slate-400 mr-2">Giờ:</span>
-                        {formatShowtimeTime(selectedShowtime.start_time)} -{" "}
-                        {formatShowtimeTime(selectedShowtime.end_time)}
+                      <div className="font-body">
+                        <p className="text-slate-400">Ngày Chiếu</p>
+                        <p className="text-white font-medium">
+                          {formatShowtimeDate(selectedShowtime.start_time)}
+                        </p>
                       </div>
-                      <div className="flex items-center text-slate-300">
-                        <MonitorPlay
-                          size={16}
-                          className="mr-2 text-slate-400"
-                        />
-                        <span className="text-slate-400 mr-2">Phòng Chiếu:</span>
-                        {selectedShowtime.screen?.name}
+                      <div className="font-body">
+                        <p className="text-slate-400">Giờ Bắt Đầu</p>
+                        <p className="text-white font-medium">
+                          {formatShowtimeTime(selectedShowtime.start_time)}
+                        </p>
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4">
-                    <h5 className="text-lg font-semibold text-white border-b border-slate-700 pb-2">
-                      Ghế Ngồi & Giá Vé
-                    </h5>
-                    <div className="space-y-3">
-                      <div className="flex items-center text-slate-300">
-                        <Users size={16} className="mr-2 text-slate-400" />
-                        <span className="text-slate-400 mr-2">Ghế trống:</span>
-                        {selectedShowtime.available_seats} ghế
+                      <div className="font-body">
+                        <p className="text-slate-400">Giờ Kết Thúc</p>
+                        <p className="text-white font-medium">
+                          {formatShowtimeTime(selectedShowtime.end_time)}
+                        </p>
                       </div>
-                      <div className="flex items-center text-slate-300">
-                        <Users size={16} className="mr-2 text-slate-400" />
-                        <span className="text-slate-400 mr-2">
-                          Tổng sức chứa:
-                        </span>
-                        {selectedShowtime.screen?.capacity} ghế
-                      </div>
-                      {selectedShowtime.booked_seats &&
-                        selectedShowtime.booked_seats.length > 0 && (
-                          <div className="flex items-center text-amber-400">
-                            <Users size={16} className="mr-2" />
-                            <span className="text-slate-400 mr-2">Đã đặt:</span>
-                            {selectedShowtime.booked_seats.length} ghế
-                          </div>
-                        )}
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-slate-300">
-                          <span className="text-slate-400">Ghế Thường:</span>
-                          <span>
-                            {formatPrice(selectedShowtime.price.regular)}
-                          </span>
-                        </div>
-                        <div className="flex justify-between text-slate-300">
-                          <span className="text-slate-400">Ghế Cao Cấp:</span>
-                          <span>
-                            {formatPrice(selectedShowtime.price.premium)}
-                          </span>
-                        </div>
-                        {selectedShowtime.price.vip && (
-                          <div className="flex justify-between text-slate-300">
-                            <span className="text-slate-400">Ghế VIP:</span>
-                            <span>
-                              {formatPrice(selectedShowtime.price.vip)}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Status */}
-                <div className="space-y-4 pt-4 border-t border-slate-700">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center">
-                        <span className="text-slate-400 mr-2">Trạng thái:</span>
+                      <div className="font-body">
+                        <p className="text-slate-400">Trạng Thái</p>
                         <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${getShowtimeStatusColor(
+                          className={`px-2 py-1 rounded text-xs font-medium ${getShowtimeStatusColor(
                             selectedShowtime.status
                           )}`}
                         >
                           {getShowtimeStatusDisplay(selectedShowtime.status)}
                         </span>
                       </div>
+                    </div>
+                  </div>
 
-                      {hasBookings(selectedShowtime) && (
-                        <div className="flex items-center text-amber-400">
-                          <Users size={16} className="mr-1" />
-                          <span className="text-sm font-medium">
-                            Đang có vé đặt
-                          </span>
-                        </div>
-                      )}
-
-                      {!canModifyShowtime(selectedShowtime) && (
-                        <div className="flex items-center text-red-400">
-                          <AlertTriangle size={16} className="mr-1" />
-                          <span className="text-sm font-medium">
-                            Không thể chỉnh sửa/xóa
-                          </span>
+                  <div className="bg-slate-700/30 p-4 rounded-lg">
+                    <h5 className="text-lg font-semibold text-white mb-3 font-heading">
+                      Thông Tin Vé
+                    </h5>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="font-body">
+                        <p className="text-slate-400">Giá Vé Thường</p>
+                        <p className="text-white font-medium">
+                          {formatCurrency(selectedShowtime.price.regular)}
+                        </p>
+                      </div>
+                      <div className="font-body">
+                        <p className="text-slate-400">Giá Vé Cao Cấp</p>
+                        <p className="text-white font-medium">
+                          {formatCurrency(selectedShowtime.price.premium)}
+                        </p>
+                      </div>
+                      {selectedShowtime.price.vip !== undefined && (
+                        <div className="font-body">
+                          <p className="text-slate-400">Giá Vé VIP</p>
+                          <p className="text-white font-medium">
+                            {formatCurrency(selectedShowtime.price.vip)}
+                          </p>
                         </div>
                       )}
                     </div>
+                  </div>
 
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleEditShowtime(selectedShowtime)}
-                        className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center ${
-                          canModifyShowtime(selectedShowtime)
-                            ? "bg-orange-500 hover:bg-orange-600 text-white"
-                            : "bg-gray-500/50 text-gray-400 cursor-not-allowed"
-                        }`}
-                        disabled={!canModifyShowtime(selectedShowtime)}
-                        title={
-                          !canModifyShowtime(selectedShowtime)
-                            ? "Không thể chỉnh sửa lịch chiếu có đặt vé hoặc đã qua"
-                            : "Chỉnh sửa lịch chiếu"
-                        }
-                      >
-                        <Edit size={16} className="mr-2" />
-                        Chỉnh Sửa
-                      </button>
+                  <div className="bg-slate-700/30 p-4 rounded-lg">
+                    <h5 className="text-lg font-semibold text-white mb-3 font-heading">
+                      Thống Kê Ghế
+                    </h5>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="font-body">
+                        <p className="text-slate-400">Tổng Số Ghế</p>
+                        <p className="text-white font-medium">
+                          {selectedShowtime.screen?.capacity || 0}
+                        </p>
+                      </div>
+                      <div className="font-body">
+                        <p className="text-slate-400">Ghế Đã Đặt</p>
+                        <p className="text-white font-medium">
+                          {selectedShowtime.booked_seats?.length || 0}
+                        </p>
+                      </div>
+                      <div className="font-body">
+                        <p className="text-slate-400">Ghế Còn Trống</p>
+                        <p className="text-white font-medium">
+                          {selectedShowtime.available_seats}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>

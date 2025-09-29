@@ -165,7 +165,7 @@ const Overview = () => {
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-orange-500 mx-auto mb-4" />
-          <p className="text-slate-400">Đang tải dữ liệu tổng quan...</p>
+          <p className="text-slate-400 font-body">Đang tải dữ liệu tổng quan...</p>
         </div>
       </div>
     );
@@ -177,14 +177,26 @@ const Overview = () => {
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
           <AlertTriangle className="w-8 h-8 text-red-500 mx-auto mb-4" />
-          <p className="text-red-400 mb-2">Không thể tải dữ liệu tổng quan</p>
-          <p className="text-slate-400 text-sm">{error}</p>
+          <p className="text-red-400 mb-2 font-heading">Không thể tải dữ liệu tổng quan</p>
+          <p className="text-slate-400 text-sm font-body">{error}</p>
         </div>
       </div>
     );
   }
   return (
-    <div>
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-2 font-heading">
+            Tổng Quan Rạp Chiếu
+          </h1>
+          <p className="text-slate-400 font-body">
+            Tổng quan toàn diện về hoạt động và hiệu suất rạp chiếu
+          </p>
+        </div>
+      </div>
+
       <motion.div
         className="space-y-6"
         initial={{ opacity: 0, y: 20 }}
@@ -204,15 +216,15 @@ const Overview = () => {
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-slate-400 text-sm font-medium">
+                  <p className="text-slate-400 text-sm font-medium font-body">
                     {stat.label}
                   </p>
-                  <p className="text-3xl font-bold text-white mt-2 tracking-tight">
+                  <p className="text-3xl font-bold text-white mt-2 tracking-tight font-heading">
                     {stat.value}
                   </p>
                   <div className="flex items-center mt-2">
                     <TrendingUp size={14} className="mr-1 text-emerald-400" />
-                    <span className="text-emerald-400 text-sm font-medium">
+                    <span className="text-emerald-400 text-sm font-medium font-body">
                       {stat.change}
                     </span>
                   </div>
@@ -235,7 +247,7 @@ const Overview = () => {
             transition={{ duration: 0.5, delay: 0.3 }}
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-white">
+              <h3 className="text-xl font-semibold text-white font-heading">
                 Đặt Vé Gần Đây
               </h3>
               <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-2 rounded-lg shadow-lg shadow-orange-500/30">
@@ -255,7 +267,7 @@ const Overview = () => {
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <p className="text-white font-medium">
+                        <p className="text-white font-medium font-heading">
                           Đặt vé #{booking.ticket_code}
                         </p>
                         <div className="flex items-center gap-1">
@@ -272,7 +284,7 @@ const Overview = () => {
                           </span>
                         </div>
                       </div>
-                      <p className="text-slate-400 text-sm">
+                      <p className="text-slate-400 text-sm font-body">
                         {booking.seats.length} ghế •{" "}
                         {new Date(booking.booking_time).toLocaleDateString(
                           "vi-VN"
@@ -283,7 +295,7 @@ const Overview = () => {
                       <span className="text-orange-400 font-semibold text-lg">
                         {formatPrice(booking.total_amount)}
                       </span>
-                      <p className="text-slate-400 text-xs">
+                      <p className="text-slate-400 text-xs font-body">
                         {booking.payment_status}
                       </p>
                     </div>
@@ -292,7 +304,7 @@ const Overview = () => {
               ) : (
                 <div className="text-center py-8">
                   <Calendar className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-                  <p className="text-slate-400">Không có đặt vé gần đây</p>
+                  <p className="text-slate-400 font-body">Không có đặt vé gần đây</p>
                 </div>
               )}
             </div>
@@ -306,7 +318,7 @@ const Overview = () => {
             transition={{ duration: 0.5, delay: 0.4 }}
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-white">
+              <h3 className="text-xl font-semibold text-white font-heading">
                 Phân Tích Rạp Chiếu
               </h3>
               <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-2 rounded-lg shadow-lg shadow-orange-500/30">
@@ -326,10 +338,10 @@ const Overview = () => {
                 >
                   <div className="flex items-center justify-between mb-3">
                     <div>
-                      <p className="text-white font-medium">
+                      <p className="text-white font-medium font-heading">
                         {myTheaterAnalytics.result.theater_info.name}
                       </p>
-                      <p className="text-slate-400 text-sm">
+                      <p className="text-slate-400 text-sm font-body">
                         {myTheaterAnalytics.result.theater_info.location} •{" "}
                         {myTheaterAnalytics.result.theater_info.city}
                       </p>
@@ -340,23 +352,23 @@ const Overview = () => {
                           myTheaterAnalytics.result.analytics.total_revenue
                         )}
                       </span>
-                      <p className="text-slate-400 text-xs">Tổng Doanh Thu</p>
+                      <p className="text-slate-400 text-xs font-body">Tổng Doanh Thu</p>
                     </div>
                   </div>
 
                   {/* Performance metrics */}
                   <div className="grid grid-cols-3 gap-4 mt-4">
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-white">
+                      <p className="text-2xl font-bold text-white font-heading">
                         {myTheaterAnalytics.result.analytics.total_bookings}
                       </p>
-                      <p className="text-slate-400 text-xs">Đặt Vé</p>
+                      <p className="text-slate-400 text-xs font-body">Đặt Vé</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-2xl font-bold text-white">
+                      <p className="text-2xl font-bold text-white font-heading">
                         {myTheaterAnalytics.result.analytics.total_customers}
                       </p>
-                      <p className="text-slate-400 text-xs">Khách Hàng</p>
+                      <p className="text-slate-400 text-xs font-body">Khách Hàng</p>
                     </div>
                     <div className="text-center">
                       <p
@@ -375,7 +387,7 @@ const Overview = () => {
                           )
                         )}
                       </p>
-                      <p className="text-slate-400 text-xs">Hiệu Suất</p>
+                      <p className="text-slate-400 text-xs font-body">Hiệu Suất</p>
                     </div>
                   </div>
 
@@ -401,7 +413,7 @@ const Overview = () => {
                 {allTheatersAnalytics &&
                   allTheatersAnalytics.result.length > 1 && (
                     <div className="mt-4">
-                      <h4 className="text-white font-medium mb-3">
+                      <h4 className="text-white font-medium mb-3 font-heading">
                         So Sánh Thị Trường
                       </h4>
                       <div className="space-y-2">
@@ -425,10 +437,10 @@ const Overview = () => {
                               }}
                             >
                               <div className="flex-1">
-                                <p className="text-white text-sm font-medium">
+                                <p className="text-white text-sm font-medium font-heading">
                                   {theater.theater_name}
                                 </p>
-                                <p className="text-slate-400 text-xs">
+                                <p className="text-slate-400 text-xs font-body">
                                   {theater.theater_location}
                                 </p>
                               </div>
@@ -446,7 +458,7 @@ const Overview = () => {
             ) : (
               <div className="text-center py-8">
                 <BarChart3 className="w-12 h-12 text-slate-500 mx-auto mb-3" />
-                <p className="text-slate-400">Không có dữ liệu phân tích</p>
+                <p className="text-slate-400 font-body">Không có dữ liệu phân tích</p>
               </div>
             )}
           </motion.div>
@@ -459,7 +471,7 @@ const Overview = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          <h3 className="text-xl font-semibold text-white mb-4">
+          <h3 className="text-xl font-semibold text-white mb-4 font-heading">
             Thao Tác Nhanh
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -503,8 +515,8 @@ const Overview = () => {
                 >
                   <action.icon size={24} className="text-white" />
                 </div>
-                <p className="text-white font-medium text-sm">{action.label}</p>
-                <p className="text-slate-400 text-xs mt-1">
+                <p className="text-white font-medium text-sm font-heading">{action.label}</p>
+                <p className="text-slate-400 text-xs mt-1 font-body">
                   {action.description}
                 </p>
               </motion.button>
@@ -521,7 +533,7 @@ const Overview = () => {
             transition={{ duration: 0.5, delay: 0.7 }}
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-white">Phim Của Tôi</h3>
+              <h3 className="text-xl font-semibold text-white font-heading">Phim Của Tôi</h3>
               <div className="bg-gradient-to-r from-orange-500 to-amber-500 p-2 rounded-lg shadow-lg shadow-orange-500/30">
                 <Film size={20} className="text-white" />
               </div>
@@ -552,10 +564,10 @@ const Overview = () => {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-white font-medium text-sm truncate">
+                      <p className="text-white font-medium text-sm truncate font-heading">
                         {movie.title}
                       </p>
-                      <p className="text-slate-400 text-xs">{movie.language}</p>
+                      <p className="text-slate-400 text-xs font-body">{movie.language}</p>
                       <div className="flex items-center gap-2 mt-1">
                         <span
                           className={`text-xs px-2 py-1 rounded-full ${
@@ -588,7 +600,7 @@ const Overview = () => {
 
             {myMovies.result.total > 6 && (
               <div className="text-center mt-4">
-                <p className="text-slate-400 text-sm">
+                <p className="text-slate-400 text-sm font-body">
                   Hiển thị 6 trong tổng {myMovies.result.total} phim
                 </p>
               </div>

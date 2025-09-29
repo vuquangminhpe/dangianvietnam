@@ -68,7 +68,7 @@ const PartnerPage = () => {
       {/* Thanh tiêu đề */}
       <Header />
 
-      <div className="flex mt-24 h-screen overflow-hidden">
+      <div className="flex mt-20 h-screen overflow-hidden">
         {/* Thanh điều hướng */}
         <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
