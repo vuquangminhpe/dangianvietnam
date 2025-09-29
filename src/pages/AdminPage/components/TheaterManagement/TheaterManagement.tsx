@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import {
@@ -28,6 +28,28 @@ const TheaterManagement: React.FC = () => {
     sort_order: "desc",
   });
   const [selectedTheater, setSelectedTheater] = useState<string | null>(null);
+  const [searchInput, setSearchInput] = useState(filters.search || "");
+
+  // Debounce search input
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setFilters(prev => ({ ...prev, search: searchInput || undefined, page: 1 }));
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchInput]);
+
+  const handleFilterChange = useCallback((key: keyof TheaterQueryParams, value: any) => {
+    setFilters(prev => ({ ...prev, [key]: value, page: 1 }));
+  }, []);
+
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchInput(value);
+  }, []);
+
+  const handlePageChange = useCallback((page: number) => {
+    setFilters(prev => ({ ...prev, page }));
+  }, []);
 
   // Fetch theaters list
   const {
@@ -61,14 +83,6 @@ const TheaterManagement: React.FC = () => {
     enabled: !!selectedTheater,
   });
 
-  const handleFilterChange = (key: keyof TheaterQueryParams, value: any) => {
-    setFilters(prev => ({ ...prev, [key]: value, page: 1 }));
-  };
-
-  const handlePageChange = (page: number) => {
-    setFilters(prev => ({ ...prev, page }));
-  };
-
   const getStatusBadge = (status: string) => {
     const statusConfig = {
       active: { label: "Hoạt động", color: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30" },
@@ -84,21 +98,6 @@ const TheaterManagement: React.FC = () => {
     );
   };
 
-  if (theatersLoading && !theatersData) {
-    return (
-      <div className="p-6">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-slate-700 rounded w-1/4"></div>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-32 bg-slate-700 rounded-xl"></div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   if (theatersError) {
     return (
       <div className="p-6">
@@ -113,6 +112,50 @@ const TheaterManagement: React.FC = () => {
 
   const theaters = theatersData?.result.theaters || [];
   const stats = statsData?.result;
+
+  // Loading skeleton component for table rows
+  const TableSkeleton = () => (
+    <>
+      {[...Array(5)].map((_, index) => (
+        <tr key={index} className="border-b border-slate-700">
+          <td className="px-6 py-4">
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-slate-700 rounded mr-3 animate-pulse"></div>
+              <div>
+                <div className="h-4 bg-slate-700 rounded w-32 mb-2 animate-pulse"></div>
+                <div className="h-3 bg-slate-600 rounded w-20 animate-pulse"></div>
+              </div>
+            </div>
+          </td>
+          <td className="px-6 py-4">
+            <div className="space-y-2">
+              <div className="h-4 bg-slate-700 rounded w-40 animate-pulse"></div>
+              <div className="h-3 bg-slate-600 rounded w-32 animate-pulse"></div>
+            </div>
+          </td>
+          <td className="px-6 py-4">
+            <div className="space-y-2">
+              <div className="h-4 bg-slate-700 rounded w-28 animate-pulse"></div>
+              <div className="h-3 bg-slate-600 rounded w-36 animate-pulse"></div>
+            </div>
+          </td>
+          <td className="px-6 py-4">
+            <div className="h-6 bg-slate-700 rounded-full w-20 animate-pulse"></div>
+          </td>
+          <td className="px-6 py-4">
+            <div className="space-y-2">
+              <div className="h-3 bg-slate-700 rounded w-20 animate-pulse"></div>
+              <div className="h-3 bg-slate-600 rounded w-16 animate-pulse"></div>
+              <div className="h-3 bg-slate-500 rounded w-24 animate-pulse"></div>
+            </div>
+          </td>
+          <td className="px-6 py-4">
+            <div className="h-8 bg-slate-700 rounded w-20 animate-pulse"></div>
+          </td>
+        </tr>
+      ))}
+    </>
+  );
 
   return (
     <div className="p-6 space-y-6">
@@ -136,81 +179,98 @@ const TheaterManagement: React.FC = () => {
       </div>
 
       {/* Stats Cards */}
-      {!statsLoading && stats && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="grid grid-cols-1 md:grid-cols-4 gap-6"
-        >
-          <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
-            <div className="flex items-center justify-between mb-4">
-              <Building2 className="h-8 w-8 text-blue-400" />
-              <span className="text-blue-400 text-sm font-medium font-body">
-                Tổng Rạp
-              </span>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="grid grid-cols-1 md:grid-cols-4 gap-6"
+      >
+        {statsLoading && !stats ? (
+          // Loading skeleton for stats on first load
+          [...Array(4)].map((_, index) => (
+            <div key={index} className="bg-slate-800 rounded-xl p-6 border border-slate-700">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-8 h-8 bg-slate-700 rounded animate-pulse"></div>
+                <div className="h-4 bg-slate-700 rounded w-20 animate-pulse"></div>
+              </div>
+              <div className="space-y-2">
+                <div className="h-8 bg-slate-700 rounded w-16 animate-pulse"></div>
+                <div className="h-4 bg-slate-600 rounded w-24 animate-pulse"></div>
+              </div>
             </div>
-            <div className="space-y-1">
-              <p className="text-2xl font-bold text-white font-heading">
-                {stats.total_theaters}
-              </p>
-              <p className="text-blue-400 text-sm font-body">
-                {stats.active_theaters} đang hoạt động
-              </p>
+          ))
+        ) : stats ? (
+          // Actual stats data
+          <>
+            <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
+              <div className="flex items-center justify-between mb-4">
+                <Building2 className="h-8 w-8 text-blue-400" />
+                <span className="text-blue-400 text-sm font-medium font-body">
+                  Tổng Rạp
+                </span>
+              </div>
+              <div className="space-y-1">
+                <p className="text-2xl font-bold text-white font-heading">
+                  {stats.total_theaters}
+                </p>
+                <p className="text-blue-400 text-sm font-body">
+                  {stats.active_theaters} đang hoạt động
+                </p>
+              </div>
             </div>
-          </div>
 
-          <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
-            <div className="flex items-center justify-between mb-4">
-              <Users className="h-8 w-8 text-emerald-400" />
-              <span className="text-emerald-400 text-sm font-medium font-body">
-                Quản Lý
-              </span>
+            <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
+              <div className="flex items-center justify-between mb-4">
+                <Users className="h-8 w-8 text-emerald-400" />
+                <span className="text-emerald-400 text-sm font-medium font-body">
+                  Quản Lý
+                </span>
+              </div>
+              <div className="space-y-1">
+                <p className="text-2xl font-bold text-white font-heading">
+                  {stats.theaters_with_manager}
+                </p>
+                <p className="text-emerald-400 text-sm font-body">
+                  {stats.theaters_without_manager} chưa có quản lý
+                </p>
+              </div>
             </div>
-            <div className="space-y-1">
-              <p className="text-2xl font-bold text-white font-heading">
-                {stats.theaters_with_manager}
-              </p>
-              <p className="text-emerald-400 text-sm font-body">
-                {stats.theaters_without_manager} chưa có quản lý
-              </p>
-            </div>
-          </div>
 
-          <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
-            <div className="flex items-center justify-between mb-4">
-              <Calendar className="h-8 w-8 text-purple-400" />
-              <span className="text-purple-400 text-sm font-medium font-body">
-                Đặt Vé
-              </span>
+            <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
+              <div className="flex items-center justify-between mb-4">
+                <Calendar className="h-8 w-8 text-purple-400" />
+                <span className="text-purple-400 text-sm font-medium font-body">
+                  Đặt Vé
+                </span>
+              </div>
+              <div className="space-y-1">
+                <p className="text-2xl font-bold text-white font-heading">
+                  {stats.total_bookings.toLocaleString()}
+                </p>
+                <p className="text-purple-400 text-sm font-body">
+                  Tổng số đặt vé
+                </p>
+              </div>
             </div>
-            <div className="space-y-1">
-              <p className="text-2xl font-bold text-white font-heading">
-                {stats.total_bookings.toLocaleString()}
-              </p>
-              <p className="text-purple-400 text-sm font-body">
-                Tổng số đặt vé
-              </p>
-            </div>
-          </div>
 
-          <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
-            <div className="flex items-center justify-between mb-4">
-              <DollarSign className="h-8 w-8 text-emerald-400" />
-              <span className="text-emerald-400 text-sm font-medium font-body">
-                Doanh Thu
-              </span>
+            <div className="bg-slate-800 rounded-xl p-6 border border-slate-700">
+              <div className="flex items-center justify-between mb-4">
+                <DollarSign className="h-8 w-8 text-emerald-400" />
+                <span className="text-emerald-400 text-sm font-medium font-body">
+                  Doanh Thu
+                </span>
+              </div>
+              <div className="space-y-1">
+                <p className="text-2xl font-bold text-white font-heading">
+                  {formatCurrency(stats.total_revenue)}
+                </p>
+                <p className="text-emerald-400 text-sm font-body">
+                  Tổng doanh thu
+                </p>
+              </div>
             </div>
-            <div className="space-y-1">
-              <p className="text-2xl font-bold text-white font-heading">
-                {formatCurrency(stats.total_revenue)}
-              </p>
-              <p className="text-emerald-400 text-sm font-body">
-                Tổng doanh thu
-              </p>
-            </div>
-          </div>
-        </motion.div>
-      )}
+          </>
+        ) : null}
+      </motion.div>
 
       {/* Filters */}
       <motion.div
@@ -225,74 +285,86 @@ const TheaterManagement: React.FC = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Search */}
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2 font-body">
-              Tìm kiếm
-            </label>
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+        <form onSubmit={(e) => e.preventDefault()}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Search */}
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2 font-body">
+                Tìm kiếm
+              </label>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Tên rạp, địa chỉ..."
+                  value={searchInput}
+                  onChange={(e) => {
+                    e.preventDefault();
+                    handleSearchChange(e.target.value);
+                  }}
+                  className="w-full pl-10 pr-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 font-body"
+                />
+              </div>
+            </div>
+
+            {/* City */}
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2 font-body">
+                Thành phố
+              </label>
               <input
                 type="text"
-                placeholder="Tên rạp, địa chỉ..."
-                value={filters.search || ""}
-                onChange={(e) => handleFilterChange("search", e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 font-body"
+                placeholder="Hà Nội, TP.HCM..."
+                value={filters.city || ""}
+                onChange={(e) => {
+                  e.preventDefault();
+                  handleFilterChange("city", e.target.value);
+                }}
+                className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 font-body"
               />
             </div>
-          </div>
 
-          {/* City */}
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2 font-body">
-              Thành phố
-            </label>
-            <input
-              type="text"
-              placeholder="Hà Nội, TP.HCM..."
-              value={filters.city || ""}
-              onChange={(e) => handleFilterChange("city", e.target.value)}
-              className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 font-body"
-            />
-          </div>
+            {/* Status */}
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2 font-body">
+                Trạng thái
+              </label>
+              <select
+                value={filters.status || ""}
+                onChange={(e) => {
+                  e.preventDefault();
+                  handleFilterChange("status", e.target.value || undefined);
+                }}
+                className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500 font-body"
+              >
+                <option value="">Tất cả</option>
+                <option value="active">Hoạt động</option>
+                <option value="inactive">Ngừng hoạt động</option>
+                <option value="maintenance">Bảo trì</option>
+              </select>
+            </div>
 
-          {/* Status */}
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2 font-body">
-              Trạng thái
-            </label>
-            <select
-              value={filters.status || ""}
-              onChange={(e) => handleFilterChange("status", e.target.value || undefined)}
-              className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500 font-body"
-            >
-              <option value="">Tất cả</option>
-              <option value="active">Hoạt động</option>
-              <option value="inactive">Ngừng hoạt động</option>
-              <option value="maintenance">Bảo trì</option>
-            </select>
+            {/* Has Manager */}
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2 font-body">
+                Quản lý
+              </label>
+              <select
+                value={filters.has_manager?.toString() || ""}
+                onChange={(e) => {
+                  e.preventDefault();
+                  const value = e.target.value;
+                  handleFilterChange("has_manager", value ? value === "true" : undefined);
+                }}
+                className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500 font-body"
+              >
+                <option value="">Tất cả</option>
+                <option value="true">Có quản lý</option>
+                <option value="false">Chưa có quản lý</option>
+              </select>
+            </div>
           </div>
-
-          {/* Has Manager */}
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2 font-body">
-              Quản lý
-            </label>
-            <select
-              value={filters.has_manager?.toString() || ""}
-              onChange={(e) => {
-                const value = e.target.value;
-                handleFilterChange("has_manager", value ? value === "true" : undefined);
-              }}
-              className="w-full px-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500 font-body"
-            >
-              <option value="">Tất cả</option>
-              <option value="true">Có quản lý</option>
-              <option value="false">Chưa có quản lý</option>
-            </select>
-          </div>
-        </div>
+        </form>
       </motion.div>
 
       {/* Theater List */}
@@ -332,67 +404,71 @@ const TheaterManagement: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-700">
-              {theaters.map((theater) => (
-                <tr key={theater._id} className="hover:bg-slate-700/30 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <Building2 className="h-8 w-8 text-blue-400 mr-3" />
-                      <div>
-                        <div className="text-sm font-medium text-white font-body">
-                          {theater.name}
-                        </div>
-                        <div className="text-sm text-slate-400 font-body">
-                          {theater.city}
+              {theatersLoading ? (
+                <TableSkeleton />
+              ) : (
+                theaters.map((theater) => (
+                  <tr key={theater._id} className="hover:bg-slate-700/30 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <Building2 className="h-8 w-8 text-blue-400 mr-3" />
+                        <div>
+                          <div className="text-sm font-medium text-white font-body">
+                            {theater.name}
+                          </div>
+                          <div className="text-sm text-slate-400 font-body">
+                            {theater.city}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center text-sm text-slate-300 font-body">
-                      <MapPin className="h-4 w-4 text-slate-400 mr-1" />
-                      <div>
-                        <div>{theater.location}</div>
-                        <div className="text-slate-400">{theater.address}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex items-center text-sm text-slate-300 font-body">
+                        <MapPin className="h-4 w-4 text-slate-400 mr-1" />
+                        <div>
+                          <div>{theater.location}</div>
+                          <div className="text-slate-400">{theater.address}</div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {theater.manager_info ? (
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {theater.manager_info ? (
+                        <div className="text-sm font-body">
+                          <div className="text-white">{theater.manager_info.name}</div>
+                          <div className="text-slate-400">{theater.manager_info.email}</div>
+                        </div>
+                      ) : (
+                        <span className="text-sm text-red-400 font-body">Chưa có quản lý</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {getStatusBadge(theater.status)}
+                    </td>
+                    <td className="px-6 py-4">
                       <div className="text-sm font-body">
-                        <div className="text-white">{theater.manager_info.name}</div>
-                        <div className="text-slate-400">{theater.manager_info.email}</div>
+                        <div className="text-white">{theater.total_screens} phòng chiếu</div>
+                        <div className="text-slate-400">{theater.total_bookings} đặt vé</div>
+                        <div className="text-emerald-400">{formatCurrency(theater.total_revenue)}</div>
                       </div>
-                    ) : (
-                      <span className="text-sm text-red-400 font-body">Chưa có quản lý</span>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {getStatusBadge(theater.status)}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm font-body">
-                      <div className="text-white">{theater.total_screens} phòng chiếu</div>
-                      <div className="text-slate-400">{theater.total_bookings} đặt vé</div>
-                      <div className="text-emerald-400">{formatCurrency(theater.total_revenue)}</div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => setSelectedTheater(theater._id)}
-                      className="flex items-center gap-1 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm transition-colors font-body"
-                    >
-                      <Eye className="h-4 w-4" />
-                      Chi tiết
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => setSelectedTheater(theater._id)}
+                        className="flex items-center gap-1 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm transition-colors font-body"
+                      >
+                        <Eye className="h-4 w-4" />
+                        Chi tiết
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
 
         {/* Pagination */}
-        {theatersData && theatersData.result.total_pages > 1 && (
+        {!theatersLoading && theatersData && theatersData.result.total_pages > 1 && (
           <div className="px-6 py-4 border-t border-slate-700 flex items-center justify-between">
             <div className="text-sm text-slate-400 font-body">
               Hiển thị {(theatersData.result.page - 1) * theatersData.result.limit + 1} -{" "}
@@ -417,6 +493,16 @@ const TheaterManagement: React.FC = () => {
               >
                 Sau
               </button>
+            </div>
+          </div>
+        )}
+
+        {/* Loading indicator for pagination */}
+        {theatersLoading && theatersData && (
+          <div className="px-6 py-4 border-t border-slate-700 flex items-center justify-center">
+            <div className="flex items-center gap-2 text-slate-400 font-body">
+              <div className="w-4 h-4 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              Đang tải dữ liệu...
             </div>
           </div>
         )}
