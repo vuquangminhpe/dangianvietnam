@@ -18,6 +18,9 @@ const LoginModal = ({ isFormOpen }: LoginModalProps) => {
   // Modal state to switch between login and register
   const [showRegisterModal, setShowRegisterModal] = useState(false);
 
+  // Add state to track if user is selecting text
+  const [isSelecting, setIsSelecting] = useState(false);
+
   const getGoogleAuthUrl = () => {
     const url = "https://accounts.google.com/o/oauth2/auth";
     const query = {
@@ -170,19 +173,48 @@ const LoginModal = ({ isFormOpen }: LoginModalProps) => {
     }
   };
 
+  // Handle overlay click - only close when clicking directly on overlay
+  const handleOverlayClick = (e: React.MouseEvent) => {
+    // Don't close if user is selecting text
+    if (isSelecting) {
+      setIsSelecting(false);
+      return;
+    }
+    
+    // Only close if clicking directly on the overlay background
+    if (e.target === e.currentTarget) {
+      isFormOpen(false);
+    }
+  };
+
+  // Handle mouse down to track selection start
+  const handleMouseDown = () => {
+    setIsSelecting(false);
+  };
+
+  // Handle mouse move to detect text selection
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (e.buttons === 1) { // Left mouse button is pressed
+      setIsSelecting(true);
+    }
+  };
+
   return (
     <div className="">
       <div
         className="fixed inset-0 bg-black/50 background-blur-sm z-50 
         flex items-center justify-center p-4"
-        onClick={() => isFormOpen(false)}
+        onClick={handleOverlayClick}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
       >
         <div
           onClick={(e) => e.stopPropagation()}
           className="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md p-6"
+          onMouseDown={(e) => e.stopPropagation()}
         >
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold text-gray-300">Get In Touch</h1>
+            <h1 className="text-2xl font-bold text-gray-300">Sign In</h1>
 
             <button onClick={() => isFormOpen(false)}>
               <FiX className="w-5 h-5 text-gray-300 font-extrabold" />
@@ -256,7 +288,7 @@ const LoginModal = ({ isFormOpen }: LoginModalProps) => {
             {/* Divider */}
             <div className="flex items-center my-6">
               <div className="flex-1 border-t border-gray-600"></div>
-              <span className="px-4 text-sm text-gray-400">hoặc</span>
+              <span className="px-4 text-sm text-gray-400">or</span>
               <div className="flex-1 border-t border-gray-600"></div>
             </div>
 
@@ -287,7 +319,7 @@ const LoginModal = ({ isFormOpen }: LoginModalProps) => {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                <span className="text-gray-700 font-medium">Đăng nhập với Google</span>
+                <span className="text-gray-700 font-medium">Sign in with Google</span>
               </button>
             </div>
             <p className="text-center text-sm text-gray-300">
