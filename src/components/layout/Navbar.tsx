@@ -124,6 +124,7 @@ const Navbar = () => {
     const baseItems = [
       { title: "Home", link: "/" },
       { title: "EVENTS", link: "/movies" },
+      { title: "My Product", link: "/product" },
     ];
 
     if (!user) {

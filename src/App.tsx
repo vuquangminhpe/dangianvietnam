@@ -22,6 +22,7 @@ import PaymentFailed from "./pages/PaymentFailed/PaymentFailed";
 import ProfilePage from "./pages/ProfilePage";
 import SepayInstructions from "./components/sepay/SepayInstructions";
 import AdvancedSearchPage from "./pages/AdvancedSearchPage/AdvancedSearchPage";
+import ProductPage from "./pages/ProductPage";
 import { useEffect } from "react";
 import { getUserProfile } from "./apis/user.api";
 import { useAuthStore } from "./store/useAuthStore";
@@ -116,6 +117,7 @@ function App() {
                 <Route path="/movies" element={<MoviesPage />} />
                 <Route path="/movies/:id" element={<MovieDetail />} />
                 <Route path="/search" element={<AdvancedSearchPage />} />
+                <Route path="/product" element={<ProductPage />} />
 
                 {/* Routes that require authentication */}
                 <Route
