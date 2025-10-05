@@ -59,7 +59,7 @@ const ProductPage = () => {
       </motion.div>
 
       {/* Section 2 với bg03 */}
-      <motion.div className="relative" {...fadeInUp}>
+      <div className="relative" {...fadeInUp}>
         <img 
           src={images.backgrounds.bg03} 
           alt="background" 
@@ -75,11 +75,11 @@ const ProductPage = () => {
         <motion.img 
           src={images.content.img08} 
           alt="múa rối nước 08" 
-          className="absolute top-0 left-0 w-full h-auto z-20"
+          className="absolute top-0 left-[6px] w-full h-auto z-20"
           {...slideInRight}
           transition={{ ...slideInRight.transition, delay: 0.4 }}
         />
-      </motion.div>
+      </div>
 
       {/* Section 3 với bg04 */}
       <motion.div className="relative" {...scaleIn}>
@@ -91,7 +91,7 @@ const ProductPage = () => {
         <motion.img 
           src={images.content.img09} 
           alt="múa rối nước 09" 
-          className="absolute top-0 left-0 w-full h-auto z-10"
+          className="absolute top-[10px] left-0 w-full h-auto z-10"
           initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
@@ -100,7 +100,7 @@ const ProductPage = () => {
         <motion.img 
           src={images.content.img17} 
           alt="múa rối nước 17" 
-          className="absolute top-0 left-0 w-full h-auto z-20"
+          className="absolute top-[10px] left-0 w-full h-auto z-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3, ease: "easeOut" }}
@@ -176,17 +176,6 @@ const ProductPage = () => {
       <DomeGallery />
     </div>
 
-      {/* Section 7 với đường lượn */}
-      <motion.div 
-        className="relative -top-[70%]" 
-        {...fadeInUp}
-        style={{ zIndex: 50 }}
-      >
-        <motion.img 
-          src={images.decorations.duong_luon} 
-          alt="đường lượn" 
-        />
-      </motion.div>
     </div>
   );
 };
