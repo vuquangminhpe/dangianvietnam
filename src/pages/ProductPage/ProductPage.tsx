@@ -170,11 +170,22 @@ const ProductPage = () => {
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           viewport={{ once: true, margin: "-50px" }}
         />
+        
+        {/* DomeGallery ở dưới cùng bg06 */}
+        <div 
+          className="absolute bottom-0 left-0 z-40 bg-transparent"
+          style={{ 
+            width: '100vw', 
+            height: '100vh',
+            backgroundColor: 'transparent',
+            background: 'none'
+          }}
+        >
+          <DomeGallery 
+            overlayBlurColor="rgba(0,0,0,0)"
+          />
+        </div>
       </motion.div>
-
-    <div style={{ width: '100vw', height: '100vh' }}>
-      <DomeGallery />
-    </div>
 
     </div>
   );
