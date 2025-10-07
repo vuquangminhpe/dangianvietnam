@@ -8,13 +8,13 @@ import {
   FiUser,
   FiLogOut,
 } from "react-icons/fi";
-import { HiOutlineTicket } from "react-icons/hi2";
 import { IoSearchOutline } from "react-icons/io5";
 import { headerItems } from "../../const/index";
 import { IoIosArrowUp } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import Avatar from "../ui/Avatar";
+import logoImage from "../../assets/Giao dien home-06.png";
 
 const Header = () => {
   // Toogle the Menu open/close
@@ -90,18 +90,17 @@ const Header = () => {
           className="flex items-center cursor-pointer"
           onClick={() => navigate("/home")}
         >
-          <div
-            className="h-10 w-10 rounded-xl bg-gradient-to-r from-gray-500 to-gray-100
-            flex items-center justify-center text-purple-600 font-bold text-xl mr-3"
-          >
-            <HiOutlineTicket className="h-6 w-6" />
-          </div>
+          <img 
+            src={logoImage} 
+            alt="Dân Gian Việt Nam Logo" 
+            className="h-12 w-auto mr-3"
+          />
 
           <span
             className="text-xl font-bold bg-gradient-to-r from-gray-300 to-gray-100
             bg-clip-text text-transparent"
           >
-            Cinema Connect
+            Dân Gian Việt Nam
           </span>
         </motion.div>
         {/* Destop navigation */}
