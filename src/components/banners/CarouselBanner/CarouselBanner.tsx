@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../../ui/button";
+import LazyImage from "../../ui/LazyImage";
 import {
   getActiveBannerSliderHome,
   type BannerSliderHome,
@@ -541,10 +542,13 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
                     zIndex: index === currentIndex ? 2 : 1,
                   }}
                 >
-                  <img
+                  <LazyImage
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full"
+                    width={1920}
+                    height={1080}
+                    loading={index === 0 ? "eager" : "lazy"}
                   />
                   <div className="content absolute top-[20%] left-1/2 transform -translate-x-1/2 w-full max-w-6xl px-8 text-white">
                     <div className="max-w-[60%] pr-[30%]">
@@ -655,10 +659,13 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
                     cursor: isAnimating ? "default" : "pointer",
                   }}
                 >
-                  <img
+                  <LazyImage
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full"
+                    width={112}
+                    height={144}
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                   <div className="content absolute bottom-2 left-2 right-2 text-white">

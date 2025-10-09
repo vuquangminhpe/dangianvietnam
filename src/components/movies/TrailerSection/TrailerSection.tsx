@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import VideoPlayer from "../../VideoPlayer";
+import LazyImage from "../../ui/LazyImage";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -162,14 +163,17 @@ const TrailerSection = () => {
                   >
                     {/* Image Container */}
                     <div className="relative overflow-hidden rounded-lg h-64 md:h-72">
-                      <img
+                      <LazyImage
                         src={trailer.poster_url}
                         alt={trailer.title}
-                        className={`w-full h-full object-cover transition-opacity duration-200 ${
+                        className={`w-full h-full transition-opacity duration-200 ${
                           isSelected
                             ? "brightness-110"
                             : "brightness-90 group-hover:brightness-100"
                         }`}
+                        width={300}
+                        height={400}
+                        loading="lazy"
                       />
 
                       {/* Simple Overlay */}

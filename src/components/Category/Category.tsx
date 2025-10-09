@@ -1,5 +1,6 @@
 import PixelTransition from '../PixelTransition';
 import { useNavigate } from 'react-router-dom';
+import LazyImage from '../ui/LazyImage';
 import muaRoiNuocImg from '../../assets/Img_category/mua_roi_nuoc.jpg';
 import tuongImg from '../../assets/Img_category/tuong.jpg';
 import cheoImg from '../../assets/Img_category/Cheo.jpg';
@@ -79,10 +80,13 @@ const Category = () => {
             <PixelTransition
               firstContent={
                 <div className="relative w-full h-full">
-                  <img
+                  <LazyImage
                     src={category.image}
                     alt={category.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full"
+                    width={310}
+                    height={465}
+                    loading="lazy"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-black/70 p-4">
                     <h3

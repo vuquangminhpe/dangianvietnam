@@ -3,6 +3,7 @@ import { getTopRevenueMovies } from '../../apis/movie.api';
 import type { Movie } from '../../types';
 import { useNavigate } from 'react-router-dom';
 import { FaFire } from 'react-icons/fa';
+import LazyImage from '../ui/LazyImage';
 
 let stylesInjected = false;
 
@@ -214,14 +215,13 @@ const Trending = () => {
                     >
                       {/* Poster Section */}
                       <div className='aspect-[3/4] overflow-hidden'>
-                        <img
+                        <LazyImage
                           src={movie.poster_url}
                           alt={movie.title}
-                          className='w-full h-full object-cover'
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = '/logo.png';
-                          }}
+                          className='w-full h-full'
+                          width={280}
+                          height={400}
+                          loading="lazy"
                         />
                       </div>
                     </div>

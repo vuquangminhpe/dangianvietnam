@@ -3,6 +3,7 @@ import { getComingSoonMovies } from '../../apis/movie.api';
 import type { Movie } from '../../types/Movie.type';
 import { useNavigate } from 'react-router-dom';
 import { FaCalendarAlt } from 'react-icons/fa';
+import LazyImage from '../ui/LazyImage';
 
 const ComingSoon = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -320,14 +321,14 @@ const ComingSoon = () => {
             >
               {/* Poster Image */}
               <div className="relative w-full h-80 overflow-hidden bg-gray-800">
-                <img
+                <LazyImage
                   src={movie.poster_url || '/placeholder-movie.jpg'}
                   alt={movie.title}
-                  className="w-full h-full object-cover"
-                  draggable="false"
-                  onError={(e) => {
-                    e.currentTarget.src = '/placeholder-movie.jpg';
-                  }}
+                  className="w-full h-full"
+                  width={240}
+                  height={320}
+                  loading="lazy"
+                  placeholderSrc="/placeholder-movie.jpg"
                 />
                 {/* Simple Overlay */}
                 <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-opacity duration-200 flex items-center justify-center">
