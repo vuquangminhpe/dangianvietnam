@@ -8,6 +8,7 @@ import type { Movie } from "../../../types";
 import { getPopularMovies } from "../../../apis/movie.api";
 import BlurCircle from "../../layout/BlurCircle";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import bgImage from "../../../assets/Img_category/Giao dien home-01.png";
 
 // Custom Arrow Components
 const CustomPrevArrow = ({ onClick }: { onClick?: () => void }) => (
@@ -68,14 +69,17 @@ const TrailerSection = () => {
     undefined
   );
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
-  const [showVideoPlayer, setShowVideoPlayer] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const movies = await getPopularMovies(10, 1);
         setGetShowingMovies(movies);
-        // Removed auto-selection of trailer and movie
+        // Auto-select first movie's trailer on load
+        if (movies.length > 0) {
+          setCurrentTrailer(movies[0].trailer_url);
+          setSelectedMovieId(movies[0]._id);
+        }
       } catch (error) {
         console.error("Failed to fetch popular movies:", error);
       }
@@ -90,7 +94,6 @@ const TrailerSection = () => {
   ) => {
     setCurrentTrailer(trailerUrl);
     setSelectedMovieId(movieId);
-    setShowVideoPlayer(true);
 
     // Scroll to video player after a short delay to ensure it's rendered
     setTimeout(() => {
@@ -102,21 +105,44 @@ const TrailerSection = () => {
   return (
     <div
       id="trailer-main"
-      className="px-6 md:px-16 lg:px-24 xl:px-44 py-20 overflow-hidden"
+      className="overflow-hidden"
     >
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-center mb-12"
-      >
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-          Đoạn giới thiệu của các buổi biểu diễn
-        </h2>
+      <div className="px-6 md:px-16 lg:px-24 xl:px-44 py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12"
+        >
+          <div className="group relative flex items-center justify-center">
+          <h2
+            className="text-4xl md:text-6xl font-extrabold text-gray-800 text-center tracking-wider transition-all duration-500 cursor-pointer group-hover:text-red-500"
+            style={{
+              fontFamily: 'Merriweather, serif',
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+              WebkitTextStroke: '0px transparent',
+              transition: 'all 0.5s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.webkitTextStroke = '2px #fbbf24';
+              e.currentTarget.style.textShadow = '0 0 20px rgba(239, 68, 68, 0.5)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.webkitTextStroke = '0px transparent';
+              e.currentTarget.style.textShadow = '2px 2px 4px rgba(0, 0, 0, 0.3)';
+            }}
+            onMouseMove={(e) => {
+              e.currentTarget.style.webkitTextStroke = '2px #fbbf24';
+              e.currentTarget.style.textShadow = '0 0 20px rgba(239, 68, 68, 0.5)';
+            }}
+          >
+            ĐOẠN GIỚI THIỆU CÁC BUỔI BIỂU DIỄN
+          </h2>
+        </div>
       </motion.div>
 
-      {/* Video Player - Only show when a trailer is selected */}
-      {showVideoPlayer && currentTrailer && (
+      {/* Video Player - Always visible */}
+      {currentTrailer && (
         <motion.div
           id="trailer-player"
           className="relative mt-6 mb-12"
@@ -131,25 +157,6 @@ const TrailerSection = () => {
               classNames="w-full h-full rounded-lg shadow-2xl"
               showGlow={true}
             />
-            {/* Close button */}
-            <button
-              onClick={() => setShowVideoPlayer(false)}
-              className="absolute top-4 right-4 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 transition-colors duration-200 z-10"
-              aria-label="Close video"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
           </div>
         </motion.div>
       )}
@@ -253,6 +260,26 @@ const TrailerSection = () => {
             })}
           </Slider>
         </div>
+      </motion.div>
+      </div>
+
+      {/* Background Section at the bottom - Full Width */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.8 }}
+        className="w-screen h-96 relative"
+        style={{
+          backgroundImage: `url(${bgImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          marginLeft: 'calc(-50vw + 50%)',
+          marginRight: 'calc(-50vw + 50%)',
+        }}
+      >
+        {/* Optional overlay for better visual effect */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
       </motion.div>
     </div>
   );

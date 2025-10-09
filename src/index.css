@@ -20,6 +20,19 @@
 body {
   color: white;
   background-color: #09090b;
+  margin: 0;
+  padding: 0;
+}
+
+/* Force navbar to be completely flush with top */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#root {
+  margin: 0;
+  padding: 0;
 }
 
 @layer utilities {

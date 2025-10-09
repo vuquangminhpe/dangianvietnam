@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { gsap } from "gsap";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../ui/button";
 import {
   getActiveBannerSliderHome,
@@ -34,6 +35,7 @@ const transformBannerToCarouselItem = (
 });
 
 const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
+  const navigate = useNavigate();
   const [carouselItems, setCarouselItems] = useState<CarouselItem[]>(
     items || []
   );
@@ -369,6 +371,12 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
           backdrop-filter: blur(3px);
         }
 
+        /* Button shimmer animation */
+        @keyframes shimmer {
+          0% { transform: translateX(-100%) skewX(-12deg); }
+          100% { transform: translateX(300%) skewX(-12deg); }
+        }
+
         /* Ultra smooth thumbnails */
         .thumbnail .item {
           transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -620,31 +628,89 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
                   />
                   <div className="content absolute top-[20%] left-1/2 transform -translate-x-1/2 w-full max-w-6xl px-8 text-white">
                     <div className="max-w-[60%] pr-[30%]">
-                      <div className="author font-bold tracking-[10px] text-sm mb-4 text-white/90 drop-shadow-md">
+                      <div 
+                        className="author font-bold tracking-[10px] text-sm mb-4 text-white/90 drop-shadow-md"
+                        style={{ fontFamily: 'Roboto, sans-serif' }}
+                      >
                         {item?.author}
                       </div>
-                      <h1 className="title text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-2 drop-shadow-2xl">
+                      <h1 
+                        className="title text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-2 drop-shadow-2xl"
+                        style={{ fontFamily: 'Merriweather, serif' }}
+                      >
                         {item.title}
                       </h1>
-                      <h2 className="topic text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-orange-500 drop-shadow-2xl">
+                      <h2 
+                        className="topic text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-orange-500 drop-shadow-2xl"
+                        style={{ fontFamily: 'Merriweather, serif' }}
+                      >
                         {item.topic}
                       </h2>
-                      <p className="des text-base lg:text-lg mb-8 leading-relaxed text-white/90 drop-shadow-lg">
+                      <p 
+                        className="des text-base lg:text-lg mb-8 leading-relaxed text-white/90 drop-shadow-lg"
+                        style={{ fontFamily: 'Roboto, sans-serif' }}
+                      >
                         {item.description}
                       </p>
-                      <div className="buttons flex gap-4">
+                      <div className="buttons flex gap-6">
                         <Button
                           size="lg"
-                          className="bg-white text-black hover:bg-white/90 font-medium tracking-wider px-6 lg:px-8 transform hover:scale-105 transition-all duration-300 shadow-xl"
+                          onClick={() => navigate(`/movie/${item.id}`)}
+                          className="relative bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-black tracking-wider px-10 lg:px-12 py-4 lg:py-5 transform hover:scale-110 transition-all duration-300 shadow-2xl border-4 border-orange-300 hover:border-yellow-300 rounded-2xl overflow-hidden"
+                          style={{ 
+                            fontFamily: 'Inter, system-ui, sans-serif',
+                            background: 'linear-gradient(135deg, #f97316, #dc2626, #b91c1c)',
+                            boxShadow: '0 12px 35px rgba(249, 115, 22, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.3), 0 0 0 3px rgba(249, 115, 22, 0.3)',
+                            textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
+                            fontSize: '1.1rem',
+                            fontWeight: '900',
+                            backdropFilter: 'blur(10px)'
+                          }}
                         >
-                          SEE MORE
+                          <span className="relative z-10 flex items-center gap-2">
+                            <span 
+                              className="text-yellow-100"
+                              style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: '900' }}
+                            >
+                              MUA VÉ
+                            </span>
+                          </span>
+                          <div 
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
+                            style={{
+                              background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
+                              animation: 'shimmer 3s infinite'
+                            }}
+                          />
                         </Button>
                         <Button
-                          variant="outline"
-                          size="lg"
-                          className="border-white text-white hover:bg-white hover:text-black font-medium tracking-wider px-6 lg:px-8 transform hover:scale-105 transition-all duration-300 shadow-xl"
+                          onClick={() => navigate('/product')}
+                          className="relative bg-gradient-to-r from-slate-700 to-slate-900 hover:from-slate-600 hover:to-slate-800 text-white font-black tracking-wider px-10 lg:px-12 py-4 lg:py-5 transform hover:scale-110 transition-all duration-300 shadow-2xl border-4 border-slate-400 hover:border-blue-300 rounded-2xl overflow-hidden"
+                          style={{ 
+                            fontFamily: 'Inter, system-ui, sans-serif',
+                            background: 'linear-gradient(135deg, #374151, #111827, #000000)',
+                            boxShadow: '0 12px 35px rgba(55, 65, 81, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.2), 0 0 0 3px rgba(55, 65, 81, 0.3)',
+                            textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
+                            fontSize: '1.1rem',
+                            fontWeight: '900',
+                            backdropFilter: 'blur(10px)'
+                          }}
                         >
-                          SUBSCRIBE
+                          <span className="relative z-10 flex items-center gap-2">
+                            <span 
+                              className="text-blue-100"
+                              style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: '900' }}
+                            >
+                              CHI TIẾT
+                            </span>
+                          </span>
+                          <div 
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
+                            style={{
+                              background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
+                              animation: 'shimmer 3s infinite 1.5s'
+                            }}
+                          />
                         </Button>
                       </div>
                     </div>
@@ -698,10 +764,16 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                   <div className="content absolute bottom-2 left-2 right-2 text-white">
-                    <div className="title font-semibold text-xs truncate drop-shadow-md">
+                    <div 
+                      className="title font-semibold text-xs truncate drop-shadow-md"
+                      style={{ fontFamily: 'Merriweather, serif' }}
+                    >
                       {item.title}
                     </div>
-                    <div className="description font-light text-xs text-orange-300 truncate">
+                    <div 
+                      className="description font-light text-xs text-orange-300 truncate"
+                      style={{ fontFamily: 'Roboto, sans-serif' }}
+                    >
                       {item.topic}
                     </div>
                   </div>

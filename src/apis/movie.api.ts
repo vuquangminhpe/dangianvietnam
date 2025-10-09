@@ -270,6 +270,47 @@ export const getLatestMovies = async (limit = 10): Promise<Movie[]> => {
   }
 };
 
+// Get top revenue movies
+export const getTopRevenueMovies = async (limit = 10): Promise<Movie[]> => {
+  try {
+    const movieApi = createPublicMovieRequest();
+    const response = await movieApi.get<{ message: string; result: Movie[] }>(
+      `/cinema/movies/categories/top-revenue?limit=${limit}`
+    );
+    console.log('API Response:', response.data);
+    // The API returns {message: "...", result: [...]} where result is directly an array
+    if (response.data && Array.isArray(response.data.result)) {
+      return response.data.result;
+    }
+    // Fallback for other possible structures
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+    return [];
+  } catch (error) {
+    console.error('Error fetching top revenue movies:', error);
+    throw handleMovieError(error);
+  }
+};
+
+// Get coming soon movies
+export const getComingSoonMovies = async (limit = 20): Promise<Movie[]> => {
+  try {
+    const movieApi = createPublicMovieRequest();
+    const response = await movieApi.get<{ message: string; result: { movies: Movie[] } }>(
+      `/cinema/movies/categories/coming-soon?page=1&limit=${limit}&sort_by=release_date&sort_order=asc`
+    );
+    console.log('Coming Soon API Response:', response.data);
+    if (response.data && response.data.result && Array.isArray(response.data.result.movies)) {
+      return response.data.result.movies;
+    }
+    return [];
+  } catch (error) {
+    console.error('Error fetching coming soon movies:', error);
+    throw handleMovieError(error);
+  }
+};
+
 // Advanced search movies with multiple filters
 export const searchMoviesAdvanced = async (
   params: AdvancedSearchParams
