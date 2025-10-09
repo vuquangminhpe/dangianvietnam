@@ -192,29 +192,18 @@ const Trending = () => {
                   {index + 1}
                 </div>
 
-                {/* Movie Card - Bottom aligned with Gradient Effect */}
+                {/* Movie Card - Bottom aligned with Simple Border */}
                 <div className='relative group flex-shrink-0' style={{ width: '240px', maxWidth: '100%', marginLeft: '20px' }}>
-                  {/* Gradient Blur Background */}
+                  {/* Simple Border */}
                   <div
-                    className="absolute -inset-2 bg-gradient-to-r from-pink-600 via-purple-600 to-blue-500 rounded-xl blur-2xl opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"
+                    className="relative rounded-xl border-2 border-orange-500 transition-all duration-300 hover:border-orange-400"
                     style={{
-                      backgroundSize: '200% 200%',
-                      animation: 'move-gradient 4s ease-in-out infinite',
-                    }}
-                  ></div>
-
-                  {/* Gradient Border */}
-                  <div
-                    className="relative rounded-xl bg-gradient-to-r from-pink-600 via-purple-600 to-blue-500 p-0.5 transition-all duration-500"
-                    style={{
-                      backgroundSize: '200% 200%',
-                      animation: 'move-gradient 4s ease-in-out infinite',
                       width: '100%'
                     }}
                   >
                     {/* Inner Card */}
                     <div
-                      className='rounded-xl hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 overflow-hidden cursor-pointer'
+                      className='rounded-xl hover:shadow-lg transition-shadow duration-200 overflow-hidden cursor-pointer'
                       style={{
                         backgroundColor: '#fff',
                       }}
@@ -228,7 +217,7 @@ const Trending = () => {
                         <img
                           src={movie.poster_url}
                           alt={movie.title}
-                          className='w-full h-full object-cover hover:scale-110 transition-transform duration-500'
+                          className='w-full h-full object-cover'
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.src = '/logo.png';

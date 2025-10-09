@@ -61,24 +61,10 @@ const Category = () => {
       <div className="flex justify-center items-center py-12">
         <div className="group relative flex items-center justify-center">
           <h2
-            className="text-5xl md:text-7xl font-extrabold text-gray-800 text-center tracking-wider transition-all duration-500 cursor-pointer group-hover:text-red-500"
+            className="text-5xl md:text-7xl font-extrabold text-gray-800 text-center tracking-wider transition-colors duration-200 cursor-pointer group-hover:text-red-500"
             style={{
               fontFamily: 'Merriweather, serif',
               textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
-              WebkitTextStroke: '0px transparent',
-              transition: 'all 0.5s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.webkitTextStroke = '2px #fbbf24';
-              e.currentTarget.style.textShadow = '0 0 20px rgba(239, 68, 68, 0.5)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.webkitTextStroke = '0px transparent';
-              e.currentTarget.style.textShadow = '2px 2px 4px rgba(0, 0, 0, 0.3)';
-            }}
-            onMouseMove={(e) => {
-              e.currentTarget.style.webkitTextStroke = '2px #fbbf24';
-              e.currentTarget.style.textShadow = '0 0 20px rgba(239, 68, 68, 0.5)';
             }}
           >
             THỂ LOẠI KHÁC
@@ -98,7 +84,7 @@ const Category = () => {
                     alt={category.name}
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                  <div className="absolute bottom-0 left-0 right-0 bg-black/70 p-4">
                     <h3
                       className="text-white text-xl font-bold text-center"
                       style={{
@@ -111,7 +97,7 @@ const Category = () => {
                 </div>
               }
               secondContent={
-                <div className="relative w-full h-full bg-gradient-to-br from-red-900 to-red-700 flex flex-col items-center justify-center p-6">
+                <div className="relative w-full h-full bg-red-800 flex flex-col items-center justify-center p-6">
                   <h3
                     className="text-white text-2xl font-bold mb-4 text-center"
                     style={{
@@ -130,7 +116,7 @@ const Category = () => {
                     {category.description}
                   </p>
                   <button
-                    className="mt-6 px-6 py-2 bg-white text-red-900 rounded-full font-bold hover:bg-red-100 transition-colors duration-300"
+                    className="mt-6 px-6 py-2 bg-white text-red-900 rounded-full font-bold hover:bg-red-100 transition-colors duration-200"
                     style={{
                       fontFamily: 'Merriweather, serif',
                     }}

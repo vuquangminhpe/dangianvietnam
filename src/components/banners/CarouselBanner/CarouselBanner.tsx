@@ -339,10 +339,9 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
   return (
     <>
       <style>{`
-        /* Enhanced base styles */
+        /* Simplified base styles */
         .carousel {
-          perspective: 1200px;
-          transform-style: preserve-3d;
+          position: relative;
         }
 
         .carousel .list .item {
@@ -351,92 +350,40 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
           width: 100%;
           height: 100%;
           z-index: 1;
-          transform-style: preserve-3d;
         }
 
         .carousel .list .item img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transform-style: preserve-3d;
-          backface-visibility: hidden;
         }
 
-        /* Magic overlay */
+        /* Simple overlay */
         .magic-overlay {
-          background: radial-gradient(circle at center, 
-            rgba(249, 115, 22, 0.1) 0%, 
-            rgba(0, 0, 0, 0.4) 50%, 
-            rgba(0, 0, 0, 0.8) 100%);
-          backdrop-filter: blur(3px);
+          background: rgba(0, 0, 0, 0.4);
         }
 
-        /* Button shimmer animation */
-        @keyframes shimmer {
-          0% { transform: translateX(-100%) skewX(-12deg); }
-          100% { transform: translateX(300%) skewX(-12deg); }
-        }
-
-        /* Ultra smooth thumbnails */
+        /* Simple thumbnails */
         .thumbnail .item {
-          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-          transform-style: preserve-3d;
+          transition: all 0.2s ease;
           position: relative;
           overflow: hidden;
           cursor: pointer;
         }
 
-        .thumbnail .item::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
-          transform: translateX(-100%) translateY(-100%);
-          transition: transform 0.6s ease;
-          z-index: 2;
-        }
-
-        .thumbnail .item:hover::before {
-          transform: translateX(100%) translateY(100%);
-        }
-
         .thumbnail .item:hover {
-          transform: scale(1.05) translateY(-5px);
-          box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-          filter: brightness(1.1);
+          transform: scale(1.02);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
 
         .thumbnail .item.active {
           border-color: #f97316 !important;
-          box-shadow: 
-            0 0 30px rgba(249, 115, 22, 0.8),
-            0 15px 30px rgba(0,0,0,0.4);
-          transform: scale(1.03);
+          box-shadow: 0 4px 8px rgba(249, 115, 22, 0.5);
         }
 
-        .thumbnail .item.active::after {
-          content: '';
-          position: absolute;
-          inset: -2px;
-          background: linear-gradient(45deg, #f97316, #ea580c, #dc2626, #f97316);
-          border-radius: inherit;
-          z-index: -1;
-          animation: borderFlow 3s linear infinite;
-          background-size: 300% 300%;
-        }
-
-        @keyframes borderFlow {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-
-        /* Silk-smooth buttons */
+        /* Simple buttons */
         .navigation-button {
-          backdrop-filter: blur(20px);
-          transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-          position: relative;
-          overflow: hidden;
+          transition: all 0.2s ease;
           cursor: pointer;
           pointer-events: auto;
         }
@@ -447,41 +394,14 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
           pointer-events: none;
         }
 
-        .navigation-button::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
-          transform: translateX(-100%) translateY(-100%);
-          transition: transform 0.6s ease;
-        }
-
-        .navigation-button:hover::before {
-          transform: translateX(100%) translateY(100%);
-        }
-
         .navigation-button:hover:not(:disabled) {
-          transform: scale(1.08);
-          backdrop-filter: blur(25px);
-          box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+          transform: scale(1.05);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
 
-        .navigation-button:active:not(:disabled) {
-          transform: scale(0.98);
-          transition: transform 0.1s ease;
-        }
-
-        /* Enhanced progress bar */
+        /* Simple progress bar */
         .progress-bar {
-          background: linear-gradient(90deg, #f97316, #ea580c, #dc2626);
-          background-size: 200% 100%;
-          animation: progressFlow 2s linear infinite;
-          box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
-        }
-
-        @keyframes progressFlow {
-          0% { background-position: 0% 0%; }
-          100% { background-position: 200% 0%; }
+          background: #f97316;
         }
 
         /* Responsive design */
@@ -656,61 +576,39 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
                         <Button
                           size="lg"
                           onClick={() => navigate(`/movie/${item.id}`)}
-                          className="relative bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-black tracking-wider px-10 lg:px-12 py-4 lg:py-5 transform hover:scale-110 transition-all duration-300 shadow-2xl border-4 border-orange-300 hover:border-yellow-300 rounded-2xl overflow-hidden"
+                          className="bg-orange-600 hover:bg-orange-700 text-white font-black tracking-wider px-10 lg:px-12 py-4 lg:py-5 transition-colors duration-200 shadow-lg border-2 border-orange-400 rounded-xl"
                           style={{ 
                             fontFamily: 'Inter, system-ui, sans-serif',
-                            background: 'linear-gradient(135deg, #f97316, #dc2626, #b91c1c)',
-                            boxShadow: '0 12px 35px rgba(249, 115, 22, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.3), 0 0 0 3px rgba(249, 115, 22, 0.3)',
                             textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
                             fontSize: '1.1rem',
-                            fontWeight: '900',
-                            backdropFilter: 'blur(10px)'
+                            fontWeight: '900'
                           }}
                         >
-                          <span className="relative z-10 flex items-center gap-2">
+                          <span className="flex items-center gap-2">
                             <span 
-                              className="text-yellow-100"
                               style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: '900' }}
                             >
                               MUA VÉ
                             </span>
                           </span>
-                          <div 
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
-                            style={{
-                              background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-                              animation: 'shimmer 3s infinite'
-                            }}
-                          />
                         </Button>
                         <Button
                           onClick={() => navigate('/product')}
-                          className="relative bg-gradient-to-r from-slate-700 to-slate-900 hover:from-slate-600 hover:to-slate-800 text-white font-black tracking-wider px-10 lg:px-12 py-4 lg:py-5 transform hover:scale-110 transition-all duration-300 shadow-2xl border-4 border-slate-400 hover:border-blue-300 rounded-2xl overflow-hidden"
+                          className="bg-slate-700 hover:bg-slate-800 text-white font-black tracking-wider px-10 lg:px-12 py-4 lg:py-5 transition-colors duration-200 shadow-lg border-2 border-slate-500 rounded-xl"
                           style={{ 
                             fontFamily: 'Inter, system-ui, sans-serif',
-                            background: 'linear-gradient(135deg, #374151, #111827, #000000)',
-                            boxShadow: '0 12px 35px rgba(55, 65, 81, 0.6), inset 0 2px 0 rgba(255, 255, 255, 0.2), 0 0 0 3px rgba(55, 65, 81, 0.3)',
                             textShadow: '0 2px 4px rgba(0, 0, 0, 0.5)',
                             fontSize: '1.1rem',
-                            fontWeight: '900',
-                            backdropFilter: 'blur(10px)'
+                            fontWeight: '900'
                           }}
                         >
-                          <span className="relative z-10 flex items-center gap-2">
+                          <span className="flex items-center gap-2">
                             <span 
-                              className="text-blue-100"
                               style={{ fontFamily: 'Inter, system-ui, sans-serif', fontWeight: '900' }}
                             >
                               CHI TIẾT
                             </span>
                           </span>
-                          <div 
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 transform translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"
-                            style={{
-                              background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
-                              animation: 'shimmer 3s infinite 1.5s'
-                            }}
-                          />
                         </Button>
                       </div>
                     </div>

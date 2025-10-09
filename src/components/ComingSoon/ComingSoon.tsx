@@ -305,20 +305,16 @@ const ComingSoon = () => {
           >
             {/* Movie Card with Red Border and Diagonal Tilt */}
             <div
-              className="relative overflow-hidden rounded-lg transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xl cursor-pointer"
+              className="relative overflow-hidden rounded-lg transition-shadow duration-200 cursor-pointer"
               style={{
                 border: '3px solid #730109',
                 boxShadow: '0 4px 6px rgba(115, 1, 9, 0.3)',
                 transform: index % 2 === 0 ? 'rotate(-2deg)' : 'rotate(2deg)',
               }}
               onMouseEnter={(e) => {
-                const currentRotation = index % 2 === 0 ? 'rotate(-2deg)' : 'rotate(2deg)';
-                e.currentTarget.style.transform = `${currentRotation} scale(1.05)`;
-                e.currentTarget.style.boxShadow = '0 8px 16px rgba(115, 1, 9, 0.6)';
+                e.currentTarget.style.boxShadow = '0 6px 12px rgba(115, 1, 9, 0.5)';
               }}
               onMouseLeave={(e) => {
-                const currentRotation = index % 2 === 0 ? 'rotate(-2deg)' : 'rotate(2deg)';
-                e.currentTarget.style.transform = currentRotation;
                 e.currentTarget.style.boxShadow = '0 4px 6px rgba(115, 1, 9, 0.3)';
               }}
             >
@@ -327,16 +323,16 @@ const ComingSoon = () => {
                 <img
                   src={movie.poster_url || '/placeholder-movie.jpg'}
                   alt={movie.title}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  className="w-full h-full object-cover"
                   draggable="false"
                   onError={(e) => {
                     e.currentTarget.src = '/placeholder-movie.jpg';
                   }}
                 />
-                {/* Overlay on Hover */}
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 flex items-center justify-center">
+                {/* Simple Overlay */}
+                <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-opacity duration-200 flex items-center justify-center">
                   <p
-                    className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center px-4"
+                    className="text-white opacity-0 hover:opacity-100 transition-opacity duration-200 text-center px-4"
                     style={{
                       fontFamily: 'Roboto, sans-serif',
                       fontSize: '14px',
