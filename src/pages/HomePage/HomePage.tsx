@@ -28,7 +28,7 @@ const SectionPlaceholder = () => (
 const Home = () => {
   return (
     <div
-      className='bg-cover bg-center bg-no-repeat w-full min-h-screen'
+      className='bg-cover bg-center bg-no-repeat w-full min-h-screen object-contain'
       style={{
         backgroundImage: `url(${bgImage})`,
         fontFamily: 'Roboto, sans-serif'

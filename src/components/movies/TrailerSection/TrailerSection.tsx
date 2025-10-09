@@ -8,7 +8,7 @@ import type { Movie } from "../../../types";
 import { getPopularMovies } from "../../../apis/movie.api";
 import BlurCircle from "../../layout/BlurCircle";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import bgImage from "../../../assets/Img_category/Giao dien home-01.png";
+
 
 // Custom Arrow Components
 const CustomPrevArrow = ({ onClick }: { onClick?: () => void }) => (
@@ -219,21 +219,6 @@ const TrailerSection = () => {
       </div>
       </div>
 
-      {/* Background Section at the bottom - Full Width */}
-      <div
-        className="w-screen h-96 relative"
-        style={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          marginLeft: 'calc(-50vw + 50%)',
-          marginRight: 'calc(-50vw + 50%)',
-        }}
-      >
-        {/* Optional overlay for better visual effect */}
-        <div className="absolute inset-0 bg-black/20" />
-      </div>
     </div>
   );
 };

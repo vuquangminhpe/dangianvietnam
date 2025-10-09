@@ -94,6 +94,16 @@ html, body {
   .partner-page .font-body {
     font-family: var(--font-body) !important;
   }
+
+  /* Footer transparent styles */
+  .footer-transparent {
+    background: transparent !important;
+    backdrop-filter: none !important;
+  }
+
+  .footer-transparent * {
+    background-color: transparent !important;
+  }
 }
 
 .slick-slide > div {
