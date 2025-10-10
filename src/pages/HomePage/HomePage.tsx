@@ -6,7 +6,6 @@ import bgImage from '../../assets/background home-01.png'
 
 // Lazy load components
 const FeaturedSection = lazy(() => import('../../components/banners/FeaturedSection/FeaturedSection'))
-const TrailerSection = lazy(() => import('../../components/movies/TrailerSection/TrailerSection'))
 const Trending = lazy(() => import('../../components/Trending/Trending'))
 const ComingSoon = lazy(() => import('../../components/ComingSoon/ComingSoon'))
 const Category = lazy(() => import('../../components/Category/Category'))
@@ -42,16 +41,17 @@ const Home = () => {
       
       {/* Section spacing with title */}
       <div className='flex justify-center items-center py-12' style={{ marginTop: '75px' }}>
-        <div className="group relative flex items-center justify-center">
-          <h2 
-            className='text-5xl md:text-7xl font-extrabold text-gray-800 text-center tracking-wider transition-colors duration-200 cursor-pointer group-hover:text-red-500'
+        <div className="flex items-center justify-center">
+          <h3 
+            className='text-4xl md:text-5xl font-extrabold text-center tracking-wider'
             style={{ 
               fontFamily: 'Merriweather, serif',
               textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+              color: '#730109'
             }}
           >
             ĐANG CÔNG CHIẾU
-          </h2>
+          </h3>
         </div>
       </div>
       
@@ -80,11 +80,11 @@ const Home = () => {
         </Suspense>
       </LazyLoad>
       
-      <LazyLoad fallback={<SectionPlaceholder />} rootMargin="200px">
+      {/* <LazyLoad fallback={<SectionPlaceholder />} rootMargin="200px">
         <Suspense fallback={<LoadingSpinner />}>
           <TrailerSection />
         </Suspense>
-      </LazyLoad>
+      </LazyLoad> */}
     </div>
   )
 }

@@ -61,11 +61,12 @@ const Category = () => {
       {/* Title Section */}
       <div className="flex justify-center items-center py-12">
         <div className="group relative flex items-center justify-center">
-          <h2
-            className="text-5xl md:text-7xl font-extrabold text-gray-800 text-center tracking-wider transition-colors duration-200 cursor-pointer group-hover:text-red-500"
+        <h2
+            className='text-4xl md:text-5xl font-extrabold text-center tracking-wider'
             style={{
               fontFamily: 'Merriweather, serif',
               textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+              color: '#730109'
             }}
           >
             THỂ LOẠI KHÁC
@@ -130,10 +131,7 @@ const Category = () => {
                   </button>
                 </div>
               }
-              gridSize={10}
-              pixelColor="#ffd700"
-              animationStepDuration={0.4}
-              aspectRatio="150%"
+             
               className="w-full max-w-[310px]"
               style={{
                 borderColor: '#730109',

@@ -72,31 +72,16 @@ const FeaturedSection = () => {
             <BlurCircle top={'0'} left={'-80px'} />
             <div className="group relative flex items-center justify-end">
               <h4 
-                className='text-3xl md:text-4xl lg:text-5xl font-bold text-gray-700 text-center tracking-wide transition-all duration-500 cursor-pointer group-hover:text-red-500 flex items-center gap-3'
+                className='text-lg md:text-2xl font-extrabold text-gray-900 text-center tracking-wider flex items-center gap-3 cursor-pointer'
                 style={{ 
                   fontFamily: 'Merriweather, serif',
-                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.4)',
-                  WebkitTextStroke: '0px transparent',
-                  transition: 'all 0.5s ease'
+                  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
                 }}
                 onClick={() => navigate('/movies')}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.webkitTextStroke = '1px #fbbf24'
-                  e.currentTarget.style.textShadow = '0 0 20px rgba(239, 68, 68, 0.6)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.webkitTextStroke = '0px transparent'
-                  e.currentTarget.style.textShadow = '2px 2px 4px rgba(0, 0, 0, 0.4)'
-                }}
-                onMouseMove={(e) => {
-                  // Ensure consistent hover effect
-                  e.currentTarget.style.webkitTextStroke = '1px #fbbf24'
-                  e.currentTarget.style.textShadow = '0 0 20px rgba(239, 68, 68, 0.6)'
-                }}
               >
                 Xem tất cả
                 <BsArrowRight
-                  className='group-hover:translate-x-1 transition-transform duration-300 w-6 h-6 md:w-7 md:h-7'
+                  className='w-5 h-5 md:w-6 md:h-6'
                 />
               </h4>
             </div>

@@ -254,33 +254,18 @@ const ComingSoon = () => {
     <div className="w-full py-16 px-4 lg:px-8">
       {/* Title Section - matching "SỰ KIỆN XU HƯỚNG" style */}
       <div className='flex justify-center items-center py-12'>
-        <div className="group relative flex items-center justify-center gap-3">
+        <div className="flex items-center justify-center gap-3">
           <FaCalendarAlt className='text-4xl md:text-5xl text-yellow-500 animate-pulse' />
           <h2
-            className='text-4xl md:text-6xl lg:text-7xl font-extrabold text-gray-800 text-center tracking-wider transition-all duration-500 cursor-pointer group-hover:text-red-500'
+            className='text-4xl md:text-5xl font-extrabold text-center tracking-wider'
             style={{
               fontFamily: 'Merriweather, serif',
               textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
-              WebkitTextStroke: '0px transparent',
-              transition: 'all 0.5s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.webkitTextStroke = '2px #fbbf24'
-              e.currentTarget.style.textShadow = '0 0 20px rgba(239, 68, 68, 0.5)'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.webkitTextStroke = '0px transparent'
-              e.currentTarget.style.textShadow = '2px 2px 4px rgba(0, 0, 0, 0.3)'
-            }}
-            onMouseMove={(e) => {
-              // Ensure consistent hover effect across all characters
-              e.currentTarget.style.webkitTextStroke = '2px #fbbf24'
-              e.currentTarget.style.textShadow = '0 0 20px rgba(239, 68, 68, 0.5)'
+              color: '#730109'
             }}
           >
             SẮP CÔNG CHIẾU
           </h2>
-          <FaCalendarAlt className='text-4xl md:text-5xl text-yellow-500 animate-pulse' />
         </div>
       </div>
 
@@ -297,7 +282,7 @@ const ComingSoon = () => {
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
       >
-        {movies.map((movie, index) => (
+        {movies.map((movie) => (
           <div
             key={movie._id}
             className="flex-shrink-0 group"
@@ -310,7 +295,7 @@ const ComingSoon = () => {
               style={{
                 border: '3px solid #730109',
                 boxShadow: '0 4px 6px rgba(115, 1, 9, 0.3)',
-                transform: index % 2 === 0 ? 'rotate(-2deg)' : 'rotate(2deg)',
+              
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.boxShadow = '0 6px 12px rgba(115, 1, 9, 0.5)';
@@ -377,18 +362,11 @@ const ComingSoon = () => {
       {/* Custom Scrollbar Styles */}
       <style>{`
         .scrollbar-hide::-webkit-scrollbar {
-          height: 8px;
+          display: none;
         }
-        .scrollbar-hide::-webkit-scrollbar-track {
-          background: rgba(255, 255, 255, 0.1);
-          border-radius: 4px;
-        }
-        .scrollbar-hide::-webkit-scrollbar-thumb {
-          background: #730109;
-          border-radius: 4px;
-        }
-        .scrollbar-hide::-webkit-scrollbar-thumb:hover {
-          background: #a01414;
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
     </div>

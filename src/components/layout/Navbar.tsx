@@ -47,7 +47,7 @@ const Navbar = () => {
 
   // Determine navbar background color based on scroll position
   const getNavbarBackground = () => {
-    return currentSrollY === 0 ? '#2d3748' : '#730109'; // Dark gray when at top, red when scrolled
+    return currentSrollY === 0 ? '#730109' : '#730109'; // Dark gray when at top, red when scrolled
   };
 
   useEffect(() => {

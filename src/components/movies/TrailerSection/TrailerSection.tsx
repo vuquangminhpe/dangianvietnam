@@ -65,26 +65,20 @@ const TrailerSection = () => {
     ],
   };
   const [getShowingMovies, setGetShowingMovies] = useState<Movie[]>([]);
-  const [currentTrailer, setCurrentTrailer] = useState<string | undefined>(
-    undefined
-  );
+  const [currentTrailer, setCurrentTrailer] = useState<string | undefined>(undefined);
   const [selectedMovieId, setSelectedMovieId] = useState<string | null>(null);
+  const [hasPlayed, setHasPlayed] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const movies = await getPopularMovies(10, 1);
         setGetShowingMovies(movies);
-        // Auto-select first movie's trailer on load
-        if (movies.length > 0) {
-          setCurrentTrailer(movies[0].trailer_url);
-          setSelectedMovieId(movies[0]._id);
-        }
+        // Không auto-select trailer khi load nữa
       } catch (error) {
         console.error("Failed to fetch popular movies:", error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -94,7 +88,7 @@ const TrailerSection = () => {
   ) => {
     setCurrentTrailer(trailerUrl);
     setSelectedMovieId(movieId);
-
+    setHasPlayed(true);
     // Scroll to video player after a short delay to ensure it's rendered
     setTimeout(() => {
       const trailerElement = document.getElementById("trailer-player");
@@ -110,20 +104,21 @@ const TrailerSection = () => {
       <div className="px-6 md:px-16 lg:px-24 xl:px-44 py-20">
         <div className="text-center mb-12">
           <div className="group relative flex items-center justify-center">
-          <h2
-            className="text-4xl md:text-6xl font-extrabold text-gray-800 text-center tracking-wider transition-colors duration-200 cursor-pointer group-hover:text-red-500"
-            style={{
+           <h2 
+            className='text-4xl md:text-5xl font-extrabold text-center tracking-wider'
+            style={{ 
               fontFamily: 'Merriweather, serif',
               textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+              color: '#730109'
             }}
           >
-            ĐOẠN GIỚI THIỆU CÁC BUỔI BIỂU DIỄN
+          ĐOẠN GIỚI THIỆU CÁC BUỔI BIỂU DIỄN
           </h2>
         </div>
       </div>
 
-      {/* Video Player - Always visible */}
-      {currentTrailer && (
+      {/* Video Player - Chỉ hiển thị khi đã bấm play */}
+      {currentTrailer && hasPlayed && (
         <div
           id="trailer-player"
           className="relative mt-6 mb-12"
