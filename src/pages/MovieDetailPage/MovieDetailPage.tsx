@@ -165,7 +165,7 @@ export default function MovieDetailsPage() {
             className="flex flex-col md:flex-row gap-0 mb-10 mt-10"
           >
             <motion.div
-              variants={fadeUp}
+          
               className="flex flex-col gap-0 items-center w-full md:w-1/3"
             >
             
@@ -190,7 +190,7 @@ export default function MovieDetailsPage() {
             </div>
 
             <motion.div
-              variants={fadeUp}
+        
               className="pb-10 w-full md:w-2/3 relative"
             >
               <div className="bg-[#fff4e6] rounded-tr-3xl rounded-br-3xl p-6 shadow-xl">
