@@ -158,50 +158,58 @@ export default function MovieDetailsPage() {
       <div className="bg-zinc-900 text-gray-300">
         <div className="z-10 px-6 md:px-16 lg:px-24 xl:px-44 pt-20 pb-10">
           {/* Movie Info Section */}
-          <motion.div
-            variants={container}
-            initial="hidden"
-            animate="visible"
-            className="flex flex-col md:flex-row gap-0 mb-10 mt-10"
-          >
-            <motion.div
-          
-              className="flex flex-col gap-0 items-center w-full md:w-1/3"
-            >
-            
-              <div className="bg-[#fff4e6] rounded-tl-3xl rounded-bl-3xl p-6 shadow-xl h-[500px] w-[500px] ml-10">
-                <MovieInfo
-                  movie={movie}
-                  theater={theater}
-                  selectedInfo={selectedInfo}
-                  setSelectedInfo={setSelectedInfo}
-                  showtimes={showtimes}
-                  isAuthenticated={isAuthenticated}
-                  userId={userId}
-                  navigate={navigate}
-                  setShowLoginModal={setShowLoginModal}
-                />
-              </div>
-            </motion.div>
+         <motion.div
+  variants={container}
+  initial="hidden"
+  animate="visible"
+  className="flex flex-col md:flex-row gap-0 mb-10 mt-10"
+>
+  <motion.div
+    className="flex flex-col gap-0 items-center w-full md:w-1/3"
+  >
+    <div 
+      className="bg-[#fff4e6] rounded-tl-3xl rounded-bl-3xl p-6 shadow-xl h-[500px] w-[500px] ml-10 relative 
+                 before:content-[''] before:absolute before:-top-[30px] before:-right-[30px] before:w-[60px] before:h-[60px] before:bg-[#18181b] before:rounded-full
+                 after:content-[''] after:absolute after:-bottom-[30px] after:-right-[30px] after:w-[60px] after:h-[60px] after:bg-[#18181b] after:rounded-full"
+    >
+      <MovieInfo
+        movie={movie}
+        theater={theater}
+        selectedInfo={selectedInfo}
+        setSelectedInfo={setSelectedInfo}
+        showtimes={showtimes}
+        isAuthenticated={isAuthenticated}
+        userId={userId}
+        navigate={navigate}
+        setShowLoginModal={setShowLoginModal}
+      />
+    </div>
+  </motion.div>
 
-            {/* Dashed line separator */}
-            <div className="hidden md:flex items-center justify-center ml-1">
-              <div className="h-[495px] border-l-4 border-dashed border-gray-400 mb-10"></div>
-            </div>
+  {/* Dashed line separator - THÊM 'relative z-10' VÀO ĐÂY */}
+  <div className="hidden md:flex items-center justify-center -ml-px relative z-10">
+    <div className="h-[440px] border-l-4 border-dashed border-gray-400"></div>
+  </div>
 
-            <motion.div
-        
-              className="pb-10 w-full md:w-2/3 relative"
-            >
-              <div className="bg-[#fff4e6] rounded-tr-3xl rounded-br-3xl p-6 shadow-xl">
-                <img
-                  src={movie.poster_url}
-                  alt={movie.title}
-                  className="rounded-lg w-full h-[452px] object-cover shadow-2xl border border-white/10 ml-"
-                />
-              </div>
-            </motion.div>
-          </motion.div>
+  {/* Phần bên phải - Poster phim */}
+<motion.div
+  className="w-full md:w-2/3" // Xóa pb-10 và relative vì không cần nữa
+>
+  <div 
+    className="bg-[#fff4e6] rounded-tr-3xl rounded-br-3xl p-6 shadow-xl relative h-[500px]
+               before:content-[''] before:absolute before:-top-[30px] before:-left-[30px] before:w-[60px] before:h-[60px] before:bg-[#18181b] before:rounded-full
+               after:content-[''] after:absolute after:-bottom-[30px] after:-left-[30px] after:w-[60px] after:h-[60px] after:bg-[#18181b] after:rounded-full"
+    style={{
+      backgroundImage: `url(${movie.poster_url})`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat'
+    }}
+  >
+    {/* KHÔNG CẦN THẺ <img> Ở ĐÂY NỮA */}
+  </div>
+</motion.div>
+</motion.div>
         </div>
       </div>
 
