@@ -44,7 +44,7 @@ const FeaturedSection = () => {
 
   return (
     <div className='relative px-6 md:px-16 lg:px-24 xl:px-44 overflow-hidden'>
-      <div className='absolute top-0 left-0 w-full h-full'>
+      <div className='absolute top-0 left-0 w-full h-full' style={{ height: '100vh' }}>
         <svg
           version='1.1'
           id='Layer_1'

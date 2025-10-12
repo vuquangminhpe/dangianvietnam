@@ -170,10 +170,10 @@ const ProductPage = () => {
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           viewport={{ once: true, margin: "-50px" }}
         />
-        
+      
         {/* DomeGallery ở dưới cùng bg06 */}
         <div 
-          className="absolute bottom-0 left-0 z-40 bg-transparent"
+          className="absolute bottom-2.5 left-0 z-40 bg-transparent mt-5"
           style={{ 
             width: '100vw', 
             height: '100vh',
@@ -181,6 +181,17 @@ const ProductPage = () => {
             background: 'none'
           }}
         >
+             <h2 
+            className='text-4xl md:text-5xl font-extrabold text-center tracking-wider'
+            style={{ 
+              fontFamily: 'Merriweather, serif',
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+              color: '#730109'
+            }}
+          >
+          THƯ VIỆN ẢNH
+          </h2>
+
           <DomeGallery 
             overlayBlurColor="rgba(0,0,0,0)"
           />

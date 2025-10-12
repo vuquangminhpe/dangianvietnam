@@ -184,7 +184,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="md:hidden fixed top-4 right-4 z-50 flex gap-40 items-center">
+        <div className="md:hidden fixed top-4 right-4 z-[160] flex gap-40 items-center">
         <div ref={searchRef} className="relative">
           {isOpen ? (
             <IoIosSearch
@@ -309,7 +309,7 @@ const Navbar = () => {
       {/* Menu dropdown khi mở */}
       {isOpen && (
         <div
-          className="md:hidden fixed inset-0 z-40 bg-black bg-opacity-50"
+          className="md:hidden fixed inset-0 z-[140] bg-black bg-opacity-50"
           onClick={() => setIsOpen(false)}
         >
           <div
@@ -392,7 +392,7 @@ const Navbar = () => {
       )}
       <div
         ref={navContainerRef}
-        className={`fixed left-0 right-0 z-50 h-20 border-none transition-all duration-700 flex items-center justify-between px-8 max-md:hidden`}
+        className={`fixed left-0 right-0 z-[150] h-20 border-none transition-all duration-700 flex items-center justify-between px-8 max-md:hidden`}
         style={{ 
           margin: 0, 
           width: '100vw', 
@@ -436,7 +436,7 @@ const Navbar = () => {
 
             {/* Search dropdown */}
             {isSearchOpen && (searchQuery.trim() || searchResults.length > 0) && (
-              <div className="absolute left-0 top-10 w-full bg-gray-900 border border-gray-700 rounded-lg shadow-2xl z-50">
+              <div className="absolute left-0 top-10 w-full bg-gray-900 border border-gray-700 rounded-lg shadow-2xl z-[160]">
                 {/* Search results */}
                 <div className="max-h-80 overflow-y-auto">
                   {searchLoading && (
@@ -537,7 +537,7 @@ const Navbar = () => {
                 </PopoverButton>
 
                 <PopoverPanel
-                  className={`absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-lg shadow-lg ring-1 
+                  className={`absolute right-0 z-[160] mt-2 w-56 origin-top-right rounded-lg shadow-lg ring-1 
                     ring-black/5 transition-all duration-300 bg-primary-dull`}
                 >
                   <div

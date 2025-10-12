@@ -184,8 +184,7 @@ export default function MovieDetailsPage() {
           variants={container}
           initial="hidden"
           animate="visible"
-          className="flex flex-col md:flex-row gap-6 bg-white/10 backdrop-blur-lg p-6 rounded-3xl
-          shadow-xl border border-white/20 mb-10 mt-10"
+          className="flex flex-col md:flex-row gap-6 mb-10 mt-10"
         >
           <motion.div
             variants={fadeUp}
@@ -206,6 +205,30 @@ export default function MovieDetailsPage() {
               isLoadingTheaters={isLoadingTheaters}
               isLoadingShowtimes={isLoadingShowtimes}
             />
+
+            {/* Booking Button */}
+            <motion.div
+              variants={fadeUp}
+              custom={10}
+              className="mt-4"
+            >
+              {isAuthenticated || userId ? (
+                <button
+                  onClick={handleBookSeats}
+                  disabled={!selectedInfo.showtimeId}
+                  className="px-4 py-2 w-[100px] h-[40px] text-xs text-white bg-primary hover:bg-primary-dull transition rounded-xl font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-lg backdrop-blur-sm"
+                >
+                  Đặt vé
+                </button>
+              ) : (
+                <button
+                  className="px-4 py-2 text-xs text-white bg-red-500 hover:bg-red-600 transition rounded-xl font-medium shadow-lg backdrop-blur-sm cursor-pointer"
+                  onClick={() => setShowLoginModal(true)}
+                >
+                  Log in to booking
+                </button>
+              )}
+            </motion.div>
           </motion.div>
 
           <motion.div
@@ -218,29 +241,8 @@ export default function MovieDetailsPage() {
               className="rounded-lg w-full h-[400px] md:h-[600px] object-cover shadow-2xl border border-white/10"
             />
           </motion.div>
-          <motion.div
-            variants={fadeUp}
-            custom={10}
-            className="absolute pt-4 right-6 bottom-2"
-          >
-            {isAuthenticated || userId ? (
-              <button
-                onClick={handleBookSeats}
-                disabled={!selectedInfo.showtimeId}
-                className="px-4 py-2 w-[100px] h-[40px] text-xs text-white bg-primary hover:bg-primary-dull transition rounded-xl font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-lg backdrop-blur-sm"
-              >
-                Đặt vé
-              </button>
-            ) : (
-              <button
-                className="px-4 py-2 text-xs text-white bg-red-500 hover:bg-red-600 transition rounded-xl font-medium shadow-lg backdrop-blur-sm cursor-pointer"
-                onClick={() => setShowLoginModal(true)}
-              >
-                Log in to booking
-              </button>
-            )}
-          </motion.div>
         </motion.div>
+        <div className="">
         <motion.div
           variants={container}
           initial="hidden"
@@ -265,6 +267,7 @@ export default function MovieDetailsPage() {
             {movie.description}
           </motion.p>
         </motion.div>
+        </div>
         {/* Feedback Section - New integrated component */}
         <motion.div
           variants={fadeUp}

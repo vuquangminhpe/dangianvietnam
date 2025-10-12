@@ -69,7 +69,7 @@ const Header = () => {
   }, []);
   return (
     <header
-      className="fixed w-full h-fit z-50 transition-all 
+      className="fixed w-full h-fit z-[150] transition-all 
     duration-300 border-b-gray-600 border-b-[1px] bg-gradient-to-r from-violet-900 to-gray-800"
     >
       <div
@@ -174,7 +174,7 @@ const Header = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-600 z-50"
+                    className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-lg shadow-lg border border-gray-600 z-[160]"
                   >
                     <div className="py-2">
                       <div className="px-4 py-2 border-b border-gray-600">
