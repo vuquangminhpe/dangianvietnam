@@ -185,7 +185,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
             )}
             <div>
               <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                <MessageSquare className="h-6 w-6 text-purple-400" />
+                <MessageSquare className="h-6 w-6 text-[#730109]" />
                 Share Your Experience
               </h2>
               <p className="text-gray-300 text-lg">{movieTitle}</p>
@@ -226,7 +226,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
                       preventDefault: () => {},
                     } as React.FormEvent);
                   }}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  className="px-4 py-2 bg-[#730109] text-white rounded-lg hover:bg-[#5a0708] transition-colors"
                 >
                   Yes, Submit with Spoiler Warning
                 </button>
@@ -380,8 +380,8 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
               disabled={createFeedbackMutation.isPending}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="flex-1 py-3 px-6 bg-gradient-to-r from-purple-600 to-blue-600 text-white 
-                       font-medium rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all 
+              className="flex-1 py-3 px-6 bg-[#730109] text-white 
+                       font-medium rounded-lg hover:bg-[#5a0708] transition-all 
                        disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {createFeedbackMutation.isPending ? (

@@ -88,7 +88,7 @@ export default function SeatSelection({
 
     onSuccess: (data) => {
       toast.success(
-        `Successfully cancelled seat ${
+        `Đã hủy ghế thành công ${
           (data?.data?.result as any)?.deleted_seats[0].seat_row
         }${(data?.data?.result as any)?.deleted_seats[0].seat_number}!`
       );
@@ -100,7 +100,7 @@ export default function SeatSelection({
     },
     onError: (error: any) => {
       const message =
-        error.response?.data?.message || "Unable to cancel seat reservation";
+        error.response?.data?.message || "Không thể hủy đặt ghế";
       console.error("Error unlocking seat:", message);
     },
   });
@@ -119,15 +119,15 @@ export default function SeatSelection({
 
   // Validate and apply coupon
   const handleValidateCoupon = async (coupon: Coupon | null, code?: string) => {
-    if (!seatData || selectedSeats.length === 0) {
-      toast.error("Please select seats before applying coupon");
+    if (!seatData) {
+      toast.error("Vui lòng đợi dữ liệu ghế tải xong");
       return;
     }
 
     const couponToValidate =
       coupon || availableCoupons.find((c) => c.code === code);
     if (!couponToValidate) {
-      toast.error("Coupon not found");
+      toast.error("Không tìm thấy mã giảm giá");
       return;
     }
 
@@ -155,12 +155,12 @@ export default function SeatSelection({
       );
 
       toast.success(
-        `Coupon applied successfully! Discount ${response.result.discount_amount.toLocaleString(
+        `Áp dụng mã giảm giá thành công! Giảm giá ${response.result.discount_amount.toLocaleString(
           "vi-VN"
-        )} VND`
+        )} VNĐ`
       );
     } catch (error: any) {
-      const message = error.message || "Cannot apply coupon";
+      const message = error.message || "Không thể áp dụng mã giảm giá";
       toast.error(message);
 
       // Reset coupon state on error
@@ -181,13 +181,13 @@ export default function SeatSelection({
     // Remove coupon from localStorage
     removeCoupon();
 
-    toast.info("Coupon removed");
+    toast.info("Đã xóa mã giảm giá");
   };
 
   // Manual coupon code input
   const handleManualCouponSubmit = async () => {
     if (!couponCode.trim()) {
-      toast.error("Please enter coupon code");
+      toast.error("Vui lòng nhập mã giảm giá");
       return;
     }
 
@@ -388,7 +388,7 @@ export default function SeatSelection({
   const handleCheckout = async () => {
     requireAuth(async () => {
       if (!seatData || selectedSeats.length === 0) {
-        toast.error("Please select seats before proceeding to payment");
+        toast.error("Vui lòng chọn ghế trước khi thanh toán");
         return;
       }
 
@@ -419,7 +419,7 @@ export default function SeatSelection({
         );
       } catch (error) {
         console.error("Error preparing checkout:", error);
-        toast.error("Error preparing checkout. Please try again.");
+        toast.error("Lỗi chuẩn bị thanh toán. Vui lòng thử lại.");
       } finally {
         setIsRefetching(false);
       }
@@ -523,6 +523,7 @@ export default function SeatSelection({
   return (
     <motion.div
       className="flex flex-col gap-4 items-center text-gray-300 max-w-6xl mx-auto p-2 sm:p-4"
+       style={{ fontFamily: "Black Stuff, cursive" }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
@@ -531,7 +532,7 @@ export default function SeatSelection({
       <div className="relative w-full max-w-3xl">
         <div className="bg-gradient-to-b from-gray-200 to-gray-400 h-2 sm:h-3 rounded-t-3xl shadow-lg"></div>
         <div className="text-center text-sm sm:text-base text-gray-400 mt-2 font-medium tracking-wider">
-          SCREEN
+          MÀN HÌNH
         </div>
       </div>
 
@@ -630,17 +631,17 @@ export default function SeatSelection({
         transition={{ delay: 0.3 }}
       >
         <h3 className="font-bold text-sm mb-2 text-center text-gray-200 flex items-center justify-center gap-2">
-          <span className="w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></span>
-          Seat Legend
+        
+
         </h3>
         <div className="flex gap-2">
           {[
-            ["Standard", "bg-blue-500"],
+            ["THƯỜNG", "bg-blue-500"],
             ["VIP", "bg-purple-500"],
-            ["Selected", "bg-green-500"],
-            ["Picking", "bg-yellow-500"],
-            ["Booked", "bg-red-500"],
-            ["Blocked", "bg-gray-500"],
+            ["ĐÃ CHỌN", "bg-green-500"],
+            ["ĐANG CHỌN", "bg-yellow-500"],
+            ["ĐÃ ĐẶT", "bg-red-500"],
+            ["KHÔNG SỬ DỤNG", "bg-gray-500"],
           ].map(([type, color], i) => (
             <motion.div
               key={i}
@@ -656,14 +657,14 @@ export default function SeatSelection({
         </div>
       </motion.div>
       <div className="mt-6 rounded-xl p-4 border border-gray-700/50 max-w-7xl mx-auto w-full bg-gray-800/30">
-        <div className="flex items-center justify-between gap-6 w-full">
+        <div className="flex items-start justify-between gap-6 w-full">
           {/* Left side: Selected Seats + Total Amount */}
           <div className="flex flex-col gap-4 flex-1">
             {/* Selected Seats */}
             <div className="flex gap-2 items-center">
-              <h3 className="font-bold text-sm mb-2 text-white">
-                Selected Seats
-              </h3>
+              <h2 className="font-bold text-lg mb-2 text-white-400 uppercase tracking-wide">
+                GHẾ ĐÃ CHỌN
+              </h2>
               <div className="min-h-[40px] flex items-center">
                 {selectedSeats.length > 0 ? (
                   <div className="flex flex-wrap gap-2">
@@ -681,7 +682,7 @@ export default function SeatSelection({
                   </div>
                 ) : (
                   <p className="text-gray-400 italic text-sm">
-                    No seats selected
+                    Chưa chọn ghế nào
                   </p>
                 )}
               </div>
@@ -689,15 +690,17 @@ export default function SeatSelection({
 
             {/* Total Amount */}
             <div className="flex gap-2 items-center">
-              <h3 className="font-bold text-sm mb-2 text-white">
-                Total Amount
-              </h3>
+              <h2 className="font-black text-lg mb-2 text-white-400 uppercase tracking-wide">
+                TỔNG TIỀN
+              </h2>
               <div className="space-y-2">
-                {price ? totalAmount.toLocaleString("vi-VN") : "0"} VNĐ
+                <div className="text-2xl font-bold text-white-400 bg-gray-800/50 px-3 py-2 rounded-lg border border-yellow-400/30 shadow-lg">
+                  {price ? totalAmount.toLocaleString("vi-VN") : "0"} VNĐ
+                </div>
                 {selectedCoupon && (
                   <div className="flex items-center justify-between border-t border-gray-600 pt-2">
                     <span className="text-sm text-orange-400">
-                      Discount ({selectedCoupon.code}):
+                      Giảm giá ({selectedCoupon.code}):
                     </span>
                     <span className="text-sm font-bold text-red-400">
                       -{couponDiscount.toLocaleString("vi-VN")} VNĐ
@@ -708,232 +711,217 @@ export default function SeatSelection({
             </div>
           </div>
 
-          {/* Right side: Action Buttons */}
-          <div className="flex  gap-3 min-w-[300px]">
-            <motion.button
-              onClick={() => {
-                if (!isRefetching) {
-                  setHasInitialized(false);
-                  fetchSeatData();
-                }
-              }}
-              disabled={isRefetching}
-              whileHover={{ scale: isRefetching ? 1 : 1.02 }}
-              whileTap={{ scale: isRefetching ? 1 : 0.98 }}
-              className={`w-full px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
-                isRefetching
-                  ? "bg-gray-600 cursor-not-allowed text-gray-400"
-                  : "bg-blue-600 hover:bg-blue-700 text-white"
-              }`}
-            >
-              {isRefetching ? "Refreshing..." : "Refresh"}
-            </motion.button>
-
-            {showConfirmButton && selectedSeats.length > 0 && (
-              <motion.button
-                onClick={handleCheckout}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ type: "spring", stiffness: 300 }}
+          {/* Right side: Coupon Section + Action Buttons */}
+          <div className="flex flex-col gap-3 min-w-[300px]">
+            {/* Coupon Section */}
+            {user && (
+              <motion.div
+                className="bg-gradient-to-r rounded-lg p-3 shadow-lg border"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
               >
-                Payment ({selectedSeats.length})
-              </motion.button>
+              
+
+                {!selectedCoupon && (
+                  <div className="space-y-3">
+                    {/* Available Coupons */}
+                    {availableCoupons.length > 0 && (
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-medium text-gray-300">
+                            Mã giảm giá có sẵn:
+                          </span>
+                          <button
+                            onClick={() =>
+                              setShowAvailableCoupons(!showAvailableCoupons)
+                            }
+                            className="text-xs text-white-400 hover:text-orange-300"
+                          >
+                            Xem tất cả
+                          </button>
+                        </div>
+
+                        {showAvailableCoupons && (
+                          <motion.div
+                            className="grid grid-cols-1 gap-2 mb-3"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            {availableCoupons
+                              .filter(
+                                (coupon) =>
+                                  isCouponValid(coupon) &&
+                                  isCouponApplicable(
+                                    coupon,
+                                    seatData?.movieId,
+                                    seatData?.theaterId
+                                  ) &&
+                                  totalAmount >= coupon.min_purchase
+                              )
+                              .map((coupon) => (
+                                <motion.div
+                                  key={coupon._id}
+                                  className="bg-gradient-to-r from-orange-600/20 to-red-600/20 border border-orange-500/30 rounded-md p-2 cursor-pointer hover:border-orange-400/50 transition-all duration-300"
+                                  whileHover={{ scale: 1.02 }}
+                                  whileTap={{ scale: 0.98 }}
+                                  onClick={() => handleValidateCoupon(coupon)}
+                                >
+                                  <div className="flex items-center justify-between">
+                                    <div className="flex-1">
+                                      <p className="font-bold text-orange-300 text-xs">
+                                        {coupon.code}
+                                      </p>
+                                      <p className="text-xs text-gray-400">
+                                        {formatCouponDiscount(coupon)}
+                                      </p>
+                                    </div>
+                                    <div className="text-right ml-2">
+                                      <p className="text-xs text-gray-400">
+                                        Tối thiểu: {coupon.min_purchase.toLocaleString("vi-VN")}₫
+                                      </p>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              ))}
+                          </motion.div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Manual Coupon Input */}
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-medium text-gray-300">
+                          Nhập mã giảm giá:
+                        </span>
+                        <button
+                          onClick={() => setShowCouponInput(!showCouponInput)}
+                          className="text-xs text-orange-400 hover:text-orange-300"
+                        >
+                     
+                        </button>
+                      </div>
+
+                      {showCouponInput && (
+                        <motion.div
+                          className="flex gap-2"
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <input
+                            type="text"
+                            value={couponCode}
+                            onChange={(e) =>
+                              setCouponCode(e.target.value.toUpperCase())
+                            }
+                            placeholder="Nhập mã giảm giá..."
+                            className="flex-1 px-2 py-1 bg-gray-700/50 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none text-xs"
+                          />
+                          <button
+                            onClick={handleManualCouponSubmit}
+                            disabled={isValidatingCoupon || !couponCode.trim()}
+                            className={`px-3 py-1 rounded font-medium transition-all duration-300 text-xs ${
+                              isValidatingCoupon || !couponCode.trim()
+                                ? "bg-gray-600 text-gray-400 cursor-not-allowed"
+                                : "bg-yellow-600 hover:bg-yellow-700 text-white"
+                            }`}
+                          >
+                            {isValidatingCoupon ? (
+                              <motion.div
+                                className="w-3 h-3 border border-white border-t-transparent rounded-full"
+                                animate={{ rotate: 360 }}
+                                transition={{
+                                  duration: 1,
+                                  repeat: Infinity,
+                                  ease: "linear",
+                                }}
+                              />
+                            ) : (
+                              "Áp dụng"
+                            )}
+                          </button>
+                        </motion.div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Applied Coupon Display */}
+                {selectedCoupon && (
+                  <motion.div
+                    className="bg-gradient-to-r from-green-600/20 to-emerald-600/20 border border-green-500/30 rounded-md p-3"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1">
+                        <p className="font-bold text-green-300 text-xs">
+                          ✓ {selectedCoupon.code}
+                        </p>
+                        <p className="text-xs text-gray-300 mt-1">
+                          Tiết kiệm: {couponDiscount.toLocaleString("vi-VN")} VNĐ
+                        </p>
+                      </div>
+                      <button
+                        onClick={handleRemoveCoupon}
+                        className="flex-shrink-0 px-2 py-1 bg-red-600/20 border border-red-500/30 rounded text-red-400 hover:bg-red-600/30 transition-all duration-300 text-xs font-medium"
+                      >
+                        Hủy
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </motion.div>
             )}
+
+            {/* Action Buttons */}
+            <div className="flex gap-3">
+              <motion.button
+                onClick={() => {
+                  if (!isRefetching) {
+                    setHasInitialized(false);
+                    fetchSeatData();
+                  }
+                }}
+                disabled={isRefetching}
+                whileHover={{ scale: isRefetching ? 1 : 1.02 }}
+                whileTap={{ scale: isRefetching ? 1 : 0.98 }}
+                className={`w-full px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
+                  isRefetching
+                    ? "bg-gray-600 cursor-not-allowed text-gray-400"
+                    : "text-gray-800"
+                }`}
+                style={{
+                  backgroundColor: isRefetching ? undefined : "#ffebd3",
+                }}
+              >
+                {isRefetching ? "Đang làm mới..." : "Làm mới"}
+              </motion.button>
+
+              {showConfirmButton && selectedSeats.length > 0 && (
+                <motion.button
+                  onClick={handleCheckout}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="w-full px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 text-white"
+                  style={{
+                    backgroundColor: "#730109",
+                  }}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  Thanh toán ({selectedSeats.length})
+                </motion.button>
+              )}
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Coupon Section */}
-      {user && selectedSeats.length > 0 && (
-        <motion.div
-          className="mt-4 bg-gradient-to-r  rounded-xl p-4 shadow-xl border "
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <h3 className="font-bold text-sm mb-3 text-center flex items-center justify-center gap-2">
-            <span className="w-3 h-3 bg-gradient-to-r  rounded-full"></span>
-            Discount Code
-          </h3>
-
-          {!selectedCoupon && (
-            <div className="space-y-4">
-              {/* Available Coupons */}
-              {availableCoupons.length > 0 && (
-                <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-medium text-gray-300">
-                      Available Coupons:
-                    </span>
-                    <button
-                      onClick={() =>
-                        setShowAvailableCoupons(!showAvailableCoupons)
-                      }
-                      className="text-sm text-orange-400 hover:text-orange-300"
-                    >
-                      {showAvailableCoupons ? "Hide" : "View All"}
-                    </button>
-                  </div>
-
-                  {showAvailableCoupons && (
-                    <motion.div
-                      className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {availableCoupons
-                        .filter(
-                          (coupon) =>
-                            isCouponValid(coupon) &&
-                            isCouponApplicable(
-                              coupon,
-                              seatData?.movieId,
-                              seatData?.theaterId
-                            ) &&
-                            totalAmount >= coupon.min_purchase
-                        )
-                        .map((coupon) => (
-                          <motion.div
-                            key={coupon._id}
-                            className="bg-gradient-to-r from-orange-600/20 to-red-600/20 border border-orange-500/30 rounded-lg p-3 cursor-pointer hover:border-orange-400/50 transition-all duration-300"
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => handleValidateCoupon(coupon)}
-                          >
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <p className="font-bold text-orange-300">
-                                  {coupon.code}
-                                </p>
-                                <p className="text-xs text-gray-400">
-                                  {coupon.description}
-                                </p>
-                                <p className="text-sm text-orange-400 mt-1">
-                                  {formatCouponDiscount(coupon)}
-                                </p>
-                              </div>
-                              <div className="text-right">
-                                <p className="text-xs text-gray-400">
-                                  Minimum:{" "}
-                                  {coupon.min_purchase.toLocaleString("vi-VN")}₫
-                                </p>
-                                {coupon.max_discount > 0 && (
-                                  <p className="text-xs text-gray-400">
-                                    Maximum:{" "}
-                                    {coupon.max_discount.toLocaleString(
-                                      "vi-VN"
-                                    )}
-                                    ₫
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-                          </motion.div>
-                        ))}
-                    </motion.div>
-                  )}
-                </div>
-              )}
-
-              {/* Manual Coupon Input */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-300">
-                    Enter coupon code:
-                  </span>
-                  <button
-                    onClick={() => setShowCouponInput(!showCouponInput)}
-                    className="text-sm text-orange-400 hover:text-orange-300"
-                  >
-                    {showCouponInput ? "Hide" : "Enter Code"}
-                  </button>
-                </div>
-
-                {showCouponInput && (
-                  <motion.div
-                    className="flex gap-2"
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <input
-                      type="text"
-                      value={couponCode}
-                      onChange={(e) =>
-                        setCouponCode(e.target.value.toUpperCase())
-                      }
-                      placeholder="Enter coupon code..."
-                      className="flex-1 px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-orange-400"
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          handleManualCouponSubmit();
-                        }
-                      }}
-                    />
-                    <button
-                      onClick={handleManualCouponSubmit}
-                      disabled={isValidatingCoupon || !couponCode.trim()}
-                      className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
-                        isValidatingCoupon || !couponCode.trim()
-                          ? "bg-gray-600 text-gray-400 cursor-not-allowed"
-                          : "bg-orange-600 hover:bg-orange-700 text-white"
-                      }`}
-                    >
-                      {isValidatingCoupon ? (
-                        <motion.div
-                          className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                          animate={{ rotate: 360 }}
-                          transition={{
-                            duration: 1,
-                            repeat: Infinity,
-                            ease: "linear",
-                          }}
-                        />
-                      ) : (
-                        "Apply"
-                      )}
-                    </button>
-                  </motion.div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Applied Coupon Display */}
-          {selectedCoupon && (
-            <motion.div
-              className="bg-gradient-to-r from-green-600/20 to-emerald-600/20 border border-green-500/30 rounded-lg p-4"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1">
-                  <p className="font-bold text-green-300">
-                    ✓ {selectedCoupon.code}
-                  </p>
-                  <p className="text-sm text-gray-300 mt-1">
-                    {selectedCoupon.description}
-                  </p>
-                  <p className="text-sm text-green-400 mt-2">
-                    Savings: {couponDiscount.toLocaleString("vi-VN")} VND
-                  </p>
-                </div>
-                <button
-                  onClick={handleRemoveCoupon}
-                  className="flex-shrink-0 px-4 py-2 bg-red-600/20 border border-red-500/30 rounded-lg text-red-400 hover:bg-red-600/30 transition-all duration-300 text-sm font-medium"
-                >
-                  Cancel
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </motion.div>
-      )}
 
       {showLoginModal && <LoginModal isFormOpen={setShowLoginModal} />}
     </motion.div>

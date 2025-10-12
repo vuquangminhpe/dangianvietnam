@@ -412,7 +412,7 @@ const Trending = () => {
                       }}
                     >
                       {/* Movie Poster */}
-                      <div className="relative h-full w-full overflow-hidden">
+                      <div className="relative h-full w-full overflow-hidden bg-100">
                         <LazyImage
                           src={movie.poster_url}
                           alt={movie.title}

@@ -146,7 +146,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <MessageSquare className="h-6 w-6 text-purple-400" />
+          <MessageSquare className="h-6 w-6 text-[#730109]" />
           <h3 className="text-2xl font-bold text-white">
             User Reviews ({feedbackData?.total || 0})
           </h3>
@@ -176,8 +176,8 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
               onClick={onAddFeedback}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-4 py-2 bg-primary text-white 
-                       font-medium rounded-lg hover:from-black hover:to-primary/15 transition-all"
+              className="px-4 py-2 bg-[#730109] text-white 
+                       font-medium rounded-lg hover:bg-[#5a0708] transition-all"
             >
               Write Review
             </motion.button>
@@ -189,7 +189,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
       {!isLoadingRatings && ratings.length > 0 && (
         <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 border border-white/20">
           <div className="flex items-center gap-3 mb-4">
-            <Star className="h-6 w-6 text-yellow-400" />
+            <Star className="h-6 w-6 text-[#730109]" />
             <h4 className="text-xl font-bold text-white">
               Movie Ratings ({ratings.length})
             </h4>
@@ -244,8 +244,8 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
                 className={`px-3 py-1 rounded-lg text-sm transition-colors ${
                   filters.sort_by === option.value &&
                   filters.sort_order === option.order
-                    ? "bg-primary text-white"
-                    : "bg-white/10 text-gray-300 hover:bg-white/20"
+                    ? "bg-[#730109] text-white"
+                    : "bg-white/10 text-gray-300 hover:bg-[#730109]/20"
                 }`}
               >
                 {option.label}
@@ -259,7 +259,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
       <div className="space-y-4">
         {feedbackData?.feedbacks?.length === 0 ? (
           <div className="text-center py-12 bg-white/5 rounded-xl border border-white/10">
-            <MessageSquare className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+            <MessageSquare className="h-16 w-16 text-[#730109] mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">
               No reviews yet
             </h3>
@@ -269,7 +269,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
             {showAddFeedbackButton && user && (
               <button
                 onClick={onAddFeedback}
-                className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/60 transition-colors"
+                className="px-6 py-2 bg-[#730109] text-white rounded-lg hover:bg-[#5a0708] transition-colors"
               >
                 Write First Review
               </button>
@@ -351,8 +351,8 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
                         </p>
                         <button
                           onClick={() => setShowSpoilers(true)}
-                          className="px-4 py-2 bg-yellow-600/20 text-yellow-300 rounded-lg 
-                                   hover:bg-yellow-600/30 transition-colors border border-yellow-500/30"
+                          className="px-4 py-2 bg-[#730109] text-white rounded-lg 
+                                   hover:bg-[#5a0708] transition-colors border border-red-500/30"
                         >
                           Show Anyway
                         </button>
@@ -444,8 +444,8 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
                 onClick={() => handlePageChange(page)}
                 className={`px-4 py-2 rounded-lg transition-colors ${
                   page === filters.page
-                    ? "bg-purple-600 text-white"
-                    : "bg-white/10 text-gray-300 hover:bg-white/20"
+                    ? "bg-[#730109] text-white"
+                    : "bg-white/10 text-gray-300 hover:bg-[#730109]/20"
                 }`}
               >
                 {page}

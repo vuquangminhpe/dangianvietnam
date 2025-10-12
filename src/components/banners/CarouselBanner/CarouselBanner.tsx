@@ -129,7 +129,6 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
 
     let SliderDom = carouselRef.current.querySelector('.carousel .list') as HTMLElement;
     let thumbnailBorderDom = carouselRef.current.querySelector('.carousel .thumbnail') as HTMLElement;
-    let timeDom = carouselRef.current.querySelector('.carousel .time') as HTMLElement;
     let carouselDom = carouselRef.current.querySelector('.carousel') as HTMLElement;
 
     let SliderItemsDom = SliderDom.querySelectorAll('.carousel .list .item');
@@ -538,7 +537,7 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
 
             {/* list thumnail */}
             <div className="thumbnail">
-              {carouselItems.map((item, index) => (
+              {carouselItems.map((item) => (
                 <div
                   key={item.id}
                   className="item"

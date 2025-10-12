@@ -34,8 +34,6 @@ export default function MovieDetailsPage() {
   const { id = "" } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<Movie | null>(null);
   const [theater, setTheater] = useState<GetTheatersResponse | null>(null);
-  const [isLoadingTheaters, setIsLoadingTheaters] = useState(false);
-  const [isLoadingShowtimes, setIsLoadingShowtimes] = useState(false);
   const navigate = useNavigate();
   const { showLoginModal, setShowLoginModal } = useAuthAction();
   const { isAuthenticated } = useAuthStore();
@@ -79,7 +77,6 @@ export default function MovieDetailsPage() {
 
     const fetchTheater = async () => {
       try {
-        setIsLoadingTheaters(true);
         // Lấy các rạp có lịch chiếu cho Buổi biểu diễn này
         const theaterData = await getTheatersWithShowtimes(id);
         setTheater(theaterData);
@@ -93,8 +90,6 @@ export default function MovieDetailsPage() {
         }
       } catch {
         setTheater(null);
-      } finally {
-        setIsLoadingTheaters(false);
       }
     };
 
@@ -117,27 +112,10 @@ export default function MovieDetailsPage() {
 
   const fetchShowtimesByTheater = async (theaterId: string) => {
     try {
-      setIsLoadingShowtimes(true);
       const data = await getShowtimeByMovieIdAndTheaterId(id, theaterId);
       setShowtimes(data);
     } catch {
       setShowtimes([]);
-    } finally {
-      setIsLoadingShowtimes(false);
-    }
-  };
-
-  const handleBookSeats = () => {
-    if (isAuthenticated || userId) {
-      if (
-        selectedInfo.theaterId &&
-        selectedInfo.showtimeId &&
-        selectedInfo.screenId
-      ) {
-        navigate(`/movies/${id}/${selectedInfo.screenId}`);
-      }
-    } else {
-      setShowLoginModal(true);
     }
   };
 
@@ -175,112 +153,100 @@ export default function MovieDetailsPage() {
   };
 
   return (
-    <div className="relative min-h-screen  bg-zinc-900 text-gray-300 overflow-x-hidden">
-      {/* Background Elements - matching your design theme */}
-
-      <div className="relative   z-10 px-6 md:px-16 lg:px-24 xl:px-44 pt-20 pb-20">
-        {/* Movie Info Section */}
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col md:flex-row gap-6 mb-10 mt-10"
-        >
+    <div className="min-h-screen">
+      {/* Phần trên - Movie Info Section với background đen */}
+      <div className="bg-zinc-900 text-gray-300">
+        <div className="z-10 px-6 md:px-16 lg:px-24 xl:px-44 pt-20 pb-10">
+          {/* Movie Info Section */}
           <motion.div
-            variants={fadeUp}
-            className="flex flex-col gap-3 items-center w-full md:w-1/3"
+            variants={container}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col md:flex-row gap-0 mb-10 mt-10"
           >
-            {/* Play Trailer Button */}
-
-            <MovieInfo
-              setIsPlayTrailer={setIsPlayTrailer}
-              movie={movie}
-              theater={theater}
-              selectedInfo={selectedInfo}
-              setSelectedInfo={setSelectedInfo}
-              showtimes={showtimes}
-              fetchShowtimesByTheater={fetchShowtimesByTheater}
-              handleBookSeats={handleBookSeats}
-              userId={userId}
-              isLoadingTheaters={isLoadingTheaters}
-              isLoadingShowtimes={isLoadingShowtimes}
-            />
-
-            {/* Booking Button */}
             <motion.div
               variants={fadeUp}
-              custom={10}
-              className="mt-4"
+              className="flex flex-col gap-0 items-center w-full md:w-1/3"
             >
-              {isAuthenticated || userId ? (
-                <button
-                  onClick={handleBookSeats}
-                  disabled={!selectedInfo.showtimeId}
-                  className="px-4 py-2 w-[100px] h-[40px] text-xs text-white bg-primary hover:bg-primary-dull transition rounded-xl font-medium cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed shadow-lg backdrop-blur-sm"
-                >
-                  Đặt vé
-                </button>
-              ) : (
-                <button
-                  className="px-4 py-2 text-xs text-white bg-red-500 hover:bg-red-600 transition rounded-xl font-medium shadow-lg backdrop-blur-sm cursor-pointer"
-                  onClick={() => setShowLoginModal(true)}
-                >
-                  Log in to booking
-                </button>
-              )}
+            
+              <div className="bg-[#fff4e6] rounded-tl-3xl rounded-bl-3xl p-6 shadow-xl h-[500px] w-[500px] ml-10">
+                <MovieInfo
+                  movie={movie}
+                  theater={theater}
+                  selectedInfo={selectedInfo}
+                  setSelectedInfo={setSelectedInfo}
+                  showtimes={showtimes}
+                  isAuthenticated={isAuthenticated}
+                  userId={userId}
+                  navigate={navigate}
+                  setShowLoginModal={setShowLoginModal}
+                />
+              </div>
+            </motion.div>
+
+            {/* Dashed line separator */}
+            <div className="hidden md:flex items-center justify-center ml-1">
+              <div className="h-[495px] border-l-4 border-dashed border-gray-400 mb-10"></div>
+            </div>
+
+            <motion.div
+              variants={fadeUp}
+              className="pb-10 w-full md:w-2/3 relative"
+            >
+              <div className="bg-[#fff4e6] rounded-tr-3xl rounded-br-3xl p-6 shadow-xl">
+                <img
+                  src={movie.poster_url}
+                  alt={movie.title}
+                  className="rounded-lg w-full h-[452px] object-cover shadow-2xl border border-white/10 ml-"
+                />
+              </div>
             </motion.div>
           </motion.div>
+        </div>
+      </div>
 
+      {/* Phần dưới - Cast và Feedback Section với background trắng */}
+      <div className="bg-white text-gray-800">
+        <div className="z-10 px-6 md:px-16 lg:px-24 xl:px-44 pt-10 pb-20">
+          <motion.div
+            variants={container}
+            initial="hidden"
+            animate="visible"
+            className="gap-6 bg-zinc-900 p-6 rounded-3xl 
+            shadow-xl border border-gray-200 mb-10"
+          >
+            <motion.div
+              variants={fadeUp}
+              className="flex flex-col gap-3 items-center"
+            ></motion.div>
+            <motion.p variants={fadeUp} custom={1} className="mb-1 text-gray-300">
+              Tác giả: {movie.director}
+            </motion.p>
+            <motion.p variants={fadeUp} custom={2} className="mb-1 text-gray-300">
+              Đạo diễn: {getCountryDisplay(movie.language)}
+            </motion.p>
+            <motion.div variants={fadeUp} custom={8}>
+              <CastList movie={movie} />
+            </motion.div>
+            <motion.p variants={fadeUp} custom={7} className="mb-4 text-gray-400">
+              {movie.description}
+            </motion.p>
+          </motion.div>
+          
+          {/* Feedback Section - New integrated component */}
           <motion.div
             variants={fadeUp}
-            className="pb-10 w-full md:w-2/3 relative"
+            initial="hidden"
+            animate="visible"
+            className="bg-zinc-900 rounded-3xl p-8 border border-gray-200"
           >
-            <img
-              src={movie.poster_url}
-              alt={movie.title}
-              className="rounded-lg w-full h-[400px] md:h-[600px] object-cover shadow-2xl border border-white/10"
+            <MovieFeedbackSection
+              movieId={id}
+              movieTitle={movie.title}
+              moviePoster={movie.poster_url}
             />
           </motion.div>
-        </motion.div>
-        <div className="">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="visible"
-          className="gap-6 bg-white/10 backdrop-blur-lg p-6 rounded-3xl 
-          shadow-xl border border-white/20 mb-10 mt-10"
-        >
-          <motion.div
-            variants={fadeUp}
-            className="flex flex-col gap-3 items-center"
-          ></motion.div>
-          <motion.p variants={fadeUp} custom={1} className="mb-1">
-            Tác giả: {movie.director}
-          </motion.p>
-          <motion.p variants={fadeUp} custom={2} className="mb-1">
-            Đạo diễn: {getCountryDisplay(movie.language)}
-          </motion.p>
-          <motion.div variants={fadeUp} custom={8}>
-            <CastList movie={movie} />
-          </motion.div>
-          <motion.p variants={fadeUp} custom={7} className="mb-4">
-            {movie.description}
-          </motion.p>
-        </motion.div>
         </div>
-        {/* Feedback Section - New integrated component */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          className="bg-white/5 backdrop-blur-lg rounded-3xl p-8 border border-white/10"
-        >
-          <MovieFeedbackSection
-            movieId={id}
-            movieTitle={movie.title}
-            moviePoster={movie.poster_url}
-          />
-        </motion.div>
       </div>
 
       {/* Login Modal */}
