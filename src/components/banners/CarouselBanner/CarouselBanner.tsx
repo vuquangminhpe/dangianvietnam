@@ -1,11 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import LazyImage from "../../ui/LazyImage";
-import {
-  getActiveBannerSliderHome,
-  type BannerSliderHome,
-} from "../../../apis/bannerSliderHome.api";
+
+// Import banner images
+import { bannerImages } from "../../../assets/bn";
 
 interface CarouselItem {
   id: string;
@@ -20,17 +18,15 @@ interface CarouselBannerProps {
   items?: CarouselItem[];
 }
 
-// Transform API data to CarouselItem format
-const transformBannerToCarouselItem = (
-  banner: BannerSliderHome
-): CarouselItem => ({
-  id: banner._id,
-  image: banner.image,
+// Local banner data
+const localBannerData: CarouselItem[] = bannerImages.map((banner: any) => ({
+  id: banner.id,
+  image: banner.src,
   author: banner.author,
   title: banner.title,
-  topic: banner.topic || "FEATURED",
+  topic: banner.topic,
   description: banner.description,
-});
+}));
 
 const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
   const navigate = useNavigate();
@@ -38,7 +34,7 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
     items || []
   );
   const [loading, setLoading] = useState(!items);
-  const [error, setError] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const carouselRef = useRef<HTMLDivElement>(null);
   let timeRunning = 3000;
@@ -46,7 +42,18 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
   const runTimeOutRef = useRef<number | undefined>(undefined);
   const runNextAutoRef = useRef<number | undefined>(undefined);
 
-  // Fetch active banners from API
+  // Function to scroll to featured section
+  const scrollToFeaturedSection = () => {
+    const featuredSection = document.querySelector('[data-section="featured"]');
+    if (featuredSection) {
+      featuredSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      // Fallback: scroll to a reasonable position
+      window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+    }
+  };
+
+  // Load local banner data
   useEffect(() => {
     if (items) {
       setCarouselItems(items);
@@ -54,35 +61,16 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
       return;
     }
 
-    const fetchBanners = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const banners = await getActiveBannerSliderHome();
-
-        if (banners && banners.length > 0) {
-          const transformedItems = banners.map(transformBannerToCarouselItem);
-          setCarouselItems(transformedItems);
-        } else {
-          setCarouselItems([]);
-          setError("No active banners found. Please contact administrator.");
-        }
-      } catch (err) {
-        console.error("Error fetching banner slider home:", err);
-        setError(err instanceof Error ? err.message : "Failed to load banners");
-        setCarouselItems([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBanners();
+    // Use local banner data instead of API
+    setCarouselItems(localBannerData);
+    setLoading(false);
   }, [items]);
 
   useEffect(() => {
     if (carouselItems.length > 0) {
       // Initialize slider after data is loaded
       initSlider();
+      setCurrentIndex(0); // Reset to first slide when data changes
     }
     return () => {
       if (runNextAutoRef.current) {
@@ -128,20 +116,18 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
     if (!carouselRef.current) return;
 
     let SliderDom = carouselRef.current.querySelector('.carousel .list') as HTMLElement;
-    let thumbnailBorderDom = carouselRef.current.querySelector('.carousel .thumbnail') as HTMLElement;
     let carouselDom = carouselRef.current.querySelector('.carousel') as HTMLElement;
 
     let SliderItemsDom = SliderDom.querySelectorAll('.carousel .list .item');
-    let thumbnailItemsDom = thumbnailBorderDom.querySelectorAll('.carousel .thumbnail .item');
 
     if(type === 'next'){
       SliderDom.appendChild(SliderItemsDom[0]);
-      thumbnailBorderDom.appendChild(thumbnailItemsDom[0]);
       carouselDom.classList.add('next');
+      setCurrentIndex((prev) => (prev + 1) % carouselItems.length);
     }else{
       SliderDom.prepend(SliderItemsDom[SliderItemsDom.length - 1]);
-      thumbnailBorderDom.prepend(thumbnailItemsDom[thumbnailItemsDom.length - 1]);
       carouselDom.classList.add('prev');
+      setCurrentIndex((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
     }
 
     clearTimeout(runTimeOutRef.current);
@@ -166,12 +152,20 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
             text-decoration: none;
         }
         /* carousel */
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .carousel{
-            height: 100vh;
-            margin-top: -50px;
-            width: 100vw;
+            height: 80vh; /* Reverted to original height */
+            width: 90%; /* Changed width to 90% */
             overflow: hidden;
             position: relative;
+            border-radius: 20px;
+            margin: 0 auto;
         }
         .carousel .list .item{
             width: 100%;
@@ -186,118 +180,149 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
         }
         .carousel .list .item .content{
             position: absolute;
-            top: 20%;
-            width: 1140px;
-            max-width: 80%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding-right: 30%;
-            box-sizing: border-box;
+            bottom: 15%;
+            left: 5%;
+            right: 5%;
             color: #fff;
-            text-shadow: 0 5px 10px #0004;
-            height: 60vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            z-index: 10;
         }
         .carousel .list .item .author{
-            font-weight: bold;
-            letter-spacing: 10px;
+            font-weight: 600;
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            opacity: 0.9;
         }
-        .carousel .list .item .title,
-        .carousel .list .item .topic{
-            font-size: 5em;
-            font-weight: bold;
-            line-height: 1.3em;
+        .carousel .list .item .title{
+            font-size: 3.5em;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 12px;
         }
         .carousel .list .item .topic{
-            color: #f1683a;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fef3c7;
+        }
+        .carousel .list .item .des{
+            font-size: 1em;
+            font-weight: 400;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            opacity: 0.9;
         }
         .carousel .list .item .buttons{
-            display: grid;
-            grid-template-columns: repeat(2, 130px);
-            grid-template-rows: 40px;
-            gap: 5px;
-            margin-top: auto;
-            align-self: flex-start;
-            box-sizing: border-box;
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
         }
         .carousel .list .item .buttons button{
             border: none;
-            background-color: #eee;
-            letter-spacing: 3px;
+            padding: 12px 24px;
+            border-radius: 25px;
             font-family: Poppins;
-            font-weight: 500;
+            font-weight: 600;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
         .carousel .list .item .buttons button:nth-child(1){
             background-color: #730109;
-            color: #FFFFF;
+            color: #fff;
+        }
+        .carousel .list .item .buttons button:nth-child(1):hover{
+            background-color: #5a0708;
         }
         .carousel .list .item .buttons button:nth-child(2){
             background-color: transparent;
-            border: 1px solid #fff;
-            color: #eee;
+            border: 2px solid #fff;
+            color: #fff;
+        }
+        .carousel .list .item .buttons button:nth-child(2):hover{
+            background-color: #fff;
+            color: #000;
         }
         /* thumbail */
         .thumbnail{
             position: absolute;
-            bottom: 50px;
+            bottom: -80px;
             left: 50%;
+            transform: translateX(-50%);
             width: max-content;
             z-index: 100;
             display: flex;
-            gap: 20px;
+            gap: 15px;
+            padding: 0 20px;
         }
         .thumbnail .item{
-            width: 150px;
-            height: 220px;
+            width: 20px;
+            height: 20px;
             flex-shrink: 0;
             position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+        }
+        .thumbnail .item.active{
+            opacity: 1;
+            transform: scale(1.2);
         }
         .thumbnail .item img{
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 20px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .thumbnail .item.active img{
+            border-color: #10b981;
+        }
+        .thumbnail .item:hover{
+            opacity: 0.8;
+            transform: scale(1.1);
         }
         .thumbnail .item .content{
-            color: #fff;
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            right: 10px;
-        }
-        .thumbnail .item .content .title{
-            font-weight: 500;
-        }
-        .thumbnail .item .content .description{
-            font-weight: 300;
+            display: none;
         }
         /* arrows */
         .arrows{
-            margin-top: 26px;
-            margin-left: 40px;
-            display: grid;
-            grid-template-columns: repeat(2, 130px);
-            gap: 5px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 100;
+            pointer-events: none;
         }
         .arrows button{
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background-color: #eee4;
-            border: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             color: #fff;
             font-family: monospace;
             font-weight: bold;
-            transition: .5s;
+            font-size: 18px;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
         }
         .arrows button:hover{
-            background-color: #fff;
-            color: #000;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-color: rgba(255, 255, 255, 0.8);
+            transform: scale(1.1);
         }
 
         /* animation */
@@ -319,13 +344,7 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
             opacity: 0;
             animation: showContent .5s 1s linear 1 forwards;
         }
-        @keyframes showContent{
-            to{
-                transform: translateY(0px);
-                filter: blur(0px);
-                opacity: 1;
-            }
-        }
+       
         .carousel .list .item:nth-child(1) .content .title{
             animation-delay: 1.2s!important;
         }
@@ -351,15 +370,7 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
             border-radius: 30px;
             animation: showImage .5s linear 1 forwards;
         }
-        @keyframes showImage{
-            to{
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                border-radius: 0;
-            }
-        }
+       
 
         .carousel.next .thumbnail .item:nth-last-child(1){
             overflow: hidden;
@@ -368,21 +379,12 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
         .carousel.prev .list .item img{
             z-index: 100;
         }
-        @keyframes showThumbnail{
-            from{
-                width: 0;
-                opacity: 0;
-            }
-        }
+      
         .carousel.next .thumbnail{
             animation: effectNext .5s linear 1 forwards;
         }
 
-        @keyframes effectNext{
-            from{
-                transform: translateX(150px);
-            }
-        }
+       
 
         /* running time */
 
@@ -400,10 +402,7 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
         .carousel.prev .time{
             animation: runningTime 3s linear 1 forwards;
         }
-        @keyframes runningTime{
-            from{ width: 100%}
-            to{width: 0}
-        }
+      
 
 
         /* prev click */
@@ -418,15 +417,7 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
             bottom: 0;
             left: 0;
         }
-        @keyframes outFrame{
-            to{
-                width: 150px;
-                height: 220px;
-                bottom: 50px;
-                left: 50%;
-                border-radius: 20px;
-            }
-        }
+       
 
         .carousel.prev .thumbnail .item:nth-child(1){
             overflow: hidden;
@@ -443,125 +434,156 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
             animation: contentOut 1.5s linear 1 forwards!important;
         }
 
-        @keyframes contentOut{
-            to{
-                transform: translateY(-150px);
-                filter: blur(20px);
-                opacity: 0;
+      
+        @media screen and (max-width: 768px) {
+            .carousel{
+                width: 95%; /* Adjust width for smaller screens */
+                height: 70vh;
+                border-radius: 15px;
             }
-        }
-        @media screen and (max-width: 678px) {
             .carousel .list .item .content{
-                padding-right: 0;
+                bottom: 10%;
+                left: 3%;
+                right: 3%;
             }
-            .carousel .list .item .content .title{
-                font-size: 30px;
+            .carousel .list .item .title{
+                font-size: 2.5em;
+            }
+            .carousel .list .item .buttons{
+                flex-direction: column;
+                gap: 10px;
+            }
+            .carousel .list .item .buttons button{
+                width: 100%;
+                max-width: 200px;
+            }
+            .thumbnail{
+                bottom: 15px;
+                gap: 10px;
+            }
+         0thumbnail .item{
+                width: 30px;
+                height: 30px;
+            }
+            .arrows {
+                width: calc(100% + 40px);
+                left: -20px;
+            }
+            .arrows button{
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
             }
         }
       `}</style>
 
-      <div
-        ref={carouselRef}
-        className="carousel"
-      >
-        {/* Loading State */}
-        {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black z-[100]">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
-              <div className="text-white text-xl">Loading banners...</div>
-            </div>
-          </div>
-        )}
-
-        {/* Error State */}
-        {error && !loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black z-[100]">
-            <div className="text-center">
-              <div className="text-red-400 text-xl mb-2">
-                Error Loading Banners
-              </div>
-              <div className="text-slate-400 text-sm">{error}</div>
-            </div>
-          </div>
-        )}
-
-        {/* No Data State */}
-        {!loading && !error && carouselItems.length === 0 && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black z-[100]">
-            <div className="text-center">
-              <div className="text-slate-400 text-xl mb-2">
-                No Banners Available
-              </div>
-              <div className="text-slate-500 text-sm">
-                Please contact administrator to add banners
+      {/* Wrapper with black background */}
+      <div className="w-full min-h-screen bg-black flex items-center justify-center p-4">
+        <div className="carousel-container">
+          <div
+            ref={carouselRef}
+            className="carousel"
+          >
+          {/* Loading State */}
+          {loading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black z-[100]">
+              <div className="text-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+                <div className="text-white text-xl">Loading banners...</div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Main slider - Only render if we have data */}
-        {carouselItems.length > 0 && (
-          <>
-            <div className="list">
+          {/* Error State - Removed since we use local data */}
+          {/* {!loading && !error && carouselItems.length === 0 && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black z-[100]">
+              <div className="text-center">
+                <div className="text-slate-400 text-xl mb-2">
+                  No Banners Available
+                </div>
+                <div className="text-slate-500 text-sm">
+                  Please contact administrator to add banners
+                </div>
+              </div>
+            </div>
+          )} */}
+
+          {/* Main slider - Only render if we have data */}
+          {carouselItems.length > 0 && (
+            <>
+              <div className="list">
+                {carouselItems.map((item, index) => (
+                  <div
+                    key={item.id}
+                    className="item"
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full"
+                      width={1920}
+                      height={1080}
+                      loading={index === 0 ? "eager" : "lazy"}
+                    />
+                    <div className="content">
+                     
+                      <div className="buttons">
+                        <button onClick={scrollToFeaturedSection}>ĐẶT VÉ</button>
+                        <button onClick={() => navigate('/product')}>XEM THÊM</button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Navigation arrows */}
+              <div className="arrows">
+                <button className="prev-btn ">&lt;</button>
+                <button className="next-btn">&gt;</button>
+              </div>
+
+              {/* time running */}
+              <div className="time"></div>
+            </>
+          )}
+          </div>
+
+          {/* list thumnail - moved outside carousel */}
+          {carouselItems.length > 0 && (
+            <div className="thumbnail">
               {carouselItems.map((item, index) => (
                 <div
                   key={item.id}
-                  className="item"
+                  className={`item ${index === currentIndex ? 'active' : ''}`}
+                  onClick={() => {
+                    // Handle thumbnail click to go to specific slide
+                    const targetIndex = index;
+                    if (targetIndex > currentIndex) {
+                      for (let i = 0; i < targetIndex - currentIndex; i++) {
+                        const nextBtn = carouselRef.current?.querySelector('.next-btn') as HTMLElement;
+                        if (nextBtn) nextBtn.click();
+                      }
+                    } else if (targetIndex < currentIndex) {
+                      for (let i = 0; i < currentIndex - targetIndex; i++) {
+                        const prevBtn = carouselRef.current?.querySelector('.prev-btn') as HTMLElement;
+                        if (prevBtn) prevBtn.click();
+                      }
+                    }
+                  }}
                 >
-                  <LazyImage
+                  <img
                     src={item.image}
                     alt={item.title}
                     className="w-full h-full"
-                    width={1920}
-                    height={1080}
-                    loading={index === 0 ? "eager" : "lazy"}
-                  />
-                  <div className="content">
-                    <div className="author">{item?.author}</div>
-                    <div className="title">{item.title}</div>
-                    {/* <div className="topic">{item.topic}</div> */}
-                    <div className="des">{item.description}</div>
-                    <div className="buttons">
-                      <button onClick={() => navigate(`/movie/${item.id}`)}>ĐẶT VÉ</button>
-                      <button onClick={() => navigate('/product')}>XEM THÊM</button>
-                    </div>
-                    <div className="arrows">
-                      <button className="prev-btn">&lt;</button>
-                      <button className="next-btn">&gt;</button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* list thumnail */}
-            <div className="thumbnail">
-              {carouselItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="item"
-                >
-                  <LazyImage
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full"
-                    width={150}
-                    height={220}
+                    width={40}
+                    height={40}
                     loading="lazy"
                   />
-                  <div className="content">
-                    <div className="title">{item.title}</div>
-                    {/* <div className="description">{item.topic}</div> */}
-                  </div>
                 </div>
               ))}
             </div>
-
-            {/* time running */}
-            <div className="time"></div>
-          </>
-        )}
+          )}
+        </div>
       </div>
     </>
   );

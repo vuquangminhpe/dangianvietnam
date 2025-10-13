@@ -156,61 +156,76 @@ export default function MovieDetailsPage() {
     <div className="min-h-screen">
       {/* Phần trên - Movie Info Section với background đen */}
       <div className="bg-zinc-900 text-gray-300">
-        <div className="z-10 px-6 md:px-16 lg:px-24 xl:px-44 pt-20 pb-10">
-          {/* Movie Info Section */}
-         <motion.div
-  variants={container}
-  initial="hidden"
-  animate="visible"
-  className="flex flex-col md:flex-row gap-0 mb-10 mt-10"
->
+       <div className="z-10 px-6 md:px-16 lg:px-24 xl:px-44 pt-20 pb-10">
+  {/* Movie Info Section */}
   <motion.div
-    className="flex flex-col gap-0 items-center w-full md:w-1/3"
+    variants={container}
+    initial="hidden"
+    animate="visible"
+    // UPDATE: Giữ nguyên flex-col cho mobile, chuyển sang flex-row trên desktop
+    className="flex flex-col md:flex-row gap-0 mb-10 mt-10"
   >
-    <div 
-      className="bg-[#fff4e6] rounded-tl-3xl rounded-bl-3xl p-6 shadow-xl h-[500px] w-[500px] ml-10 relative 
-                 before:content-[''] before:absolute before:-top-[30px] before:-right-[30px] before:w-[60px] before:h-[60px] before:bg-[#18181b] before:rounded-full
-                 after:content-[''] after:absolute after:-bottom-[30px] after:-right-[30px] after:w-[60px] after:h-[60px] after:bg-[#18181b] after:rounded-full"
+    {/* ===== PHẦN BÊN TRÁI - THÔNG TIN PHIM ===== */}
+    <motion.div
+      // UPDATE: Chiếm toàn bộ chiều rộng trên mobile, 1/3 trên desktop
+      className="flex flex-col items-center w-full md:w-1/3"
     >
-      <MovieInfo
-        movie={movie}
-        theater={theater}
-        selectedInfo={selectedInfo}
-        setSelectedInfo={setSelectedInfo}
-        showtimes={showtimes}
-        isAuthenticated={isAuthenticated}
-        userId={userId}
-        navigate={navigate}
-        setShowLoginModal={setShowLoginModal}
-      />
+      <div
+        // UPDATE: Bỏ kích thước cố định, thay bằng kích thước responsive
+        // Bỏ ml-10 để không bị lệch trên mobile
+        // Thay đổi bo góc và hiệu ứng lỗ tròn cho từng màn hình
+        className="bg-[#fff4e6] p-6 shadow-xl w-full 
+                   min-h-[450px] md:h-[500px] relative
+                   rounded-t-3xl md:rounded-l-3xl md:rounded-r-none
+                   
+                   before:hidden md:before:block before:content-[''] before:absolute before:-top-[30px] before:-right-[30px] before:w-[60px] before:h-[60px] before:bg-[#18181b] before:rounded-full
+                   after:hidden md:after:block after:content-[''] after:absolute after:-bottom-[30px] after:-right-[30px] after:w-[60px] after:h-[60px] after:bg-[#18181b] after:rounded-full"
+      >
+        <MovieInfo
+          movie={movie}
+          theater={theater}
+          selectedInfo={selectedInfo}
+          setSelectedInfo={setSelectedInfo}
+          showtimes={showtimes}
+          isAuthenticated={isAuthenticated}
+          userId={userId}
+          navigate={navigate}
+          setShowLoginModal={setShowLoginModal}
+        />
+      </div>
+    </motion.div>
+
+    {/* ===== ĐƯỜNG KẺ ĐỨT Ở GIỮA ===== */}
+    {/* Giữ nguyên, chỉ hiển thị trên desktop */}
+    <div className="hidden md:flex items-center justify-center -ml-px relative z-10">
+      <div className="h-[440px] border-l-4 border-dashed border-gray-400"></div>
     </div>
+
+    {/* ===== PHẦN BÊN PHẢI - POSTER PHIM ===== */}
+    <motion.div
+      // UPDATE: Chiếm toàn bộ chiều rộng trên mobile, 2/3 trên desktop
+      className="w-full md:w-2/3"
+    >
+      <div
+        // UPDATE: Thay đổi chiều cao và bo góc cho responsive
+        className="bg-[#fff4e6] shadow-xl relative 
+                   h-[350px] md:h-[500px]
+                   rounded-b-3xl md:rounded-r-3xl md:rounded-l-none
+
+                   before:hidden md:before:block before:content-[''] before:absolute before:-top-[30px] before:-left-[30px] before:w-[60px] before:h-[60px] before:bg-[#18181b] before:rounded-full
+                   after:hidden md:after:block after:content-[''] after:absolute after:-bottom-[30px] after:-left-[30px] after:w-[60px] after:h-[60px] after:bg-[#18181b] after:rounded-full"
+        style={{
+          backgroundImage: `url(${movie.poster_url})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
+        {/* Nội dung trống, chỉ dùng làm nền */}
+      </div>
+    </motion.div>
   </motion.div>
-
-  {/* Dashed line separator - THÊM 'relative z-10' VÀO ĐÂY */}
-  <div className="hidden md:flex items-center justify-center -ml-px relative z-10">
-    <div className="h-[440px] border-l-4 border-dashed border-gray-400"></div>
-  </div>
-
-  {/* Phần bên phải - Poster phim */}
-<motion.div
-  className="w-full md:w-2/3" // Xóa pb-10 và relative vì không cần nữa
->
-  <div 
-    className="bg-[#fff4e6] rounded-tr-3xl rounded-br-3xl p-6 shadow-xl relative h-[500px]
-               before:content-[''] before:absolute before:-top-[30px] before:-left-[30px] before:w-[60px] before:h-[60px] before:bg-[#18181b] before:rounded-full
-               after:content-[''] after:absolute after:-bottom-[30px] after:-left-[30px] after:w-[60px] after:h-[60px] after:bg-[#18181b] after:rounded-full"
-    style={{
-      backgroundImage: `url(${movie.poster_url})`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat'
-    }}
-  >
-    {/* KHÔNG CẦN THẺ <img> Ở ĐÂY NỮA */}
-  </div>
-</motion.div>
-</motion.div>
-        </div>
+</div>
       </div>
 
       {/* Phần dưới - Cast và Feedback Section với background trắng */}

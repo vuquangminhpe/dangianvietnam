@@ -4,6 +4,8 @@ import LazyLoad from '../../components/ui/LazyLoad'
 import ImagePreloader from '../../components/ui/ImagePreloader'
 import bgImage from '../../assets/background home-01.png'
 
+
+
 // Lazy load components
 const FeaturedSection = lazy(() => import('../../components/banners/FeaturedSection/FeaturedSection'))
 const Trending = lazy(() => import('../../components/Trending/Trending'))
@@ -50,7 +52,7 @@ const Home = () => {
               color: '#730109'
             }}
           >
-            ĐANG CÔNG CHIẾU
+            SỰ KIỆN ĐẶC BIỆT
           </h3>
         </div>
       </div>
@@ -58,7 +60,9 @@ const Home = () => {
       {/* Lazy loaded components with intersection observer */}
       <LazyLoad fallback={<SectionPlaceholder />} rootMargin="200px">
         <Suspense fallback={<LoadingSpinner />}>
-          <FeaturedSection />
+        
+            <FeaturedSection />
+         
         </Suspense>
       </LazyLoad>
       
@@ -79,6 +83,8 @@ const Home = () => {
           <Category />
         </Suspense>
       </LazyLoad>
+
+
       
       {/* <LazyLoad fallback={<SectionPlaceholder />} rootMargin="200px">
         <Suspense fallback={<LoadingSpinner />}>

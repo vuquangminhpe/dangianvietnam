@@ -4,6 +4,7 @@ import background_03 from '../../assets/Giao diện múa rối nước/backgroun
 import background_04 from '../../assets/Giao diện múa rối nước/background/background-04.png';
 import background_05 from '../../assets/Giao diện múa rối nước/background/background-05.png';
 import background_06 from '../../assets/Giao diện múa rối nước/background/background-06.png';
+import background_07 from '../../assets/Giao diện múa rối nước/background/Mua roi nuoc_bonus-17.png';
 
 import duong_luon from '../../assets/Giao diện múa rối nước/đường lượn.png';
 import khung_bo_video from '../../assets/Giao diện múa rối nước/khung bỏ video.png';
@@ -29,7 +30,8 @@ export const images = {
     bg03: background_03,
     bg04: background_04,
     bg05: background_05,
-    bg06: background_06
+    bg06: background_06,
+    bg07: background_07,
   },
   decorations: {
     duong_luon,

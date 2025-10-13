@@ -315,7 +315,7 @@ const Trending = () => {
   return (
     <div className="relative px-6 md:px-16 lg:px-24 xl:px-44 py-12 overflow-hidden">
       {/* Red Striped Background SVG */}
-      <div className="absolute top-0 left-0 w-full h-full">
+      {/* <div className="absolute top-0 left-0 w-full h-full">
         <svg
           version="1.1"
           id="Layer_1"
@@ -336,7 +336,7 @@ const Trending = () => {
             transform="translate(75,50)"
           />
         </svg>
-      </div>
+      </div> */}
 
       {/* Content */}
       <div className="relative">

@@ -44,18 +44,11 @@ const ProductPage = () => {
       {/* Hero Section với bg02 */}
       <motion.div className="relative" {...fadeIn}>
         <img 
-          src={images.backgrounds.bg02} 
+          src={images.backgrounds.bg07} 
           alt="background" 
           className="w-full h-auto block z-0" 
         />
-        <motion.img 
-          src={images.text.gioi_thieu} 
-          alt="múa rối nước 07" 
-          className="absolute top-0 left-0 w-full h-auto z-10"
-          initial={{ opacity: 0, y: -15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-        />
+
       </motion.div>
 
       {/* Section 2 với bg03 */}

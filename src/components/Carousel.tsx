@@ -12,6 +12,9 @@ interface CardData {
   genre: string[]
   release_date: string
   average_rating: number
+  showtimeStart?: string | null
+  showtimeEnd?: string | null
+  priceRegular?: number | null
 }
 
 interface IconProps {
@@ -139,22 +142,22 @@ export default function Carousel({ cardData }: { cardData: CardData[] }) {
 
   return (
     <div
-      className='w-full max-w-7xl mx-auto p-4'
+      className='w-full max-w-7xl mx-auto p-2 sm:p-4'
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className='relative flex w-full flex-col rounded-3xl p-4 pt-6 md:p-6'>
+      <div className='relative flex w-full flex-col rounded-3xl p-2 sm:p-4 pt-4 sm:pt-6 md:p-6'>
         <div 
-          className='relative w-full h-[650px] md:h-[700px] flex items-center justify-center overflow-visible'
+          className='relative w-full h-[378px] sm:h-[434px] md:h-[490px] flex items-center justify-center overflow-visible'
           style={{ marginTop: '-50px', marginBottom: '75px' }}
         >
           {/* Left Arrow Button */}
           <button
             onClick={() => changeSlide(activeIndex - 1)}
-            className='absolute left-[-120px] top-1/2 -translate-y-1/2 z-50 p-2 hover:opacity-80 transition-opacity focus:outline-none'
+            className='absolute left-[-80px] sm:left-[-100px] md:left-[-120px] top-1/2 -translate-y-1/2 z-50 p-2 hover:opacity-80 transition-opacity focus:outline-none'
             aria-label='Previous slide'
           >
-            <ChevronLeftIcon className='w-24 h-24 md:w-28 md:h-28' />
+            <ChevronLeftIcon className='w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28' />
           </button>
 
           <motion.div
@@ -178,10 +181,10 @@ export default function Carousel({ cardData }: { cardData: CardData[] }) {
           {/* Right Arrow Button */}
           <button
             onClick={() => changeSlide(activeIndex + 1)}
-            className='absolute right-[-120px] top-1/2 -translate-y-1/2 z-50 p-2 hover:opacity-80 transition-opacity focus:outline-none'
+            className='absolute right-[-80px] sm:right-[-100px] md:right-[-120px] top-1/2 -translate-y-1/2 z-50 p-2 hover:opacity-80 transition-opacity focus:outline-none'
             aria-label='Next slide'
           >
-            <ChevronRightIcon className='w-24 h-24 md:w-28 md:h-28' />
+            <ChevronRightIcon className='w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28' />
           </button>
         </div>
       </div>
@@ -202,7 +205,7 @@ function Card({ card, index, activeIndex, totalCards }: CardProps) {
   const isVisible = Math.abs(offset) <= 1
 
   const animate = {
-    x: `${offset * 435}px`,
+    x: `${offset * 380}px`,
     scale: offset === 0 ? 1 : 0.85,
     zIndex: totalCards - Math.abs(offset),
     opacity: isVisible ? 1 : 0,
@@ -211,7 +214,7 @@ function Card({ card, index, activeIndex, totalCards }: CardProps) {
 
   return (
     <motion.div
-      className='absolute w-[365px] h-full flex flex-col items-center justify-center'
+      className='absolute w-[280px] sm:w-[320px] md:w-[365px] h-[378px] sm:h-[434px] md:h-[490px] flex flex-col items-center justify-center'
       style={{
         transformStyle: 'preserve-3d'
       }}
@@ -219,11 +222,15 @@ function Card({ card, index, activeIndex, totalCards }: CardProps) {
       initial={false}
     >
       <div className='flex flex-col bg-transparent rounded-2xl hover:-translate-y-1 transition duration-300 w-full overflow-hidden border-2 border-red-800 shadow-2xl'>
-        <div className='w-[365px] h-[545px] overflow-hidden rounded-t-2xl flex-shrink-0'>
+        <div className='w-[280px] sm:w-[320px] md:w-[365px] h-[294px] sm:h-[336px] md:h-[382px] overflow-hidden rounded-t-2xl flex-shrink-0'>
           <img
             alt={card.title}
             className='w-full h-full object-cover cursor-pointer hover:scale-105 transition-transform duration-300'
             src={card.imageUrl}
+            onClick={() => {
+              navigate(`/movies/${card.id}`)
+              scrollTo(0, 0)
+            }}
             onError={(e) => {
               const target = e.target as HTMLImageElement
               target.onerror = null
@@ -231,48 +238,41 @@ function Card({ card, index, activeIndex, totalCards }: CardProps) {
             }}
           />
         </div>
-        <div className='flex flex-col justify-between p-3 h-[155px] sm:h-[165px] md:h-[155px] bg-red-800'>
-          <div className='h-[50px] sm:h-[55px] flex items-center justify-center'>
-            <h3 className='font-bold text-white leading-tight line-clamp-2 text-base sm:text-lg md:text-base text-center'
+        <div className='flex flex-col justify-between p-2 sm:p-3 h-[84px] sm:h-[98px] md:h-[109px] bg-red-800'>
+          <div className='h-[25px] sm:h-[28px] md:h-[35px] flex items-center justify-center'>
+            <h3 className='font-bold text-white leading-tight line-clamp-2 text-sm sm:text-base md:text-base text-center'
                 style={{ fontFamily: 'Merriweather, serif' }}>
               {card.title}
             </h3>
           </div>
-          <div className='h-[45px] sm:h-[50px] flex items-center justify-center'>
-            <p className='text-sm sm:text-base md:text-sm text-yellow-50 line-clamp-2 leading-tight text-center'
-               style={{ fontFamily: 'Roboto, sans-serif' }}>
-              {new Date(card.release_date).getFullYear()} | {card.genre.join(' - ')} | {card.duration} mins
-            </p>
+          <div className='h-[25px] sm:h-[28px] md:h-[32px] flex items-center justify-center'>
+            {card.showtimeStart && card.showtimeEnd && (
+              <div className='flex items-center gap-1 sm:gap-2'>
+                <svg fill="#fef3c7" width="14px" height="14px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24">
+                  <path d="M2,19c0,1.7,1.3,3,3,3h14c1.7,0,3-1.3,3-3v-8H2V19z M19,4h-2V3c0-0.6-0.4-1-1-1s-1,0.4-1,1v1H9V3c0-0.6-0.4-1-1-1S7,2.4,7,3v1H5C3.3,4,2,5.3,2,7v2h20V7C22,5.3,20.7,4,19,4z"/>
+                </svg>
+                <p className='text-xs sm:text-sm md:text-sm text-yellow-50 line-clamp-2 leading-tight text-center'
+                   style={{ fontFamily: 'Roboto, sans-serif' }}>
+                  {(() => {
+                    const startDate = new Date(card.showtimeStart as string)
+                    const endDate = new Date(card.showtimeEnd as string)
+                    const startHour = startDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+                    const endHour = endDate.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+                    const day = startDate.getDate()
+                    const month = startDate.getMonth() + 1
+                    const year = startDate.getFullYear()
+                    return `${startHour} - ${endHour}, ${day} tháng ${month}, ${year}`
+                  })()}
+                </p>
+              </div>
+            )}
           </div>
-          <div className='flex items-center justify-center gap-4 h-[40px] sm:h-[45px]'>
-            <button
-              onClick={() => {
-                navigate(`/movies/${card.id}`);
-                scrollTo(0, 0);
-              }}
-              className='px-4 sm:px-5 py-2 sm:py-2.5 text-sm font-bold bg-yellow-400 hover:bg-yellow-500 text-red-800 hover:text-red-900
-          transition rounded-full cursor-pointer'
-              style={{ fontFamily: 'Merriweather, serif' }}
-            >
-              <span className='hidden sm:inline'>Mua vé</span>
-              <span className='sm:hidden'>Mua</span>
-            </button>
-            <p className='flex items-center gap-1 text-sm text-yellow-50'
-               style={{ fontFamily: 'Roboto, sans-serif' }}>
-              <svg
-                stroke='currentColor'
-                fill='currentColor'
-                strokeWidth='0'
-                viewBox='0 0 24 24'
-                className='w-3 h-3 text-yellow-400 fill-yellow-400'
-                height='1em'
-                width='1em'
-                xmlns='http://www.w3.org/2000/svg'
-              >
-                <path d='m6.516 14.323-1.49 6.452a.998.998 0 0 0 1.529 1.057L12 18.202l5.445 3.63a1.001 1.001 0 0 0 1.517-1.106l-1.829-6.4 4.536-4.082a1 1 0 0 0-.59-1.74l-5.701-.454-2.467-5.461a.998.998 0 0 0-1.822 0L8.622 8.05l-5.701.453a1 1 0 0 0-.619 1.713l4.214 4.107zm2.853-4.326a.998.998 0 0 0 .832-.586L12 5.43l1.799 3.981a.998.998 0 0 0 .832.586l3.972.315-3.271 2.944c-.284.256-.397.65-.293 1.018l1.253 4.385-3.736-2.491a.995.995 0 0 0-1.109 0l-3.904 2.603 1.05-4.546a1 1 0 0 0-.276-.94l-3.038-2.962 4.09-.326z'></path>
-              </svg>
-              {card.average_rating > 0 ? card.average_rating.toFixed(1) : 'N/A'}
-            </p>
+          <div className='flex items-center justify-center gap-2 sm:gap-4 h-[21px] sm:h-[25px] md:h-[28px]'>
+            {typeof card.priceRegular === 'number' && (
+              <p className='text-sm sm:text-base font-bold text-white' style={{ fontFamily: 'Merriweather, serif' }}>
+                Giá từ: <span style={{ color: '#FFE082' }}>{(card.priceRegular as number).toLocaleString('vi-VN')} VNĐ</span>
+              </p>
+            )}
           </div>
         </div>
       </div>

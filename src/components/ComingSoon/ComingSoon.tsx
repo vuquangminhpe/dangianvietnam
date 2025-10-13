@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { getComingSoonMovies } from '../../apis/movie.api';
+import { getPopularMovies } from '../../apis/movie.api';
 import type { Movie } from '../../types/Movie.type';
 import { useNavigate } from 'react-router-dom';
 import { FaCalendarAlt } from 'react-icons/fa';
@@ -18,7 +18,7 @@ const ComingSoon = () => {
     const fetchComingSoonMovies = async () => {
       try {
         setLoading(true);
-        const data = await getComingSoonMovies(20);
+        const data = await getPopularMovies(20, 1);
         console.log('Coming Soon Movies:', data);
         
         // If no data from API, use hardcoded data

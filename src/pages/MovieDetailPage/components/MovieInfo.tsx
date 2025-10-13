@@ -56,7 +56,8 @@ export default function MovieInfo({
           <motion.h1
             variants={fadeUp}
             custom={0}
-            className="text-5xl font-bold mb-2"
+            // UPDATE: Thêm responsive cho tiêu đề phim
+            className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2"
             style={{ fontFamily: "Black Stuff Bold" }}
           >
             {movie.title}
@@ -67,7 +68,8 @@ export default function MovieInfo({
               <motion.p
                 variants={fadeUp}
                 custom={1}
-                className="mb-1 flex items-center gap-2 text-lg"
+                // UPDATE: Thêm responsive cho thông tin suất chiếu
+                className="mb-1 flex items-center gap-2 text-base md:text-lg"
                 style={{ fontFamily: "Black Stuff Bold" }}
               >
                 <svg
@@ -100,7 +102,8 @@ export default function MovieInfo({
               <motion.p
                 variants={fadeUp}
                 custom={2}
-                className="mb-1 flex items-center gap-2 text-lg"
+                // UPDATE: Thêm responsive cho thông tin rạp
+                className="mb-1 flex items-center gap-2 text-base md:text-lg"
                 style={{ fontFamily: "Black Stuff Bold" }}
               >
                 <svg
@@ -133,7 +136,8 @@ export default function MovieInfo({
               <motion.p
                 variants={fadeUp}
                 custom={3}
-                className="mb-1 text-3xl font-bold"
+                // UPDATE: Thêm responsive cho giá vé
+                className="mb-1 text-2xl md:text-3xl font-bold"
                 style={{ fontFamily: "Black Stuff Bold" }}
               >
                 Giá từ:{" "}
@@ -161,9 +165,10 @@ export default function MovieInfo({
                 whileTap={{ scale: 0.95 }}
                 variants={fadeUp}
                 custom={4}
-                className="mt-4 w-full py-3 bg-[#730109] text-white 
-                                   font-semibold rounded-lg hover:bg-[#5a0708] transition-all
-                                   flex items-center justify-center gap-2"
+                // UPDATE: Thêm responsive cho button (padding, text size)
+                className="mt-4 w-full py-2 md:py-3 bg-[#730109] text-white 
+                           text-base md:text-lg font-semibold rounded-lg hover:bg-[#5a0708] 
+                           transition-all flex items-center justify-center gap-2"
               >
                 {isAuthenticated || userId ? "Mua Vé Ngay" : "Log in to booking"}
               </motion.button>
