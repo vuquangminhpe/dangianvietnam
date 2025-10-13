@@ -154,7 +154,7 @@ const PaymentHistory: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-primary/40 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400 mx-auto mb-4" />
           <p className="text-gray-300">Loading payment history...</p>
@@ -164,7 +164,7 @@ const PaymentHistory: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-primary/40 to-slate-900 py-8 pt-28">
+    <div className="min-h-screen bg-white py-8 pt-28">
       {/* Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl" />
@@ -178,10 +178,10 @@ const PaymentHistory: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-3xl font-bold text-white mb-2">
+          <h1 className="text-3xl font-bold mb-2" style={{ color: '#730109' }}>
             Payment History
           </h1>
-          <p className="text-gray-300">Track all your movie ticket payments</p>
+          <p style={{ color: '#730109' }}>Track all your movie ticket payments</p>
         </motion.div>
 
         {/* Search and Filters */}
@@ -189,7 +189,8 @@ const PaymentHistory: React.FC = () => {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 mb-6"
+          className="backdrop-blur-lg rounded-2xl p-6 border border-white/20 mb-6"
+          style={{ backgroundColor: '#37373c' }}
         >
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             {/* Search */}
@@ -208,8 +209,9 @@ const PaymentHistory: React.FC = () => {
             {/* Filter Toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600/30 text-purple-200 rounded-lg 
-                       hover:bg-purple-600/50 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-white rounded-lg 
+                       transition-colors"
+              style={{ backgroundColor: '#730109' }}
             >
               <Filter className="h-4 w-4" />
               Filters
@@ -329,7 +331,7 @@ const PaymentHistory: React.FC = () => {
           className="space-y-4"
         >
           {paymentsData?.payments?.length === 0 ? (
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 text-center">
+            <div className="backdrop-blur-lg rounded-2xl p-8 border border-white/20 text-center" style={{ backgroundColor: '#37373c' }}>
               <CreditCard className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">
                 No payments found
@@ -345,8 +347,9 @@ const PaymentHistory: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:border-white/40 
+                className="backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:border-white/40 
                          transition-all cursor-pointer"
+                style={{ backgroundColor: '#37373c' }}
                 onClick={() => handleViewDetails(payment as any)}
               >
                 <div className="flex flex-col lg:flex-row lg:items-center gap-4">
@@ -401,7 +404,7 @@ const PaymentHistory: React.FC = () => {
                     </div>
 
                     {/* Action */}
-                    <button className="flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors">
+                    <button className="flex items-center gap-2 transition-colors" style={{ color: '#ffffff' }}>
                       <Eye className="h-4 w-4" />
                       <span className="hidden lg:inline">
                         {payment.status === "pending"
@@ -460,9 +463,10 @@ const PaymentHistory: React.FC = () => {
                   onClick={() => handlePageChange(page)}
                   className={`px-4 py-2 rounded-lg transition-colors ${
                     page === filters.page
-                      ? "bg-purple-600 text-white"
-                      : "bg-white/10 text-gray-300 hover:bg-white/20"
+                      ? "text-white"
+                      : "text-gray-300 hover:text-white"
                   }`}
+                  style={{ backgroundColor: page === filters.page ? '#730109' : '#37373c' }}
                 >
                   {page}
                 </button>
@@ -480,7 +484,8 @@ const PaymentHistory: React.FC = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 max-w-md w-full"
+                className="backdrop-blur-lg rounded-2xl p-8 border border-white/20 max-w-md w-full"
+                style={{ backgroundColor: '#37373c' }}
               >
                 <div className="text-center mb-6">
                   <h3 className="text-2xl font-bold text-white mb-2">
@@ -503,7 +508,8 @@ const PaymentHistory: React.FC = () => {
                 <div className="mt-6">
                   <button
                     onClick={() => setShowQRModal(false)}
-                    className="w-full px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
+                    className="w-full px-4 py-2 text-white rounded-lg transition-colors"
+                    style={{ backgroundColor: '#730109' }}
                   >
                     Đóng
                   </button>
@@ -519,7 +525,8 @@ const PaymentHistory: React.FC = () => {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              className="backdrop-blur-lg rounded-2xl p-8 border border-white/20 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+              style={{ backgroundColor: '#37373c' }}
             >
               {/* Header */}
               <div className="text-center mb-6">
@@ -540,7 +547,7 @@ const PaymentHistory: React.FC = () => {
               </div>
 
               {/* Movie Info */}
-              <div className="bg-white/5 rounded-xl p-6 mb-6">
+              <div className="rounded-xl p-6 mb-6" style={{ backgroundColor: '#37373c' }}>
                 <div className="flex items-center gap-4 mb-4">
                   {selectedPayment.movie?.poster_url && (
                     <img
@@ -623,7 +630,7 @@ const PaymentHistory: React.FC = () => {
 
               {/* Error Message for Failed Payments */}
               {selectedPayment.status === "failed" && selectedPayment.error && (
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 mb-6">
+                <div className="border border-red-500/20 rounded-lg p-4 mb-6" style={{ backgroundColor: '#37373c' }}>
                   <p className="text-red-400 font-medium text-sm">
                     Lỗi thanh toán:
                   </p>
@@ -635,7 +642,7 @@ const PaymentHistory: React.FC = () => {
 
               {/* Admin Note */}
               {selectedPayment.admin_note && (
-                <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-6">
+                <div className="border border-blue-500/20 rounded-lg p-4 mb-6" style={{ backgroundColor: '#37373c' }}>
                   <p className="text-blue-400 font-medium text-sm">Ghi chú:</p>
                   <p className="text-blue-300 text-sm">
                     {selectedPayment.admin_note}
@@ -647,7 +654,8 @@ const PaymentHistory: React.FC = () => {
               <div className="text-center">
                 <button
                   onClick={() => setShowDetailsModal(false)}
-                  className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors font-medium"
+                  className="px-8 py-3 text-white rounded-lg transition-colors font-medium"
+                  style={{ backgroundColor: '#730109' }}
                 >
                   Đóng
                 </button>

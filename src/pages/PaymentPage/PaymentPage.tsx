@@ -266,13 +266,13 @@ const PaymentPage: React.FC = () => {
 
   if (!hasValidSeats || !bookingData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="h-16 w-16 text-red-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-2">
+          <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
             {!bookingData ? "No Booking Data" : "No Seats Selected"}
           </h2>
-          <p className="text-gray-300 mb-4">
+          <p className="text-gray-600 mb-4">
             {!bookingData 
               ? "Please select seats and try again" 
               : "You need to select at least one seat to proceed with payment"
@@ -298,12 +298,12 @@ const PaymentPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8">
+    <div className="min-h-screen bg-white py-8">
       {/* Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-purple-500/5 to-transparent rounded-full" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-100 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-100 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-gray-100 to-transparent rounded-full" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4 max-w-6xl">
@@ -315,12 +315,12 @@ const PaymentPage: React.FC = () => {
         >
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors mr-4"
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mr-4"
           >
             <ArrowLeft className="h-5 w-5" />
             Back
           </button>
-          <h1 className="text-3xl font-bold text-white">
+          <h1 className="text-3xl font-bold text-gray-900">
             Complete Your Payment
           </h1>
         </motion.div>
@@ -333,8 +333,8 @@ const PaymentPage: React.FC = () => {
             transition={{ delay: 0.1 }}
             className="lg:col-span-1"
           >
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-              <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
+            <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-lg">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <Star className="h-5 w-5 text-yellow-400" />
                 Booking Summary
               </h2>
@@ -347,10 +347,10 @@ const PaymentPage: React.FC = () => {
                   className="w-20 h-28 object-cover rounded-lg"
                 />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-white text-lg leading-tight">
+                  <h3 className="font-semibold text-gray-900 text-lg leading-tight">
                     {bookingData.movie.title}
                   </h3>
-                  <p className="text-gray-300 text-sm mt-1">
+                  <p className="text-gray-600 text-sm mt-1">
                     {bookingData.movie.duration} minutes
                   </p>
                 </div>
@@ -359,17 +359,17 @@ const PaymentPage: React.FC = () => {
               {/* Theater & Showtime */}
               <div className="space-y-3 mb-6">
                 <div>
-                  <p className="text-gray-400 text-sm">Theater</p>
-                  <p className="text-white font-medium">
+                  <p className="text-gray-500 text-sm">Theater</p>
+                  <p className="text-gray-900 font-medium">
                     {bookingData.theater.name}
                   </p>
-                  <p className="text-gray-300 text-sm">
+                  <p className="text-gray-600 text-sm">
                     {bookingData.theater.location}
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-400 text-sm">Showtime</p>
-                  <p className="text-white font-medium">
+                  <p className="text-gray-500 text-sm">Showtime</p>
+                  <p className="text-gray-900 font-medium">
                     {formatDateTime(bookingData.showtime.start_time)}
                   </p>
                 </div>
@@ -377,12 +377,12 @@ const PaymentPage: React.FC = () => {
 
               {/* Seats */}
               <div className="mb-6">
-                <p className="text-gray-400 text-sm mb-2">Seats</p>
+                <p className="text-gray-500 text-sm mb-2">Seats</p>
                 <div className="flex flex-wrap gap-2">
                   {bookingData.seats.map((seat, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-purple-600/30 text-purple-200 rounded-full text-sm"
+                      className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm"
                     >
                       {seat.row}
                       {seat.number}
@@ -392,12 +392,12 @@ const PaymentPage: React.FC = () => {
               </div>
 
               {/* Price Breakdown */}
-              <div className="border-t border-white/20 pt-4">
+              <div className="border-t border-gray-200 pt-4">
                 <div className="space-y-2 text-sm">
                   {bookingData.seats.map((seat, index) => (
                     <div
                       key={index}
-                      className="flex justify-between text-gray-300"
+                      className="flex justify-between text-gray-600"
                     >
                       <span>
                         Seat {seat.row}
@@ -406,8 +406,8 @@ const PaymentPage: React.FC = () => {
                       <span>{formatCurrency(seat.price)}</span>
                     </div>
                   ))}
-                  <div className="border-t border-white/10 pt-2 mt-2">
-                    <div className="flex justify-between text-white font-semibold text-lg">
+                  <div className="border-t border-gray-200 pt-2 mt-2">
+                    <div className="flex justify-between text-gray-900 font-semibold text-lg">
                       <span>Total</span>
                       <span>{formatCurrency(bookingData.total_amount)}</span>
                     </div>
@@ -424,9 +424,9 @@ const PaymentPage: React.FC = () => {
             transition={{ delay: 0.2 }}
             className="lg:col-span-2"
           >
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-              <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-                <Shield className="h-5 w-5 text-green-400" />
+            <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-lg">
+              <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
+                <Shield className="h-5 w-5 text-green-500" />
                 Select Payment Method
               </h2>
 
@@ -440,8 +440,8 @@ const PaymentPage: React.FC = () => {
                       whileTap={{ scale: 0.98 }}
                       className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all ${
                         selectedPaymentMethod === method.id
-                          ? "border-purple-400 bg-purple-500/20"
-                          : "border-white/20 bg-white/5 hover:border-white/40"
+                          ? "border-purple-400 bg-purple-50"
+                          : "border-gray-200 bg-gray-50 hover:border-gray-300"
                       }`}
                       onClick={() => setSelectedPaymentMethod(method.id)}
                     >
@@ -452,10 +452,10 @@ const PaymentPage: React.FC = () => {
                           <Icon className="h-6 w-6 text-white" />
                         </div>
                         <div className="flex-1">
-                          <h3 className="font-semibold text-white">
+                          <h3 className="font-semibold text-gray-900">
                             {method.name}
                           </h3>
-                          <p className="text-gray-300 text-sm">
+                          <p className="text-gray-600 text-sm">
                             {method.description}
                           </p>
                         </div>
@@ -469,12 +469,12 @@ const PaymentPage: React.FC = () => {
               </div>
 
               {/* Security Info */}
-              <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 mb-6">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                 <div className="flex items-center gap-3">
-                  <Shield className="h-5 w-5 text-green-400" />
+                  <Shield className="h-5 w-5 text-green-500" />
                   <div>
-                    <p className="text-green-300 font-medium">Secure Payment</p>
-                    <p className="text-green-400/80 text-sm">
+                    <p className="text-green-700 font-medium">Secure Payment</p>
+                    <p className="text-green-600/80 text-sm">
                       Your payment information is encrypted and secure
                     </p>
                   </div>
@@ -504,7 +504,7 @@ const PaymentPage: React.FC = () => {
                 )}
               </motion.button>
 
-              <p className="text-center text-gray-400 text-sm mt-4">
+              <p className="text-center text-gray-500 text-sm mt-4">
                 By completing this payment, you agree to our Terms of Service
                 and Privacy Policy
               </p>

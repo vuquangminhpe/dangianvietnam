@@ -577,11 +577,11 @@ export default function CheckoutPage() {
       ];
 
   return (
-    <div className="min-h-screen bg-black/70 py-8">
+    <div className="min-h-screen bg-white py-8">
       {/* Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-100/50 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4 max-w-4xl mt-20">
@@ -594,7 +594,7 @@ export default function CheckoutPage() {
           <div className="flex items-center justify-between mb-5">
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors mr-4"
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mr-4"
             >
               <ArrowLeft className="h-5 w-5" />
               Back
@@ -605,7 +605,8 @@ export default function CheckoutPage() {
               disabled={deletedLockedSeatsMutation.isPending}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+              style={{ backgroundColor: '#730109', color: 'white' }}
             >
               {deletedLockedSeatsMutation.isPending ? (
                 <>
@@ -623,7 +624,7 @@ export default function CheckoutPage() {
 
           {/* Cancel locked seats button */}
 
-          <h1 className="text-3xl font-bold text-white">
+          <h1 className="text-3xl font-bold" style={{ color: '#730109' }}>
             Complete Your Booking
           </h1>
         </motion.div>
@@ -650,7 +651,7 @@ export default function CheckoutPage() {
                         ? "bg-purple-600 text-white"
                         : isCompleted
                         ? "bg-green-600 text-white"
-                        : "bg-white/10 text-gray-400"
+                        : "bg-gray-100 text-gray-500 border border-gray-200"
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -661,7 +662,7 @@ export default function CheckoutPage() {
                   {index < steps.length - 1 && (
                     <div
                       className={`w-8 h-0.5 mx-2 ${
-                        isCompleted ? "bg-green-400" : "bg-white/20"
+                        isCompleted ? "bg-green-400" : "bg-gray-300"
                       }`}
                     />
                   )}
@@ -681,8 +682,8 @@ export default function CheckoutPage() {
             <div
               className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg ${
                 timeRemaining <= 60
-                  ? "bg-red-500/20 border border-red-500/40 text-red-300"
-                  : "bg-orange-500/20 border border-orange-500/40 text-orange-300"
+                  ? "bg-red-100 border border-red-200 text-red-700"
+                  : "bg-orange-100 border border-orange-200 text-orange-700"
               }`}
             >
               <Clock className="h-4 w-4" />
@@ -702,9 +703,9 @@ export default function CheckoutPage() {
             transition={{ delay: 0.2 }}
             className="lg:col-span-1"
           >
-            <div className="bg-black/70 backdrop-blur-lg rounded-2xl p-6 border border-white/20 sticky top-8">
-              <h2 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                <Ticket className="h-5 w-5 text-purple-400" />
+            <div className="rounded-2xl p-6 border border-gray-200 shadow-sm sticky top-8" style={{ backgroundColor: '#37373c' }}>
+              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2" style={{ color: 'white' }}>
+                <Ticket className="h-5 w-5 text-purple-600" />
                 Booking Summary
               </h2>
 
@@ -717,10 +718,10 @@ export default function CheckoutPage() {
                     className="w-20 h-28 object-cover rounded-lg"
                   />
                   <div className="flex-1">
-                    <h3 className="font-semibold text-white text-lg leading-tight">
+                    <h3 className="font-semibold text-lg leading-tight" style={{ color: 'white' }}>
                       {movie.title}
                     </h3>
-                    <p className="text-gray-300 text-sm mt-1">
+                    <p className="text-sm mt-1" style={{ color: '#cccccc' }}>
                       {movie.duration} minutes
                     </p>
                   </div>
@@ -730,15 +731,15 @@ export default function CheckoutPage() {
               {/* Theater & Showtime */}
               <div className="space-y-3 mb-6">
                 <div className="flex items-start gap-2">
-                  <MapPin className="h-4 w-4 text-gray-400 mt-1" />
+                  <MapPin className="h-4 w-4 text-gray-500 mt-1" />
                   <div>
-                    <p className="text-white font-medium">
+                    <p className="font-medium" style={{ color: 'white' }}>
                       {screen?.theater?.name}
                     </p>
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-sm" style={{ color: '#cccccc' }}>
                       {screen?.theater?.location}, {screen?.theater?.city}
                     </p>
-                    <p className="text-gray-400 text-sm">
+                    <p className="text-sm" style={{ color: '#cccccc' }}>
                       Screen: {screen?.name} ({screen?.screen_type})
                     </p>
                   </div>
@@ -746,9 +747,9 @@ export default function CheckoutPage() {
 
                 {showtime && (
                   <div className="flex items-start gap-2">
-                    <Calendar className="h-4 w-4 text-gray-400 mt-1" />
+                    <Calendar className="h-4 w-4 text-gray-500 mt-1" />
                     <div>
-                      <p className="text-white font-medium">
+                      <p className="font-medium" style={{ color: 'white' }}>
                         {formatTime(showtime.start_time)}
                       </p>
                     </div>
@@ -758,12 +759,12 @@ export default function CheckoutPage() {
 
               {/* Seats */}
               <div className="mb-6">
-                <p className="text-gray-400 text-sm mb-2">Selected Seats</p>
+                <p className="text-sm mb-2" style={{ color: '#cccccc' }}>Selected Seats</p>
                 <div className="flex flex-wrap gap-2">
                   {seats.map((seat, index) => (
                     <span
                       key={index}
-                      className="px-3 py-1 bg-purple-600/30 text-purple-200 rounded-full text-sm font-medium"
+                      className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium border border-purple-200"
                     >
                       {seat}
                     </span>
@@ -772,12 +773,12 @@ export default function CheckoutPage() {
               </div>
 
               {/* Price */}
-              <div className="border-t border-white/20 pt-4">
+              <div className="border-t border-gray-200 pt-4">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-300">
+                  <span style={{ color: '#cccccc' }}>
                     {seats.length} seat{seats.length > 1 ? "s" : ""}
                   </span>
-                  <span className="text-2xl font-bold text-white">
+                  <span className="text-2xl font-bold" style={{ color: 'white' }}>
                     {formatCurrency(price)}
                   </span>
                 </div>
@@ -785,8 +786,8 @@ export default function CheckoutPage() {
 
               {/* User Info */}
               {user && (
-                <div className="border-t border-white/20 pt-4 mt-4">
-                  <div className="flex items-center gap-2 text-gray-300">
+                <div className="border-t border-gray-200 pt-4 mt-4">
+                  <div className="flex items-center gap-2" style={{ color: '#cccccc' }}>
                     <User className="h-4 w-4" />
                     <span className="text-sm">{user.name}</span>
                   </div>
@@ -809,20 +810,21 @@ export default function CheckoutPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="bg-black/70 backdrop-blur-lg rounded-2xl p-6 border border-white/20"
+                  className="rounded-2xl p-6 border border-gray-200 shadow-sm"
+                  style={{ backgroundColor: '#37373c' }}
                 >
-                  <h2 className="text-2xl font-bold text-white mb-6">
+                  <h2 className="text-2xl font-bold mb-6" style={{ color: 'white' }}>
                     Review Your Booking
                   </h2>
 
                   {/* Booking Details */}
                   <div className="space-y-6">
                     {/* Terms and Conditions */}
-                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-                      <h3 className="font-semibold text-blue-300 mb-2">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <h3 className="font-semibold text-blue-900 mb-2">
                         Important Information
                       </h3>
-                      <ul className="text-blue-400/80 text-sm space-y-1">
+                      <ul className="text-blue-800/80 text-sm space-y-1">
                         <li>• Please arrive 15 minutes before showtime</li>
                         <li>• No refunds after payment confirmation</li>
                         <li>
@@ -843,10 +845,10 @@ export default function CheckoutPage() {
                       }
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white 
-                               font-semibold rounded-xl hover:from-purple-700 hover:to-blue-700 
+                      className="w-full py-4 font-semibold rounded-xl hover:opacity-90 
                                transition-all disabled:opacity-50 disabled:cursor-not-allowed
                                flex items-center justify-center gap-2"
+                      style={{ backgroundColor: '#730109', color: 'white' }}
                     >
                       {isCreatingBooking ||
                       createBookingMutation.isPending ||
@@ -871,7 +873,8 @@ export default function CheckoutPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="bg-black/70 backdrop-blur-lg rounded-2xl p-6 border border-white/20"
+                  className="rounded-2xl p-6 border border-gray-200 shadow-sm"
+                  style={{ backgroundColor: '#37373c' }}
                 >
                   <CheckoutPaymentStep
                     bookingId={bookingId}
@@ -891,14 +894,15 @@ export default function CheckoutPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="bg-black/70 backdrop-blur-lg rounded-2xl p-6 border border-white/20"
+                  className="rounded-2xl p-6 border border-gray-200 shadow-sm"
+                  style={{ backgroundColor: '#37373c' }}
                 >
                   <div className="text-center space-y-6">
-                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-400 mx-auto" />
-                    <h2 className="text-2xl font-bold text-white">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto" />
+                    <h2 className="text-2xl font-bold" style={{ color: 'white' }}>
                       Processing Your Booking
                     </h2>
-                    <p className="text-gray-300">
+                    <p style={{ color: '#cccccc' }}>
                       {isCreatingBooking ||
                       createBookingMutation.isPending ||
                       createPaymentMutation.isPending

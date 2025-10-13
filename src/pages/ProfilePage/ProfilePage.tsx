@@ -257,8 +257,8 @@ const ProfilePage = () => {
 
   if (loading && !user) {
     return (
-      <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-        <div className="text-white">Loading profile...</div>
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-gray-900">Loading profile...</div>
       </div>
     );
   }
@@ -280,22 +280,22 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-br from-slate-900 via-primary/40 to-slate-900 text-gray-300 overflow-x-hidden">
+    <div className="relative min-h-screen bg-white text-gray-900 overflow-x-hidden">
       {/* Background Elements - matching MovieDetailPage design */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-purple-500/5 to-transparent rounded-full" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-purple-100/50 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-radial from-purple-100/30 to-transparent rounded-full" />
       </div>
 
       <div className="relative z-10 px-6 md:px-16 lg:px-24 xl:px-44 pt-36 pb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white/10 backdrop-blur-lg rounded-3xl shadow-xl border border-white/20 overflow-hidden"
+          className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden"
         >
           {/* Header */}
-          <div className="bg-gradient-to-r from-primary to-gray-600 p-8">
+          <div className="p-8" style={{ backgroundColor: '#730109' }}>
             <div className="md:flex md:flex-row flex-col items-center justify-between gap-3">
               <h1 className="text-3xl font-bold text-white">My Profile</h1>
               {!isEditing ? (
@@ -360,24 +360,22 @@ const ProfilePage = () => {
                 className="flex flex-col items-center"
               >
                 <div className="relative">
-                  <div className="w-32 h-32 rounded-full overflow-hidden bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20 shadow-2xl">
-                    {user?.avatar ? (
-                      <img
-                        src={user.avatar}
-                        alt={user.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <FiUser className="w-16 h-16 text-gray-300" />
-                    )}
-                  </div>
-
-                  {/* Avatar Upload Button */}
+                <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-200 shadow-2xl">
+                  {user?.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={user.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <FiUser className="w-16 h-16 text-gray-400" />
+                  )}
+                </div>                  {/* Avatar Upload Button */}
                   <label
                     className="absolute bottom-0 right-0 bg-gradient-to-r from-[#F84565] to-[#D63854] hover:from-[#D63854] hover:to-[#F84565] 
                     p-2 rounded-full cursor-pointer transition-all transform hover:scale-110 shadow-lg"
                   >
-                    <FiCamera className="w-4 h-4 text-white" />
+                    <FiCamera className="w-4 h-4 text-[#730109]" />
                     <input
                       type="file"
                       accept="image/*"
@@ -397,10 +395,10 @@ const ProfilePage = () => {
                 </div>
 
                 <div className="mt-4 text-center">
-                  <h2 className="text-xl font-semibold text-white">
+                  <h2 className="text-xl font-semibold text-gray-900">
                     {user?.name}
                   </h2>
-                  <p className="text-[#F84565] capitalize font-medium bg-white/10 px-3 py-1 rounded-full text-sm mt-2">
+                  <p className="text-white capitalize font-medium px-3 py-1 rounded-full text-sm mt-2" style={{ backgroundColor: '#730109' }}>
                     {user?.role}
                   </p>
                 </div>
@@ -417,13 +415,13 @@ const ProfilePage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Basic Information */}
                   <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-white mb-4 border-b border-white/20 pb-2">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-200 pb-2">
                       Basic Information
                     </h3>
 
                     {/* Name */}
                     <div>
-                      <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      <label className="block text-gray-700 text-sm mb-2 font-medium">
                         Full Name
                       </label>
                       {isEditing ? (
@@ -433,12 +431,12 @@ const ProfilePage = () => {
                           onChange={(e) =>
                             handleInputChange("name", e.target.value)
                           }
-                          className="w-full px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                            focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                          className="w-full px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
+                            focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 text-gray-200 bg-white/5 p-3 rounded-lg">
-                          <FiUser className="w-4 h-4 text-purple-400" />
+                        <div className="flex items-center gap-2 text-gray-800 bg-gray-50 p-3 rounded-lg">
+                          <FiUser className="w-4 h-4 text-[#730109]" />
                           {user?.name || "Not provided"}
                         </div>
                       )}
@@ -446,7 +444,7 @@ const ProfilePage = () => {
 
                     {/* Username */}
                     <div>
-                      <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      <label className="block text-gray-700 text-sm mb-2 font-medium">
                         Username
                       </label>
                       {isEditing ? (
@@ -456,11 +454,11 @@ const ProfilePage = () => {
                           onChange={(e) =>
                             handleInputChange("username", e.target.value)
                           }
-                          className="w-full px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                            focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                          className="w-full px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
+                            focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                         />
                       ) : (
-                        <div className="text-gray-200 font-medium bg-white/5 p-3 rounded-lg">
+                        <div className="text-gray-800 font-medium bg-gray-50 p-3 rounded-lg">
                           @{user?.username || "Not set"}
                         </div>
                       )}
@@ -468,18 +466,18 @@ const ProfilePage = () => {
 
                     {/* Email */}
                     <div>
-                      <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      <label className="block text-gray-700 text-sm mb-2 font-medium">
                         Email
                       </label>
-                      <div className="flex items-center gap-2 text-gray-200 bg-white/5 p-3 rounded-lg">
-                        <FiMail className="w-4 h-4 text-purple-400" />
+                      <div className="flex items-center gap-2 text-gray-800 bg-gray-50 p-3 rounded-lg">
+                        <FiMail className="w-4 h-4 text-[#730109]" />
                         {user?.email}
                       </div>
                     </div>
 
                     {/* Phone */}
                     <div>
-                      <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      <label className="block text-gray-700 text-sm mb-2 font-medium">
                         Phone
                       </label>
                       {isEditing ? (
@@ -489,12 +487,12 @@ const ProfilePage = () => {
                           onChange={(e) =>
                             handleInputChange("phone", e.target.value)
                           }
-                          className="w-full px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                            focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                          className="w-full px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
+                            focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 text-gray-200 bg-white/5 p-3 rounded-lg">
-                          <FiPhone className="w-4 h-4 text-purple-400" />
+                        <div className="flex items-center gap-2 text-gray-800 bg-gray-50 p-3 rounded-lg">
+                          <FiPhone className="w-4 h-4 text-[#730109]" />
                           {user?.phone || "Not provided"}
                         </div>
                       )}
@@ -503,13 +501,13 @@ const ProfilePage = () => {
 
                   {/* Additional Information */}
                   <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-white mb-4 border-b border-white/20 pb-2">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-200 pb-2">
                       Additional Information
                     </h3>
 
                     {/* Bio */}
                     <div>
-                      <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      <label className="block text-gray-700 text-sm mb-2 font-medium">
                         Bio
                       </label>
                       {isEditing ? (
@@ -519,12 +517,12 @@ const ProfilePage = () => {
                             handleInputChange("bio", e.target.value)
                           }
                           rows={3}
-                          className="w-full px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                            focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all resize-none"
+                          className="w-full px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
+                            focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all resize-none"
                           placeholder="Tell us about yourself..."
                         />
                       ) : (
-                        <div className="text-gray-200 bg-white/5 p-3 rounded-lg">
+                        <div className="text-gray-800 bg-gray-50 p-3 rounded-lg">
                           {user?.bio || "No bio provided"}
                         </div>
                       )}
@@ -532,7 +530,7 @@ const ProfilePage = () => {
 
                     {/* Location */}
                     <div>
-                      <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      <label className="block text-gray-700 text-sm mb-2 font-medium">
                         Location
                       </label>
                       {isEditing ? (
@@ -542,13 +540,13 @@ const ProfilePage = () => {
                           onChange={(e) =>
                             handleInputChange("location", e.target.value)
                           }
-                          className="w-full px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                            focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                          className="w-full px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
+                            focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                           placeholder="e.g., New York, USA"
                         />
                       ) : (
-                        <div className="flex items-center gap-2 text-gray-200 bg-white/5 p-3 rounded-lg">
-                          <FiMapPin className="w-4 h-4 text-purple-400" />
+                        <div className="flex items-center gap-2 text-gray-800 bg-gray-50 p-3 rounded-lg">
+                          <FiMapPin className="w-4 h-4 text-[#730109]" />
                           {user?.location || "Not provided"}
                         </div>
                       )}
@@ -556,7 +554,7 @@ const ProfilePage = () => {
 
                     {/* Website */}
                     <div>
-                      <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      <label className="block text-gray-700 text-sm mb-2 font-medium">
                         Website
                       </label>
                       {isEditing ? (
@@ -566,18 +564,18 @@ const ProfilePage = () => {
                           onChange={(e) =>
                             handleInputChange("website", e.target.value)
                           }
-                          className="w-full px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                            focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                          className="w-full px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
+                            focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                           placeholder="https://example.com"
                         />
                       ) : (
-                        <div className="text-gray-200 bg-white/5 p-3 rounded-lg">
+                        <div className="text-gray-800 bg-gray-50 p-3 rounded-lg">
                           {user?.website ? (
                             <a
                               href={user.website}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-purple-400 hover:text-purple-300 hover:underline transition-colors"
+                              className="text-[#730109] hover:text-[#5a0a0d] hover:underline transition-colors"
                             >
                               {user.website}
                             </a>
@@ -597,7 +595,7 @@ const ProfilePage = () => {
                     animate={{ opacity: 1, y: 0 }}
                     className="mt-8"
                   >
-                    <h3 className="text-lg font-semibold text-white mb-4 border-b border-white/20 pb-2">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-200 pb-2">
                       Address
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -608,8 +606,8 @@ const ProfilePage = () => {
                         onChange={(e) =>
                           handleAddressChange("street", e.target.value)
                         }
-                        className="px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                          focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                        className="px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
+                          focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                       />
                       <input
                         type="text"
@@ -618,8 +616,8 @@ const ProfilePage = () => {
                         onChange={(e) =>
                           handleAddressChange("city", e.target.value)
                         }
-                        className="px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                          focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                        className="px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
+                          focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                       />
                       <input
                         type="text"
@@ -628,8 +626,8 @@ const ProfilePage = () => {
                         onChange={(e) =>
                           handleAddressChange("state", e.target.value)
                         }
-                        className="px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                          focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                        className="px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
+                          focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                       />
                       <input
                         type="text"
@@ -638,8 +636,8 @@ const ProfilePage = () => {
                         onChange={(e) =>
                           handleAddressChange("country", e.target.value)
                         }
-                        className="px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                          focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                        className="px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
+                          focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                       />
                       <input
                         type="text"
@@ -648,8 +646,8 @@ const ProfilePage = () => {
                         onChange={(e) =>
                           handleAddressChange("zipCode", e.target.value)
                         }
-                        className="px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                          focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                        className="px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
+                          focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                       />
                     </div>
                   </motion.div>
@@ -663,14 +661,15 @@ const ProfilePage = () => {
                       animate={{ opacity: 1, y: 0 }}
                       className="mt-8"
                     >
-                      <div className="bg-white/5 backdrop-blur-lg rounded-lg p-6 border border-white/10">
+                      <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
                         <div className="flex items-center justify-between mb-6">
-                          <h3 className="text-lg font-semibold text-white border-b border-white/20 pb-2">
+                          <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
                             Change Password
                           </h3>
                           <button
                             onClick={handleCancelPasswordChange}
-                            className="text-gray-400 hover:text-white transition-colors"
+                            className="text-white transition-colors"
+                            style={{ backgroundColor: '#730109' }}
                           >
                             <FiX className="w-5 h-5" />
                           </button>
@@ -678,7 +677,7 @@ const ProfilePage = () => {
 
                         <div className="space-y-4">
                           <div>
-                            <label className="block text-gray-300 text-sm mb-2 font-medium">
+                            <label className="block text-gray-700 text-sm mb-2 font-medium">
                               Current Password
                             </label>
                             <input
@@ -690,14 +689,14 @@ const ProfilePage = () => {
                                   e.target.value
                                 )
                               }
-                              className="w-full px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                              focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                              className="w-full px-3 py-2 bg-white text-gray-900 rounded-lg 
+                              focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                               placeholder="Enter your current password"
                             />
                           </div>
 
                           <div>
-                            <label className="block text-gray-300 text-sm mb-2 font-medium">
+                            <label className="block text-gray-700 text-sm mb-2 font-medium">
                               New Password
                             </label>
                             <input
@@ -709,14 +708,14 @@ const ProfilePage = () => {
                                   e.target.value
                                 )
                               }
-                              className="w-full px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                              focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                              className="w-full px-3 py-2 bg-white text-gray-900 rounded-lg 
+                              focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                               placeholder="Enter your new password"
                             />
                           </div>
 
                           <div>
-                            <label className="block text-gray-300 text-sm mb-2 font-medium">
+                            <label className="block text-gray-700 text-sm mb-2 font-medium">
                               Confirm New Password
                             </label>
                             <input
@@ -728,8 +727,8 @@ const ProfilePage = () => {
                                   e.target.value
                                 )
                               }
-                              className="w-full px-3 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg 
-                              focus:ring-2 focus:ring-purple-500 border border-white/20 transition-all"
+                              className="w-full px-3 py-2 bg-white text-gray-900 rounded-lg 
+                              focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
                               placeholder="Confirm your new password"
                             />
                           </div>
@@ -740,9 +739,9 @@ const ProfilePage = () => {
                               disabled={passwordLoading}
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#F84565] to-[#D63854] 
-                              hover:from-[#D63854] hover:to-[#F84565] text-white rounded-lg transition-all 
+                              className="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-all 
                               disabled:opacity-50 font-medium"
+                              style={{ backgroundColor: '#730109' }}
                             >
                               <FiLock className="w-4 h-4" />
                               {passwordLoading
@@ -753,8 +752,8 @@ const ProfilePage = () => {
                               onClick={handleCancelPasswordChange}
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
-                              className="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg 
-                              transition-all font-medium backdrop-blur-sm"
+                              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg 
+                              transition-all font-medium"
                             >
                               Cancel
                             </motion.button>

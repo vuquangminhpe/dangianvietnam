@@ -135,7 +135,7 @@ const MyBooking: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-primary/40 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400 mx-auto mb-4" />
           <p className="text-gray-300">Loading your bookings...</p>
@@ -145,7 +145,7 @@ const MyBooking: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-primary/40 to-slate-900 py-8">
+    <div className="min-h-screen bg-white py-8 pt-28">
       {/* Background Elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl" />
@@ -154,21 +154,24 @@ const MyBooking: React.FC = () => {
 
       <div className="relative z-10 container mx-auto px-4 max-w-6xl">
         {/* Header */}
-        {/* <motion.div
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-3xl font-bold text-white mb-2">My Bookings</h1>
-          <p className="text-gray-300">Track and manage your movie tickets</p>
-        </motion.div> */}
+          <h1 className="text-3xl font-bold mb-2" style={{ color: '#730109' }}>
+            My Bookings
+          </h1>
+          <p style={{ color: '#730109' }}>Track and manage your movie tickets</p>
+        </motion.div>
 
         {/* Search and Filters */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 mb-6 mt-16"
+          className="backdrop-blur-lg rounded-2xl p-6 border border-white/20 mb-6"
+          style={{ backgroundColor: '#37373c' }}
         >
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             {/* Search */}
@@ -187,8 +190,9 @@ const MyBooking: React.FC = () => {
             {/* Filter Toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 bg-purple-600/30 text-purple-200 rounded-lg 
-                       hover:bg-purple-600/50 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-white rounded-lg 
+                       transition-colors"
+              style={{ backgroundColor: '#730109' }}
             >
               <Filter className="h-4 w-4" />
               Filters
@@ -287,7 +291,7 @@ const MyBooking: React.FC = () => {
           className="space-y-4"
         >
           {bookingsData?.bookings?.length === 0 ? (
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 border border-white/20 text-center">
+            <div className="backdrop-blur-lg rounded-2xl p-8 border border-white/20 text-center" style={{ backgroundColor: '#37373c' }}>
               <Ticket className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">
                 No bookings found
@@ -304,8 +308,9 @@ const MyBooking: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:border-white/40 
-                         transition-all"
+                className="backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:border-white/40 
+                         transition-all cursor-pointer"
+                style={{ backgroundColor: '#37373c' }}
               >
                 <div className="flex flex-col lg:flex-row gap-6  justify-between ">
                   {/* Movie Poster and Info */}
@@ -378,8 +383,8 @@ const MyBooking: React.FC = () => {
                           onClick={() =>
                             handleDownloadTicket(booking.ticket_code)
                           }
-                          className="flex items-center gap-2 px-3 py-2 bg-green-600/30 text-green-300 
-                                   rounded-lg hover:bg-green-600/50 transition-colors"
+                          className="flex items-center gap-2 px-3 py-2 text-white rounded-lg transition-colors"
+                          style={{ backgroundColor: '#730109' }}
                         >
                           <QrCode className="h-4 w-4" />
                           <span className="hidden md:inline">QR Code</span>
@@ -390,8 +395,8 @@ const MyBooking: React.FC = () => {
                         <button
                           onClick={() => handleCancelBooking(booking._id)}
                           disabled={isCancelling}
-                          className="flex items-center gap-2 px-3 py-2 bg-red-600/30 text-red-300 
-                                   rounded-lg hover:bg-red-600/50 transition-colors disabled:opacity-50"
+                          className="flex items-center gap-2 px-3 py-2 text-white rounded-lg transition-colors disabled:opacity-50"
+                          style={{ backgroundColor: '#730109' }}
                         >
                           <X className="h-4 w-4" />
                           <span className="hidden md:inline">Cancel</span>
@@ -463,9 +468,10 @@ const MyBooking: React.FC = () => {
                   onClick={() => handlePageChange(page)}
                   className={`px-4 py-2 rounded-lg transition-colors ${
                     page === filters.page
-                      ? "bg-purple-600 text-white"
-                      : "bg-white/10 text-gray-300 hover:bg-white/20"
+                      ? "text-white"
+                      : "text-gray-300 hover:text-white"
                   }`}
+                  style={{ backgroundColor: page === filters.page ? '#730109' : '#37373c' }}
                 >
                   {page}
                 </button>

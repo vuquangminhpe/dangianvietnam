@@ -146,20 +146,35 @@ export default function Carousel({ cardData }: { cardData: CardData[] }) {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className='relative flex w-full flex-col rounded-3xl p-2 sm:p-4 pt-4 sm:pt-6 md:p-6'>
-        <div 
-          className='relative w-full h-[378px] sm:h-[434px] md:h-[490px] flex items-center justify-center overflow-visible'
-          style={{ marginTop: '-50px', marginBottom: '75px' }}
-        >
-          {/* Left Arrow Button */}
-          <button
-            onClick={() => changeSlide(activeIndex - 1)}
-            className='absolute left-[-80px] sm:left-[-100px] md:left-[-120px] top-1/2 -translate-y-1/2 z-50 p-2 hover:opacity-80 transition-opacity focus:outline-none'
-            aria-label='Previous slide'
-          >
-            <ChevronLeftIcon className='w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28' />
-          </button>
+      {/* ===================================================================
+        * THAY ĐỔI CHÍNH BẮT ĐẦU TỪ ĐÂY
+        * Thẻ div này sẽ là khung định vị `relative` cho các button
+        ===================================================================
+      */}
+      <div className='relative w-full flex items-center justify-center'>
 
+        {/* === NÚT TRÁI ĐÃ ĐƯỢC DI CHUYỂN RA NGOÀI === */}
+        <button
+          onClick={() => changeSlide(activeIndex - 1)}
+          // Đẩy nút ra ngoài bằng left-0 và translate-x, nhưng ít hơn để gần carousel hơn
+          className='absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 z-50 p-2 hover:opacity-80 transition-opacity focus:outline-none'
+          aria-label='Previous slide'
+        >
+          {/* Tăng kích thước icon */}
+          <ChevronLeftIcon className='w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24' />
+        </button>
+
+        {/* Thẻ div chứa carousel vẫn giữ nguyên nhưng không còn chứa button nữa */}
+        <div
+          className='relative w-full h-[378px] sm:h-[434px] md:h-[490px] flex items-center justify-center overflow-hidden'
+          style={{
+            marginTop: '-50px',
+            marginBottom: '75px',
+            // Tăng padding để có không gian cho các card dịch chuyển
+            paddingLeft: 'clamp(80px, 10vw, 160px)',
+            paddingRight: 'clamp(80px, 10vw, 160px)'
+          }}
+        >
           <motion.div
             className='w-full h-full flex items-center justify-center'
             drag='x'
@@ -177,16 +192,18 @@ export default function Carousel({ cardData }: { cardData: CardData[] }) {
               />
             ))}
           </motion.div>
-
-          {/* Right Arrow Button */}
-          <button
-            onClick={() => changeSlide(activeIndex + 1)}
-            className='absolute right-[-80px] sm:right-[-100px] md:right-[-120px] top-1/2 -translate-y-1/2 z-50 p-2 hover:opacity-80 transition-opacity focus:outline-none'
-            aria-label='Next slide'
-          >
-            <ChevronRightIcon className='w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28' />
-          </button>
         </div>
+
+        {/* === NÚT PHẢI ĐÃ ĐƯỢC DI CHUYỂN RA NGOÀI === */}
+        <button
+          onClick={() => changeSlide(activeIndex + 1)}
+          // Đẩy nút ra ngoài bằng right-0 và translate-x, nhưng ít hơn để gần carousel hơn
+          className='absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 z-50 p-2 hover:opacity-80 transition-opacity focus:outline-none'
+          aria-label='Next slide'
+        >
+          {/* Tăng kích thước icon */}
+          <ChevronRightIcon className='w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24' />
+        </button>
       </div>
     </div>
   )

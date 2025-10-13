@@ -538,11 +538,11 @@ const Navbar = () => {
 
                 <PopoverPanel
                   className={`absolute right-0 z-[160] mt-2 w-56 origin-top-right rounded-lg shadow-lg ring-1 
-                    ring-black/5 transition-all duration-300 bg-primary-dull`}
+                    ring-black/5 transition-all duration-300 user-dropdown`}
                 >
                   <div
-                    className={`text-sm py-2 px-4 text-center border-b transition-colors duration-300 `}
-                    style={{ fontFamily: 'Merriweather, serif', color: '#f4c5b4' }}
+                    className={`text-sm py-2 px-4 text-center border-b transition-colors duration-300`}
+                    style={{ fontFamily: 'Merriweather, serif' }}
                   >
                     <p>Xin chào {user.name}</p>
                   </div>
@@ -552,8 +552,8 @@ const Navbar = () => {
                         <Link
                           key={index}
                           to={item.link}
-                          className={`block px-4 py-2 text-sm transition-all duration-200 `}
-                          style={{ fontFamily: 'Merriweather, serif', color: '#f4c5b4' }}
+                          className={`block px-4 py-2 text-sm transition-all duration-200 hover:bg-white/10`}
+                          style={{ fontFamily: 'Merriweather, serif' }}
                         >
                           {item.title}
                         </Link>
@@ -565,8 +565,8 @@ const Navbar = () => {
                               item.action();
                             }
                           }}
-                          className={`block px-4 py-2 text-sm transition-all duration-200 text-left w-full hover:bg-gray-700`}
-                          style={{ fontFamily: 'Merriweather, serif', color: '#f4c5b4' }}
+                          className={`block px-4 py-2 text-sm transition-all duration-200 text-left w-full hover:bg-white/10`}
+                          style={{ fontFamily: 'Merriweather, serif' }}
                         >
                           {item.title}
                         </button>

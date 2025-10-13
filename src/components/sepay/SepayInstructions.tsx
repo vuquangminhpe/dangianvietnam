@@ -74,27 +74,27 @@ const SepayInstructions: React.FC = () => {
 
   if (isPaymentCompleted) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           className="text-center"
         >
-          <CheckCircle className="h-24 w-24 text-green-400 mx-auto mb-4" />
-          <h2 className="text-3xl font-bold text-white mb-2">
+          <CheckCircle className="h-24 w-24 text-green-600 mx-auto mb-4" />
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">
             Payment Received!
           </h2>
-          <p className="text-gray-300 mb-4">
+          <p className="text-gray-600 mb-4">
             Redirecting to confirmation page...
           </p>
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-400 mx-auto" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto" />
         </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 py-8">
+    <div className="min-h-screen bg-white py-8">
       {/* Background Elements */}
 
       <div className="relative z-10 container mx-auto px-4 max-w-7xl mt-20">
@@ -107,22 +107,22 @@ const SepayInstructions: React.FC = () => {
           <div className="flex items-center justify-between mb-5">
             <button
               onClick={() => navigate(-1)}
-              className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors mr-4"
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mr-4"
             >
               <ArrowLeft className="h-5 w-5" />
               Back
             </button>
 
             {/* Timer */}
-            <div className="flex items-center gap-2 bg-orange-500/20 text-orange-300 px-4 py-2 rounded-lg">
+            <div className="flex items-center gap-2 bg-orange-100 text-orange-700 px-4 py-2 rounded-lg border border-orange-200">
               <Timer className="h-5 w-5" />
               <span className="font-mono text-lg">{formatTime(timeLeft)}</span>
             </div>
           </div>
 
           <div className="flex-1">
-            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <Building2 className="h-8 w-8 " />
+            <h1 className="text-3xl font-bold flex items-center gap-3" style={{ color: '#730109' }}>
+              <Building2 className="h-8 w-8 text-gray-700" />
               Bank Transfer Instructions
             </h1>
           </div>
@@ -137,8 +137,8 @@ const SepayInstructions: React.FC = () => {
             className="lg:col-span-2 space-y-6"
           >
             {/* Booking Summary */}
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-              <h3 className="text-lg font-semibold text-white mb-4">
+            <div className="rounded-2xl p-6 border border-gray-200 shadow-sm" style={{ backgroundColor: '#37373c' }}>
+              <h3 className="text-lg font-semibold mb-4" style={{ color: 'white' }}>
                 Booking Summary
               </h3>
 
@@ -152,24 +152,24 @@ const SepayInstructions: React.FC = () => {
                 )}
 
                 <div>
-                  <h4 className="font-semibold text-white">
+                  <h4 className="font-semibold" style={{ color: 'white' }}>
                     {booking?.movie?.title}
                   </h4>
-                  <p className="text-gray-300 text-sm">
+                  <p style={{ color: '#cccccc' }}>
                     {booking?.theater?.name}
                   </p>
                 </div>
 
                 <div className="text-sm space-y-1">
-                  <p className="text-gray-400">
+                  <p style={{ color: '#cccccc' }}>
                     Ticket Code:{" "}
-                    <span className="text-white font-mono">
+                    <span style={{ color: 'white' }}>
                       {booking?.ticket_code}
                     </span>
                   </p>
-                  <p className="text-gray-400">
+                  <p style={{ color: '#cccccc' }}>
                     Seats:{" "}
-                    <span className="text-white">
+                    <span style={{ color: 'white' }}>
                       {booking?.seats
                         ?.map((s: any) => `${s.row}${s.number}`)
                         .join(", ")}
@@ -177,27 +177,27 @@ const SepayInstructions: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="border-t border-white/20 pt-3">
+                <div className="border-t border-gray-200 pt-3">
                   {/* Coupon Discount Display */}
                   {booking?.coupon_code && booking?.coupon_discount && (
                     <>
-                      <div className="flex justify-between text-gray-300 text-sm mb-2">
-                        <span>Original Amount</span>
-                        <span>
+                      <div className="flex justify-between text-sm mb-2">
+                        <span style={{ color: '#cccccc' }}>Original Amount</span>
+                        <span style={{ color: 'white' }}>
                           {formatCurrency(
                             booking?.original_amount ||
                               booking?.total_amount + booking?.coupon_discount
                           )}
                         </span>
                       </div>
-                      <div className="flex justify-between text-green-400 text-sm mb-2">
-                        <span>Coupon Discount ({booking?.coupon_code})</span>
-                        <span>-{formatCurrency(booking?.coupon_discount)}</span>
+                      <div className="flex justify-between text-sm mb-2">
+                        <span style={{ color: '#cccccc' }}>Coupon Discount ({booking?.coupon_code})</span>
+                        <span style={{ color: '#22c55e' }}>-{formatCurrency(booking?.coupon_discount)}</span>
                       </div>
-                      <div className="border-t border-white/10 pt-2">
-                        <div className="flex justify-between text-white font-semibold">
-                          <span>Final Total</span>
-                          <span>{formatCurrency(amount)}</span>
+                      <div className="border-t border-gray-100 pt-2">
+                        <div className="flex justify-between font-semibold">
+                          <span style={{ color: 'white' }}>Final Total</span>
+                          <span style={{ color: 'white' }}>{formatCurrency(amount)}</span>
                         </div>
                       </div>
                     </>
@@ -205,9 +205,9 @@ const SepayInstructions: React.FC = () => {
 
                   {/* No coupon - just show total */}
                   {!booking?.coupon_code && (
-                    <div className="flex justify-between text-white font-semibold">
-                      <span>Total</span>
-                      <span>{formatCurrency(amount)}</span>
+                    <div className="flex justify-between font-semibold">
+                      <span style={{ color: 'white' }}>Total</span>
+                      <span style={{ color: 'white' }}>{formatCurrency(amount)}</span>
                     </div>
                   )}
                 </div>
@@ -223,22 +223,23 @@ const SepayInstructions: React.FC = () => {
             className="lg:col-span-1 space-y-6"
           >
             {/* Payment Status */}
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                <Clock className="h-5 w-5 text-orange-400" />
+            <div className="rounded-2xl p-6 border border-gray-200 shadow-sm" style={{ backgroundColor: '#37373c' }}>
+              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2" style={{ color: 'white' }}>
+                <Clock className="h-5 w-5 text-orange-500" />
                 Payment Status
               </h3>
 
               <div className="space-y-4">
-                <div className="flex items-center justify-center p-4  rounded-lg">
+                <div className="flex items-center justify-center p-4 bg-orange-50 rounded-lg border border-orange-100">
                   <div className="text-center">
-                    <RefreshCw className="h-8 w-8 text-orange-400 mx-auto mb-2 animate-spin" />
+                    <RefreshCw className="h-8 w-8 text-orange-500 mx-auto mb-2 animate-spin" />
                   </div>
                 </div>
 
                 <button
                   onClick={() => refetchBooking()}
-                  className="w-full py-2 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-2 px-4 rounded-lg transition-colors flex items-center justify-center gap-2"
+                  style={{ backgroundColor: '#730109', color: 'white' }}
                 >
                   <RefreshCw className="h-4 w-4" />
                   Check Status
@@ -246,7 +247,7 @@ const SepayInstructions: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20">
+            <div className="rounded-2xl p-6 border border-gray-200 shadow-sm" style={{ backgroundColor: '#37373c' }}>
               <div className="space-y-4">
                 <VietQRBanking amount={amount} content={transferContent} />
               </div>

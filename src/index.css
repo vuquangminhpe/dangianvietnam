@@ -105,6 +105,20 @@ html, body {
   .footer-transparent * {
     background-color: transparent !important;
   }
+
+  /* User dropdown styles */
+  .user-dropdown {
+    background-color: #730109 !important;
+    color: white !important;
+  }
+
+  .user-dropdown * {
+    color: white !important;
+  }
+
+  .user-dropdown .border-b {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
 }
 
 .slick-slide > div {
