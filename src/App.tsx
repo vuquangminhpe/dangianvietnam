@@ -23,6 +23,7 @@ import ProfilePage from "./pages/ProfilePage";
 import SepayInstructions from "./components/sepay/SepayInstructions";
 import AdvancedSearchPage from "./pages/AdvancedSearchPage/AdvancedSearchPage";
 import ProductPage from "./pages/ProductPage";
+import ProductCaiLuong from "./pages/ProductCaiLuong/ProductCaiLuong";
 import { useEffect } from "react";
 import { getUserProfile } from "./apis/user.api";
 import { useAuthStore } from "./store/useAuthStore";
@@ -118,6 +119,7 @@ function App() {
                 <Route path="/movies/:id" element={<MovieDetail />} />
                 <Route path="/search" element={<AdvancedSearchPage />} />
                 <Route path="/product" element={<ProductPage />} />
+                <Route path="/product-cai-luong" element={<ProductCaiLuong />} />
 
                 {/* Routes that require authentication */}
                 <Route

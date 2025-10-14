@@ -507,17 +507,60 @@ const Navbar = () => {
 
           {/* Navigation items - centered in remaining space */}
           <div className="flex items-center justify-center flex-1">
-            {navigationItems.map((item, index) => (
-              <Link
-                key={index}
-                className="nav-hover-btn text-2xl font-bold px-8 hover:opacity-80 transition-opacity"
-                to={item.link}
-                onClick={() => setIsOpen(!isOpen)}
-                style={{ fontFamily: 'Merriweather, serif', color: '#f4c5b4' }}
-              >
-                {item.title}
-              </Link>
-            ))}
+            {navigationItems.map((item, index) => {
+              if (item.title === "Sản phẩm") {
+                return (
+                  <Popover key={index} as="div" className="relative inline-block text-left">
+                    <PopoverButton
+                      className="nav-hover-btn text-2xl font-bold px-8 hover:opacity-80 transition-opacity"
+                      style={{ fontFamily: 'Merriweather, serif', color: '#f4c5b4' }}
+                    >
+                      {item.title}
+                    </PopoverButton>
+
+                    <PopoverPanel
+                      className="absolute left-0 z-[160] mt-2 w-48 origin-top-left rounded-md shadow-lg ring-1 ring-black/5"
+                      style={{ backgroundColor: '#730109' }}
+                    >
+                      <div className="py-1">
+                        <Link
+                          to="/product"
+                          className="block px-4 py-2 text-sm text-white hover:bg-white/10 transition-colors"
+                          style={{ fontFamily: 'Merriweather, serif' }}
+                        >
+                          Múa rối nước
+                        </Link>
+                        <Link
+                          to="/product-cai-luong"
+                          className="block px-4 py-2 text-sm text-white hover:bg-white/10 transition-colors"
+                          style={{ fontFamily: 'Merriweather, serif' }}
+                        >
+                          Cải lương
+                        </Link>
+                        <div className="block px-4 py-2 text-sm text-white/60 cursor-not-allowed">
+                          Tuồng
+                        </div>
+                        <div className="block px-4 py-2 text-sm text-white/60 cursor-not-allowed">
+                          Chèo
+                        </div>
+                      </div>
+                    </PopoverPanel>
+                  </Popover>
+                );
+              }
+
+              return (
+                <Link
+                  key={index}
+                  className="nav-hover-btn text-2xl font-bold px-8 hover:opacity-80 transition-opacity"
+                  to={item.link}
+                  onClick={() => setIsOpen(!isOpen)}
+                  style={{ fontFamily: 'Merriweather, serif', color: '#f4c5b4' }}
+                >
+                  {item.title}
+                </Link>
+              );
+            })}
           </div>
 
           {/* User section */}
