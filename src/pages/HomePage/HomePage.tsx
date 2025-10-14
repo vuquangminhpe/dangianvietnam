@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import CarouselBanner from '../../components/banners/CarouselBanner/CarouselBanner'
 import LazyLoad from '../../components/ui/LazyLoad'
 import ImagePreloader from '../../components/ui/ImagePreloader'
-import bgImage from '../../assets/background home-01.png'
+import bgImage from '../../assets/bg dai home_11zon.png'
 
 
 

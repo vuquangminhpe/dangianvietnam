@@ -247,7 +247,7 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
         /* thumbail */
         .thumbnail{
             position: absolute;
-            bottom: -80px;
+            bottom: -40px;
             left: 50%;
             transform: translateX(-50%);
             width: max-content;
@@ -277,9 +277,10 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
             border: 3px solid transparent;
             transition: all 0.3s ease;
         }
-        .thumbnail .item.active img{
+        /* Removed green border for active thumbnail */
+        /* .thumbnail .item.active img{
             border-color: #10b981;
-        }
+        } */
         .thumbnail .item:hover{
             opacity: 0.8;
             transform: scale(1.1);
@@ -458,7 +459,7 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
                 max-width: 200px;
             }
             .thumbnail{
-                bottom: 15px;
+                bottom: 25px;
                 gap: 10px;
             }
          0thumbnail .item{
