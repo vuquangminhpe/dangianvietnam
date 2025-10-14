@@ -24,6 +24,7 @@ import SepayInstructions from "./components/sepay/SepayInstructions";
 import AdvancedSearchPage from "./pages/AdvancedSearchPage/AdvancedSearchPage";
 import ProductPage from "./pages/ProductPage";
 import ProductCaiLuong from "./pages/ProductCaiLuong/ProductCaiLuong";
+import ProductTuong from "./pages/ProductTuong/ProductTuong";
 import { useEffect } from "react";
 import { getUserProfile } from "./apis/user.api";
 import { useAuthStore } from "./store/useAuthStore";
@@ -120,6 +121,7 @@ function App() {
                 <Route path="/search" element={<AdvancedSearchPage />} />
                 <Route path="/product" element={<ProductPage />} />
                 <Route path="/product-cai-luong" element={<ProductCaiLuong />} />
+                <Route path="/product-tuong" element={<ProductTuong />} />
 
                 {/* Routes that require authentication */}
                 <Route

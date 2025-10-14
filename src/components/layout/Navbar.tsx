@@ -537,9 +537,13 @@ const Navbar = () => {
                         >
                           Cải lương
                         </Link>
-                        <div className="block px-4 py-2 text-sm text-white/60 cursor-not-allowed">
+                        <Link
+                          to="/product-tuong"
+                          className="block px-4 py-2 text-sm text-white hover:bg-white/10 transition-colors"
+                          style={{ fontFamily: 'Merriweather, serif' }}
+                        >
                           Tuồng
-                        </div>
+                        </Link>
                         <div className="block px-4 py-2 text-sm text-white/60 cursor-not-allowed">
                           Chèo
                         </div>

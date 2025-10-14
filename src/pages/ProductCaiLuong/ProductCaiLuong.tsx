@@ -1,4 +1,6 @@
 import { caiLuong03, caiLuong04, caiLuong06, caiLuong07, caiLuong08, caiLuong09, caiLuong10, caiLuong11, caiLuong12, caiLuong13, caiLuong14, caiLuong15, caiLuong16, caiLuong17, caiLuong18, caiLuong19 } from '../../assets/Giao diện cải lương/index'
+import { thuVienAnhCLuongImages } from '../../assets/ThuVienAnhCLuong/index'
+import DomeGallery from '../../components/DomeGallery'
 
 const ProductCaiLuong = () => {
   return (
@@ -101,6 +103,34 @@ const ProductCaiLuong = () => {
           alt="Cải lương overlay 11"
           className="absolute top-0 left-0 w-full h-auto z-30 m-0 p-0"
         />
+
+        {/* DomeGallery ở cuối section 5 */}
+        <div
+          className="absolute top-[60%] left-0 z-40 bg-transparent"
+          style={{
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'transparent',
+            background: 'none',
+            marginTop: '50px'
+          }}
+        >
+          <h2
+            className='text-4xl md:text-5xl font-extrabold text-center tracking-wider'
+            style={{
+              fontFamily: 'Merriweather, serif',
+              textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+              color: '#730109'
+            }}
+          >
+            THƯ VIỆN ẢNH
+          </h2>
+
+          <DomeGallery
+            images={thuVienAnhCLuongImages}
+            overlayBlurColor="rgba(0,0,0,0)"
+          />
+        </div>
       </div>
     </div>
   )
