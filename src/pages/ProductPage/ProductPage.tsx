@@ -1,8 +1,18 @@
+import  { useState, useEffect } from 'react'
 import { motion } from 'framer-motion';
 import { images } from './assets';
 import DomeGallery from '../../components/DomeGallery';
 
 const ProductPage = () => {
+  const [showGallery, setShowGallery] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowGallery(true)
+    }, 1500) // Hiển thị sau 1.5 giây
+
+    return () => clearTimeout(timer)
+  }, [])
   // Animation variants cho hiệu ứng nhẹ
   const fadeInUp = {
     initial: { opacity: 0, y: 20 },
@@ -185,9 +195,17 @@ const ProductPage = () => {
           THƯ VIỆN ẢNH
           </h2>
 
-          <DomeGallery 
-            overlayBlurColor="rgba(0,0,0,0)"
-          />
+          {!showGallery && (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#730109]"></div>
+            </div>
+          )}
+
+          {showGallery && (
+            <DomeGallery 
+              overlayBlurColor="rgba(0,0,0,0)"
+            />
+          )}
         </div>
       </motion.div>
 

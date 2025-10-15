@@ -108,24 +108,6 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSearchIconClick = () => {
-    setIsSearchOpen(!isSearchOpen);
-    if (!isSearchOpen) {
-      // Focus on input when opening
-      setTimeout(() => {
-        const input = searchRef.current?.querySelector("input");
-        input?.focus();
-      }, 100);
-    } else {
-      setSearchQuery("");
-      setSearchResults([]);
-    }
-  };
-
-  const handleViewAllResults = () => {
-    // Navigate to advanced search page with the current query
-    window.location.href = `/search?q=${encodeURIComponent(searchQuery)}`;
-  };
 
   // Navigation items based on user role
   const getNavigationItems = () => {
@@ -184,120 +166,12 @@ const Navbar = () => {
 
   return (
     <>
-        <div className="md:hidden fixed top-4 right-4 z-[160] flex gap-40 items-center">
-        <div ref={searchRef} className="relative">
-          {isOpen ? (
-            <IoIosSearch
-              onClick={handleSearchIconClick}
-              className={`w-6 h-6 cursor-pointer transition-colors duration-300 hover:text-orange-500 ${
-                isSearchOpen ? "text-orange-500" : ""
-              }`}
-            />
-          ) : (
-            <></>
-          )}
 
-          {/* Search input and dropdown */}
-          {isSearchOpen && (
-            <div className="absolute right-0 top-8 w-80 bg-gray-900 border border-gray-700 rounded-lg shadow-2xl z-50">
-              {/* Search input */}
-              <div className="p-4 border-b border-gray-700">
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Tìm kiếm sự kiện..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-2 pl-10 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:border-orange-500 transition-colors"
-                    style={{ fontFamily: 'Merriweather, serif' }}
-                    autoFocus
-                  />
-                  <IoIosSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                </div>
-              </div>
-
-              {/* Search results */}
-              <div className="max-h-80 overflow-y-auto">
-                {searchLoading && (
-                  <div className="flex items-center justify-center py-8">
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-500"></div>
-                  </div>
-                )}
-
-                {!searchLoading && searchResults.length > 0 && (
-                  <div className="p-2">
-                    {searchResults.map((movie) => (
-                      <Link
-                        key={movie._id}
-                        to={`/movies/${movie._id}`}
-                        onClick={() => {
-                          setIsSearchOpen(false);
-                          setSearchQuery("");
-                          setSearchResults([]);
-                        }}
-                        className="flex items-center gap-3 p-3 hover:bg-gray-800 rounded-lg transition-colors"
-                      >
-                        <img
-                          src={movie.poster_url}
-                          alt={movie.title}
-                          className="w-12 h-16 object-cover rounded"
-                        />
-                        <div className="flex-1 min-w-0">
-                          <h4 className="text-white font-medium truncate">
-                            {movie.title}
-                          </h4>
-                          <p className="text-gray-400 text-sm">
-                            {new Date(movie.release_date).getFullYear()} •{" "}
-                            {movie.duration} min
-                          </p>
-                          <div className="flex items-center gap-1 mt-1">
-                            <span className="text-yellow-400 text-sm">★</span>
-                            <span className="text-gray-400 text-sm">
-                              {movie.average_rating}/10
-                            </span>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-
-                    {/* View all results button */}
-                    <button
-                      onClick={handleViewAllResults}
-                      className="w-full mt-2 p-3 text-center text-orange-500 hover:text-orange-400 hover:bg-gray-800 rounded-lg transition-colors border-t border-gray-700"
-                    >
-                      View all results for "{searchQuery}"
-                    </button>
-                  </div>
-                )}
-
-                {!searchLoading &&
-                  searchResults.length === 0 &&
-                  searchQuery.trim() && (
-                    <div className="p-8 text-center">
-                      <p className="text-gray-400">
-                        No movies found for "{searchQuery}"
-                      </p>
-                      <button
-                        onClick={handleViewAllResults}
-                        className="mt-2 text-orange-500 hover:text-orange-400 transition-colors"
-                      >
-                        Try advanced search
-                      </button>
-                    </div>
-                  )}
-
-                {!searchQuery.trim() && (
-                  <div className="p-8 text-center">
-                    <p className="text-gray-400">
-                      Start typing to Search for event s...
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-
+      {/* Mobile Navbar: always visible on small screens */}
+      <div className="fixed top-0 left-0 right-0 z-[200] md:hidden flex items-center justify-between px-4 h-16 bg-[#730109]">
+        <Link to="/" className="flex-shrink-0">
+          <img src={logoImage} alt="Dân Gian Việt Nam Logo" className="w-20 h-auto" />
+        </Link>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="p-2 rounded-md bg-gray-800 text-white transition-all duration-300"
@@ -390,9 +264,10 @@ const Navbar = () => {
           </div>
         </div>
       )}
+      {/* Desktop Navbar: only visible on md+ screens */}
       <div
         ref={navContainerRef}
-        className={`fixed left-0 right-0 z-[150] h-20 border-none transition-all duration-700 flex items-center justify-between px-8 max-md:hidden`}
+        className={`fixed left-0 right-0 z-[150] h-20 border-none transition-all duration-700 flex items-center justify-between px-8 hidden md:flex`}
         style={{ 
           margin: 0, 
           width: '100vw', 
@@ -544,9 +419,13 @@ const Navbar = () => {
                         >
                           Tuồng
                         </Link>
-                        <div className="block px-4 py-2 text-sm text-white/60 cursor-not-allowed">
+                        <Link
+                          to="/product-cheo"
+                          className="block px-4 py-2 text-sm text-white hover:bg-white/10 transition-colors"
+                          style={{ fontFamily: 'Merriweather, serif' }}
+                        >
                           Chèo
-                        </div>
+                        </Link>
                       </div>
                     </PopoverPanel>
                   </Popover>

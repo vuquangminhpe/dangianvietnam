@@ -625,16 +625,12 @@ export default function SeatSelection({
         ))}
       </div>
       <motion.div
-        className="bg-gradient-to-br max-w-5xl from-gray-800/30 to-gray-700/30 rounded-lg p-3 border border-gray-600/30"
+        className="bg-gradient-to-br max-w-5xl from-gray-800/30 to-gray-700/30 rounded-lg p-2 sm:p-3 border border-gray-600/30 w-full"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        <h3 className="font-bold text-sm mb-2 text-center text-gray-200 flex items-center justify-center gap-2">
-        
-
-        </h3>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 justify-center">
           {[
             ["THƯỜNG", "bg-blue-500"],
             ["VIP", "bg-purple-500"],
@@ -645,29 +641,30 @@ export default function SeatSelection({
           ].map(([type, color], i) => (
             <motion.div
               key={i}
-              className="flex items-center gap-1 p-1"
+              className="flex items-center gap-1 p-1 min-w-[90px] sm:min-w-0"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4 + i * 0.02 }}
             >
               <div className={`w-3 h-3 ${color} rounded shadow-sm`}></div>
-              <p className="text-xs text-gray-200">{type}</p>
+              <p className="text-xs sm:text-xs text-gray-200">{type}</p>
             </motion.div>
           ))}
         </div>
       </motion.div>
-      <div className="mt-6 rounded-xl p-4 border border-gray-700/50 max-w-7xl mx-auto w-full bg-gray-800/30">
-        <div className="flex items-start justify-between gap-6 w-full">
+
+      <div className="mt-4 sm:mt-6 rounded-xl p-2 sm:p-4 border border-gray-700/50 max-w-7xl mx-auto w-full bg-gray-800/30">
+        <div className="flex flex-col md:flex-row items-start md:items-stretch justify-between gap-4 md:gap-6 w-full">
           {/* Left side: Selected Seats + Total Amount */}
-          <div className="flex flex-col gap-4 flex-1">
+          <div className="flex flex-col gap-4 flex-1 min-w-0">
             {/* Selected Seats */}
-            <div className="flex gap-2 items-center">
-              <h2 className="font-bold text-lg mb-2 text-white-400 uppercase tracking-wide">
+            <div className="flex flex-wrap gap-2 items-center">
+              <h2 className="font-bold text-base sm:text-lg mb-2 text-white-400 uppercase tracking-wide">
                 GHẾ ĐÃ CHỌN
               </h2>
-              <div className="min-h-[40px] flex items-center">
+              <div className="min-h-[32px] sm:min-h-[40px] flex items-center flex-wrap gap-1">
                 {selectedSeats.length > 0 ? (
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1 sm:gap-2">
                     {selectedSeats.map((seat, index) => (
                       <motion.span
                         key={seat}
@@ -681,7 +678,7 @@ export default function SeatSelection({
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-400 italic text-sm">
+                  <p className="text-gray-400 italic text-xs sm:text-sm">
                     Chưa chọn ghế nào
                   </p>
                 )}
@@ -689,20 +686,20 @@ export default function SeatSelection({
             </div>
 
             {/* Total Amount */}
-            <div className="flex gap-2 items-center">
-              <h2 className="font-black text-lg mb-2 text-white-400 uppercase tracking-wide">
+            <div className="flex flex-wrap gap-2 items-center">
+              <h2 className="font-black text-base sm:text-lg mb-2 text-white-400 uppercase tracking-wide">
                 TỔNG TIỀN
               </h2>
               <div className="space-y-2">
-                <div className="text-2xl font-bold text-white-400 bg-gray-800/50 px-3 py-2 rounded-lg border border-yellow-400/30 shadow-lg">
+                <div className="text-lg sm:text-2xl font-bold text-white-400 bg-gray-800/50 px-2 sm:px-3 py-2 rounded-lg border border-yellow-400/30 shadow-lg">
                   {price ? totalAmount.toLocaleString("vi-VN") : "0"} VNĐ
                 </div>
                 {selectedCoupon && (
-                  <div className="flex items-center justify-between border-t border-gray-600 pt-2">
-                    <span className="text-sm text-orange-400">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-t border-gray-600 pt-2 gap-1">
+                    <span className="text-xs sm:text-sm text-orange-400">
                       Giảm giá ({selectedCoupon.code}):
                     </span>
-                    <span className="text-sm font-bold text-red-400">
+                    <span className="text-xs sm:text-sm font-bold text-red-400">
                       -{couponDiscount.toLocaleString("vi-VN")} VNĐ
                     </span>
                   </div>
@@ -712,7 +709,7 @@ export default function SeatSelection({
           </div>
 
           {/* Right side: Coupon Section + Action Buttons */}
-          <div className="flex flex-col gap-3 min-w-[300px]">
+          <div className="flex flex-col gap-3 w-full md:min-w-[300px] md:max-w-[340px]">
             {/* Coupon Section */}
             {user && (
               <motion.div
@@ -806,7 +803,7 @@ export default function SeatSelection({
 
                       {showCouponInput && (
                         <motion.div
-                          className="flex gap-2"
+                          className="flex gap-2 min-w-0"
                           initial={{ opacity: 0, y: -10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3 }}
@@ -818,12 +815,12 @@ export default function SeatSelection({
                               setCouponCode(e.target.value.toUpperCase())
                             }
                             placeholder="Nhập mã giảm giá..."
-                            className="flex-1 px-2 py-1 bg-gray-700/50 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none text-xs"
+                            className="flex-1 px-2 py-1 bg-gray-700/50 border border-gray-600 rounded text-white placeholder-gray-400 focus:outline-none text-xs min-w-0"
                           />
                           <button
                             onClick={handleManualCouponSubmit}
                             disabled={isValidatingCoupon || !couponCode.trim()}
-                            className={`px-3 py-1 rounded font-medium transition-all duration-300 text-xs ${
+                            className={`flex-shrink-0 max-w-[100px] px-3 py-1 rounded font-medium transition-all duration-300 text-xs ${
                               isValidatingCoupon || !couponCode.trim()
                                 ? "bg-gray-600 text-gray-400 cursor-not-allowed"
                                 : "bg-yellow-600 hover:bg-yellow-700 text-white"
@@ -879,7 +876,7 @@ export default function SeatSelection({
             )}
 
             {/* Action Buttons */}
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full">
               <motion.button
                 onClick={() => {
                   if (!isRefetching) {
@@ -890,7 +887,7 @@ export default function SeatSelection({
                 disabled={isRefetching}
                 whileHover={{ scale: isRefetching ? 1 : 1.02 }}
                 whileTap={{ scale: isRefetching ? 1 : 0.98 }}
-                className={`w-full px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 ${
+                className={`w-full px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all duration-300 ${
                   isRefetching
                     ? "bg-gray-600 cursor-not-allowed text-gray-400"
                     : "text-gray-800"
@@ -907,7 +904,7 @@ export default function SeatSelection({
                   onClick={handleCheckout}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300 text-white"
+                  className="w-full px-3 py-2 rounded-lg font-medium text-xs sm:text-sm transition-all duration-300 text-white"
                   style={{
                     backgroundColor: "#730109",
                   }}

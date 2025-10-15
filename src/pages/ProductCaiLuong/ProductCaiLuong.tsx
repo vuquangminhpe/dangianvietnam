@@ -1,8 +1,18 @@
+import { useState, useEffect } from 'react'
 import { caiLuong03, caiLuong04, caiLuong06, caiLuong07, caiLuong08, caiLuong09, caiLuong10, caiLuong11, caiLuong12, caiLuong13, caiLuong14, caiLuong15, caiLuong16, caiLuong17, caiLuong18, caiLuong19 } from '../../assets/Giao diện cải lương/index'
 import { thuVienAnhCLuongImages } from '../../assets/ThuVienAnhCLuong/index'
 import DomeGallery from '../../components/DomeGallery'
 
 const ProductCaiLuong = () => {
+  const [showGallery, setShowGallery] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowGallery(true)
+    }, 1500) // Hiển thị sau 1.5 giây
+
+    return () => clearTimeout(timer)
+  }, [])
   return (
     <div className="relative w-full">
       {/* Section 1 với caiLuong03 */}
@@ -126,10 +136,18 @@ const ProductCaiLuong = () => {
             THƯ VIỆN ẢNH
           </h2>
 
-          <DomeGallery
-            images={thuVienAnhCLuongImages}
-            overlayBlurColor="rgba(0,0,0,0)"
-          />
+          {!showGallery && (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#730109]"></div>
+            </div>
+          )}
+
+          {showGallery && (
+            <DomeGallery
+              images={thuVienAnhCLuongImages}
+              overlayBlurColor="rgba(0,0,0,0)"
+            />
+          )}
         </div>
       </div>
     </div>

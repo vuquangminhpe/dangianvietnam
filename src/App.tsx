@@ -25,6 +25,7 @@ import AdvancedSearchPage from "./pages/AdvancedSearchPage/AdvancedSearchPage";
 import ProductPage from "./pages/ProductPage";
 import ProductCaiLuong from "./pages/ProductCaiLuong/ProductCaiLuong";
 import ProductTuong from "./pages/ProductTuong/ProductTuong";
+import ProductCheo from "./pages/ProductCheo/ProductCheo";
 import { useEffect } from "react";
 import { getUserProfile } from "./apis/user.api";
 import { useAuthStore } from "./store/useAuthStore";
@@ -122,6 +123,7 @@ function App() {
                 <Route path="/product" element={<ProductPage />} />
                 <Route path="/product-cai-luong" element={<ProductCaiLuong />} />
                 <Route path="/product-tuong" element={<ProductTuong />} />
+                <Route path="/product-cheo" element={<ProductCheo />} />
 
                 {/* Routes that require authentication */}
                 <Route

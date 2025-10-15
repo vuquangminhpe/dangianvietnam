@@ -1,8 +1,18 @@
+import  { useState, useEffect } from 'react'
 import { tuong03, tuong04, tuong06, tuong07, tuong08, tuong09, tuong10, tuong11, tuong12, tuong13, tuong16, tuong17, tuong18, tuong19, tuong20, tuong21, tuong22, tuong23, tuong24, tuong25, tuong26, tuong27, tuong28, tuong29, tuong30, tuong31 } from '../../assets/Giao diện Tuồng/index'
 import { thuVienAnhTuongImages } from '../../assets/ThuVienAnhTuong/index'
 import DomeGallery from '../../components/DomeGallery'
 
 const ProductTuong = () => {
+  const [showGallery, setShowGallery] = useState(false)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowGallery(true)
+    }, 1500) // Hiển thị sau 1.5 giây
+
+    return () => clearTimeout(timer)
+  }, [])
   return (
     <div className="relative w-full">
       {/* Section 1 với tuong03 */}
@@ -202,10 +212,18 @@ const ProductTuong = () => {
             THƯ VIỆN ẢNH
           </h2>
 
-          <DomeGallery
-            images={thuVienAnhTuongImages}
-            overlayBlurColor="rgba(0,0,0,0)"
-          />
+          {!showGallery && (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#730109]"></div>
+            </div>
+          )}
+
+          {showGallery && (
+            <DomeGallery
+              images={thuVienAnhTuongImages}
+              overlayBlurColor="rgba(0,0,0,0)"
+            />
+          )}
         </div>
       </div>
 
