@@ -16,32 +16,56 @@ export const RevenueByStatus = ({ dashboardData }: RevenueByStatusProps) => {
     );
   }
 
+  // Debug: Log raw data to understand duplicates
+  console.log('Raw revenue_by_status:', dashboardData.booking_stats.revenue_by_status);
+
+  // Aggregate revenue by status to handle duplicates
+  const aggregatedRevenue = dashboardData.booking_stats.revenue_by_status.reduce((acc, status) => {
+    if (acc[status._id]) {
+      acc[status._id].total += status.total;
+    } else {
+      acc[status._id] = { _id: status._id, total: status.total };
+    }
+    return acc;
+  }, {} as Record<string, { _id: string; total: number }>);
+
+  console.log('Aggregated revenue:', aggregatedRevenue);
+
+  const revenueByStatus = Object.values(aggregatedRevenue);
+
   const statusConfig = {
     confirmed: {
       color: 'from-emerald-500 to-green-600',
       bgColor: 'bg-emerald-500/20',
       icon: CheckCircle,
       iconColor: 'text-emerald-400',
-      label: 'Đã xác nhận'
+      label: 'Đặt vé đã xác nhận'
     },
     pending: {
       color: 'from-amber-500 to-yellow-600',
       bgColor: 'bg-amber-500/20',
       icon: Clock,
       iconColor: 'text-amber-400',
-      label: 'Đang chờ xử lý'
+      label: 'Đặt vé đang chờ thanh toán'
     },
     cancelled: {
       color: 'from-red-500 to-rose-600',
       bgColor: 'bg-red-500/20',
       icon: XCircle,
       iconColor: 'text-red-400',
-      label: 'Đã hủy'
+      label: 'Đặt vé đã hủy'
+    },
+    used: {
+      color: 'from-blue-500 to-indigo-600',
+      bgColor: 'bg-blue-500/20',
+      icon: CheckCircle,
+      iconColor: 'text-blue-400',
+      label: 'Vé đã được sử dụng'
     }
   };
 
-  const maxRevenue = Math.max(...dashboardData.booking_stats.revenue_by_status.map(s => s.total));
-  const totalRevenue = dashboardData.booking_stats.revenue_by_status.reduce((sum, status) => sum + status.total, 0);
+  const maxRevenue = Math.max(...revenueByStatus.map(s => s.total));
+  const totalRevenue = revenueByStatus.reduce((sum, status) => sum + status.total, 0);
 
   return (
     <div>
@@ -54,7 +78,7 @@ export const RevenueByStatus = ({ dashboardData }: RevenueByStatusProps) => {
           >
             <Activity size={20} className="text-blue-400" />
           </motion.div>
-          Doanh thu theo trạng thái
+          Doanh thu theo trạng thái đặt vé
         </h3>
         <div className="flex items-center text-sm text-gray-300 font-body">
           <Banknote size={14} className="mr-1" />
@@ -63,8 +87,14 @@ export const RevenueByStatus = ({ dashboardData }: RevenueByStatusProps) => {
       </div>
       
       <div className="space-y-4">
-        {dashboardData.booking_stats.revenue_by_status.map((status, index) => {
-          const config = statusConfig[status._id as keyof typeof statusConfig] || statusConfig.confirmed;
+        {revenueByStatus.map((status, index) => {
+          const config = statusConfig[status._id as keyof typeof statusConfig] || {
+            color: 'from-gray-500 to-gray-600',
+            bgColor: 'bg-gray-500/20',
+            icon: Activity,
+            iconColor: 'text-gray-400',
+            label: `Trạng thái: ${status._id.charAt(0).toUpperCase() + status._id.slice(1)}`
+          };
           const Icon = config.icon;
           const percentage = ((status.total / totalRevenue) * 100).toFixed(1);
           const progressWidth = (status.total / maxRevenue) * 100;
@@ -85,6 +115,9 @@ export const RevenueByStatus = ({ dashboardData }: RevenueByStatusProps) => {
                   </div>
                   <div>
                     <span className="font-medium text-white capitalize font-heading">{config.label}</span>
+                    {status._id !== 'confirmed' && status._id !== 'pending' && status._id !== 'cancelled' && status._id !== 'used' && (
+                      <span className="text-xs text-gray-500 ml-2">({status._id})</span>
+                    )}
                     <p className="text-sm text-gray-400 font-body">{percentage}% trên tổng số</p>
                   </div>
                 </div>
@@ -118,7 +151,7 @@ export const RevenueByStatus = ({ dashboardData }: RevenueByStatusProps) => {
         <div className="flex items-center justify-between">
           <div>
             <h4 className="font-medium text-white font-heading">Hiệu suất doanh thu</h4>
-            <p className="text-sm text-gray-300 font-body">Dựa trên phân phối trạng thái đặt vé</p>
+            <p className="text-sm text-gray-300 font-body">Dựa trên phân phối trạng thái đặt vé và thanh toán</p>
           </div>
           <div className="text-right">
             <p className="text-2xl font-bold text-blue-400 font-heading">{totalRevenue.toLocaleString()} VNĐ</p>

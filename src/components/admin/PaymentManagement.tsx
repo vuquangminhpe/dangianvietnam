@@ -80,6 +80,9 @@ export const PaymentManagement = () => {
     staleTime: 2 * 60 * 1000, // 2 minutes
   });
 
+  // Debug stats data
+  console.log('Stats data:', statsData);
+
   // Mutations
   const updateStatusMutation = useMutation({
     mutationFn: ({
@@ -154,7 +157,8 @@ export const PaymentManagement = () => {
       case "pending":
         return "text-yellow-400 bg-yellow-500/20";
       case "failed":
-        return "text-red-400 bg-red-500/20";
+      case "cancelled":
+        return "text-orange-400 bg-orange-500/20";
       case "refunded":
         return "text-blue-400 bg-blue-500/20";
       default:
@@ -169,6 +173,7 @@ export const PaymentManagement = () => {
       case "pending":
         return <Clock size={16} />;
       case "failed":
+      case "cancelled":
         return <XCircle size={16} />;
       case "refunded":
         return <AlertCircle size={16} />;
@@ -191,12 +196,35 @@ export const PaymentManagement = () => {
     });
   };
 
-  // Helper function to get seats count safely
+  // Helper function to normalize status display
+  const getNormalizedStatusLabel = (status: string) => {
+    switch (status) {
+      case "completed":
+        return "Hoàn thành";
+      case "pending":
+        return "Đang chờ";
+      case "failed":
+      case "cancelled":
+        return "Đã hủy/Thất bại";
+      case "refunded":
+        return "Đã hoàn tiền";
+      default:
+        return status.charAt(0).toUpperCase() + status.slice(1);
+    }
+  };
+
+  // Helper to get number of seats from booking object (handles various possible shapes)
   const getSeatsCount = (booking: any) => {
-    if (!booking || !booking.seats) return 0;
+    if (!booking) return "N/A";
+    // common numeric property
+    if (typeof booking.seat_count === "number") return booking.seat_count;
+    // arrays of seats
     if (Array.isArray(booking.seats)) return booking.seats.length;
-    if (typeof booking.seats === "number") return booking.seats;
-    return 0;
+    if (Array.isArray(booking.selected_seats)) return booking.selected_seats.length;
+    if (Array.isArray(booking.selectedSeats)) return booking.selectedSeats.length;
+    // fallback to other possible properties
+    if (typeof booking.seats_count === "number") return booking.seats_count;
+    return "N/A";
   };
 
   return (
@@ -298,12 +326,18 @@ export const PaymentManagement = () => {
           <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-xl p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-400 font-body">Thất Bại</p>
+                <p className="text-sm text-gray-400 font-body">Đã hủy/Thất bại</p>
                 <p className="text-2xl font-bold text-white font-heading">
-                  {statsData?.result.overview.failed_payments?.toLocaleString() || 0}
+                  {(() => {
+                    // Get counts from payment_status array instead of overview
+                    const failedCount = statsData?.result.payment_status?.find(status => status._id === 'failed')?.count || 0;
+                    const cancelledCount = statsData?.result.payment_status?.find(status => status._id === 'cancelled')?.count || 0;
+                    console.log('Failed payments:', failedCount, 'Cancelled payments:', cancelledCount);
+                    return (failedCount + cancelledCount).toLocaleString();
+                  })()}
                 </p>
               </div>
-              <XCircle className="text-red-400" size={24} />
+              <XCircle className="text-orange-400" size={24} />
             </div>
           </div>
         </motion.div>
@@ -349,7 +383,7 @@ export const PaymentManagement = () => {
               <option value="" className="bg-slate-700 text-white">Tất cả</option>
               <option value="completed" className="bg-slate-700 text-white">Hoàn thành</option>
               <option value="pending" className="bg-slate-700 text-white">Đang chờ</option>
-              <option value="failed" className="bg-slate-700 text-white">Thất bại</option>
+              <option value="cancelled" className="bg-slate-700 text-white">Đã hủy/Thất bại</option>
               <option value="refunded" className="bg-slate-700 text-white">Đã hoàn tiền</option>
             </select>
           </div>
@@ -364,6 +398,7 @@ export const PaymentManagement = () => {
               className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-body"
             >
               <option value="" className="bg-slate-700 text-white">Tất cả</option>
+              <option value="sepay" className="bg-slate-700 text-white">Sepay</option>
               <option value="Momo" className="bg-slate-700 text-white">Momo</option>
               <option value="ZaloPay" className="bg-slate-700 text-white">ZaloPay</option>
               <option value="Credit Card" className="bg-slate-700 text-white">Thẻ tín dụng</option>
@@ -473,8 +508,13 @@ export const PaymentManagement = () => {
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-white font-mono">
-                        {payment.transaction_id || "N/A"}
+                        {payment.transaction_id || payment.order_id || "N/A"}
                       </div>
+                      {payment.order_id && payment.transaction_id && (
+                        <div className="text-xs text-gray-400 font-mono">
+                          Order: {payment.order_id}
+                        </div>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-white font-body">{payment.user?.name}</div>
@@ -495,7 +535,7 @@ export const PaymentManagement = () => {
                       >
                         <div className="flex items-center space-x-1">
                           {getStatusIcon(payment.status)}
-                          <span className="capitalize font-body">{payment.status}</span>
+                          <span className="capitalize font-body">{getNormalizedStatusLabel(payment.status)}</span>
                         </div>
                       </div>
                     </td>
@@ -606,8 +646,13 @@ export const PaymentManagement = () => {
                   <div className="bg-slate-700 p-3 rounded-lg">
                     <p className="text-sm text-gray-400 font-body">ID Giao dịch</p>
                     <p className="text-white font-mono text-sm">
-                      {selectedPayment.transaction_id || "N/A"}
+                      {selectedPayment.transaction_id || selectedPayment.order_id || "N/A"}
                     </p>
+                    {selectedPayment.order_id && (
+                      <p className="text-xs text-gray-400 font-mono mt-1">
+                        Order ID: {selectedPayment.order_id}
+                      </p>
+                    )}
                   </div>
                   <div className="bg-slate-700 p-3 rounded-lg">
                     <p className="text-sm text-gray-400 font-body">Trạng thái</p>
@@ -617,7 +662,7 @@ export const PaymentManagement = () => {
                       )}`}
                     >
                       {getStatusIcon(selectedPayment.status)}
-                      <span className="capitalize font-body">{selectedPayment.status}</span>
+                      <span className="capitalize font-body">{getNormalizedStatusLabel(selectedPayment.status)}</span>
                     </div>
                   </div>
                 </div>
@@ -769,22 +814,27 @@ const UpdateStatusModal = ({
             >
               <option value="pending">Đang chờ</option>
               <option value="completed">Hoàn thành</option>
-              <option value="failed">Thất bại</option>
+              <option value="cancelled">Đã hủy/Thất bại</option>
               <option value="refunded">Đã hoàn tiền</option>
             </select>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2 font-body">
-              ID Giao dịch
+              ID Giao dịch / Order ID
             </label>
             <input
               type="text"
               value={transactionId}
               onChange={(e) => setTransactionId(e.target.value)}
               className="w-full px-3 py-2 bg-slate-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-body"
-              placeholder="Nhập ID giao dịch"
+              placeholder="Nhập ID giao dịch hoặc Order ID"
             />
+            {payment.order_id && (
+              <p className="text-xs text-gray-400 mt-1 font-body">
+                Order ID hiện tại: {payment.order_id}
+              </p>
+            )}
           </div>
 
           <div>

@@ -12,7 +12,7 @@ import {
   Tag,
   Building2,
 } from "lucide-react";
-import { getDashboardStats, getPaymentStats } from "../../../../apis/admin.api";
+import { getDashboardStats, getPaymentStats, getAllUsers } from "../../../../apis/admin.api";
 import { useQuery } from "@tanstack/react-query";
 import type {
   DashboardQueryParams,
@@ -38,6 +38,12 @@ export const AdminSidebar = ({
   const { data: dataDashboard } = useQuery({
     queryKey: ["admin-dashboard-stats", selectedPeriod],
     queryFn: () => getDashboardStats({ period: selectedPeriod }),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  const { data: staffData } = useQuery({
+    queryKey: ["admin-staff-count"],
+    queryFn: () => getAllUsers({ role: "staff", limit: 1 }),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
   const { data: statsData } = useQuery({
@@ -72,7 +78,7 @@ export const AdminSidebar = ({
       id: "staff",
       label: "Quản lý nhân viên",
       icon: Users,
-      count: dataDashboard?.hr_stats?.total_staff || 0,
+      count: staffData?.result?.total || 0,
       color: "from-indigo-500 to-purple-500",
     },
     {

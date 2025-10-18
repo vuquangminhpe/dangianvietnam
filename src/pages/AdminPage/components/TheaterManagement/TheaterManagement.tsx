@@ -230,7 +230,7 @@ const TheaterManagement: React.FC = () => {
                   {stats.theaters_with_manager}
                 </p>
                 <p className="text-emerald-400 text-sm font-body">
-                  {stats.theaters_without_manager} chưa có quản lý
+                  {stats.theaters_with_manager} quản lý
                 </p>
               </div>
             </div>

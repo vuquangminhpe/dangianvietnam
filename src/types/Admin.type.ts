@@ -161,7 +161,7 @@ export interface PaymentStatsQueryParams {
 }
 
 export interface UpdatePaymentStatusRequest {
-  status: "pending" | "completed" | "failed" | "refunded";
+  status: "pending" | "completed" | "failed" | "cancelled" | "refunded";
   transaction_id?: string;
   admin_note?: string;
 }
@@ -174,8 +174,13 @@ export interface AdminPayment {
   payment_method: string;
   status: string;
   transaction_id: string;
+  order_id?: string;
+  bank_code?: string;
+  card_type?: string;
   payment_time: string;
   admin_note?: string;
+  error?: string;
+  payment_url?: string;
   created_at: string;
   updated_at: string;
   user: {
@@ -237,6 +242,7 @@ export interface PaymentStats {
     completed_payments: number;
     pending_payments: number;
     failed_payments: number;
+    cancelled_payments: number;
     refunded_payments: number;
     total_revenue: number;
   };
