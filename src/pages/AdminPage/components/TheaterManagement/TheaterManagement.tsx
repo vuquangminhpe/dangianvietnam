@@ -16,9 +16,12 @@ import {
   getTheaters,
   getTheaterStats,
   getTheaterDetails,
-  formatCurrency,
   type TheaterQueryParams,
 } from "../../../../apis/admin.api";
+
+// Local formatCurrency utility
+const formatCurrency = (amount: number) =>
+  amount.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 
 const TheaterManagement: React.FC = () => {
   const [filters, setFilters] = useState<TheaterQueryParams>({

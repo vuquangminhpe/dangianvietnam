@@ -955,10 +955,48 @@ export const getTheaterStats = async (): Promise<GetTheaterStatsResponse> => {
   }
 };
 
-// Format currency helper
-export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(amount);
+// Get quick stats for dashboard
+export const getQuickStats = async (): Promise<{
+  message: string;
+  result: {
+    active_users: number;
+    new_bookings_this_month: number;
+    pending_feedbacks: number;
+    pending_ratings: number;
+    pending_contracts: number;
+    total_staff: number;
+    total_theaters: number;
+    total_screens: number;
+  };
+}> => {
+  try {
+    const adminApi = createAdminRequest();
+    const response = await adminApi.get("/admin/quick-stats");
+    return response.data;
+  } catch (error) {
+    throw handleAdminError(error);
+  }
+};
+
+// Get recent activities for dashboard
+export const getRecentActivities = async (): Promise<{
+  message: string;
+  result: {
+    period: string;
+    summary: {
+      new_users: number;
+      successful_bookings: number;
+      new_ratings: number;
+      completed_payments: number;
+    };
+    daily_stats: any[];
+  };
+}> => {
+  try {
+    const adminApi = createAdminRequest();
+    const response = await adminApi.get("/admin/recent-activities");
+    return response.data;
+  } catch (error) {
+    throw handleAdminError(error);
+  }
 };

@@ -5,12 +5,15 @@ import {
   RefreshCw, 
   Loader2, 
   Activity, 
-  ChevronRight, 
-  Users, 
+  Users,
+  UserCheck,
+  Ticket,
+  Star
 } from 'lucide-react';
-import { getDashboardStats } from '../../../../apis/admin.api';
+import { getDashboardStats, getQuickStats, getRecentActivities } from '../../../../apis/admin.api';
 import type { DashboardStats, DashboardQueryParams } from '../../../../types/Admin.type';
 import { toast } from 'sonner';
+import { useQuery } from '@tanstack/react-query';
 
 import { DashboardStatsComponent } from './DashboardStats';
 import { TopMovies } from './TopMovies';
@@ -22,6 +25,20 @@ export const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState<DashboardStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPeriod, setSelectedPeriod] = useState<DashboardQueryParams['period']>('month');
+
+  // Fetch quick stats
+  const { data: quickStatsData } = useQuery({
+    queryKey: ["admin-quick-stats"],
+    queryFn: () => getQuickStats(),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  // Fetch recent activities
+  const { data: recentActivitiesData } = useQuery({
+    queryKey: ["admin-recent-activities"],
+    queryFn: () => getRecentActivities(),
+    staleTime: 2 * 60 * 1000, // 2 minutes
+  });
 
   useEffect(() => {
     fetchDashboardData();
@@ -179,15 +196,35 @@ export const Dashboard = () => {
           <div className="space-y-4 font-body">
             <div className="flex items-center justify-between">
               <span className="text-gray-300">Người dùng hoạt động</span>
-              <span className="font-semibold text-white">1,420</span>
+              <span className="font-semibold text-white">{quickStatsData?.result?.active_users || 0}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-gray-300">Lượt đặt vé mới</span>
-              <span className="font-semibold text-white">89</span>
+              <span className="font-semibold text-white">{quickStatsData?.result?.new_bookings_this_month || 0}</span>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-gray-300">Đánh giá chờ duyệt</span>
-              <span className="font-semibold text-white">23</span>
+              <span className="font-semibold text-white">{quickStatsData?.result?.pending_ratings || 0}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-gray-300">Phản hồi chờ duyệt</span>
+              <span className="font-semibold text-white">{quickStatsData?.result?.pending_feedbacks || 0}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-gray-300">Hợp đồng chờ duyệt</span>
+              <span className="font-semibold text-white">{quickStatsData?.result?.pending_contracts || 0}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-gray-300">Tổng nhân viên</span>
+              <span className="font-semibold text-white">{quickStatsData?.result?.total_staff || 0}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-gray-300">Tổng rạp chiếu</span>
+              <span className="font-semibold text-white">{quickStatsData?.result?.total_theaters || 0}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-gray-300">Tổng màn hình</span>
+              <span className="font-semibold text-white">{quickStatsData?.result?.total_screens || 0}</span>
             </div>
           </div>
         </motion.div>
@@ -212,10 +249,30 @@ export const Dashboard = () => {
           
           <div className="space-y-3">
             {[
-              { action: 'Người dùng mới đăng ký', time: '5 phút trước', type: 'user' },
-              { action: 'Đặt vé xem phim thành công', time: '12 phút trước', type: 'booking' },
-              { action: 'Đánh giá đã được gửi', time: '1 giờ trước', type: 'review' },
-              { action: 'Thanh toán đã được xử lý', time: '2 giờ trước', type: 'payment' }
+              { 
+                action: 'Người dùng mới đăng ký', 
+                count: recentActivitiesData?.result?.summary?.new_users || 0,
+                type: 'user',
+                icon: UserCheck
+              },
+              { 
+                action: 'Đặt vé thành công', 
+                count: recentActivitiesData?.result?.summary?.successful_bookings || 0,
+                type: 'booking',
+                icon: Ticket
+              },
+              { 
+                action: 'Đánh giá mới', 
+                count: recentActivitiesData?.result?.summary?.new_ratings || 0,
+                type: 'review',
+                icon: Star
+              },
+              { 
+                action: 'Thanh toán hoàn thành', 
+                count: recentActivitiesData?.result?.summary?.completed_payments || 0,
+                type: 'payment',
+                icon: Activity
+              }
             ].map((activity, index) => (
               <motion.div 
                 key={index}
@@ -231,16 +288,13 @@ export const Dashboard = () => {
                 }`} />
                 <div className="flex-1">
                   <p className="text-sm text-white font-body">{activity.action}</p>
-                  <p className="text-xs text-gray-400 font-body">{activity.time}</p>
+                  <p className="text-xs text-gray-400 font-body">{activity.count} hoạt động</p>
                 </div>
               </motion.div>
             ))}
           </div>
           
-          <button className="w-full mt-4 text-sm text-blue-400 hover:text-blue-300 flex items-center justify-center font-body">
-            Xem tất cả hoạt động
-            <ChevronRight size={16} className="ml-1" />
-          </button>
+       
         </motion.div>
       </div>
 
