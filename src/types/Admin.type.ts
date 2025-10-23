@@ -55,7 +55,7 @@ export interface DashboardStats {
 
 export interface AdminUser {
   _id: string;
-  name: string;
+  name?: string;
   email: string;
   username?: string;
   avatar?: string;
@@ -64,18 +64,18 @@ export interface AdminUser {
   verify: number; // 0: not verified, 1: verified, 2: banned
   date_of_birth?: string;
   address?: {
-    street: string;
-    city: string;
-    state: string;
-    country: string;
-    zipCode: string;
+    street?: string;
+    city?: string;
+    state?: string;
+    country?: string;
+    zipCode?: string;
   };
   created_at: string;
   updated_at: string;
   email_verify_code?: string;
   verify_code_expires_at?: string | null;
   class?: string;
-  stats: {
+  stats?: {
     bookings_count: number;
     ratings_count: number;
     feedbacks_count: number;
@@ -86,6 +86,11 @@ export interface AdminUser {
     recent_ratings: any[];
     recent_feedbacks: any[];
   };
+  theaters_managed?: Array<{
+    _id: string;
+    name: string;
+    location?: string;
+  }>;
 }
 
 export interface GetUsersResponse {

@@ -61,7 +61,7 @@ export const UserDetailModal = ({ user, onClose }: UserDetailModalProps) => (
           >
             <img 
               src={user.avatar} 
-              alt={user.name}
+              alt={user.name || 'user-avatar'}
               className="w-24 h-24 rounded-full object-cover border-4 border-blue-500/50"
               onError={(e) => {
                 e.currentTarget.style.display = 'none';
@@ -189,23 +189,49 @@ interface EditUserModalProps {
 }
 
 export const EditUserModal = ({ user, onClose, onSave }: EditUserModalProps) => {
-  const [formData, setFormData] = useState({
-    name: user.name,
+  const [formData, setFormData] = useState<{
+    name: string;
+    email: string;
+    phone: string;
+    date_of_birth: string;
+    address: {
+      street: string;
+      city: string;
+      state: string;
+      country: string;
+      zipCode: string;
+    };
+  }>({
+    name: user.name || '',
     email: user.email,
     phone: user.phone || '',
     date_of_birth: user.date_of_birth ? user.date_of_birth.split('T')[0] : '',
-    address: user.address || {
-      street: '',
-      city: '',
-      state: '',
-      country: '',
-      zipCode: ''
+    address: {
+      street: user.address?.street || '',
+      city: user.address?.city || '',
+      state: user.address?.state || '',
+      country: user.address?.country || '',
+      zipCode: user.address?.zipCode || ''
     }
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave(user._id, formData);
+    const payload: UpdateUserRequest = {
+      name: formData.name.trim() || undefined,
+      email: formData.email,
+      phone: formData.phone.trim() || undefined,
+      date_of_birth: formData.date_of_birth || undefined,
+      address: {
+        street: formData.address.street || undefined,
+        city: formData.address.city || undefined,
+        state: formData.address.state || undefined,
+        country: formData.address.country || undefined,
+        zipCode: formData.address.zipCode || undefined
+      }
+    };
+
+    onSave(user._id, payload);
   };
 
   return (

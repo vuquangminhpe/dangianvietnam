@@ -47,6 +47,10 @@ type Contract = {
     email: string;
     name: string;
   };
+  theaters_managed?: Array<{
+    _id: string;
+    name: string;
+  }>;
 };
 
 export const ContractManagement = () => {

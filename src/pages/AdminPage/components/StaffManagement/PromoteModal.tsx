@@ -262,7 +262,7 @@ export const PromoteModal = ({ customer, onClose, onSubmit }: PromoteModalProps)
               <h3 className="text-lg font-medium text-white mb-3 flex items-center gap-2 font-heading">
                 <div className="h-8 w-8 rounded-full overflow-hidden bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center text-white font-semibold text-sm">
                   {customer.avatar ? (
-                    <img src={customer.avatar} alt={customer.name} className="w-full h-full object-cover" />
+                    <img src={customer.avatar} alt={customer.name || 'customer-avatar'} className="w-full h-full object-cover" />
                   ) : (
                     customer.name?.charAt(0)?.toUpperCase() || '?'
                   )}

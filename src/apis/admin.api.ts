@@ -385,6 +385,11 @@ export const getAllContracts = async (params?: {
         email: string;
         name: string;
       };
+      // list of theaters the staff manages (added to match API response)
+      theaters_managed?: Array<{
+        _id: string;
+        name: string;
+      }>;
     }>;
     total: number;
     page: number;
@@ -450,6 +455,11 @@ export const getContractById = async (
       email: string;
       name: string;
     };
+    // list of theaters the staff manages (added to match API response)
+    theaters_managed?: Array<{
+      _id: string;
+      name: string;
+    }>;
   };
 }> => {
   try {

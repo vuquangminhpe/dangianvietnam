@@ -34,6 +34,10 @@ type Contract = {
     email: string;
     name: string;
   };
+  theaters_managed?: Array<{
+    _id: string;
+    name: string;
+  }>;
 };
 
 interface ContractTableProps {
@@ -93,11 +97,12 @@ export const ContractTable = ({
     }
   };
 
-  const formatSalary = (amount: number) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(amount);
+  const getTheaterName = (contract: Contract) => {
+    const managedName = contract.theaters_managed && contract.theaters_managed.length > 0
+      ? contract.theaters_managed[0].name
+      : null;
+
+    return managedName || contract.theater_name || 'Chưa có';
   };
 
   if (contractsLoading) {
@@ -147,7 +152,7 @@ export const ContractTable = ({
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Hợp đồng</th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Nhân viên</th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Trạng thái</th>
-              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Lương</th>
+              <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Tên rạp</th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Thời hạn</th>
               <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Hành động</th>
             </tr>
@@ -205,7 +210,7 @@ export const ContractTable = ({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-white">
-                      {formatSalary(contract.salary)}
+                      {getTheaterName(contract)}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

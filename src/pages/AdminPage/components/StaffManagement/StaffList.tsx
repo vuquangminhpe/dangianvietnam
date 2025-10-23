@@ -79,7 +79,7 @@ export const StaffList = ({ staff, loading, onRefresh }: StaffListProps) => {
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Thành viên nhân viên</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Vai trò</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Trạng thái</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Thống kê</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Tên rạp</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-300 uppercase tracking-wider font-heading">Ngày tham gia</th>
                 </tr>
               </thead>
@@ -102,7 +102,7 @@ export const StaffList = ({ staff, loading, onRefresh }: StaffListProps) => {
                           {staffMember.avatar ? (
                             <img 
                               src={staffMember.avatar} 
-                              alt={staffMember.name}
+                              alt={staffMember.name || 'staff-avatar'}
                               className="w-full h-full object-cover"
                               onError={(e) => {
                                 e.currentTarget.style.display = 'none';
@@ -144,13 +144,10 @@ export const StaffList = ({ staff, loading, onRefresh }: StaffListProps) => {
                         {staffMember.verify === 1 ? 'Hoạt động' : staffMember.verify === 2 ? 'Không hoạt động' : 'Đang chờ xử lý'}
                       </motion.button>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-body">
-                      {staffMember.stats && (
-                        <div className="text-xs space-y-1">
-                          <div>Lượt đặt vé: {staffMember.stats.bookings_count}</div>
-                          <div>Lượt đánh giá: {staffMember.stats.ratings_count}</div>
-                        </div>
-                      )}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-body text-white">
+                      {staffMember.theaters_managed && staffMember.theaters_managed.length > 0
+                        ? staffMember.theaters_managed[0].name
+                        : 'Chưa có'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400 font-body">
                       {new Date(staffMember.created_at).toLocaleDateString()}

@@ -106,7 +106,7 @@ export const UserTable = ({
                       {userData.avatar ? (
                         <img 
                           src={userData.avatar} 
-                          alt={userData.name}
+                          alt={userData.name || 'user-avatar'}
                           className="w-full h-full object-cover"
                           onError={(e) => {
                             e.currentTarget.style.display = 'none';

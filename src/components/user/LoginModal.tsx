@@ -3,20 +3,20 @@ import { getRedirectPathByRole, useAuthStore } from "../../store/useAuthStore";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import RegisterModal from "./RegisterModal";
+// Register modal is controlled by parent (Navbar). Do not render it from here.
 
 interface LoginModalProps {
   isFormOpen: (value: boolean) => void;
+  // Called when user wants to switch from Login -> Register. Parent should close login and open register.
+  onSwitchToRegister?: () => void;
 }
 
-const LoginModal = ({ isFormOpen }: LoginModalProps) => {
+const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
   const { login, error } = useAuthStore();
   const navigate = useNavigate();
   // Local loading state for better control
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Modal state to switch between login and register
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
 
   // Add state to track if user is selecting text
   const [isSelecting, setIsSelecting] = useState(false);
@@ -326,7 +326,10 @@ const LoginModal = ({ isFormOpen }: LoginModalProps) => {
               Don't have account?{" "}
               <span
                 className="cursor-pointer text-red-400 hover:text-red-300 hover:underline transition"
-                onClick={() => setShowRegisterModal(true)}
+                onClick={() => {
+                  // ask parent to switch to register modal
+                  if (onSwitchToRegister) onSwitchToRegister();
+                }}
               >
                 Register
               </span>{" "}
@@ -334,17 +337,7 @@ const LoginModal = ({ isFormOpen }: LoginModalProps) => {
           </form>
         </div>
       </div>
-
-      {/* Register Modal */}
-      {showRegisterModal && (
-        <RegisterModal
-          isFormOpen={setShowRegisterModal}
-          onSwitchToLogin={() => {
-            setShowRegisterModal(false);
-            // Keep login modal open
-          }}
-        />
-      )}
+      {/* Register modal should be rendered by the parent so only one modal shows at a time */}
     </div>
   );
 };

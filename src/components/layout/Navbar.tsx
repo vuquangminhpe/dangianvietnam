@@ -164,6 +164,17 @@ const Navbar = () => {
 
   const userQuickAccess = getUserQuickAccess();
 
+  // Helpers to ensure only one modal is open at a time
+  const openLogin = () => {
+    setIsRegisterForm(false);
+    setIsLoginForm(true);
+  };
+
+  const openRegister = () => {
+    setIsLoginForm(false);
+    setIsRegisterForm(true);
+  };
+
   return (
     <>
 
@@ -254,7 +265,7 @@ const Navbar = () => {
                 <button
                   className="px-4 py-1 sm:px-7 sm:py-2 bg-[#F84565] hover:bg-[#D63854]
             transition rounded-full font-medium cursor-pointer w-full mt-3 text-base"
-                  onClick={() => setIsLoginForm(true)}
+                  onClick={() => openLogin()}
                   style={{ fontFamily: 'Roboto, sans-serif' }}
                 >
                   Login
@@ -267,7 +278,7 @@ const Navbar = () => {
       {/* Desktop Navbar: only visible on md+ screens */}
       <div
         ref={navContainerRef}
-        className={`fixed left-0 right-0 z-[150] h-20 border-none transition-all duration-700 flex items-center justify-between px-8 hidden md:flex`}
+        className={`fixed left-0 right-0 z-[150] h-20 border-none transition-all duration-700 items-center justify-between px-8 hidden md:flex`}
         style={{ 
           margin: 0, 
           width: '100vw', 
@@ -506,7 +517,7 @@ const Navbar = () => {
             <div className="flex items-center gap-3">
               <button
                 className="px-6 py-2 sm:px-8 sm:py-3 transition-all duration-300 rounded-full font-bold cursor-pointer text-lg transform hover:scale-105 hover:shadow-lg"
-                onClick={() => setIsLoginForm(true)}
+                onClick={() => openLogin()}
                 style={{ 
                   fontFamily: 'Merriweather, serif',
                   backgroundColor: '#fbf5e7',
@@ -526,7 +537,7 @@ const Navbar = () => {
               
               <button
                 className="px-6 py-2 sm:px-8 sm:py-3 transition-all duration-300 rounded-full font-bold cursor-pointer text-lg transform hover:scale-105 hover:shadow-lg border-2"
-                onClick={() => setIsRegisterForm(true)}
+                onClick={() => openRegister()}
                 style={{ 
                   fontFamily: 'Merriweather, serif',
                   backgroundColor: 'transparent',
@@ -550,11 +561,26 @@ const Navbar = () => {
         </div>
       </div>
 
-      {isLoginForm && <LoginModal isFormOpen={setIsLoginForm} />}
-      {isRegisterForm && <RegisterModal isFormOpen={setIsRegisterForm} onSwitchToLogin={() => {
-        setIsRegisterForm(false);
-        setIsLoginForm(true);
-      }} />}
+      {isLoginForm && (
+        <LoginModal
+          isFormOpen={setIsLoginForm}
+          onSwitchToRegister={() => {
+            // close login, open register
+            setIsLoginForm(false);
+            setIsRegisterForm(true);
+          }}
+        />
+      )}
+      {isRegisterForm && (
+        <RegisterModal
+          isFormOpen={setIsRegisterForm}
+          onSwitchToLogin={() => {
+            // close register, open login
+            setIsRegisterForm(false);
+            setIsLoginForm(true);
+          }}
+        />
+      )}
     </>
   );
 };

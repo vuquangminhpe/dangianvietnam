@@ -36,6 +36,10 @@ type Contract = {
     email: string;
     name: string;
   };
+  theaters_managed?: Array<{
+    _id: string;
+    name: string;
+  }>;
 };
 
 interface ContractDetailModalProps {
@@ -177,6 +181,14 @@ export const ContractDetailModal = ({ contract, onClose }: ContractDetailModalPr
               Thông tin hợp đồng
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-sm text-gray-400 font-body">Tên rạp</label>
+                <p className="text-white font-body">
+                  {contract.theaters_managed && contract.theaters_managed.length > 0
+                    ? contract.theaters_managed[0].name
+                    : contract.theater_name || 'Chưa có'}
+                </p>
+              </div>
               <div>
                 <label className="text-sm text-gray-400 font-body">Ngày bắt đầu</label>
                 <p className="text-white font-body">{new Date(contract.start_date).toLocaleDateString()}</p>
@@ -493,6 +505,21 @@ export const EditContractModal = ({ contract, onClose, onSave }: EditContractMod
               {errors.position && (
                 <p className="text-red-400 text-xs mt-1 font-body">{errors.position}</p>
               )}
+            </div>
+
+            {/* Theater Name */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2 font-body">
+                Tên rạp
+              </label>
+              <input
+                type="text"
+                value={contract.theaters_managed && contract.theaters_managed.length > 0
+                  ? contract.theaters_managed[0].name
+                  : contract.theater_name || 'Chưa có'}
+                readOnly
+                className="w-full px-3 py-2 bg-slate-700/50 text-white rounded-lg border border-slate-600/50 focus:outline-none font-body"
+              />
             </div>
 
             {/* Salary */}

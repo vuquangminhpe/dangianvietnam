@@ -89,7 +89,7 @@ export const CustomerList = ({ customers, loading, onPromote, onRefresh }: Custo
                     {customer.avatar ? (
                       <img 
                         src={customer.avatar} 
-                        alt={customer.name}
+                        alt={customer.name || 'customer-avatar'}
                         className="w-full h-full object-cover"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';

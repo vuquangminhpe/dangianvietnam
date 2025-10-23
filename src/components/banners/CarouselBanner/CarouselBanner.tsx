@@ -37,6 +37,7 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const carouselRef = useRef<HTMLDivElement>(null);
+  const thumbnailRef = useRef<HTMLDivElement | null>(null);
   let timeRunning = 3000;
   let timeAutoNext = 6000;
   const runTimeOutRef = useRef<number | undefined>(undefined);
@@ -84,6 +85,14 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
     };
   }, [carouselItems]);
 
+  // Scroll active thumbnail into view when currentIndex changes
+  useEffect(() => {
+    const activeEl = thumbnailRef.current?.querySelector('.item.active') as HTMLElement | null;
+    if (activeEl && typeof activeEl.scrollIntoView === 'function') {
+      activeEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    }
+  }, [currentIndex]);
+
   const initSlider = () => {
     if (!carouselRef.current) return;
 
@@ -114,27 +123,68 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
   const showSlider = (type: string) => {
     console.log('showSlider called with type:', type);
     if (!carouselRef.current) return;
+    const SliderDom = carouselRef.current.querySelector('.list') as HTMLElement | null;
+    const carouselDom = carouselRef.current;
+    if (!SliderDom) return;
 
-    let SliderDom = carouselRef.current.querySelector('.carousel .list') as HTMLElement;
-    let carouselDom = carouselRef.current.querySelector('.carousel') as HTMLElement;
+    // get items based on current DOM order
+    const SliderItemsDom = SliderDom.querySelectorAll('.item');
 
-    let SliderItemsDom = SliderDom.querySelectorAll('.carousel .list .item');
-
-    if(type === 'next'){
-      SliderDom.appendChild(SliderItemsDom[0]);
+    if (type === 'next') {
+      // move first to end
+      if (SliderItemsDom.length > 0) {
+        SliderDom.appendChild(SliderItemsDom[0]);
+      }
       carouselDom.classList.add('next');
-      setCurrentIndex((prev) => (prev + 1) % carouselItems.length);
-    }else{
-      SliderDom.prepend(SliderItemsDom[SliderItemsDom.length - 1]);
+    } else {
+      // move last to start
+      if (SliderItemsDom.length > 0) {
+        SliderDom.prepend(SliderItemsDom[SliderItemsDom.length - 1]);
+      }
       carouselDom.classList.add('prev');
-      setCurrentIndex((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
     }
+
+    // After reordering DOM, determine which slide is visible (first child)
+    const first = SliderDom.firstElementChild as HTMLElement | null;
+    const visibleId = first?.getAttribute('data-id') || null;
+    const visibleIndex = visibleId ? carouselItems.findIndex((it) => it.id === visibleId) : -1;
+    if (visibleIndex >= 0) setCurrentIndex(visibleIndex);
 
     clearTimeout(runTimeOutRef.current);
     runTimeOutRef.current = setTimeout(() => {
       carouselDom.classList.remove('next');
       carouselDom.classList.remove('prev');
     }, timeRunning);
+  };
+
+  // Rotate slider DOM so the slide with given index becomes the first child (visible)
+  const goToSlide = (targetIndex: number) => {
+    if (!carouselRef.current) return;
+    const SliderDom = carouselRef.current.querySelector('.list') as HTMLElement | null;
+    const carouselDom = carouselRef.current.querySelector('.carousel') as HTMLElement | null;
+    if (!SliderDom) return;
+
+    const children = Array.from(SliderDom.children) as HTMLElement[];
+    const targetId = carouselItems[targetIndex]?.id;
+    if (!targetId) return;
+
+    const targetEl = children.find((c) => c.getAttribute('data-id') === targetId);
+    if (!targetEl) return;
+
+    // Rotate until targetEl is first child
+    let safety = 0;
+    while (SliderDom.firstElementChild !== targetEl && safety < children.length) {
+      SliderDom.appendChild(SliderDom.firstElementChild as ChildNode);
+      safety++;
+    }
+
+    // trigger animation class briefly
+    if (carouselDom) {
+      carouselDom.classList.add('next');
+      setTimeout(() => carouselDom.classList.remove('next'), timeRunning);
+    }
+
+    setCurrentIndex(targetIndex);
   };
 
   return (
@@ -245,38 +295,48 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
             color: #000;
         }
         /* thumbail */
-        .thumbnail{
-            position: absolute;
-            bottom: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: max-content;
-            z-index: 100;
-            display: flex;
-            gap: 15px;
-            padding: 0 20px;
-        }
-        .thumbnail .item{
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            opacity: 0.5;
-        }
-        .thumbnail .item.active{
-            opacity: 1;
-            transform: scale(1.2);
-        }
-        .thumbnail .item img{
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
+    .thumbnail{
+      position: absolute;
+      bottom: -40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: max-content;
+      /* Lower z-index so modals (z-50) appear above thumbnails */
+      z-index: 10;
+      display: flex;
+      gap: 15px;
+      padding: 0 20px;
+    }
+    .thumbnail .item{
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.24s ease, box-shadow 0.24s ease, opacity 0.24s ease, border-color 0.24s ease;
+      opacity: 0.55;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+    }
+    .thumbnail .item.active{
+      opacity: 1;
+      transform: scale(1.28);
+      box-shadow: 0 6px 18px rgba(16, 185, 129, 0.18); /* subtle green glow */
+    }
+    .thumbnail .item img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      transition: transform 0.24s ease, border-color 0.24s ease;
+    }
+    .thumbnail .item.active img{
+      border-color: #10b981; /* green ring on active */
+      transform: translateZ(0);
+    }
         /* Removed green border for active thumbnail */
         /* .thumbnail .item.active img{
             border-color: #10b981;
@@ -362,47 +422,28 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
             animation-delay: 1s!important;
         }
         /* create animation when next click */
-        .carousel.next .list .item:nth-child(1) img{
-            width: 150px;
-            height: 220px;
-            position: absolute;
-            bottom: 50px;
-            left: 50%;
-            border-radius: 30px;
-            animation: showImage .5s linear 1 forwards;
-        }
+    /* disable small popup image on next/prev to keep slide image full-bleed */
+    .carousel.next .list .item:nth-child(1) img,
+    .carousel.prev .list .item:nth-child(1) img,
+    .carousel .list .item img {
+      width: 100% !important;
+      height: 100% !important;
+      position: static !important;
+      bottom: auto !important;
+      left: auto !important;
+      border-radius: 0 !important;
+      animation: none !important;
+      transform: none !important;
+    }
        
 
-        .carousel.next .thumbnail .item:nth-last-child(1){
-            overflow: hidden;
-            animation: showThumbnail .5s linear 1 forwards;
-        }
-        .carousel.prev .list .item img{
-            z-index: 100;
-        }
-      
-        .carousel.next .thumbnail{
-            animation: effectNext .5s linear 1 forwards;
-        }
+    .carousel.prev .list .item img{
+      z-index: 100;
+    }
 
        
 
-        /* running time */
-
-        .carousel .time{
-            position: absolute;
-            z-index: 1000;
-            width: 0%;
-            height: 3px;
-            background-color: #f1683a;
-            left: 0;
-            top: 0;
-        }
-
-        .carousel.next .time,
-        .carousel.prev .time{
-            animation: runningTime 3s linear 1 forwards;
-        }
+    /* running time removed to avoid temporary progress bar/3s animation */
       
 
 
@@ -420,11 +461,13 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
         }
        
 
-        .carousel.prev .thumbnail .item:nth-child(1){
-            overflow: hidden;
-            opacity: 0;
-            animation: showThumbnail .5s linear 1 forwards;
-        }
+    /* ensure thumbnail items do not flash/hide on prev/next */
+    .carousel.prev .thumbnail .item:nth-child(1),
+    .carousel.next .thumbnail .item:nth-last-child(1) {
+      overflow: visible !important;
+      opacity: 1 !important;
+      animation: none !important;
+    }
         .carousel.prev .list .item:nth-child(2) .content .author,
         .carousel.prev .list .item:nth-child(2) .content .title,
         .carousel.prev .list .item:nth-child(2) .content .topic,
@@ -458,14 +501,14 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
                 width: 100%;
                 max-width: 200px;
             }
-            .thumbnail{
-                bottom: 25px;
-                gap: 10px;
-            }
-         0thumbnail .item{
-                width: 30px;
-                height: 30px;
-            }
+      .thumbnail{
+        bottom: 25px;
+        gap: 10px;
+      }
+      .thumbnail .item{
+        width: 30px;
+        height: 30px;
+      }
             .arrows {
                 width: calc(100% + 40px);
                 left: -20px;
@@ -517,6 +560,7 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
                   <div
                     key={item.id}
                     className="item"
+                    data-id={item.id}
                   >
                     <img
                       src={item.image}
@@ -551,31 +595,26 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
 
           {/* list thumnail - moved outside carousel */}
           {carouselItems.length > 0 && (
-            <div className="thumbnail">
-              {carouselItems.map((item, index) => (
+            <div className="thumbnail" ref={(el) => { thumbnailRef.current = el; }}>
+                {carouselItems.map((item, index) => (
                 <div
                   key={item.id}
                   className={`item ${index === currentIndex ? 'active' : ''}`}
-                  onClick={() => {
-                    // Handle thumbnail click to go to specific slide
-                    const targetIndex = index;
-                    if (targetIndex > currentIndex) {
-                      for (let i = 0; i < targetIndex - currentIndex; i++) {
-                        const nextBtn = carouselRef.current?.querySelector('.next-btn') as HTMLElement;
-                        if (nextBtn) nextBtn.click();
+                  role="button"
+                  tabIndex={0}
+                  aria-current={index === currentIndex ? 'true' : undefined}
+                  onClick={() => goToSlide(index)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                      goToSlide(index);
                       }
-                    } else if (targetIndex < currentIndex) {
-                      for (let i = 0; i < currentIndex - targetIndex; i++) {
-                        const prevBtn = carouselRef.current?.querySelector('.prev-btn') as HTMLElement;
-                        if (prevBtn) prevBtn.click();
-                      }
-                    }
-                  }}
-                >
+                    }}
+                  >
                   <img
                     src={item.image}
                     alt={item.title}
-                    className="w-full h-full"
+                    className="w-full h-full rounded-full"
                     width={40}
                     height={40}
                     loading="lazy"
