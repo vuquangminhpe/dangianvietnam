@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getAuthToken } from "./user.api";
 
-const BASE_URL = "https://holaren.shop";
+const BASE_URL = "https://dangianvietnam.space";
 
 // Types based on the API documentation
 export interface BannerSliderHome {

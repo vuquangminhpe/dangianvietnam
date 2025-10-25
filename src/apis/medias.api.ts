@@ -3,7 +3,7 @@ import type { Media } from "../types/Medias.type";
 import type { SuccessResponse } from "../types/Utils.type";
 import { getAuthToken } from "./user.api";
 
-const BASE_URL = "https://holaren.shop";
+const BASE_URL = "https://dangianvietnam.space";
 
 // Create authenticated axios instance for media requests
 const createStaffRequest = () => {

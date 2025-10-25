@@ -12,7 +12,7 @@ import type {
 } from "../types/Coupon.type";
 import { getAuthToken } from "./user.api";
 
-const BASE_URL = "https://holaren.shop";
+const BASE_URL = "https://dangianvietnam.space";
 
 // Create authenticated axios instance for admin requests
 const createAdminRequest = () => {

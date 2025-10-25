@@ -10,7 +10,7 @@ import type {
 } from "../types/Banner.type";
 import { getAuthToken } from "./user.api";
 
-const BASE_URL = "https://holaren.shop";
+const BASE_URL = "https://dangianvietnam.space";
 
 // Create authenticated axios instance for banner requests
 const createBannerRequest = () => {

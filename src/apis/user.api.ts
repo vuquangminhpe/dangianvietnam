@@ -12,7 +12,7 @@ import type {
   ChangePasswordResponse,
 } from "../types/User.type";
 
-const BASE_URL = "https://holaren.shop";
+const BASE_URL = "https://dangianvietnam.space";
 
 // API for user registration
 export const registerUser = async (userData: RegisterUserType) => {

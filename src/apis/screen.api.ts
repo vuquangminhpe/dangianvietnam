@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { Screen } from "../types/Screen.type";
 
-const BASE_URL = "https://holaren.shop";
+const BASE_URL = "https://dangianvietnam.space";
 const API_URL = "/cinema/screens";
 
 // Create axios instance for screen requests

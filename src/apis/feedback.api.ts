@@ -9,7 +9,7 @@ import type {
   UpdateFeedbackStatusRequest,
 } from "../types/Feedback.type";
 import { getAuthToken } from "./user.api";
-const BASE_URL = "https://holaren.shop";
+const BASE_URL = "https://dangianvietnam.space";
 const createAuthRequest = () => {
   const token = getAuthToken();
   return axios.create({

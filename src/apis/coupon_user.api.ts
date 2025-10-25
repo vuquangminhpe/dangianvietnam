@@ -3,7 +3,7 @@ import axios from "axios";
 import type { Coupon } from "../types/Coupon.type";
 import { getAuthToken } from "./user.api";
 
-const BASE_URL = "https://holaren.shop";
+const BASE_URL = "https://dangianvietnam.space";
 
 // ===============================
 // USER COUPON API TYPES
