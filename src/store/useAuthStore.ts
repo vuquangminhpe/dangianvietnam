@@ -18,6 +18,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  validationErrors: Record<string, string> | null;
   tempEmail: string | null;
   register: (userData: RegisterUserType) => Promise<boolean>;
   verifyOtp: (otpData: OtpRegisterType) => Promise<boolean>;
@@ -36,28 +37,37 @@ export const useAuthStore = create<AuthState>()(
         isAuthenticated: false,
         isLoading: false,
         error: null,
+        validationErrors: null,
         tempEmail: null,
 
         register: async (userData: RegisterUserType) => {
-          set({ isLoading: true, error: null });
+          set({ isLoading: true, error: null, validationErrors: null });
           try {
             await registerUser(userData);
             // Store the email for later use in OTP verification
-            set({ tempEmail: userData.email, isLoading: false });
+            set({ tempEmail: userData.email, isLoading: false, validationErrors: null });
             return true;
           } catch (error) {
             console.error("Registration error:", error);
             let errorMessage = "Failed to send verification email";
+            let validationErrors: Record<string, string> | null = null;
             if (error instanceof Error) {
               errorMessage = error.message;
+              validationErrors =
+                (error as Error & { validationErrors?: Record<string, string> })
+                  .validationErrors || null;
             }
-            set({ error: errorMessage, isLoading: false });
+            set({
+              error: errorMessage,
+              validationErrors,
+              isLoading: false,
+            });
             return false;
           }
         },
 
         verifyOtp: async (otpData: OtpRegisterType) => {
-          set({ isLoading: true, error: null });
+          set({ isLoading: true, error: null, validationErrors: null });
           try {
             await verifyRegistration(otpData);
             set({ isLoading: false });
@@ -67,13 +77,13 @@ export const useAuthStore = create<AuthState>()(
             if (error instanceof Error) {
               errorMessage = error.message;
             }
-            set({ error: errorMessage, isLoading: false });
+            set({ error: errorMessage, isLoading: false, validationErrors: null });
             return false;
           }
         },
 
         login: async (credentials: UserLoginType) => {
-          set({ isLoading: true, error: null });
+          set({ isLoading: true, error: null, validationErrors: null });
           try {
             const response = await loginUser(credentials);
             const { access_token, user } = response.result;
@@ -83,14 +93,23 @@ export const useAuthStore = create<AuthState>()(
               user: user,
               isAuthenticated: true,
               isLoading: false,
+              validationErrors: null,
             });
             return true;
           } catch (error) {
             let errorMessage = "Login failed";
+            let validationErrors: Record<string, string> | null = null;
             if (error instanceof Error) {
               errorMessage = error.message;
+              validationErrors =
+                (error as Error & { validationErrors?: Record<string, string> })
+                  .validationErrors || null;
             }
-            set({ error: errorMessage, isLoading: false });
+            set({
+              error: errorMessage,
+              validationErrors,
+              isLoading: false,
+            });
             return false;
           }
         },
@@ -101,6 +120,7 @@ export const useAuthStore = create<AuthState>()(
             isAuthenticated: false,
             isLoading: false,
             error: null,
+            validationErrors: null,
           });
           // Redirect to home page (public route)
           window.location.href = "/";
@@ -112,7 +132,7 @@ export const useAuthStore = create<AuthState>()(
 
         setTempEmail: (email: string) => set({ tempEmail: email }),
 
-        clearError: () => set({ error: null }),
+        clearError: () => set({ error: null, validationErrors: null }),
       }),
       {
         name: "auth-storage",

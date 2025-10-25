@@ -54,9 +54,9 @@ export interface RegisterUserType {
   email: string;
   password: string;
   confirm_password: string;
-  date_of_birth: string;
-  address: Address;
-  phone: string;
+  date_of_birth?: string;
+  address?: Address;
+  phone?: string;
 }
 export interface addConciergeType {
   email: string;

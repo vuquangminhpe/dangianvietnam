@@ -5,6 +5,40 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 // Register modal is controlled by parent (Navbar). Do not render it from here.
 
+const EyeOpenIcon = () => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 32 32"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path
+      d="M16 8C7.664063 8 1.25 15.34375 1.25 15.34375L0.65625 16L1.25 16.65625C1.25 16.65625 7.097656 23.324219 14.875 23.9375C15.246094 23.984375 15.617188 24 16 24C16.382813 24 16.753906 23.984375 17.125 23.9375C24.902344 23.324219 30.75 16.65625 30.75 16.65625L31.34375 16L30.75 15.34375C30.75 15.34375 24.335938 8 16 8ZM16 10C18.203125 10 20.234375 10.601563 22 11.40625C22.636719 12.460938 23 13.675781 23 15C23 18.613281 20.289063 21.582031 16.78125 21.96875C16.761719 21.972656 16.738281 21.964844 16.71875 21.96875C16.480469 21.980469 16.242188 22 16 22C15.734375 22 15.476563 21.984375 15.21875 21.96875C11.710938 21.582031 9 18.613281 9 15C9 13.695313 9.351563 12.480469 9.96875 11.4375L9.9375 11.4375C11.71875 10.617188 13.773438 10 16 10ZM16 12C14.34375 12 13 13.34375 13 15C13 16.65625 14.34375 18 16 18C17.65625 18 19 16.65625 19 15C19 13.34375 17.65625 12 16 12ZM7.25 12.9375C7.09375 13.609375 7 14.285156 7 15C7 16.753906 7.5 18.394531 8.375 19.78125C5.855469 18.324219 4.105469 16.585938 3.53125 16C4.011719 15.507813 5.351563 14.203125 7.25 12.9375ZM24.75 12.9375C26.648438 14.203125 27.988281 15.507813 28.46875 16C27.894531 16.585938 26.144531 18.324219 23.625 19.78125C24.5 18.394531 25 16.753906 25 15C25 14.285156 24.90625 13.601563 24.75 12.9375Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
+const EyeClosedIcon = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path
+      d="M20 14.8335C21.3082 13.3317 22 12 22 12C22 12 18.3636 5 12 5C11.6588 5 11.3254 5.02013 11 5.05822C10.6578 5.09828 10.3244 5.15822 10 5.23552M12 9C12.3506 9 12.6872 9.06015 13 9.17071C13.8524 9.47199 14.528 10.1476 14.8293 11C14.9398 11.3128 15 11.6494 15 12M3 3L21 21M12 15C11.6494 15 11.3128 14.9398 11 14.8293C10.1476 14.528 9.47198 13.8524 9.1707 13C9.11386 12.8392 9.07034 12.6721 9.04147 12.5M4.14701 9C3.83877 9.34451 3.56234 9.68241 3.31864 10C2.45286 11.1282 2 12 2 12C2 12 5.63636 19 12 19C12.3412 19 12.6746 18.9799 13 18.9418"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 interface LoginModalProps {
   isFormOpen: (value: boolean) => void;
   // Called when user wants to switch from Login -> Register. Parent should close login and open register.
@@ -16,6 +50,7 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
   const navigate = useNavigate();
   // Local loading state for better control
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
 
   // Add state to track if user is selecting text
@@ -254,17 +289,27 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
               >
                 Password
               </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                placeholder="Your Password"
-                className={`w-full px-4 py-2 border ${
-                  errors.password ? "border-red-500" : "border-gray-600"
-                } rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 bg-gray-700 text-white`}
-                onChange={handleChange}
-                value={formData.password}
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  placeholder="Your Password"
+                  className={`w-full px-4 py-2 border ${
+                    errors.password ? "border-red-500" : "border-gray-600"
+                  } rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 bg-gray-700 text-white pr-10`}
+                  onChange={handleChange}
+                  value={formData.password}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute inset-y-0 right-3 flex items-center text-gray-300 hover:text-white focus:outline-none"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
+                </button>
+              </div>
               {errors.password && (
                 <p className="mt-1 text-sm text-red-500">{errors.password}</p>
               )}

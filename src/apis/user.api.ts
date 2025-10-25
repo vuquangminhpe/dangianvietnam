@@ -14,6 +14,55 @@ import type {
 
 const BASE_URL = "https://dangianvietnam.space";
 
+type ValidationErrors = Record<string, string>;
+
+const extractValidationErrors = (errors: unknown): ValidationErrors | null => {
+  if (!errors || typeof errors !== "object") {
+    return null;
+  }
+
+  const formattedEntries = Object.entries(errors as Record<string, unknown>)
+    .map(([field, detail]) => {
+      if (typeof detail === "string") {
+        return [field, detail];
+      }
+
+      if (detail && typeof detail === "object") {
+        const { msg, message } = detail as { msg?: unknown; message?: unknown };
+        if (typeof msg === "string") {
+          return [field, msg];
+        }
+        if (typeof message === "string") {
+          return [field, message];
+        }
+      }
+
+      return null;
+    })
+    .filter((entry): entry is [string, string] => Array.isArray(entry));
+
+  if (!formattedEntries.length) {
+    return null;
+  }
+
+  return Object.fromEntries(formattedEntries);
+};
+
+const buildApiError = (
+  message: string,
+  validationErrors?: ValidationErrors | null
+) => {
+  const error = new Error(message) as Error & {
+    validationErrors?: ValidationErrors;
+  };
+
+  if (validationErrors && Object.keys(validationErrors).length > 0) {
+    error.validationErrors = validationErrors;
+  }
+
+  return error;
+};
+
 // API for user registration
 export const registerUser = async (userData: RegisterUserType) => {
   try {
@@ -34,24 +83,33 @@ export const registerUser = async (userData: RegisterUserType) => {
       // Handle different status codes
       const status = error.response?.status;
       const message = error.response?.data?.message;
+      const validationErrors = extractValidationErrors(
+        error.response?.data?.errors
+      );
 
       if (status === 400) {
-        throw new Error(
-          message || "Invalid registration data. Please check your information."
+        const fallbackMessage =
+          message || "Invalid registration data. Please check your information.";
+        const firstValidationMessage = validationErrors
+          ? Object.values(validationErrors)[0]
+          : null;
+        throw buildApiError(
+          firstValidationMessage || fallbackMessage,
+          validationErrors
         );
       } else if (status === 409) {
-        throw new Error(
-          message || "Email already exists. Please use a different email."
-        );
+        const fallbackMessage =
+          message || "Email already exists. Please use a different email.";
+        throw buildApiError(fallbackMessage, validationErrors);
       } else if (status === 500) {
-        throw new Error("Server error. Please try again later.");
+        throw buildApiError("Server error. Please try again later.", validationErrors);
       } else {
-        throw new Error(
-          message || "Failed to send verification email. Please try again."
-        );
+        const fallbackMessage =
+          message || "Failed to send verification email. Please try again.";
+        throw buildApiError(fallbackMessage, validationErrors);
       }
     }
-    throw new Error("Failed to send verification email. Please try again.");
+    throw buildApiError("Failed to send verification email. Please try again.");
   }
 };
 
@@ -86,9 +144,16 @@ export const loginUser = async (credentials: UserLoginType) => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error(error.response?.data?.message || "Login failed");
+      const validationErrors = extractValidationErrors(
+        error.response?.data?.errors
+      );
+      const fallbackMessage = error.response?.data?.message || "Login failed";
+      const firstValidationMessage = validationErrors
+        ? Object.values(validationErrors)[0]
+        : null;
+      throw buildApiError(firstValidationMessage || fallbackMessage, validationErrors);
     }
-    throw new Error("Login failed");
+    throw buildApiError("Login failed");
   }
 };
 
