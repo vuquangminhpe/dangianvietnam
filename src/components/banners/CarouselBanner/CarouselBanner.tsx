@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -84,15 +84,6 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
       }
     };
   }, [carouselItems]);
-
-  // Scroll active thumbnail into view when currentIndex changes
-  useEffect(() => {
-    const activeEl = thumbnailRef.current?.querySelector('.item.active') as HTMLElement | null;
-    if (activeEl && typeof activeEl.scrollIntoView === 'function') {
-      activeEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-    }
-  }, [currentIndex]);
-
   const initSlider = () => {
     if (!carouselRef.current) return;
 
