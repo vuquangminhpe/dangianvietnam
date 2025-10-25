@@ -6,7 +6,7 @@ import type {
   TheaterResponse,
 } from "../types/Theater.type";
 
-const BASE_URL = "https://bookmovie-5n6n.onrender.com";
+const BASE_URL = "https://holaren.shop";
 const API_URL = "/cinema/theaters";
 
 const theaterApi = axios.create({

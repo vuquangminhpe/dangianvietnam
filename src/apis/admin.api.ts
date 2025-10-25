@@ -24,7 +24,7 @@ import type {
   updateConciergeType,
 } from "../types";
 
-const BASE_URL = "https://bookmovie-5n6n.onrender.com";
+const BASE_URL = "https://holaren.shop";
 
 // Create authenticated axios instance for admin requests
 const createAdminRequest = () => {

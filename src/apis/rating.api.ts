@@ -2,7 +2,7 @@ import axios from "axios";
 import { getAuthToken } from "./user.api";
 import type { responseAllRating } from "../types/Rating.type";
 
-const BASE_URL = "https://bookmovie-5n6n.onrender.com";
+const BASE_URL = "https://holaren.shop";
 
 const createRatingRequest = () => {
   const token = getAuthToken();

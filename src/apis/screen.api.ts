@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { Screen } from "../types/Screen.type";
 
-const BASE_URL = "https://bookmovie-5n6n.onrender.com";
+const BASE_URL = "https://holaren.shop";
 const API_URL = "/cinema/screens";
 
 // Create axios instance for screen requests
