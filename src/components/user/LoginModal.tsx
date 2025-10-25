@@ -128,25 +128,25 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
     const trimmedEmail = formData.email.trim().toLowerCase();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!trimmedEmail) {
-      newErrors.email = "Email is required";
+      newErrors.email = "Email là bắt buộc";
     } else if (/^\s|\s$/.test(formData.email)) {
-      newErrors.email = "Email cannot start or end with spaces";
+      newErrors.email = "Email không được bắt đầu hoặc kết thúc bằng khoảng trắng";
     } else if (/\s/.test(trimmedEmail)) {
-      newErrors.email = "Email cannot contain spaces";
+      newErrors.email = "Email không được chứa khoảng trắng";
     } else if (!emailRegex.test(trimmedEmail)) {
       newErrors.email =
-        "Please enter a valid email address (e.g., user@example.com)";
+        "Vui lòng nhập địa chỉ email hợp lệ (ví dụ: user@example.com)";
     } else if (trimmedEmail.length > 254) {
-      newErrors.email = "Email is too long";
+      newErrors.email = "Email quá dài";
     }
 
     // Validate password
     if (!formData.password) {
-      newErrors.password = "Password is required";
+      newErrors.password = "Mật khẩu là bắt buộc";
     } else if (/^\s|\s$/.test(formData.password)) {
-      newErrors.password = "Password cannot start or end with spaces";
+      newErrors.password = "Mật khẩu không được bắt đầu hoặc kết thúc bằng khoảng trắng";
     } else if (formData.password.length < 1) {
-      newErrors.password = "Password is required";
+      newErrors.password = "Mật khẩu là bắt buộc";
     }
 
     setErrors(newErrors);
@@ -156,7 +156,7 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      toast.error("Please fix form errors before submitting");
+      toast.error("Vui lòng sửa các lỗi trong biểu mẫu trước khi gửi");
       return;
     }
 
@@ -165,7 +165,7 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
       const success = await login(formData);
 
       if (success) {
-        toast.success("Login successful!");
+        toast.success("Đăng nhập thành công!");
         // Get user from store after successful login
         isFormOpen(false);
         const currentUser = useAuthStore.getState().user;
@@ -182,26 +182,26 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
         }
       } else {
         // Handle specific error messages from API
-        const errorMessage = error || "Login failed";
+        const errorMessage = error || "Đăng nhập thất bại";
         if (
           errorMessage.toLowerCase().includes("email") ||
           errorMessage.toLowerCase().includes("user not found")
         ) {
-          setErrors({ email: "Email not found or invalid" });
-          toast.error("Email not found or invalid");
+          setErrors({ email: "Email không tồn tại hoặc không hợp lệ" });
+          toast.error("Email không tồn tại hoặc không hợp lệ");
         } else if (
           errorMessage.toLowerCase().includes("password") ||
           errorMessage.toLowerCase().includes("incorrect")
         ) {
-          setErrors({ password: "Incorrect password" });
-          toast.error("Incorrect password");
+          setErrors({ password: "Mật khẩu không chính xác" });
+          toast.error("Mật khẩu không chính xác");
         } else {
           toast.error(errorMessage);
         }
       }
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "An unexpected error occurred";
+        err instanceof Error ? err.message : "Đã xảy ra lỗi không mong muốn";
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -249,7 +249,7 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
           onMouseDown={(e) => e.stopPropagation()}
         >
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold text-gray-300">Sign In</h1>
+            <h1 className="text-2xl font-bold text-gray-300">Đăng nhập</h1>
 
             <button onClick={() => isFormOpen(false)}>
               <FiX className="w-5 h-5 text-gray-300 font-extrabold" />
@@ -269,7 +269,7 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
                 type="email"
                 id="email"
                 name="email"
-                placeholder="Your Email"
+                placeholder="Email của bạn"
                 className={`w-full px-4 py-2 border ${
                   errors.email ? "border-red-500" : "border-gray-600"
                 } rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 bg-gray-700 text-white`}
@@ -287,14 +287,14 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
                 htmlFor="Password"
                 className="block text-sm font-medium text-gray-300 mb-1"
               >
-                Password
+                Mật khẩu
               </label>
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
                   id="password"
                   name="password"
-                  placeholder="Your Password"
+                  placeholder="Mật khẩu của bạn"
                   className={`w-full px-4 py-2 border ${
                     errors.password ? "border-red-500" : "border-gray-600"
                   } rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-violet-500 bg-gray-700 text-white pr-10`}
@@ -305,7 +305,7 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute inset-y-0 right-3 flex items-center text-gray-300 hover:text-white focus:outline-none"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
                 >
                   {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
                 </button>
@@ -317,7 +317,7 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
 
             <div className="flex justify-end text-xs pb-3">
               <p className="cursor-pointer hover:text-primary hover:underline transition">
-                Forgot password?
+                Quên mật khẩu?
               </p>
             </div>
 
@@ -328,12 +328,12 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
               shadow-md hover:shadow-lg hover:shadow-primary/15"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Signing in..." : "Sign in"}
+              {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
             </button>
             {/* Divider */}
             <div className="flex items-center my-6">
               <div className="flex-1 border-t border-gray-600"></div>
-              <span className="px-4 text-sm text-gray-400">or</span>
+              <span className="px-4 text-sm text-gray-400">hoặc</span>
               <div className="flex-1 border-t border-gray-600"></div>
             </div>
 
@@ -364,11 +364,11 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                <span className="text-gray-700 font-medium">Sign in with Google</span>
+                <span className="text-gray-700 font-medium">Đăng nhập bằng Google</span>
               </button>
             </div>
             <p className="text-center text-sm text-gray-300">
-              Don't have account?{" "}
+              Chưa có tài khoản?{" "}
               <span
                 className="cursor-pointer text-red-400 hover:text-red-300 hover:underline transition"
                 onClick={() => {
@@ -376,7 +376,7 @@ const LoginModal = ({ isFormOpen, onSwitchToRegister }: LoginModalProps) => {
                   if (onSwitchToRegister) onSwitchToRegister();
                 }}
               >
-                Register
+                Đăng ký
               </span>{" "}
             </p>
           </form>

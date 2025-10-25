@@ -115,50 +115,50 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
     // Validate name
     const trimmedName = formData.name.trim();
     if (!trimmedName) {
-      newErrors.name = "Name is required";
+      newErrors.name = "Tên là bắt buộc";
     } else if (trimmedName.length < 2) {
-      newErrors.name = "Name must be at least 2 characters long";
+      newErrors.name = "Tên phải có ít nhất 2 ký tự";
     } else if (trimmedName.length > 50) {
-      newErrors.name = "Name must be less than 50 characters";
+      newErrors.name = "Tên phải ít hơn 50 ký tự";
     } else if (
       !/^[a-zA-ZÀ-ÿĂăÂâÊêÔôƠơƯưĐđàáảãạầấẩẫậằắẳẵặèéẻẽẹềếểễệìíỉĩịòóỏõọồốổỗộờớởỡợùúủũụừứửữựỳýỷỹỵ\s]+$/.test(
         trimmedName
       )
     ) {
-      newErrors.name = "Name can only contain letters and spaces";
+      newErrors.name = "Tên chỉ được chứa chữ cái và khoảng trắng";
     } else if (/\s{2,}/.test(trimmedName)) {
-      newErrors.name = "Name cannot contain multiple consecutive spaces";
+      newErrors.name = "Tên không được chứa nhiều khoảng trắng liên tiếp";
     }
 
     // Validate email
     const trimmedEmail = formData.email.trim().toLowerCase();
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!trimmedEmail) {
-      newErrors.email = "Email is required";
+      newErrors.email = "Email là bắt buộc";
     } else if (/\s/.test(trimmedEmail)) {
-      newErrors.email = "Email cannot contain spaces";
+      newErrors.email = "Email không được chứa khoảng trắng";
     } else if (!emailRegex.test(trimmedEmail)) {
       newErrors.email =
-        "Please enter a valid email address (e.g., user@example.com)";
+        "Vui lòng nhập địa chỉ email hợp lệ (ví dụ: user@example.com)";
     } else if (trimmedEmail.length > 254) {
-      newErrors.email = "Email is too long";
+      newErrors.email = "Email quá dài";
     }
 
     // Validate password
     const password = formData.password;
     if (!password) {
-      newErrors.password = "Password is required";
+      newErrors.password = "Mật khẩu là bắt buộc";
     } else if (password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters long";
+      newErrors.password = "Mật khẩu phải có ít nhất 6 ký tự";
     } else if (password.length > 50) {
-      newErrors.password = "Password must be less than 50 characters";
+      newErrors.password = "Mật khẩu phải ít hơn 50 ký tự";
     }
 
     // Validate password confirmation
     if (!formData.confirm_password) {
-      newErrors.confirm_password = "Please confirm your password";
+      newErrors.confirm_password = "Vui lòng xác nhận mật khẩu của bạn";
     } else if (formData.password !== formData.confirm_password) {
-      newErrors.confirm_password = "Passwords do not match";
+      newErrors.confirm_password = "Mật khẩu không trùng khớp";
     }
 
     setErrors(newErrors);
@@ -171,7 +171,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
     const validationResult = validateForm();
 
     if (!validationResult) {
-      toast.error("Please fix form errors before submitting");
+      toast.error("Vui lòng sửa các lỗi trong biểu mẫu trước khi gửi");
       return;
     }
 
@@ -191,7 +191,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
       if (success) {
         setErrors({});
         toast.success(
-          "Registration successful! Check your email for verification code."
+          "Đăng ký thành công! Vui lòng kiểm tra email để nhận mã xác minh."
         );
         isFormOpen(false);
         // Navigate to verify page with email parameter
@@ -199,7 +199,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
           navigate(`/verify?email=${encodeURIComponent(formData.email)}`);
         }, 1500);
       } else {
-        const errorMessage = error || "Registration failed";
+        const errorMessage = error || "Đăng ký thất bại";
         const latestValidationErrors =
           useAuthStore.getState().validationErrors || validationErrors;
 
@@ -232,7 +232,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
       }
     } catch (err) {
       const errorMessage =
-        err instanceof Error ? err.message : "Registration failed";
+        err instanceof Error ? err.message : "Đăng ký thất bại";
       toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
@@ -280,7 +280,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
           onMouseDown={(e) => e.stopPropagation()}
         >
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold text-gray-300">Create Account</h1>
+            <h1 className="text-2xl font-bold text-gray-300">Tạo tài khoản</h1>
             <button onClick={() => isFormOpen(false)}>
               <FiX className="w-5 h-5 text-gray-300 font-extrabold" />
             </button>
@@ -296,7 +296,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-300 mb-1"
                 >
-                  Full Name <span className="text-red-500">*</span>
+                  Họ và tên <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -305,7 +305,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                   value={formData.name}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="Enter your full name"
+                  placeholder="Nhập họ tên của bạn"
                   className={`w-full px-4 py-2 border ${
                     errors.name ? "border-red-500" : "border-gray-600"
                   } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-gray-700 text-white`}
@@ -330,7 +330,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                   value={formData.email}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  placeholder="Enter your email address"
+                  placeholder="Nhập địa chỉ email của bạn"
                   className={`w-full px-4 py-2 border ${
                     errors.email ? "border-red-500" : "border-gray-600"
                   } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-gray-700 text-white`}
@@ -346,7 +346,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-300 mb-1"
                 >
-                  Password <span className="text-red-500">*</span>
+                  Mật khẩu <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <input
@@ -355,7 +355,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    placeholder="Enter your password"
+                    placeholder="Nhập mật khẩu của bạn"
                     className={`w-full px-4 py-2 border ${
                       errors.password ? "border-red-500" : "border-gray-600"
                     } rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 bg-gray-700 text-white pr-10`}
@@ -364,7 +364,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
                     className="absolute inset-y-0 right-3 flex items-center text-gray-300 hover:text-white focus:outline-none"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
                   >
                     {showPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
                   </button>
@@ -375,7 +375,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                   </p>
                 )}
                 <p className="mt-1 text-xs text-gray-400">
-                  Password must be 6-50 characters long
+                  Mật khẩu phải từ 6-50 ký tự
                 </p>
               </div>
 
@@ -385,7 +385,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                   htmlFor="confirm_password"
                   className="block text-sm font-medium text-gray-300 mb-1"
                 >
-                  Confirm Password <span className="text-red-500">*</span>
+                  Xác nhận mật khẩu <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <input
@@ -394,7 +394,7 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                     name="confirm_password"
                     value={formData.confirm_password}
                     onChange={handleChange}
-                    placeholder="Confirm your password"
+                    placeholder="Xác nhận mật khẩu của bạn"
                     className={`w-full px-4 py-2 border ${
                       errors.confirm_password
                         ? "border-red-500"
@@ -409,8 +409,8 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                     className="absolute inset-y-0 right-3 flex items-center text-gray-300 hover:text-white focus:outline-none"
                     aria-label={
                       showConfirmPassword
-                        ? "Hide confirm password"
-                        : "Show confirm password"
+                        ? "Ẩn mật khẩu xác nhận"
+                        : "Hiện mật khẩu xác nhận"
                     }
                   >
                     {showConfirmPassword ? <EyeOpenIcon /> : <EyeClosedIcon />}
@@ -430,17 +430,17 @@ const RegisterModal = ({ isFormOpen, onSwitchToLogin }: RegisterModalProps) => {
                   shadow-md hover:shadow-lg hover:shadow-primary/15"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Creating Account..." : "Create Account"}
+                {isSubmitting ? "Đang tạo tài khoản..." : "Tạo tài khoản"}
               </button>
             </div>
 
             <p className="text-center text-sm text-gray-300">
-              Already have an account?{" "}
+              Đã có tài khoản?{" "}
               <span
                 className="cursor-pointer text-red-400 hover:text-red-300 hover:underline transition"
                 onClick={onSwitchToLogin}
               >
-                Sign in
+                Đăng nhập
               </span>
             </p>
           </form>

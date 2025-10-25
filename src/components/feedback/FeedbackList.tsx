@@ -78,9 +78,9 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
     );
 
     if (diffInHours < 24) {
-      return `${diffInHours} hours ago`;
+      return `${diffInHours} giờ trước`;
     } else if (diffInHours < 168) {
-      return `${Math.floor(diffInHours / 24)} days ago`;
+      return `${Math.floor(diffInHours / 24)} ngày trước`;
     } else {
       return date.toLocaleDateString("vi-VN", {
         year: "numeric",
@@ -113,10 +113,10 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
   };
 
   const sortOptions = [
-    { value: "created_at", label: "Newest First", order: "desc" },
-    { value: "created_at", label: "Oldest First", order: "asc" },
-    { value: "title", label: "Title A-Z", order: "asc" },
-    { value: "title", label: "Title Z-A", order: "desc" },
+    { value: "created_at", label: "Mới nhất", order: "desc" },
+    { value: "created_at", label: "Cũ nhất", order: "asc" },
+    { value: "title", label: "Tiêu đề A-Z", order: "asc" },
+    { value: "title", label: "Tiêu đề Z-A", order: "desc" },
   ];
 
   const handleSortChange = (sortBy: string, order: string) => {
@@ -136,7 +136,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
     return (
       <div className="text-center py-8">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-400 mx-auto mb-4" />
-        <p className="text-gray-300">Loading reviews...</p>
+        <p className="text-gray-300">Đang tải các đánh giá...</p>
       </div>
     );
   }
@@ -148,7 +148,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
         <div className="flex items-center gap-3">
           <MessageSquare className="h-6 w-6 text-[#730109]" />
           <h3 className="text-2xl font-bold text-white">
-            User Reviews ({feedbackData?.total || 0})
+            Đánh giá của người dùng ({feedbackData?.total || 0})
           </h3>
         </div>
 
@@ -167,7 +167,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
             ) : (
               <Eye className="h-4 w-4" />
             )}
-            {showSpoilers ? "Hide Spoilers" : "Show Spoilers"}
+            {showSpoilers ? "Ẩn spoiler" : "Hiển thị spoiler"}
           </button>
 
           {/* Add Review Button */}
@@ -179,7 +179,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
               className="px-4 py-2 bg-[#730109] text-white 
                        font-medium rounded-lg hover:bg-[#5a0708] transition-all"
             >
-              Write Review
+              Viết đánh giá
             </motion.button>
           )}
         </div>
@@ -191,7 +191,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
           <div className="flex items-center gap-3 mb-4">
             <Star className="h-6 w-6 text-[#730109]" />
             <h4 className="text-xl font-bold text-white">
-              Movie Ratings ({ratings.length})
+              Điểm đánh giá phim ({ratings.length})
             </h4>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -206,7 +206,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
                 <div className="flex items-start justify-between mb-2">
                   <div>
                     <p className="text-white font-medium text-sm">
-                      {rating.user?.name || rating.user?.email || "Anonymous"}
+                      {rating.user?.name || rating.user?.email || "Ẩn danh"}
                     </p>
                     {renderStars(rating.rating)}
                   </div>
@@ -222,7 +222,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
           {ratings.length > 6 && (
             <div className="text-center mt-4">
               <p className="text-gray-400 text-sm">
-                And {ratings.length - 6} more ratings...
+                Và còn {ratings.length - 6} đánh giá khác...
               </p>
             </div>
           )}
@@ -234,7 +234,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4 text-gray-400" />
-            <span className="text-gray-300 text-sm">Sort by:</span>
+            <span className="text-gray-300 text-sm">Sắp xếp theo:</span>
           </div>
           <div className="flex flex-wrap gap-2">
             {sortOptions.map((option) => (
@@ -261,17 +261,17 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
           <div className="text-center py-12 bg-white/5 rounded-xl border border-white/10">
             <MessageSquare className="h-16 w-16 text-[#730109] mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-white mb-2">
-              No reviews yet
+              Chưa có đánh giá nào
             </h3>
             <p className="text-gray-300 mb-4">
-              Be the first to share your thoughts about this movie!
+              Hãy là người đầu tiên chia sẻ cảm nhận của bạn về bộ phim này!
             </p>
             {showAddFeedbackButton && user && (
               <button
                 onClick={onAddFeedback}
                 className="px-6 py-2 bg-[#730109] text-white rounded-lg hover:bg-[#5a0708] transition-colors"
               >
-                Write First Review
+                Viết đánh giá đầu tiên
               </button>
             )}
           </div>
@@ -314,7 +314,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
                       </div>
                       <div>
                         <h4 className="font-semibold text-white">
-                          {feedback.user?.name || "Anonymous User"}
+                          {feedback.user?.name || "Người dùng ẩn danh"}
                         </h4>
                         <div className="flex items-center gap-2 text-gray-400 text-sm">
                           <Calendar className="h-3 w-3" />
@@ -329,7 +329,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
                           className="px-2 py-1 bg-yellow-500/20 text-yellow-300 text-xs 
                                        rounded-full border border-yellow-500/30"
                         >
-                          Spoiler
+                          Tiết lộ nội dung
                         </span>
                       )}
                       <button className="p-1 rounded hover:bg-white/10 transition-colors">
@@ -344,17 +344,17 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
                       <div className="text-center">
                         <AlertTriangle className="h-8 w-8 text-yellow-400 mx-auto mb-2" />
                         <p className="text-yellow-300 font-medium mb-2">
-                          This review contains spoilers
+                          Bài đánh giá này có chứa spoiler
                         </p>
                         <p className="text-gray-400 text-sm mb-4">
-                          Enable "Show Spoilers" to read this review
+                          Bật "Hiển thị spoiler" để xem bài đánh giá này
                         </p>
                         <button
                           onClick={() => setShowSpoilers(true)}
                           className="px-4 py-2 bg-[#730109] text-white rounded-lg 
                                    hover:bg-[#5a0708] transition-colors border border-red-500/30"
                         >
-                          Show Anyway
+                          Vẫn hiển thị
                         </button>
                       </div>
                     </div>
@@ -376,7 +376,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
                               }
                               className="text-purple-400 hover:text-purple-300 ml-2 font-medium"
                             >
-                              Read more
+                              Xem thêm
                             </button>
                           </>
                         ) : (
@@ -389,7 +389,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
                                 }
                                 className="text-purple-400 hover:text-purple-300 ml-2 font-medium"
                               >
-                                Show less
+                                Thu gọn
                               </button>
                             )}
                           </>
@@ -404,14 +404,14 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
                                            transition-colors"
                           >
                             <ThumbsUp className="h-4 w-4" />
-                            <span className="text-sm">Helpful</span>
+                            <span className="text-sm">Hữu ích</span>
                           </button>
                           <button
                             className="flex items-center gap-2 text-gray-400 hover:text-red-400 
                                            transition-colors"
                           >
                             <ThumbsDown className="h-4 w-4" />
-                            <span className="text-sm">Not helpful</span>
+                            <span className="text-sm">Không hữu ích</span>
                           </button>
                         </div>
                         <button
@@ -419,7 +419,7 @@ const FeedbackList: React.FC<FeedbackListProps> = ({
                                          transition-colors"
                         >
                           <Flag className="h-4 w-4" />
-                          <span className="text-sm">Report</span>
+                          <span className="text-sm">Báo cáo</span>
                         </button>
                       </div>
                     </>

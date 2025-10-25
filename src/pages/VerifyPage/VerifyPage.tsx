@@ -39,7 +39,7 @@ const VerifyPage = () => {
   // If no email is provided in URL or store, redirect to register
   useEffect(() => {
     if (!email && !tempEmail) {
-      toast.error('No email found for verification. Please register first.');
+      toast.error('Không tìm thấy email để xác minh. Vui lòng đăng ký trước.');
       navigate('/register');
     }
   }, [email, tempEmail, navigate]);
@@ -47,20 +47,20 @@ const VerifyPage = () => {
     e.preventDefault();
     
     if (!otpCode || otpCode.length !== 6) {
-      toast.error('Please enter a valid 6-digit OTP code');
+      toast.error('Vui lòng nhập mã OTP 6 chữ số hợp lệ');
       return;
     }
     
     const emailToUse = email || tempEmail;
     
     if (!emailToUse) {
-      toast.error('Email address is missing');
+      toast.error('Thiếu địa chỉ email');
       return;
     }
     
     try {
       setIsVerifying(true);
-      toast.loading('Verifying your email...');
+      toast.loading('Đang xác minh email của bạn...');
       
       const success = await verifyOtp({
         email: emailToUse,
@@ -70,7 +70,7 @@ const VerifyPage = () => {
       toast.dismiss();
       
       if (success) {
-        toast.success('Email verified successfully! Your account has been created.');
+        toast.success('Xác minh email thành công! Tài khoản của bạn đã được tạo.');
         // Delay navigation to allow the user to see the success message
         setTimeout(() => {
           navigate('/login');
@@ -89,40 +89,40 @@ const VerifyPage = () => {
     
 
     if (!emailToUse) {
-      toast.error('Email address is missing');
+      toast.error('Thiếu địa chỉ email');
       return;
     }
     
     if (resendCooldown > 0) {
-      toast.error(`Please wait ${resendCooldown} seconds before requesting a new code`);
+      toast.error(`Vui lòng đợi ${resendCooldown} giây trước khi yêu cầu mã mới`);
       return;
     }
     
     try {
       setIsResending(true);
-      toast.loading('Sending new verification code...');
+      toast.loading('Đang gửi mã xác minh mới...');
       await resendOtpCode(emailToUse);
       toast.dismiss();
-      toast.success('New verification code sent to your email');
+      toast.success('Mã xác minh mới đã được gửi đến email của bạn');
       setOtpCode(''); // Clear the current OTP input
       setResendCooldown(60); // Set 60-second cooldown
     } catch (error) {
       toast.dismiss();
-      const errorMessage = error instanceof Error ? error.message : 'Failed to send verification code';
+      const errorMessage = error instanceof Error ? error.message : 'Gửi mã xác minh thất bại';
       toast.error(errorMessage);
     } finally {
       setIsResending(false);
     }
   };return (
-      <div className="py-16 px-4 sm:px-6 lg:px-8 flex justify-center items-center bg-gray-900"
+      <div className="py-16 px-4 sm:px-6 lg:px-8 flex justify-center items-center bg-[#ffffff] text-[#730109]"
            style={{ minHeight: 'calc(100vh - 160px)' }}>
-        <div className="max-w-md w-full bg-gray-800 p-8 rounded-xl shadow-xl text-white">
+        <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-xl">
         <div className="text-center mb-6">
           <div className="flex justify-center mb-3">
             <Ticket size={40} className="text-pink-500" />
           </div>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent">Cinema Connect</h1>
-          <p className="mt-2 text-gray-300">Verify your email to complete registration</p>
+          <h1 className="text-3xl font-bold text-[#730109]">Cinema Connect</h1>
+          <p className="mt-2 text-[#730109]">Xác minh email để hoàn tất đăng ký</p>
         </div>
         
         <form onSubmit={handleOtpSubmit} className="space-y-6">
@@ -130,16 +130,16 @@ const VerifyPage = () => {
             <div className="flex justify-center mb-3">
               <Mail size={30} className="text-pink-500" />
             </div>
-            <h2 className="text-xl font-medium bg-gradient-to-r from-red-500 to-pink-600 bg-clip-text text-transparent">Verify Your Email</h2>
-            <p className="mt-2 text-sm text-gray-300">
-              We've sent a 6-digit code to {email || tempEmail || 'your email'}.<br />
-              The code is valid for 2 minutes.
+            <h2 className="text-xl font-medium text-[#730109]">Xác minh email của bạn</h2>
+            <p className="mt-2 text-sm text-[#730109]">
+              Chúng tôi đã gửi mã 6 chữ số tới {email || tempEmail || 'email của bạn'}.<br />
+              Mã có hiệu lực trong 2 phút.
             </p>
           </div>
           
           <div>
-            <label htmlFor="otp" className="block text-sm font-medium text-gray-200">
-              Enter Verification Code
+            <label htmlFor="otp" className="block text-sm font-medium text-[#730109]">
+              Nhập mã xác minh
             </label>            <input
               type="text"
               id="otp"
@@ -151,7 +151,7 @@ const VerifyPage = () => {
                 setOtpCode(value);
               }}
               placeholder="000000"
-              className="mt-1 block w-full px-3 py-2 border border-gray-600 bg-gray-700 rounded-md shadow-sm text-center text-2xl tracking-widest focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 text-white"
+              className="mt-1 block w-full px-3 py-2 border border-[#730109] bg-white rounded-md shadow-sm text-center text-2xl tracking-widest focus:outline-none focus:ring-2 focus:ring-[#730109] focus:border-[#730109] text-[#730109]"
               autoComplete="one-time-code"
             />
           </div>
@@ -161,7 +161,7 @@ const VerifyPage = () => {
               className="w-full flex justify-center items-center py-3 px-4 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-600 transition-all duration-300 rounded-lg shadow-md hover:shadow-lg hover:shadow-pink-500/15 text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isVerifying}
             >
-              {isVerifying ? 'Verifying...' : 'Verify Email'}
+              {isVerifying ? 'Đang xác minh...' : 'Xác minh email'}
             </button>
           </div>
             <div className="text-center mt-4 flex items-center justify-center">
@@ -189,9 +189,9 @@ const VerifyPage = () => {
             <button 
               type="button"
               onClick={() => setShowRegisterModal(true)}
-              className="text-gray-400 hover:text-pink-300 text-sm transition-colors"
+              className="text-[#730109] hover:text-[#730109]/80 text-sm transition-colors"
             >
-              Back to Register
+              Quay lại đăng ký
             </button>
           </div>        </form>
       </div>
