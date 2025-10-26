@@ -67,6 +67,10 @@ function App() {
       window.history.replaceState({}, document.title, window.location.pathname);
     }
   }, [location.search]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [location.pathname]);
   return (
     <>
       <Toaster />
