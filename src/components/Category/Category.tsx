@@ -5,7 +5,6 @@ import muaRoiNuocImg from '../../assets/Img_category/mua_roi_nuoc.jpg';
 import tuongImg from '../../assets/Img_category/tuong.jpg';
 import cheoImg from '../../assets/Img_category/Cheo.jpg';
 import caiLuongImg from '../../assets/Img_category/cai_luong.jpg';
-import caTruImg from '../../assets/Img_category/ca_tru.jpg';
 
 const Category = () => {
   const navigate = useNavigate();
@@ -17,6 +16,7 @@ const Category = () => {
       searchQuery: 'Múa rối nước',
       image: muaRoiNuocImg,
       description: 'Nghệ thuật truyền thống độc đáo của Việt Nam',
+      link: '/product',
     },
     {
       id: 2,
@@ -24,6 +24,7 @@ const Category = () => {
       searchQuery: 'Tuồng',
       image: tuongImg,
       description: 'Hát tuồng - Di sản văn hóa phi vật thể',
+      link: '/product-tuong',
     },
     {
       id: 3,
@@ -31,6 +32,7 @@ const Category = () => {
       searchQuery: 'Chèo',
       image: cheoImg,
       description: 'Nghệ thuật sân khấu dân gian phổ biến',
+      link: '/product-cheo',
     },
     {
       id: 4,
@@ -38,22 +40,16 @@ const Category = () => {
       searchQuery: 'Cải lương',
       image: caiLuongImg,
       description: 'Nghệ thuật sân khấu Nam Bộ',
-    },
-    {
-      id: 5,
-      name: 'Ca trù',
-      searchQuery: 'Ca trù',
-      image: caTruImg,
-      description: 'Nghệ thuật hát xướng cổ truyền',
-    },
+      link: '/product-cai-luong',
+    }
+    
   ];
 
-  const handleExploreClick = (searchQuery: string, e: React.MouseEvent) => {
+  const handleExploreClick = (link: string, e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent card click
     e.preventDefault(); // Prevent default action
-    console.log('Explore clicked for:', searchQuery);
-    // Navigate to search page with the category name as search query
-    navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    console.log('Explore clicked for:', link);
+    navigate(link);
   };
 
   return (
@@ -75,9 +71,9 @@ const Category = () => {
       </div>
 
       {/* Categories Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 max-w-6xl mx-auto justify-items-center">
         {categories.map((category) => (
-          <div key={category.id} className="flex justify-center">
+          <div key={category.id} className="flex justify-center w-full max-w-[330px]">
             <PixelTransition
               firstContent={
                 <div className="relative w-full h-full">
@@ -125,7 +121,7 @@ const Category = () => {
                     style={{
                       fontFamily: 'Merriweather, serif',
                     }}
-                    onClick={(e) => handleExploreClick(category.searchQuery, e)}
+                    onClick={(e) => handleExploreClick(category.link, e)}
                   >
                     Khám phá
                   </button>

@@ -11,7 +11,8 @@ export const bannerImages = [
     author: "TRUYỀN THỐNG",
     title: "CÁI LUÔNG",
     topic: "VĂN HÓA TRUYỀN THỐNG",
-    description: "Khám phá nghệ thuật cải lương - tinh hoa văn hóa Việt Nam với những câu chuyện đầy cảm xúc và giai điệu dân dã."
+    description: "Khám phá nghệ thuật cải lương - tinh hoa văn hóa Việt Nam với những câu chuyện đầy cảm xúc và giai điệu dân dã.",
+    link: '/product-cai-luong',
   },
   {
     id: "cheo",
@@ -20,7 +21,8 @@ export const bannerImages = [
     author: "TRUYỀN THỐNG",
     title: "CHÈO",
     topic: "VĂN HÓA TRUYỀN THỐNG",
-    description: "Nghệ thuật chèo cổ truyền với những vở diễn mang đậm bản sắc dân tộc và giá trị nhân văn sâu sắc."
+    description: "Nghệ thuật chèo cổ truyền với những vở diễn mang đậm bản sắc dân tộc và giá trị nhân văn sâu sắc.",
+    link: '/product-cheo',
   },
   {
     id: "mua-roi",
@@ -29,7 +31,8 @@ export const bannerImages = [
     author: "TRUYỀN THỐNG",
     title: "MÚA RỐI NƯỚC",
     topic: "VĂN HÓA TRUYỀN THỐNG",
-    description: "Múa rối nước - nghệ thuật độc đáo của Việt Nam với những chú rối gỗ sinh động trên mặt nước."
+    description: "Múa rối nước - nghệ thuật độc đáo của Việt Nam với những chú rối gỗ sinh động trên mặt nước.",
+    link: '/product',
   },
   {
     id: "tuong",
@@ -38,6 +41,7 @@ export const bannerImages = [
     author: "TRUYỀN THỐNG",
     title: "TUỒNG",
     topic: "VĂN HÓA TRUYỀN THỐNG",
-    description: "Nghệ thuật tuồng cổ điển với những vở diễn mang tính triết lý sâu sắc và nghệ thuật múa hát tinh tế."
+    description: "Nghệ thuật tuồng cổ điển với những vở diễn mang tính triết lý sâu sắc và nghệ thuật múa hát tinh tế.",
+    link: '/bannerTuong',
   }
 ];

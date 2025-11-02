@@ -24,19 +24,11 @@ const Footer = () => {
                 <li>
                   <a href="/" className="hover:underline">Home</a>
                 </li>
-                <li>
-                  <a href="#" className="hover:underline">About us</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">Contact us</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">Privacy policy</a>
-                </li>
+                
               </ul>
             </div>
             <div>
-              {/* CẬP NHẬT TẠI ĐÂY */}
+              
               <h2 className="font-semibold mb-5">Dan Gian Viet Nam</h2>
               <div className="text-sm space-y-2">
                 <p>Sdt: 0356055320</p>

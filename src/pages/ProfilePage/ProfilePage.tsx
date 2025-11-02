@@ -3,9 +3,6 @@ import { motion } from "framer-motion";
 import {
   FiEdit3,
   FiUser,
-  FiMail,
-  FiPhone,
-  FiMapPin,
   FiCamera,
   FiSave,
   FiX,
@@ -83,7 +80,7 @@ const ProfilePage = () => {
       });
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to load profile"
+        error instanceof Error ? error.message : "Không thể tải thông tin hồ sơ"
       );
     } finally {
       setLoading(false);
@@ -104,13 +101,13 @@ const ProfilePage = () => {
 
     // Validate file type
     if (!file.type.startsWith("image/")) {
-      toast.error("Please select an image file");
+      toast.error("Vui lòng chọn một tệp hình ảnh");
       return;
     }
 
     // Validate file size (5MB max)
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image size should be less than 5MB");
+      toast.error("Dung lượng ảnh phải nhỏ hơn 5MB");
       return;
     }
 
@@ -125,40 +122,16 @@ const ProfilePage = () => {
       // Reload profile to get latest data
       await loadProfile();
 
-      toast.success("Avatar updated successfully!");
+      toast.success("Cập nhật ảnh đại diện thành công!");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to upload avatar"
+        error instanceof Error ? error.message : "Tải ảnh đại diện thất bại"
       );
     } finally {
       setAvatarLoading(false);
     }
   };
 
-  // Handle form input changes
-  const handleInputChange = (
-    field: keyof UpdateProfileRequest,
-    value: string
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  // Handle address input changes
-  const handleAddressChange = (
-    field: keyof NonNullable<UpdateProfileRequest["address"]>,
-    value: string
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      address: {
-        ...prev.address!,
-        [field]: value,
-      },
-    }));
-  };
 
   // Handle password input changes
   const handlePasswordChange = (
@@ -174,12 +147,12 @@ const ProfilePage = () => {
   // Handle password change
   const handleChangePassword = async () => {
     if (passwordData.new_password !== passwordData.confirm_new_password) {
-      toast.error("New passwords do not match");
+      toast.error("Mật khẩu mới không trùng khớp");
       return;
     }
 
     if (passwordData.new_password.length < 6) {
-      toast.error("Password must be at least 6 characters long");
+      toast.error("Mật khẩu phải có ít nhất 6 ký tự");
       return;
     }
 
@@ -192,10 +165,10 @@ const ProfilePage = () => {
         confirm_new_password: "",
       });
       setIsChangingPassword(false);
-      toast.success("Password changed successfully!");
+      toast.success("Đổi mật khẩu thành công!");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to change password"
+        error instanceof Error ? error.message : "Đổi mật khẩu thất bại"
       );
     } finally {
       setPasswordLoading(false);
@@ -222,10 +195,10 @@ const ProfilePage = () => {
       await loadProfile();
 
       setIsEditing(false);
-      toast.success("Profile updated successfully!");
+      toast.success("Cập nhật hồ sơ thành công!");
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : "Failed to update profile"
+        error instanceof Error ? error.message : "Cập nhật hồ sơ thất bại"
       );
     } finally {
       setLoading(false);
@@ -258,7 +231,7 @@ const ProfilePage = () => {
   if (loading && !user) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-gray-900">Loading profile...</div>
+        <div className="text-gray-900">Đang tải hồ sơ...</div>
       </div>
     );
   }
@@ -297,7 +270,7 @@ const ProfilePage = () => {
           {/* Header */}
           <div className="p-8" style={{ backgroundColor: '#730109' }}>
             <div className="md:flex md:flex-row flex-col items-center justify-between gap-3">
-              <h1 className="text-3xl font-bold text-white">My Profile</h1>
+              <h1 className="text-3xl font-bold text-white">Hồ sơ của tôi</h1>
               {!isEditing ? (
                 <div className="flex gap-3 mt-3">
                   <motion.button
@@ -308,7 +281,7 @@ const ProfilePage = () => {
                       text-white rounded-lg transition-all font-medium backdrop-blur-sm"
                   >
                     <FiLock className="w-4 h-4" />
-                    Change Password
+                    Đổi mật khẩu
                   </motion.button>
                   <motion.button
                     onClick={handleEditProfile}
@@ -318,7 +291,7 @@ const ProfilePage = () => {
                       text-white rounded-lg transition-all font-medium backdrop-blur-sm"
                   >
                     <FiEdit3 className="w-4 h-4" />
-                    Edit Profile
+                    Chỉnh sửa hồ sơ
                   </motion.button>
                 </div>
               ) : (
@@ -332,7 +305,7 @@ const ProfilePage = () => {
                       text-white rounded-lg transition-all disabled:opacity-50 font-medium"
                   >
                     <FiSave className="w-4 h-4" />
-                    {loading ? "Saving..." : "Save"}
+                    {loading ? "Đang lưu..." : "Lưu"}
                   </motion.button>
                   <motion.button
                     onClick={handleCancelEdit}
@@ -342,7 +315,7 @@ const ProfilePage = () => {
                       text-white rounded-lg transition-all font-medium"
                   >
                     <FiX className="w-4 h-4" />
-                    Cancel
+                    Hủy
                   </motion.button>
                 </div>
               )}
@@ -360,17 +333,18 @@ const ProfilePage = () => {
                 className="flex flex-col items-center"
               >
                 <div className="relative">
-                <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-200 shadow-2xl">
-                  {user?.avatar ? (
-                    <img
-                      src={user.avatar}
-                      alt={user.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <FiUser className="w-16 h-16 text-gray-400" />
-                  )}
-                </div>                  {/* Avatar Upload Button */}
+                  <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-100 flex items-center justify-center border border-gray-200 shadow-2xl">
+                    {user?.avatar ? (
+                      <img
+                        src={user.avatar}
+                        alt={user.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <FiUser className="w-16 h-16 text-gray-400" />
+                    )}
+                  </div>
+                  {/* Avatar Upload Button */}
                   <label
                     className="absolute bottom-0 right-0 bg-gradient-to-r from-[#F84565] to-[#D63854] hover:from-[#D63854] hover:to-[#F84565] 
                     p-2 rounded-full cursor-pointer transition-all transform hover:scale-110 shadow-lg"
@@ -384,386 +358,99 @@ const ProfilePage = () => {
                       disabled={avatarLoading}
                     />
                   </label>
-
                   {avatarLoading && (
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center">
-                      <div className="text-white text-sm animate-pulse">
-                        Uploading...
-                      </div>
+                      <div className="text-white text-sm animate-pulse">Đang tải...</div>
                     </div>
                   )}
                 </div>
-
-                <div className="mt-4 text-center">
-                  <h2 className="text-xl font-semibold text-gray-900">
-                    {user?.name}
-                  </h2>
-                  <p className="text-white capitalize font-medium px-3 py-1 rounded-full text-sm mt-2" style={{ backgroundColor: '#730109' }}>
-                    {user?.role}
-                  </p>
-                </div>
               </motion.div>
 
-              {/* Profile Information */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-                className="flex-1"
-                id="information"
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Basic Information */}
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-200 pb-2">
-                      Basic Information
-                    </h3>
+              {isChangingPassword && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="mt-8 w-full"
+                  id="changePassword"
+                >
+                  <div className="bg-white border border-gray-200 rounded-2xl shadow-lg p-6">
+                    <h2 className="text-2xl font-semibold text-gray-900">Đổi mật khẩu</h2>
+                    <p className="text-gray-500 mt-2">
+                      Nhập mật khẩu hiện tại và mật khẩu mới của bạn để tiếp tục
+                    </p>
 
-                    {/* Name */}
-                    <div>
-                      <label className="block text-gray-700 text-sm mb-2 font-medium">
-                        Full Name
-                      </label>
-                      {isEditing ? (
+                    <div className="mt-6 space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Mật khẩu hiện tại
+                        </label>
                         <input
-                          type="text"
-                          value={formData.name}
+                          type="password"
+                          value={passwordData.old_password}
                           onChange={(e) =>
-                            handleInputChange("name", e.target.value)
+                            handlePasswordChange("old_password", e.target.value)
                           }
-                          className="w-full px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
-                            focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
+                          className="mt-1 w-full rounded-lg border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-[#730109]"
                         />
-                      ) : (
-                        <div className="flex items-center gap-2 text-gray-800 bg-gray-50 p-3 rounded-lg">
-                          <FiUser className="w-4 h-4 text-[#730109]" />
-                          {user?.name || "Not provided"}
-                        </div>
-                      )}
-                    </div>
+                      </div>
 
-                    {/* Username */}
-                    <div>
-                      <label className="block text-gray-700 text-sm mb-2 font-medium">
-                        Username
-                      </label>
-                      {isEditing ? (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Mật khẩu mới
+                        </label>
                         <input
-                          type="text"
-                          value={formData.username}
+                          type="password"
+                          value={passwordData.new_password}
                           onChange={(e) =>
-                            handleInputChange("username", e.target.value)
+                            handlePasswordChange("new_password", e.target.value)
                           }
-                          className="w-full px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
-                            focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
+                          className="mt-1 w-full rounded-lg border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-[#730109]"
                         />
-                      ) : (
-                        <div className="text-gray-800 font-medium bg-gray-50 p-3 rounded-lg">
-                          @{user?.username || "Not set"}
-                        </div>
-                      )}
-                    </div>
+                      </div>
 
-                    {/* Email */}
-                    <div>
-                      <label className="block text-gray-700 text-sm mb-2 font-medium">
-                        Email
-                      </label>
-                      <div className="flex items-center gap-2 text-gray-800 bg-gray-50 p-3 rounded-lg">
-                        <FiMail className="w-4 h-4 text-[#730109]" />
-                        {user?.email}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Xác nhận mật khẩu mới
+                        </label>
+                        <input
+                          type="password"
+                          value={passwordData.confirm_new_password}
+                          onChange={(e) =>
+                            handlePasswordChange(
+                              "confirm_new_password",
+                              e.target.value
+                            )
+                          }
+                          className="mt-1 w-full rounded-lg border border-gray-200 p-3 focus:outline-none focus:ring-2 focus:ring-[#730109]"
+                        />
+                      </div>
+
+                      <div className="flex gap-3 pt-4">
+                        <motion.button
+                          onClick={handleChangePassword}
+                          disabled={passwordLoading}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-all disabled:opacity-50 font-medium"
+                          style={{ backgroundColor: '#730109' }}
+                        >
+                          <FiLock className="w-4 h-4" />
+                          {passwordLoading ? "Đang đổi..." : "Đổi mật khẩu"}
+                        </motion.button>
+                        <motion.button
+                          onClick={handleCancelPasswordChange}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg transition-all font-medium"
+                        >
+                          Hủy
+                        </motion.button>
                       </div>
                     </div>
-
-                    {/* Phone */}
-                    <div>
-                      <label className="block text-gray-700 text-sm mb-2 font-medium">
-                        Phone
-                      </label>
-                      {isEditing ? (
-                        <input
-                          type="tel"
-                          value={formData.phone}
-                          onChange={(e) =>
-                            handleInputChange("phone", e.target.value)
-                          }
-                          className="w-full px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
-                            focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
-                        />
-                      ) : (
-                        <div className="flex items-center gap-2 text-gray-800 bg-gray-50 p-3 rounded-lg">
-                          <FiPhone className="w-4 h-4 text-[#730109]" />
-                          {user?.phone || "Not provided"}
-                        </div>
-                      )}
-                    </div>
                   </div>
-
-                  {/* Additional Information */}
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-200 pb-2">
-                      Additional Information
-                    </h3>
-
-                    {/* Bio */}
-                    <div>
-                      <label className="block text-gray-700 text-sm mb-2 font-medium">
-                        Bio
-                      </label>
-                      {isEditing ? (
-                        <textarea
-                          value={formData.bio}
-                          onChange={(e) =>
-                            handleInputChange("bio", e.target.value)
-                          }
-                          rows={3}
-                          className="w-full px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
-                            focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all resize-none"
-                          placeholder="Tell us about yourself..."
-                        />
-                      ) : (
-                        <div className="text-gray-800 bg-gray-50 p-3 rounded-lg">
-                          {user?.bio || "No bio provided"}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Location */}
-                    <div>
-                      <label className="block text-gray-700 text-sm mb-2 font-medium">
-                        Location
-                      </label>
-                      {isEditing ? (
-                        <input
-                          type="text"
-                          value={formData.location}
-                          onChange={(e) =>
-                            handleInputChange("location", e.target.value)
-                          }
-                          className="w-full px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
-                            focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
-                          placeholder="e.g., New York, USA"
-                        />
-                      ) : (
-                        <div className="flex items-center gap-2 text-gray-800 bg-gray-50 p-3 rounded-lg">
-                          <FiMapPin className="w-4 h-4 text-[#730109]" />
-                          {user?.location || "Not provided"}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Website */}
-                    <div>
-                      <label className="block text-gray-700 text-sm mb-2 font-medium">
-                        Website
-                      </label>
-                      {isEditing ? (
-                        <input
-                          type="url"
-                          value={formData.website}
-                          onChange={(e) =>
-                            handleInputChange("website", e.target.value)
-                          }
-                          className="w-full px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
-                            focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
-                          placeholder="https://example.com"
-                        />
-                      ) : (
-                        <div className="text-gray-800 bg-gray-50 p-3 rounded-lg">
-                          {user?.website ? (
-                            <a
-                              href={user.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-[#730109] hover:text-[#5a0a0d] hover:underline transition-colors"
-                            >
-                              {user.website}
-                            </a>
-                          ) : (
-                            "Not provided"
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Address Section */}
-                {isEditing && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mt-8"
-                  >
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 border-b border-gray-200 pb-2">
-                      Address
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <input
-                        type="text"
-                        placeholder="Street"
-                        value={formData.address?.street || ""}
-                        onChange={(e) =>
-                          handleAddressChange("street", e.target.value)
-                        }
-                        className="px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
-                          focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
-                      />
-                      <input
-                        type="text"
-                        placeholder="City"
-                        value={formData.address?.city || ""}
-                        onChange={(e) =>
-                          handleAddressChange("city", e.target.value)
-                        }
-                        className="px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
-                          focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
-                      />
-                      <input
-                        type="text"
-                        placeholder="State"
-                        value={formData.address?.state || ""}
-                        onChange={(e) =>
-                          handleAddressChange("state", e.target.value)
-                        }
-                        className="px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
-                          focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Country"
-                        value={formData.address?.country || ""}
-                        onChange={(e) =>
-                          handleAddressChange("country", e.target.value)
-                        }
-                        className="px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
-                          focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Zip Code"
-                        value={formData.address?.zipCode || ""}
-                        onChange={(e) =>
-                          handleAddressChange("zipCode", e.target.value)
-                        }
-                        className="px-3 py-2 bg-gray-50 text-gray-900 rounded-lg 
-                          focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
-                      />
-                    </div>
-                  </motion.div>
-                )}
-
-                {/* Password Change Section */}
-                <div id="changePassword">
-                  {isChangingPassword && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-8"
-                    >
-                      <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                        <div className="flex items-center justify-between mb-6">
-                          <h3 className="text-lg font-semibold text-gray-900 border-b border-gray-200 pb-2">
-                            Change Password
-                          </h3>
-                          <button
-                            onClick={handleCancelPasswordChange}
-                            className="text-white transition-colors"
-                            style={{ backgroundColor: '#730109' }}
-                          >
-                            <FiX className="w-5 h-5" />
-                          </button>
-                        </div>
-
-                        <div className="space-y-4">
-                          <div>
-                            <label className="block text-gray-700 text-sm mb-2 font-medium">
-                              Current Password
-                            </label>
-                            <input
-                              type="password"
-                              value={passwordData.old_password}
-                              onChange={(e) =>
-                                handlePasswordChange(
-                                  "old_password",
-                                  e.target.value
-                                )
-                              }
-                              className="w-full px-3 py-2 bg-white text-gray-900 rounded-lg 
-                              focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
-                              placeholder="Enter your current password"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-gray-700 text-sm mb-2 font-medium">
-                              New Password
-                            </label>
-                            <input
-                              type="password"
-                              value={passwordData.new_password}
-                              onChange={(e) =>
-                                handlePasswordChange(
-                                  "new_password",
-                                  e.target.value
-                                )
-                              }
-                              className="w-full px-3 py-2 bg-white text-gray-900 rounded-lg 
-                              focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
-                              placeholder="Enter your new password"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-gray-700 text-sm mb-2 font-medium">
-                              Confirm New Password
-                            </label>
-                            <input
-                              type="password"
-                              value={passwordData.confirm_new_password}
-                              onChange={(e) =>
-                                handlePasswordChange(
-                                  "confirm_new_password",
-                                  e.target.value
-                                )
-                              }
-                              className="w-full px-3 py-2 bg-white text-gray-900 rounded-lg 
-                              focus:ring-2 focus:ring-purple-500 border border-gray-300 transition-all"
-                              placeholder="Confirm your new password"
-                            />
-                          </div>
-
-                          <div className="flex gap-3 pt-4">
-                            <motion.button
-                              onClick={handleChangePassword}
-                              disabled={passwordLoading}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              className="flex items-center gap-2 px-4 py-2 text-white rounded-lg transition-all 
-                              disabled:opacity-50 font-medium"
-                              style={{ backgroundColor: '#730109' }}
-                            >
-                              <FiLock className="w-4 h-4" />
-                              {passwordLoading
-                                ? "Changing..."
-                                : "Change Password"}
-                            </motion.button>
-                            <motion.button
-                              onClick={handleCancelPasswordChange}
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg 
-                              transition-all font-medium"
-                            >
-                              Cancel
-                            </motion.button>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </div>
-              </motion.div>
+                </motion.div>
+              )}
             </div>
           </div>
         </motion.div>

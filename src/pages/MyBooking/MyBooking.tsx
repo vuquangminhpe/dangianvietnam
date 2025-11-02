@@ -96,7 +96,7 @@ const MyBooking: React.FC = () => {
   };
 
   const handleCancelBooking = (bookingId: string) => {
-    if (window.confirm("Are you sure you want to cancel this booking?")) {
+    if (window.confirm("Bạn có chắc muốn hủy đặt chỗ này?")) {
       cancelBooking(bookingId);
     }
   };
@@ -137,8 +137,8 @@ const MyBooking: React.FC = () => {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400 mx-auto mb-4" />
-          <p className="text-gray-300">Loading your bookings...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#730109] mx-auto mb-4" />
+          <p className="text-gray-500">Đang tải danh sách đặt chỗ...</p>
         </div>
       </div>
     );
@@ -160,9 +160,9 @@ const MyBooking: React.FC = () => {
           className="mb-8"
         >
           <h1 className="text-3xl font-bold mb-2" style={{ color: '#730109' }}>
-            My Bookings
+            Đặt chỗ của tôi
           </h1>
-          <p style={{ color: '#730109' }}>Track and manage your movie tickets</p>
+          <p style={{ color: '#730109' }}>Theo dõi và quản lý vé biểu diễn của bạn</p>
         </motion.div>
 
         {/* Search and Filters */}
@@ -179,7 +179,7 @@ const MyBooking: React.FC = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search for event title or ticket code..."
+                placeholder="Tìm theo tên sự kiện hoặc mã vé..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white 
@@ -195,7 +195,7 @@ const MyBooking: React.FC = () => {
               style={{ backgroundColor: '#730109' }}
             >
               <Filter className="h-4 w-4" />
-              Filters
+              Bộ lọc
             </button>
           </div>
 
@@ -210,7 +210,7 @@ const MyBooking: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Status
+                    Trạng thái
                   </label>
                   <select
                     value={filters.status || ""}
@@ -220,14 +220,22 @@ const MyBooking: React.FC = () => {
                     className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white 
                              focus:outline-none focus:ring-2 focus:ring-purple-400"
                   >
-                    <option value="">All Status</option>
+                    <option value="">Tất cả</option>
                     {statusOptions.map((status) => (
                       <option
                         key={status}
                         value={status}
                         className="text-black"
                       >
-                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                        {status === "pending"
+                          ? "Chờ xử lý"
+                          : status === "confirmed"
+                          ? "Đã xác nhận"
+                          : status === "cancelled"
+                          ? "Đã hủy"
+                          : status === "completed"
+                          ? "Hoàn tất"
+                          : status}
                       </option>
                     ))}
                   </select>
@@ -235,7 +243,7 @@ const MyBooking: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Payment Status
+                    Trạng thái thanh toán
                   </label>
                   <select
                     value={filters.payment_status || ""}
@@ -248,14 +256,22 @@ const MyBooking: React.FC = () => {
                     className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white 
                              focus:outline-none focus:ring-2 focus:ring-purple-400"
                   >
-                    <option value="">All Payments</option>
+                    <option value="">Tất cả</option>
                     {paymentStatusOptions.map((status) => (
                       <option
                         key={status}
                         value={status}
                         className="text-black"
                       >
-                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                        {status === "pending"
+                          ? "Chờ thanh toán"
+                          : status === "completed"
+                          ? "Đã thanh toán"
+                          : status === "failed"
+                          ? "Thanh toán thất bại"
+                          : status === "refunded"
+                          ? "Đã hoàn tiền"
+                          : status}
                       </option>
                     ))}
                   </select>
@@ -263,7 +279,7 @@ const MyBooking: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Date Range
+                    Từ ngày
                   </label>
                   <input
                     type="date"
@@ -294,10 +310,10 @@ const MyBooking: React.FC = () => {
             <div className="backdrop-blur-lg rounded-2xl p-8 border border-white/20 text-center" style={{ backgroundColor: '#37373c' }}>
               <Ticket className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">
-                No bookings found
+                Chưa có đặt chỗ nào
               </h3>
               <p className="text-gray-300">
-                You haven't made any bookings yet.
+                Bạn chưa có đặt chỗ nào.
               </p>
             </div>
           ) : (
@@ -340,7 +356,7 @@ const MyBooking: React.FC = () => {
                       </div>
                       <div className="flex items-center gap-2 text-gray-300 text-sm">
                         <Ticket className="h-4 w-4" />
-                        <span>Seats: {formatSeats(booking.seats)}</span>
+                        <span>Ghế: {formatSeats(booking.seats)}</span>
                       </div>
                     </div>
                   </div>
@@ -357,12 +373,27 @@ const MyBooking: React.FC = () => {
                             booking.payment_status
                           )}`}
                         >
-                          {booking.status.charAt(0).toUpperCase() +
-                            booking.status.slice(1)}
+                          {booking.status === "pending"
+                          ? "Chờ xử lý"
+                          : booking.status === "confirmed"
+                          ? "Đã xác nhận"
+                          : booking.status === "cancelled"
+                          ? "Đã hủy"
+                          : booking.status === "completed"
+                          ? "Hoàn tất"
+                          : booking.status}
                         </span>
                       </div>
                       <p className="text-gray-400 text-sm">
-                        Payment: {booking.payment_status}
+                        Thanh toán: {booking.payment_status === "pending"
+                          ? "Chờ thanh toán"
+                          : booking.payment_status === "completed"
+                          ? "Đã thanh toán"
+                          : booking.payment_status === "failed"
+                          ? "Thất bại"
+                          : booking.payment_status === "refunded"
+                          ? "Đã hoàn tiền"
+                          : booking.payment_status}
                       </p>
                     </div>
 
@@ -372,7 +403,7 @@ const MyBooking: React.FC = () => {
                         {formatCurrency(booking.total_amount)}
                       </p>
                       <p className="text-gray-400 text-sm">
-                        Ticket: {booking.ticket_code}
+                        Mã vé: {booking.ticket_code}
                       </p>
                     </div>
 
@@ -387,7 +418,7 @@ const MyBooking: React.FC = () => {
                           style={{ backgroundColor: '#730109' }}
                         >
                           <QrCode className="h-4 w-4" />
-                          <span className="hidden md:inline">QR Code</span>
+                          <span className="hidden md:inline">Mã QR</span>
                         </button>
                       )}
 
@@ -399,7 +430,7 @@ const MyBooking: React.FC = () => {
                           style={{ backgroundColor: '#730109' }}
                         >
                           <X className="h-4 w-4" />
-                          <span className="hidden md:inline">Cancel</span>
+                          <span className="hidden md:inline">Hủy vé</span>
                         </button>
                       )}
                     </div>
@@ -426,7 +457,7 @@ const MyBooking: React.FC = () => {
             >
               <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4 text-center">
-                  Your Ticket
+                  Vé của bạn
                 </h3>
                 <div className="mb-4">
                   <TicketQRSection

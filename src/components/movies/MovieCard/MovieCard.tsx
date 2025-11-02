@@ -59,13 +59,13 @@ const MovieCard = ({ movie }: MovieCardProps) => {
             className="px-2 sm:px-3 py-1 sm:py-1.5 text-xs bg-primary hover:bg-primary-dull 
           transition rounded-full font-medium cursor-pointer flex-shrink-0"
           >
-            <span className="hidden sm:inline">Buy Tickets</span>
-            <span className="sm:hidden">Buy</span>
+            <span className="hidden sm:inline">Đặt vé</span>
+            <span className="sm:hidden">Đặt</span>
           </button>
 
           <p className="flex items-center gap-1 text-xs text-gray-400 flex-shrink-0">
             <BiStar className="w-3 h-3 text-primary fill-primary" />
-            {movie.average_rating > 0 ? movie.average_rating.toFixed(1) : "N/A"}
+            {movie.average_rating > 0 ? movie.average_rating.toFixed(1) : "Chưa có"}
           </p>
         </div>
       </div>

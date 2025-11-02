@@ -54,13 +54,13 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
       feedbackApi.createFeedback(data),
     onSuccess: () => {
       refetchRatings();
-      toast.success("Your feedback has been submitted for review!");
+      toast.success("Đánh giá của bạn đã được gửi để kiểm duyệt!");
       queryClient.invalidateQueries({ queryKey: ["movie-feedbacks", movieId] });
       onSuccess?.();
       onClose();
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to submit feedback");
+      toast.error(error.response?.data?.message || "Gửi đánh giá thất bại");
     },
   });
 
@@ -71,7 +71,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
       queryClient.invalidateQueries({ queryKey: ["ratings", movieId] });
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to submit rating");
+      toast.error(error.response?.data?.message || "Gửi đánh giá sao thất bại");
     },
   });
 
@@ -79,17 +79,17 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
     e.preventDefault();
 
     if (!formData.title.trim() || !formData.content.trim()) {
-      toast.error("Please fill in all required fields");
+      toast.error("Vui lòng điền đầy đủ các trường bắt buộc");
       return;
     }
 
     if (formData.title.length < 5 || formData.title.length > 100) {
-      toast.error("Title must be between 5 and 100 characters");
+      toast.error("Tiêu đề phải từ 5 đến 100 ký tự");
       return;
     }
 
     if (formData.content.length < 10 || formData.content.length > 2000) {
-      toast.error("Content must be between 10 and 2000 characters");
+      toast.error("Nội dung phải từ 10 đến 2000 ký tự");
       return;
     }
 
@@ -159,44 +159,46 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
         </button>
       ))}
       <span className="ml-2 text-gray-300">
-        {rating > 0 && `${rating}/5 stars`}
+        {rating > 0 && `${rating}/5 sao`}
       </span>
     </div>
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 py-6 sm:py-10 bg-black/70 backdrop-blur-sm overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
-        className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 w-full max-w-2xl max-h-[90vh] 
-                   overflow-y-auto border border-white/20 shadow-2xl"
+        className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-5 sm:p-6 md:p-8 w-full max-w-lg sm:max-w-xl md:max-w-3xl 
+                   border border-white/20 shadow-2xl max-h-[88vh] overflow-y-auto"
       >
         {/* Header */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <div className="flex items-center gap-4">
             {moviePoster && (
               <img
                 src={moviePoster}
                 alt={movieTitle}
-                className="w-16 h-20 object-cover rounded-lg"
+                className="w-14 h-18 sm:w-16 sm:h-20 object-cover rounded-lg"
               />
             )}
-            <div>
-              <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+            <div className="space-y-1">
+              <h2 className="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
                 <MessageSquare className="h-6 w-6 text-[#730109]" />
-                Share Your Experience
+                Chia sẻ cảm nhận của bạn
               </h2>
-              <p className="text-gray-300 text-lg">{movieTitle}</p>
+              <p className="text-gray-300 text-base sm:text-lg">{movieTitle}</p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-full hover:bg-white/10 transition-colors"
-          >
-            <X className="h-6 w-6 text-gray-400" />
-          </button>
+          <div className="flex md:block justify-end">
+            <button
+              onClick={onClose}
+              className="p-2 rounded-full hover:bg-white/10 transition-colors"
+            >
+              <X className="h-6 w-6 text-gray-400" />
+            </button>
+          </div>
         </div>
 
         {/* Spoiler Warning Modal */}
@@ -204,21 +206,20 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="fixed inset-0 z-60 flex items-center justify-center p-4 bg-black/80"
+            className="fixed inset-0 z-60 flex items-center justify-center px-4 py-6 bg-black/80"
           >
             <div className="bg-gradient-to-br from-red-900/90 to-orange-900/90 rounded-xl p-6 max-w-md border border-red-500/30">
               <div className="flex items-center gap-3 mb-4">
                 <AlertTriangle className="h-8 w-8 text-red-400" />
                 <h3 className="text-xl font-bold text-white">
-                  Spoiler Warning
+                  Cảnh báo tiết lộ nội dung
                 </h3>
               </div>
               <p className="text-gray-200 mb-6">
-                You've marked this feedback as containing spoilers. This will
-                warn other users before they read your review. Are you sure you
-                want to continue?
+                Bạn đã đánh dấu phản hồi này có thể tiết lộ nội dung. Điều này sẽ
+                cảnh báo người xem khác trước khi đọc. Bạn có chắc muốn tiếp tục?
               </p>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => {
                     setShowSpoilerWarning(false);
@@ -226,15 +227,16 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
                       preventDefault: () => {},
                     } as React.FormEvent);
                   }}
-                  className="px-4 py-2 bg-[#730109] text-white rounded-lg hover:bg-[#5a0708] transition-colors"
+                  className="flex-1 py-3 px-6 bg-[#730109] text-white font-medium rounded-lg 
+                       hover:bg-[#5a0708] transition-colors"
                 >
-                  Yes, Submit with Spoiler Warning
+                  Đồng ý gửi kèm cảnh báo
                 </button>
                 <button
                   onClick={() => setShowSpoilerWarning(false)}
-                  className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                  className="flex-1 py-3 px-6 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
                 >
-                  Cancel
+                  Hủy
                 </button>
               </div>
             </div>
@@ -245,10 +247,10 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
           {/* Rating Section */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-3">
-              Rate (optional)
+              Đánh giá sao (không bắt buộc)
               {userExistingRating && (
                 <span className="text-yellow-400 text-sm ml-2">
-                  (You already rated: {userExistingRating.rating}/5 ⭐)
+                  (Bạn đã đánh giá: {userExistingRating.rating}/5 ⭐)
                 </span>
               )}
             </label>
@@ -257,9 +259,8 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
             ) : (
               <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
                 <p className="text-yellow-300 text-sm">
-                  You have already rated this movie ({userExistingRating.rating}
-                  /5 stars). Your feedback will be submitted without changing
-                  your existing rating.
+                  Bạn đã đánh giá vở diễn này ({userExistingRating.rating}/5 sao). 
+                  Đánh giá chi tiết vẫn sẽ được gửi mà không thay đổi số sao đã cho.
                 </p>
               </div>
             )}
@@ -268,19 +269,19 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
           {/* Title */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Review Title <span className="text-red-400">*</span>
+              Tiêu đề đánh giá <span className="text-red-400">*</span>
             </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => handleInputChange("title", e.target.value)}
-              placeholder="Summarize your thoughts in a few words..."
+              placeholder="Hãy tóm tắt cảm nhận của bạn..."
               maxLength={100}
               className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white 
                        placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400"
             />
             <div className="flex justify-between text-sm mt-1">
-              <span className="text-gray-400">5-100 characters required</span>
+              <span className="text-gray-400">Yêu cầu 5-100 ký tự</span>
               <span
                 className={`${
                   formData.title.length > 100 ? "text-red-400" : "text-gray-400"
@@ -294,19 +295,19 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
           {/* Content */}
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
-              Your Review <span className="text-red-400">*</span>
+              Nội dung đánh giá <span className="text-red-400">*</span>
             </label>
             <textarea
               value={formData.content}
               onChange={(e) => handleInputChange("content", e.target.value)}
-              placeholder="Share your detailed thoughts about the movie. What did you like or dislike? Would you recommend it to others?"
+              placeholder="Chia sẻ cảm nhận chi tiết về vở diễn. Bạn ấn tượng điều gì? Có điều gì chưa hài lòng? Bạn có giới thiệu cho người khác không?"
               maxLength={2000}
               rows={6}
               className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white 
                        placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none"
             />
             <div className="flex justify-between text-sm mt-1">
-              <span className="text-gray-400">10-2000 characters required</span>
+              <span className="text-gray-400">Yêu cầu 10-2000 ký tự</span>
               <span
                 className={`${
                   formData.content.length > 2000
@@ -320,13 +321,13 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
           </div>
 
           {/* Spoiler Toggle */}
-          <div className="flex items-center justify-between p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
-            <div className="flex items-center gap-3">
-              <AlertTriangle className="h-5 w-5 text-yellow-400" />
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="h-5 w-5 text-yellow-400 mt-0.5" />
               <div>
-                <p className="text-white font-medium">Contains Spoilers?</p>
+                <p className="text-white font-medium">Đánh dấu có tiết lộ nội dung?</p>
                 <p className="text-gray-300 text-sm">
-                  Check this if your review reveals plot details
+                  Hãy bật nếu đánh giá của bạn có thể làm lộ chi tiết cốt truyện.
                 </p>
               </div>
             </div>
@@ -335,12 +336,12 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
               onClick={() =>
                 handleInputChange("is_spoiler", !formData.is_spoiler)
               }
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+              className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors ${
                 formData.is_spoiler ? "bg-yellow-500" : "bg-gray-600"
               }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
                   formData.is_spoiler ? "translate-x-6" : "translate-x-1"
                 }`}
               />
@@ -353,18 +354,17 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
               <Eye className="h-5 w-5 text-blue-400 mt-0.5" />
               <div>
                 <p className="text-blue-300 font-medium text-sm">
-                  Review Moderation
+                  Kiểm duyệt đánh giá
                 </p>
                 <p className="text-blue-400/80 text-sm">
-                  Your review will be reviewed by our team before being
-                  published to ensure it follows our community guidelines.
+                  Đánh giá sẽ được đội ngũ kiểm duyệt trước khi xuất bản để đảm bảo tuân thủ quy định cộng đồng.
                 </p>
               </div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-4 pt-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
             <motion.button
               type="button"
               onClick={onClose}
@@ -373,7 +373,7 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
               className="flex-1 py-3 px-6 bg-gray-600 text-white font-medium rounded-lg 
                        hover:bg-gray-700 transition-colors"
             >
-              Cancel
+              Hủy bỏ
             </motion.button>
             <motion.button
               type="submit"
@@ -387,12 +387,12 @@ const FeedbackForm: React.FC<FeedbackFormProps> = ({
               {createFeedbackMutation.isPending ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
-                  Submitting...
+                  Đang gửi...
                 </>
               ) : (
                 <>
                   <Send className="h-5 w-5" />
-                  Submit Review
+                  Gửi đánh giá
                 </>
               )}
             </motion.button>

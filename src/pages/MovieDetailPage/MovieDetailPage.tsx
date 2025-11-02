@@ -18,7 +18,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import MovieInfo from "./components/MovieInfo";
 import MovieFeedbackSection from "../../components/movie/MovieFeedbackSection";
-import CastList from "./components/CastList";
 import { getCountryDisplay } from "../../const/language";
 
 type SelectedInfo = {
@@ -235,25 +234,38 @@ export default function MovieDetailsPage() {
             variants={container}
             initial="hidden"
             animate="visible"
-            className="gap-6 bg-zinc-900 p-6 rounded-3xl 
-            shadow-xl border border-gray-200 mb-10"
+            className="bg-zinc-900 p-8 rounded-3xl shadow-xl border border-gray-200 mb-10"
           >
-            <motion.div
-              variants={fadeUp}
-              className="flex flex-col gap-3 items-center"
-            ></motion.div>
-            <motion.p variants={fadeUp} custom={1} className="mb-1 text-gray-300">
-              Tác giả: {movie.director}
-            </motion.p>
-            <motion.p variants={fadeUp} custom={2} className="mb-1 text-gray-300">
-              Đạo diễn: {getCountryDisplay(movie.language)}
-            </motion.p>
-            <motion.div variants={fadeUp} custom={8}>
-              <CastList movie={movie} />
+            <motion.div variants={fadeUp} className="flex flex-col gap-4 text-center md:text-left">
+              <motion.h3
+                variants={fadeUp}
+                className="text-2xl md:text-3xl font-semibold text-white tracking-wide"
+              >
+                Giới thiệu tác phẩm
+              </motion.h3>
+              <motion.div
+                variants={fadeUp}
+                className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-sm md:text-base text-gray-300"
+              >
+                <span className="font-medium">
+                  Tác giả: <span className="text-white/90">{movie.director}</span>
+                </span>
+                <span className="font-medium">
+                  Ngôn ngữ: <span className="text-white/90">{getCountryDisplay(movie.language)}</span>
+                </span>
+                {movie.duration && (
+                  <span className="font-medium">
+                    Thời lượng: <span className="text-white/90">{movie.duration} phút</span>
+                  </span>
+                )}
+              </motion.div>
+              <motion.p
+                variants={fadeUp}
+                className="leading-relaxed text-gray-200 text-base md:text-lg bg-white/5 border border-white/10 rounded-2xl px-6 py-5 shadow-inner"
+              >
+                {movie.description}
+              </motion.p>
             </motion.div>
-            <motion.p variants={fadeUp} custom={7} className="mb-4 text-gray-400">
-              {movie.description}
-            </motion.p>
           </motion.div>
           
           {/* Feedback Section - New integrated component */}

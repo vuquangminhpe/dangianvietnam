@@ -1,5 +1,36 @@
 import type { Genre } from "../types";
 
+const genreTranslations: Record<string, string> = {
+  drama: "Chính kịch",
+  comedy: "Hài",
+  action: "Hành động",
+  adventure: "Phiêu lưu",
+  romance: "Lãng mạn",
+  horror: "Kinh dị",
+  thriller: "Giật gân",
+  fantasy: "Giả tưởng",
+  animation: "Hoạt hình",
+  documentary: "Tài liệu",
+  musical: "Nhạc kịch",
+  history: "Lịch sử",
+  crime: "Tội phạm",
+  family: "Gia đình",
+  war: "Chiến tranh",
+  mystery: "Bí ẩn",
+  western: "Viễn Tây",
+  biography: "Tiểu sử",
+  "science fiction": "Khoa học viễn tưởng",
+  "sci-fi": "Khoa học viễn tưởng",
+  animationfilm: "Hoạt hình",
+  fantasyfilm: "Giả tưởng",
+  musicalfilm: "Nhạc kịch",
+};
+
+const translateGenre = (genreName: string): string => {
+  const key = genreName.trim().toLowerCase();
+  return genreTranslations[key] || genreName;
+};
+
 /**
  * Format genre array to string
  */
@@ -7,7 +38,10 @@ export const formatGenres = (genre: string[] | Genre[]): string => {
   if (!Array.isArray(genre)) return String(genre);
   
   return genre
-    .map(g => typeof g === 'string' ? g : g.name)
+    .map((g) => {
+      const name = typeof g === "string" ? g : g.name;
+      return translateGenre(name);
+    })
     .join(" - ");
 };
 

@@ -156,8 +156,8 @@ const PaymentHistory: React.FC = () => {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400 mx-auto mb-4" />
-          <p className="text-gray-300">Loading payment history...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#730109] mx-auto mb-4" />
+          <p className="text-gray-500">Đang tải lịch sử thanh toán...</p>
         </div>
       </div>
     );
@@ -179,9 +179,9 @@ const PaymentHistory: React.FC = () => {
           className="mb-8"
         >
           <h1 className="text-3xl font-bold mb-2" style={{ color: '#730109' }}>
-            Payment History
+            Lịch sử thanh toán
           </h1>
-          <p style={{ color: '#730109' }}>Track all your movie ticket payments</p>
+          <p style={{ color: '#730109' }}>Theo dõi mọi thanh toán vé biểu diễn của bạn</p>
         </motion.div>
 
         {/* Search and Filters */}
@@ -198,7 +198,7 @@ const PaymentHistory: React.FC = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search for event title or transaction ID..."
+                placeholder="Tìm theo tên sự kiện hoặc mã giao dịch..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white 
@@ -214,7 +214,7 @@ const PaymentHistory: React.FC = () => {
               style={{ backgroundColor: '#730109' }}
             >
               <Filter className="h-4 w-4" />
-              Filters
+              Bộ lọc
               <ChevronDown
                 className={`h-4 w-4 transition-transform ${
                   showFilters ? "rotate-180" : ""
@@ -234,7 +234,7 @@ const PaymentHistory: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Status
+                    Trạng thái
                   </label>
                   <select
                     value={filters.status || ""}
@@ -244,14 +244,22 @@ const PaymentHistory: React.FC = () => {
                     className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white 
                              focus:outline-none focus:ring-2 focus:ring-purple-400"
                   >
-                    <option value="">All Status</option>
+                    <option value="">Tất cả</option>
                     {statusOptions.map((status) => (
                       <option
                         key={status}
                         value={status}
                         className="text-black"
                       >
-                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                        {status === "completed"
+                          ? "Đã hoàn tất"
+                          : status === "pending"
+                          ? "Đang xử lý"
+                          : status === "failed"
+                          ? "Thất bại"
+                          : status === "refunded"
+                          ? "Đã hoàn tiền"
+                          : status}
                       </option>
                     ))}
                   </select>
@@ -259,7 +267,7 @@ const PaymentHistory: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Payment Method
+                    Phương thức thanh toán
                   </label>
                   <select
                     value={filters.payment_method || ""}
@@ -272,15 +280,20 @@ const PaymentHistory: React.FC = () => {
                     className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white 
                              focus:outline-none focus:ring-2 focus:ring-purple-400"
                   >
-                    <option value="">All Methods</option>
+                    <option value="">Tất cả</option>
                     {methodOptions.map((method) => (
                       <option
                         key={method}
                         value={method}
                         className="text-black"
                       >
-                        {method.replace("_", " ").charAt(0).toUpperCase() +
-                          method.replace("_", " ").slice(1)}
+                        {method === "vnpay"
+                          ? "VNPay"
+                          : method === "credit_card"
+                          ? "Thẻ tín dụng"
+                          : method === "cash"
+                          ? "Tiền mặt"
+                          : method.replace("_", " ")}
                       </option>
                     ))}
                   </select>
@@ -288,7 +301,7 @@ const PaymentHistory: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Date From
+                    Từ ngày
                   </label>
                   <input
                     type="date"
@@ -306,7 +319,7 @@ const PaymentHistory: React.FC = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Date To
+                    Đến ngày
                   </label>
                   <input
                     type="date"
@@ -331,13 +344,16 @@ const PaymentHistory: React.FC = () => {
           className="space-y-4"
         >
           {paymentsData?.payments?.length === 0 ? (
-            <div className="backdrop-blur-lg rounded-2xl p-8 border border-white/20 text-center" style={{ backgroundColor: '#37373c' }}>
+            <div
+              className="backdrop-blur-lg rounded-2xl p-8 border border-white/20 text-center"
+              style={{ backgroundColor: '#37373c' }}
+            >
               <CreditCard className="h-16 w-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-white mb-2">
-                No payments found
+                Chưa có thanh toán nào
               </h3>
               <p className="text-gray-300">
-                You haven't made any payments yet.
+                Bạn chưa thực hiện thanh toán nào.
               </p>
             </div>
           ) : (
@@ -347,8 +363,7 @@ const PaymentHistory: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:border-white/40 
-                         transition-all cursor-pointer"
+                className="backdrop-blur-lg rounded-2xl p-6 border border-white/20 hover:border-white/40 transition-all cursor-pointer"
                 style={{ backgroundColor: '#37373c' }}
                 onClick={() => handleViewDetails(payment as any)}
               >
@@ -386,7 +401,13 @@ const PaymentHistory: React.FC = () => {
                       </p>
                       <p className="text-gray-400 text-sm">
                         {getPaymentMethodIcon(payment.payment_method)}{" "}
-                        {payment.payment_method.replace("_", " ")}
+                        {payment.payment_method === "vnpay"
+                          ? "VNPay"
+                          : payment.payment_method === "credit_card"
+                          ? "Thẻ tín dụng"
+                          : payment.payment_method === "cash"
+                          ? "Tiền mặt"
+                          : payment.payment_method.replace("_", " ")}
                       </p>
                     </div>
 
@@ -398,18 +419,26 @@ const PaymentHistory: React.FC = () => {
                           payment.status
                         )}`}
                       >
-                        {payment.status.charAt(0).toUpperCase() +
-                          payment.status.slice(1)}
+                        {payment.status === "completed"
+                          ? "Đã hoàn tất"
+                          : payment.status === "pending"
+                          ? "Đang xử lý"
+                          : payment.status === "failed"
+                          ? "Thất bại"
+                          : payment.status === "refunded"
+                          ? "Đã hoàn tiền"
+                          : payment.status}
                       </span>
                     </div>
 
                     {/* Action */}
-                    <button className="flex items-center gap-2 transition-colors" style={{ color: '#ffffff' }}>
+                    <button
+                      className="flex items-center gap-2 transition-colors"
+                      style={{ color: '#ffffff' }}
+                    >
                       <Eye className="h-4 w-4" />
                       <span className="hidden lg:inline">
-                        {payment.status === "pending"
-                          ? "Thanh toán"
-                          : "View Details"}
+                        {payment.status === "pending" ? "Thanh toán" : "Xem chi tiết"}
                       </span>
                     </button>
                   </div>
@@ -419,7 +448,7 @@ const PaymentHistory: React.FC = () => {
                 {payment.transaction_id && (
                   <div className="mt-4 pt-4 border-t border-white/10">
                     <p className="text-gray-400 text-sm">
-                      Transaction ID:{" "}
+                      Mã giao dịch:{" "}
                       <span className="text-gray-300 font-mono">
                         {payment.transaction_id}
                       </span>
@@ -431,12 +460,9 @@ const PaymentHistory: React.FC = () => {
                   <div className="mt-4 pt-4 border-t border-white/10">
                     <div className="flex items-center justify-between">
                       <p className="text-yellow-400 text-sm font-medium">
-                        ⏰ Thời gian còn lại:{" "}
-                        {calculateTimeRemaining(payment.payment_time)}
+                        ⏰ Thời gian còn lại: {calculateTimeRemaining(payment.payment_time)}
                       </p>
-                      <p className="text-gray-400 text-xs">
-                        Hết hạn sau 15 phút
-                      </p>
+                      <p className="text-gray-400 text-xs">Hết hạn sau 15 phút</p>
                     </div>
                   </div>
                 )}
@@ -541,8 +567,15 @@ const PaymentHistory: React.FC = () => {
                     selectedPayment.status
                   )}`}
                 >
-                  {selectedPayment.status.charAt(0).toUpperCase() +
-                    selectedPayment.status.slice(1)}
+                  {selectedPayment.status === "completed"
+                    ? "Đã hoàn tất"
+                    : selectedPayment.status === "pending"
+                    ? "Đang xử lý"
+                    : selectedPayment.status === "failed"
+                    ? "Thất bại"
+                    : selectedPayment.status === "refunded"
+                    ? "Đã hoàn tiền"
+                    : selectedPayment.status}
                 </div>
               </div>
 
@@ -597,7 +630,13 @@ const PaymentHistory: React.FC = () => {
                     </p>
                     <p className="text-white font-medium">
                       {getPaymentMethodIcon(selectedPayment.payment_method)}{" "}
-                      {selectedPayment.payment_method.replace("_", " ")}
+                      {selectedPayment.payment_method === "vnpay"
+                        ? "VNPay"
+                        : selectedPayment.payment_method === "credit_card"
+                        ? "Thẻ tín dụng"
+                        : selectedPayment.payment_method === "cash"
+                        ? "Tiền mặt"
+                        : selectedPayment.payment_method.replace("_", " ")}
                     </p>
                   </div>
                 </div>

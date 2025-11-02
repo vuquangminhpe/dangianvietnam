@@ -12,6 +12,7 @@ interface CarouselItem {
   title: string;
   topic: string;
   description: string;
+  link?: string;
 }
 
 interface CarouselBannerProps {
@@ -26,6 +27,7 @@ const localBannerData: CarouselItem[] = bannerImages.map((banner: any) => ({
   title: banner.title,
   topic: banner.topic,
   description: banner.description,
+  link: banner.link,
 }));
 
 const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
@@ -52,6 +54,11 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
       // Fallback: scroll to a reasonable position
       window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
     }
+  };
+
+  const handleViewMore = () => {
+    const currentItem = carouselItems[currentIndex];
+    navigate(currentItem?.link || '/product');
   };
 
   // Load local banner data
@@ -565,7 +572,7 @@ const CarouselBanner: React.FC<CarouselBannerProps> = ({ items }) => {
                      
                       <div className="buttons">
                         <button onClick={scrollToFeaturedSection}>ĐẶT VÉ</button>
-                        <button onClick={() => navigate('/product')}>XEM THÊM</button>
+                        <button onClick={handleViewMore}>XEM THÊM</button>
                       </div>
                     </div>
                   </div>
