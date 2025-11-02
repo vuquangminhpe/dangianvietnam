@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { getPopularMovies } from '../../apis/movie.api';
+import { getComingSoonMovies } from '../../apis/movie.api';
+
 import type { Movie } from '../../types/Movie.type';
 import { useNavigate } from 'react-router-dom';
 import { FaCalendarAlt } from 'react-icons/fa';
@@ -18,193 +19,13 @@ const ComingSoon = () => {
     const fetchComingSoonMovies = async () => {
       try {
         setLoading(true);
-        const data = await getPopularMovies(20, 1);
+        const data = await getComingSoonMovies(20);
+
         console.log('Coming Soon Movies:', data);
-        
-        // If no data from API, use hardcoded data
-        if (!data || data.length === 0) {
-          const moviesList = [
-            {
-              _id: '1',
-              title: 'Avengers: Secret Wars',
-              poster_url: '/avenger_endgame.jpg',
-              release_date: '2026-05-01',
-              description: 'Phim siêu anh hùng Marvel sắp ra mắt',
-              duration: 180,
-              director: 'Marvel Studios',
-              cast: [],
-              genre: ['Hành động', 'Phiêu lưu'],
-              trailer_url: '',
-              average_rating: 0,
-              ratings_count: 0,
-              status: 'coming_soon',
-              language: 'Tiếng Anh',
-              is_featured: false,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-            },
-            {
-              _id: '2',
-              title: 'Spider-Man: Beyond the Spider-Verse',
-              poster_url: '/spidermanAcross.jpg',
-              release_date: '2026-03-29',
-              description: 'Phần tiếp theo của Into the Spider-Verse',
-              duration: 150,
-              director: 'Sony Pictures',
-              cast: [],
-              genre: ['Animation', 'Hành động'],
-              trailer_url: '',
-              average_rating: 0,
-              ratings_count: 0,
-              status: 'coming_soon',
-              language: 'Tiếng Anh',
-              is_featured: false,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-            },
-            {
-              _id: '3',
-              title: 'John Wick: Chapter 5',
-              poster_url: '/johnWick4.png',
-              release_date: '2026-06-15',
-              description: 'Sát thủ John Wick trở lại',
-              duration: 160,
-              director: 'Lionsgate',
-              cast: [],
-              genre: ['Hành động', 'Thriller'],
-              trailer_url: '',
-              average_rating: 0,
-              ratings_count: 0,
-              status: 'coming_soon',
-              language: 'Tiếng Anh',
-              is_featured: false,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-            },
-            {
-              _id: '4',
-              title: 'Guardians of the Galaxy Vol. 4',
-              poster_url: '/guardiansGalaxy.jpg',
-              release_date: '2026-07-20',
-              description: 'Đội vệ binh dải ngân hà tiếp tục cuộc phiêu lưu',
-              duration: 145,
-              director: 'Marvel Studios',
-              cast: [],
-              genre: ['Hành động', 'Sci-Fi', 'Hài'],
-              trailer_url: '',
-              average_rating: 0,
-              ratings_count: 0,
-              status: 'coming_soon',
-              language: 'Tiếng Anh',
-              is_featured: false,
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
-            },
-          ];
-          
-          // Duplicate the list 4 times (original + 3 copies = 16 movies total)
-          const duplicatedMovies = [
-            ...moviesList,
-            ...moviesList.map(m => ({ ...m, _id: m._id + '-copy1' })),
-            ...moviesList.map(m => ({ ...m, _id: m._id + '-copy2' })),
-            ...moviesList.map(m => ({ ...m, _id: m._id + '-copy3' })),
-          ];
-          
-          setMovies(duplicatedMovies as Movie[]);
-        } else {
-          setMovies(data);
-        }
+        setMovies(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error('Failed to fetch coming soon movies:', error);
-        // Fallback with hardcoded data if API fails
-        const moviesList = [
-          {
-            _id: '1',
-            title: 'Avengers: Secret Wars',
-            poster_url: '/avenger_endgame.jpg',
-            release_date: '2026-05-01',
-            description: 'Phim siêu anh hùng Marvel sắp ra mắt',
-            duration: 180,
-            director: 'Marvel Studios',
-            cast: [],
-            genre: ['Hành động', 'Phiêu lưu'],
-            trailer_url: '',
-            average_rating: 0,
-            ratings_count: 0,
-            status: 'coming_soon',
-            language: 'Tiếng Anh',
-            is_featured: false,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          },
-          {
-            _id: '2',
-            title: 'Spider-Man: Beyond the Spider-Verse',
-            poster_url: '/spidermanAcross.jpg',
-            release_date: '2026-03-29',
-            description: 'Phần tiếp theo của Into the Spider-Verse',
-            duration: 150,
-            director: 'Sony Pictures',
-            cast: [],
-            genre: ['Animation', 'Hành động'],
-            trailer_url: '',
-            average_rating: 0,
-            ratings_count: 0,
-            status: 'coming_soon',
-            language: 'Tiếng Anh',
-            is_featured: false,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          },
-          {
-            _id: '3',
-            title: 'John Wick: Chapter 5',
-            poster_url: '/johnWick4.png',
-            release_date: '2026-06-15',
-            description: 'Sát thủ John Wick trở lại',
-            duration: 160,
-            director: 'Lionsgate',
-            cast: [],
-            genre: ['Hành động', 'Thriller'],
-            trailer_url: '',
-            average_rating: 0,
-            ratings_count: 0,
-            status: 'coming_soon',
-            language: 'Tiếng Anh',
-            is_featured: false,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          },
-          {
-            _id: '4',
-            title: 'Guardians of the Galaxy Vol. 4',
-            poster_url: '/guardiansGalaxy.jpg',
-            release_date: '2026-07-20',
-            description: 'Đội vệ binh dải ngân hà tiếp tục cuộc phiêu lưu',
-            duration: 145,
-            director: 'Marvel Studios',
-            cast: [],
-            genre: ['Hành động', 'Sci-Fi', 'Hài'],
-            trailer_url: '',
-            average_rating: 0,
-            ratings_count: 0,
-            status: 'coming_soon',
-            language: 'Tiếng Anh',
-            is_featured: false,
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          },
-        ];
-        
-        // Duplicate the list 4 times (original + 3 copies = 16 movies total)
-        const duplicatedMovies = [
-          ...moviesList,
-          ...moviesList.map(m => ({ ...m, _id: m._id + '-copy1' })),
-          ...moviesList.map(m => ({ ...m, _id: m._id + '-copy2' })),
-          ...moviesList.map(m => ({ ...m, _id: m._id + '-copy3' })),
-        ];
-        
-        setMovies(duplicatedMovies as Movie[]);
+        setMovies([]);
       } finally {
         setLoading(false);
       }
@@ -244,8 +65,16 @@ const ComingSoon = () => {
 
   if (loading) {
     return (
-      <div className="w-full py-16 text-center">
-        <p className="text-white text-lg">Đang tải phim sắp chiếu...</p>
+      <div className="w-full py-16 text-center text-red-500">
+        <p className="text-red-500 text-lg">Đang tải phim sắp chiếu...</p>
+      </div>
+    );
+  }
+
+  if (!movies.length) {
+    return (
+      <div className="w-full py-16 text-center text-red-500">
+        <p className="text-red-500 text-lg">Hiện chưa có suất chiếu mới.</p>
       </div>
     );
   }

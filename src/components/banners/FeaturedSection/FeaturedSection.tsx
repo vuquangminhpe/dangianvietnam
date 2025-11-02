@@ -8,11 +8,24 @@ import BlurCircle from "../../layout/BlurCircle";
 import Carousel from "../../Carousel";
 // import MoviesByTheaters from "../MoviesByTheaters/MoviesByTheaters";
 
+type FeaturedCard = {
+  id: string;
+  imageUrl: string;
+  title: string;
+  duration: number;
+  genre: string[];
+  release_date: string;
+  average_rating: number;
+  showtimeStart: string | null;
+  showtimeEnd: string | null;
+  priceRegular: number | null;
+};
+
 const FeaturedSection = () => {
   const navigate = useNavigate()
 
   const [getShowingMovies, setGetShowingMovies] = useState<Movie[]>([])
-  const [cards, setCards] = useState<any[]>([])
+  const [cards, setCards] = useState<FeaturedCard[]>([])
 
   useEffect(() => {
     let ignore = false
@@ -22,7 +35,7 @@ const FeaturedSection = () => {
         if (!ignore) {
           setGetShowingMovies(movies)
           // Fetch first upcoming showtime for each movie to get time and price
-          const enriched = await Promise.all(
+          const enriched = await Promise.all<FeaturedCard>(
             movies.map(async (m) => {
               try {
                 const showtimes = await getShowtimeByMovieId(m._id)
@@ -55,7 +68,26 @@ const FeaturedSection = () => {
               }
             })
           )
-          if (!ignore) setCards(enriched)
+          if (!ignore) {
+            const sortedByShowtime = [...enriched].sort((a, b) => {
+              const aTime = a.showtimeStart ? new Date(a.showtimeStart).getTime() : Number.POSITIVE_INFINITY
+              const bTime = b.showtimeStart ? new Date(b.showtimeStart).getTime() : Number.POSITIVE_INFINITY
+              return aTime - bTime
+            })
+
+            const earliestIndex = sortedByShowtime.findIndex((card) => card.showtimeStart !== null)
+
+            if (earliestIndex !== -1 && sortedByShowtime.length > 1) {
+              const targetIndex = Math.min(1, sortedByShowtime.length - 1)
+
+              if (earliestIndex !== targetIndex) {
+                const [earliestCard] = sortedByShowtime.splice(earliestIndex, 1)
+                sortedByShowtime.splice(targetIndex, 0, earliestCard)
+              }
+            }
+
+            setCards(sortedByShowtime)
+          }
         }
       } catch (error) {
         console.error('Failed to fetch popular movies:', error)
@@ -69,7 +101,7 @@ const FeaturedSection = () => {
     }
   }, [])
 
-  const formattedMovies = cards.length > 0
+  const formattedMovies: FeaturedCard[] = cards.length > 0
     ? cards
     : getShowingMovies.map((movie) => ({
         id: movie._id,
@@ -135,7 +167,9 @@ const FeaturedSection = () => {
         </h4>
       </div>
     </div>
-    {getShowingMovies.length > 0 && <Carousel cardData={formattedMovies} />}
+    {getShowingMovies.length > 0 && (
+      <Carousel cardData={formattedMovies} initialActiveIndex={1} />
+    )}
   </div>
 </div>
 

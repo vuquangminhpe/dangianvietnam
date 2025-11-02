@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, type PanInfo } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -26,6 +26,11 @@ interface CardProps {
   index: number;
   activeIndex: number;
   totalCards: number;
+}
+
+interface CarouselProps {
+  cardData: CardData[];
+  initialActiveIndex?: number;
 }
 
 const ChevronLeftIcon: React.FC<IconProps> = ({ className }) => (
@@ -93,38 +98,27 @@ const ChevronRightIcon: React.FC<IconProps> = ({ className }) => (
   </svg>
 )
 
-export default function Carousel({ cardData }: { cardData: CardData[] }) {
-  const [activeIndex, setActiveIndex] = useState(
-    Math.floor(cardData.length / 2)
-  );
-  const [isPaused, setIsPaused] = useState(false);
-  const autoplayIntervalRef = useRef<number | null>(null);
-  const autoplayDelay = 3000;
-
-  const goToNext = () => {
-    setActiveIndex((prev) => (prev + 1) % cardData.length);
-  };
+export default function Carousel({ cardData, initialActiveIndex = 0 }: CarouselProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
-    if (!isPaused) {
-      autoplayIntervalRef.current = setInterval(goToNext, autoplayDelay);
+    if (!cardData.length) {
+      setActiveIndex(0);
+      return;
     }
-    return () => {
-      if (autoplayIntervalRef.current) {
-        clearInterval(autoplayIntervalRef.current);
-      }
-    };
-  }, [isPaused, activeIndex]);
+
+    const safeIndex = Math.min(
+      Math.max(initialActiveIndex, 0),
+      cardData.length - 1
+    );
+
+    setActiveIndex(safeIndex);
+  }, [initialActiveIndex, cardData.length]);
 
   const changeSlide = (newIndex: number) => {
+    if (!cardData.length) return;
     const newSafeIndex = (newIndex + cardData.length) % cardData.length;
     setActiveIndex(newSafeIndex);
-    if (autoplayIntervalRef.current) {
-      clearInterval(autoplayIntervalRef.current);
-    }
-    if (!isPaused) {
-      autoplayIntervalRef.current = setInterval(goToNext, autoplayDelay);
-    }
   };
 
   const onDragEnd = (
@@ -143,8 +137,6 @@ export default function Carousel({ cardData }: { cardData: CardData[] }) {
   return (
     <div
       className='w-full max-w-7xl mx-auto p-2 sm:p-4'
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
     >
       {/* ===================================================================
         * THAY ĐỔI CHÍNH BẮT ĐẦU TỪ ĐÂY

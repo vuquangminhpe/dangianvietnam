@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import {
@@ -28,13 +28,6 @@ const Statistics: React.FC = () => {
     limit: 20,
   });
 
-  const [dateRange, setDateRange] = useState({
-    start_date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
-      .toISOString()
-      .split("T")[0],
-    end_date: new Date().toISOString().split("T")[0],
-  });
-
   const periodLabels: Record<string, string> = {
     day: "ngày",
     week: "tuần",
@@ -53,18 +46,29 @@ const Statistics: React.FC = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["revenue-stats", { ...filters, ...dateRange }],
-    queryFn: () => getRevenueStats({ ...filters, ...dateRange }),
+    queryKey: ["revenue-stats", { ...filters }],
+    queryFn: () => getRevenueStats({ ...filters }),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
+
+  const summary = revenueStats?.result.summary;
+  const data = revenueStats?.result.data || [];
 
   const handleFilterChange = (key: keyof RevenueStatsParams, value: any) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleDateRangeChange = (key: string, value: string) => {
-    setDateRange((prev) => ({ ...prev, [key]: value }));
-  };
+  useEffect(() => {
+    console.log("[Statistics] Current summary: ", summary);
+    if (summary?.top_performing_movie) {
+      console.log(
+        "[Statistics] Top performing movie from summary:",
+        summary.top_performing_movie
+      );
+    } else {
+      console.log("[Statistics] No top performing movie in summary.");
+    }
+  }, [summary]);
 
   if (isLoading) {
     return (
@@ -92,9 +96,6 @@ const Statistics: React.FC = () => {
       </div>
     );
   }
-
-  const summary = revenueStats?.result.summary;
-  const data = revenueStats?.result.data || [];
 
   // Check if no data available - show empty state
   if (!summary || !data.length) {
@@ -155,7 +156,6 @@ const Statistics: React.FC = () => {
                 <li>• Liên hệ quản trị viên để được phân công rạp</li>
                 <li>• Tạo lịch chiếu cho các bộ phim</li>
                 <li>• Đảm bảo rạp đang hoạt động và nhận đặt vé</li>
-                <li>• Kiểm tra lại khoảng thời gian lọc dữ liệu</li>
               </ul>
             </div>
 
@@ -216,35 +216,7 @@ const Statistics: React.FC = () => {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {/* Date Range */}
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Ngày Bắt Đầu
-            </label>
-            <input
-              type="date"
-              value={dateRange.start_date}
-              onChange={(e) =>
-                handleDateRangeChange("start_date", e.target.value)
-              }
-              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Ngày Kết Thúc
-            </label>
-            <input
-              type="date"
-              value={dateRange.end_date}
-              onChange={(e) =>
-                handleDateRangeChange("end_date", e.target.value)
-              }
-              className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white"
-            />
-          </div>
-
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Period */}
           <div>
             <label className="block text-sm font-medium text-slate-300 mb-2">
