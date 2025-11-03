@@ -121,7 +121,7 @@ export default function CheckoutPage() {
   const handleCreateBookingForDirectFlow = useCallback(
     async (directBookingData: any) => {
       if (!user || isCreatingBooking || directFlowProcessedRef.current) {
-        if (!user) toast.error("User not logged in");
+        if (!user) toast.error("Người dùng chưa đăng nhập");
         if (directFlowProcessedRef.current) return;
       }
 
@@ -149,7 +149,7 @@ export default function CheckoutPage() {
         );
       } catch (error: any) {
         console.error("Direct booking and payment creation error:", error);
-        toast.error("Failed to create booking and payment. Please try again.");
+        toast.error("Không thể tạo đặt vé và thanh toán. Vui lòng thử lại.");
         directFlowProcessedRef.current = false;
         navigate(-1);
       } finally {
@@ -284,7 +284,7 @@ export default function CheckoutPage() {
         });
       } else {
         clearSeatData();
-        toast.error("Session expired! Please select seats again.");
+        toast.error("Phiên đặt vé đã hết hạn! Vui lòng chọn ghế lại.");
         navigate("/movies");
       }
       return;
@@ -296,11 +296,11 @@ export default function CheckoutPage() {
 
       // Validate screenId matches URL parameter if provided
       if (urlScreenId && seatData.screenId !== urlScreenId) {
-        console.warn("ScreenId mismatch between localStorage and URL:", {
+        console.warn("ScreenId không khớp giữa localStorage và URL:", {
           localStorage: seatData.screenId,
           url: urlScreenId,
         });
-        toast.error("Screen information mismatch. Please select seats again.");
+        toast.error("Thông tin phòng chiếu không khớp. Vui lòng chọn ghế lại.");
         clearSeatData();
         navigate("/movies");
         return;
@@ -391,7 +391,7 @@ export default function CheckoutPage() {
                 },
               });
             } else {
-              toast.error("Session expired! Please select seats again.");
+              toast.error("Phiên đặt vé đã hết hạn! Vui lòng chọn ghế lại.");
               navigate("/movies");
             }
             return 0;
@@ -451,12 +451,12 @@ export default function CheckoutPage() {
   // Create booking before payment
   const handleCreateBooking = async () => {
     if (!bookingInfo || !user) {
-      toast.error("Missing booking information or user not logged in");
+      toast.error("Thiếu thông tin đặt vé hoặc người dùng chưa đăng nhập");
       return;
     }
 
     if (!bookingInfo.seats || bookingInfo.seats.length === 0) {
-      toast.error("Please select at least one seat");
+      toast.error("Vui lòng chọn ít nhất một ghế");
       return;
     }
 
@@ -569,11 +569,11 @@ export default function CheckoutPage() {
   };
 
   const steps = skipReview
-    ? [{ id: "processing", title: "Processing Payment", icon: CreditCard }]
+    ? [{ id: "processing", title: "Đang xử lý thanh toán", icon: CreditCard }]
     : [
-        { id: "review", title: "Review Booking", icon: Ticket },
-        { id: "payment", title: "Payment", icon: CreditCard },
-        { id: "processing", title: "Processing", icon: Check },
+        { id: "review", title: "Kiểm tra đặt vé", icon: Ticket },
+        { id: "payment", title: "Thanh toán", icon: CreditCard },
+        { id: "processing", title: "Đang xử lý", icon: Check },
       ];
 
   return (
@@ -597,7 +597,7 @@ export default function CheckoutPage() {
               className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mr-4"
             >
               <ArrowLeft className="h-5 w-5" />
-              Back
+              Quay lại
             </button>
 
             <motion.button
@@ -606,17 +606,17 @@ export default function CheckoutPage() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="flex items-center gap-2 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
-              style={{ backgroundColor: '#730109', color: 'white' }}
+              style={{ backgroundColor: "#730109", color: "white" }}
             >
               {deletedLockedSeatsMutation.isPending ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                  Canceling...
+                  Đang hủy...
                 </>
               ) : (
                 <>
                   <AlertTriangle className="h-4 w-4" />
-                  Cancel Seats
+                  Hủy ghế
                 </>
               )}
             </motion.button>
@@ -624,8 +624,8 @@ export default function CheckoutPage() {
 
           {/* Cancel locked seats button */}
 
-          <h1 className="text-3xl font-bold" style={{ color: '#730109' }}>
-            Complete Your Booking
+          <h1 className="text-3xl font-bold" style={{ color: "#730109" }}>
+            Hoàn tất đặt vé
           </h1>
         </motion.div>
 
@@ -690,7 +690,7 @@ export default function CheckoutPage() {
               <span className="font-mono text-lg font-bold">
                 {formatTimeRemaining(timeRemaining)}
               </span>
-              <span className="text-sm">remaining</span>
+              <span className="text-sm">còn lại</span>
             </div>
           </motion.div>
         )}
@@ -703,10 +703,16 @@ export default function CheckoutPage() {
             transition={{ delay: 0.2 }}
             className="lg:col-span-1"
           >
-            <div className="rounded-2xl p-6 border border-gray-200 shadow-sm sticky top-8" style={{ backgroundColor: '#37373c' }}>
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2" style={{ color: 'white' }}>
+            <div
+              className="rounded-2xl p-6 border border-gray-200 shadow-sm sticky top-8"
+              style={{ backgroundColor: "#37373c" }}
+            >
+              <h2
+                className="text-xl font-semibold mb-4 flex items-center gap-2"
+                style={{ color: "white" }}
+              >
                 <Ticket className="h-5 w-5 text-purple-600" />
-                Booking Summary
+                Tóm tắt đặt vé
               </h2>
 
               {/* Movie Info */}
@@ -718,11 +724,14 @@ export default function CheckoutPage() {
                     className="w-20 h-28 object-cover rounded-lg"
                   />
                   <div className="flex-1">
-                    <h3 className="font-semibold text-lg leading-tight" style={{ color: 'white' }}>
+                    <h3
+                      className="font-semibold text-lg leading-tight"
+                      style={{ color: "white" }}
+                    >
                       {movie.title}
                     </h3>
-                    <p className="text-sm mt-1" style={{ color: '#cccccc' }}>
-                      {movie.duration} minutes
+                    <p className="text-sm mt-1" style={{ color: "#cccccc" }}>
+                      {movie.duration} phút
                     </p>
                   </div>
                 </div>
@@ -733,14 +742,14 @@ export default function CheckoutPage() {
                 <div className="flex items-start gap-2">
                   <MapPin className="h-4 w-4 text-gray-500 mt-1" />
                   <div>
-                    <p className="font-medium" style={{ color: 'white' }}>
+                    <p className="font-medium" style={{ color: "white" }}>
                       {screen?.theater?.name}
                     </p>
-                    <p className="text-sm" style={{ color: '#cccccc' }}>
+                    <p className="text-sm" style={{ color: "#cccccc" }}>
                       {screen?.theater?.location}, {screen?.theater?.city}
                     </p>
-                    <p className="text-sm" style={{ color: '#cccccc' }}>
-                      Screen: {screen?.name} ({screen?.screen_type})
+                    <p className="text-sm" style={{ color: "#cccccc" }}>
+                      Phòng chiếu: {screen?.name} ({screen?.screen_type})
                     </p>
                   </div>
                 </div>
@@ -749,7 +758,7 @@ export default function CheckoutPage() {
                   <div className="flex items-start gap-2">
                     <Calendar className="h-4 w-4 text-gray-500 mt-1" />
                     <div>
-                      <p className="font-medium" style={{ color: 'white' }}>
+                      <p className="font-medium" style={{ color: "white" }}>
                         {formatTime(showtime.start_time)}
                       </p>
                     </div>
@@ -759,7 +768,9 @@ export default function CheckoutPage() {
 
               {/* Seats */}
               <div className="mb-6">
-                <p className="text-sm mb-2" style={{ color: '#cccccc' }}>Selected Seats</p>
+                <p className="text-sm mb-2" style={{ color: "#cccccc" }}>
+                  Ghế đã chọn
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {seats.map((seat, index) => (
                     <span
@@ -775,10 +786,11 @@ export default function CheckoutPage() {
               {/* Price */}
               <div className="border-t border-gray-200 pt-4">
                 <div className="flex justify-between items-center">
-                  <span style={{ color: '#cccccc' }}>
-                    {seats.length} seat{seats.length > 1 ? "s" : ""}
-                  </span>
-                  <span className="text-2xl font-bold" style={{ color: 'white' }}>
+                  <span style={{ color: "#cccccc" }}>{seats.length} ghế</span>
+                  <span
+                    className="text-2xl font-bold"
+                    style={{ color: "white" }}
+                  >
                     {formatCurrency(price)}
                   </span>
                 </div>
@@ -787,7 +799,10 @@ export default function CheckoutPage() {
               {/* User Info */}
               {user && (
                 <div className="border-t border-gray-200 pt-4 mt-4">
-                  <div className="flex items-center gap-2" style={{ color: '#cccccc' }}>
+                  <div
+                    className="flex items-center gap-2"
+                    style={{ color: "#cccccc" }}
+                  >
                     <User className="h-4 w-4" />
                     <span className="text-sm">{user.name}</span>
                   </div>
@@ -811,10 +826,13 @@ export default function CheckoutPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   className="rounded-2xl p-6 border border-gray-200 shadow-sm"
-                  style={{ backgroundColor: '#37373c' }}
+                  style={{ backgroundColor: "#37373c" }}
                 >
-                  <h2 className="text-2xl font-bold mb-6" style={{ color: 'white' }}>
-                    Review Your Booking
+                  <h2
+                    className="text-2xl font-bold mb-6"
+                    style={{ color: "white" }}
+                  >
+                    Kiểm tra lại đặt vé
                   </h2>
 
                   {/* Booking Details */}
@@ -822,16 +840,15 @@ export default function CheckoutPage() {
                     {/* Terms and Conditions */}
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                       <h3 className="font-semibold text-blue-900 mb-2">
-                        Important Information
+                        Thông tin quan trọng
                       </h3>
                       <ul className="text-blue-800/80 text-sm space-y-1">
-                        <li>• Please arrive 15 minutes before showtime</li>
-                        <li>• No refunds after payment confirmation</li>
+                        <li>• Vui lòng có mặt trước giờ chiếu 15 phút</li>
+                        <li>• Không hoàn tiền sau khi thanh toán thành công</li>
                         <li>
-                          • Seats will be released if payment not completed
-                          within 5 minutes
+                          • Ghế sẽ bị hủy nếu không hoàn tất thanh toán trong 5 phút
                         </li>
-                        <li>• Show your booking confirmation at the theater</li>
+                        <li>• Xuất trình mã xác nhận tại rạp</li>
                       </ul>
                     </div>
 
@@ -848,18 +865,19 @@ export default function CheckoutPage() {
                       className="w-full py-4 font-semibold rounded-xl hover:opacity-90 
                                transition-all disabled:opacity-50 disabled:cursor-not-allowed
                                flex items-center justify-center gap-2"
-                      style={{ backgroundColor: '#730109', color: 'white' }}
+                      style={{ backgroundColor: "#730109", color: "white" }}
                     >
                       {isCreatingBooking ||
                       createBookingMutation.isPending ||
                       updateBookingMutation.isPending ? (
                         <>
                           <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
-                          Processing Booking...
+                          Đang xử lý đặt vé...
                         </>
                       ) : (
                         <>
                           <CreditCard className="h-5 w-5" />
+                          Tiến hành thanh toán
                         </>
                       )}
                     </motion.button>
@@ -874,7 +892,7 @@ export default function CheckoutPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   className="rounded-2xl p-6 border border-gray-200 shadow-sm"
-                  style={{ backgroundColor: '#37373c' }}
+                  style={{ backgroundColor: "#37373c" }}
                 >
                   <CheckoutPaymentStep
                     bookingId={bookingId}
@@ -895,19 +913,22 @@ export default function CheckoutPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   className="rounded-2xl p-6 border border-gray-200 shadow-sm"
-                  style={{ backgroundColor: '#37373c' }}
+                  style={{ backgroundColor: "#37373c" }}
                 >
                   <div className="text-center space-y-6">
                     <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto" />
-                    <h2 className="text-2xl font-bold" style={{ color: 'white' }}>
-                      Processing Your Booking
+                    <h2
+                      className="text-2xl font-bold"
+                      style={{ color: "white" }}
+                    >
+                      Đang xử lý đặt vé của bạn
                     </h2>
-                    <p style={{ color: '#cccccc' }}>
+                    <p style={{ color: "#cccccc" }}>
                       {isCreatingBooking ||
                       createBookingMutation.isPending ||
                       createPaymentMutation.isPending
-                        ? "Creating your booking..."
-                        : "Redirecting to payment instructions..."}
+                        ? "Đang tạo đặt vé..."
+                        : "Đang chuyển đến hướng dẫn thanh toán..."}
                     </p>
                   </div>
                 </motion.div>

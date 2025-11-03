@@ -18,7 +18,7 @@ const PaymentFailed: React.FC = () => {
 
   const bookingId = searchParams.get("bookingId");
   const orderId = searchParams.get("orderId");
-  const error = searchParams.get("error") || "Payment was unsuccessful";
+  const error = searchParams.get("error") || "Thanh toán không thành công";
 
   // Mock booking data for retry
   const bookingData = {
@@ -51,26 +51,26 @@ const PaymentFailed: React.FC = () => {
   const commonReasons = [
     {
       icon: CreditCard,
-      title: "Insufficient Funds",
+      title: "Không đủ số dư",
       description:
-        "Your card may not have enough balance to complete the transaction.",
+        "Thẻ của bạn có thể không đủ số dư để hoàn tất giao dịch.",
     },
     {
       icon: AlertTriangle,
-      title: "Card Declined",
+      title: "Thẻ bị từ chối",
       description:
-        "Your bank may have declined the transaction for security reasons.",
+        "Ngân hàng có thể đã từ chối giao dịch vì lý do bảo mật.",
     },
     {
       icon: Clock,
-      title: "Session Timeout",
-      description: "The payment session may have expired. Please try again.",
+      title: "Hết thời gian",
+      description: "Phiên thanh toán có thể đã hết hạn. Vui lòng thử lại.",
     },
     {
       icon: RefreshCw,
-      title: "Network Issues",
+      title: "Sự cố mạng",
       description:
-        "Poor internet connection may have interrupted the payment process.",
+        "Kết nối internet kém có thể đã gián đoạn quá trình thanh toán.",
     },
   ];
 
@@ -100,7 +100,7 @@ const PaymentFailed: React.FC = () => {
             transition={{ delay: 0.3 }}
             className="text-4xl font-bold text-white mb-2"
           >
-            Payment Failed
+            Thanh toán thất bại
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -108,7 +108,7 @@ const PaymentFailed: React.FC = () => {
             transition={{ delay: 0.4 }}
             className="text-xl text-gray-300"
           >
-            Don't worry, your booking is still reserved
+            Đừng lo, chúng tôi vẫn giữ chỗ cho bạn
           </motion.p>
         </motion.div>
 
@@ -121,15 +121,15 @@ const PaymentFailed: React.FC = () => {
         >
           <div className="flex items-center gap-4 mb-4">
             <AlertTriangle className="h-6 w-6 text-yellow-400" />
-            <h2 className="text-xl font-semibold text-white">What happened?</h2>
+            <h2 className="text-xl font-semibold text-white">Có chuyện gì vậy?</h2>
           </div>
 
           <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 mb-6">
-            <p className="text-red-300 font-medium">Payment Error</p>
+            <p className="text-red-300 font-medium">Lỗi thanh toán</p>
             <p className="text-red-400/80 text-sm mt-1">{error}</p>
             {orderId && (
               <p className="text-gray-400 text-sm mt-2">
-                Order ID: <span className="font-mono">{orderId}</span>
+                Mã đơn hàng: <span className="font-mono">{orderId}</span>
               </p>
             )}
           </div>
@@ -154,7 +154,7 @@ const PaymentFailed: React.FC = () => {
                 <p className="text-2xl font-bold text-white">
                   {formatCurrency(bookingData.total_amount)}
                 </p>
-                <p className="text-gray-400 text-sm">Amount to pay</p>
+                <p className="text-gray-400 text-sm">Số tiền cần thanh toán</p>
               </div>
             </div>
           )}
@@ -175,7 +175,7 @@ const PaymentFailed: React.FC = () => {
                      text-white font-semibold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all"
           >
             <RefreshCw className="h-5 w-5" />
-            Try Again
+            Thử lại
           </motion.button>
 
           <motion.button
@@ -186,7 +186,7 @@ const PaymentFailed: React.FC = () => {
                      text-white font-semibold rounded-xl hover:from-gray-700 hover:to-gray-800 transition-all"
           >
             <ArrowLeft className="h-5 w-5" />
-            Back to Bookings
+            Quay lại lịch sử đặt vé
           </motion.button>
         </motion.div>
 
@@ -198,7 +198,7 @@ const PaymentFailed: React.FC = () => {
           className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20 mb-8"
         >
           <h3 className="text-xl font-bold text-white mb-6">
-            Common Reasons for Payment Failure
+            Lý do thường gặp khiến thanh toán thất bại
           </h3>
 
           <div className="grid md:grid-cols-2 gap-4">
@@ -236,10 +236,9 @@ const PaymentFailed: React.FC = () => {
           transition={{ delay: 1.3 }}
           className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-lg rounded-2xl p-6 border border-white/20"
         >
-          <h3 className="text-xl font-bold text-white mb-4">Need Help?</h3>
+          <h3 className="text-xl font-bold text-white mb-4">Cần hỗ trợ?</h3>
           <p className="text-gray-300 mb-6">
-            Our support team is here to help you complete your booking
-            successfully.
+            Đội ngũ hỗ trợ luôn sẵn sàng giúp bạn hoàn tất đặt vé.
           </p>
 
           <div className="grid md:grid-cols-3 gap-4">
@@ -252,8 +251,8 @@ const PaymentFailed: React.FC = () => {
             >
               <Phone className="h-5 w-5" />
               <div className="text-left">
-                <p className="font-medium">Call Support</p>
-                <p className="text-sm opacity-80">+84-357-663-145</p>
+                <p className="font-medium">Gọi hỗ trợ</p>
+                <p className="text-sm opacity-80">0356055320</p>
               </div>
             </motion.button>
 
@@ -265,8 +264,8 @@ const PaymentFailed: React.FC = () => {
             >
               <Mail className="h-5 w-5" />
               <div className="text-left">
-                <p className="font-medium">Email Us</p>
-                <p className="text-sm opacity-80">Get help via email</p>
+                <p className="font-medium">Gửi email</p>
+                <p className="text-sm opacity-80">Nhận hỗ trợ qua email</p>
               </div>
             </motion.button>
 
@@ -279,8 +278,8 @@ const PaymentFailed: React.FC = () => {
             >
               <AlertTriangle className="h-5 w-5" />
               <div className="text-left">
-                <p className="font-medium">Help Center</p>
-                <p className="text-sm opacity-80">Browse FAQs</p>
+                <p className="font-medium">Trung tâm trợ giúp</p>
+                <p className="text-sm opacity-80">Xem câu hỏi thường gặp</p>
               </div>
             </motion.button>
           </div>
@@ -298,20 +297,19 @@ const PaymentFailed: React.FC = () => {
               onClick={() => navigate("/movies")}
               className="text-purple-400 hover:text-purple-300 transition-colors font-medium"
             >
-              ← Browse Other Movies
+              ← Xem phim khác
             </button>
             <span className="text-gray-500">|</span>
             <button
               onClick={() => navigate("/payment-history")}
               className="text-purple-400 hover:text-purple-300 transition-colors font-medium"
             >
-              View Payment History →
+              Xem lịch sử thanh toán →
             </button>
           </div>
 
           <p className="text-gray-400 text-sm">
-            Your booking will be held for 15 minutes. Please complete payment
-            before it expires.
+            Đặt vé sẽ được giữ trong 15 phút. Vui lòng thanh toán trước khi hết thời gian.
           </p>
         </motion.div>
       </div>

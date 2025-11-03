@@ -36,7 +36,7 @@ export interface DashboardStats {
   top_performers: {
     top_movies: Array<{
       _id: string;
-      bookings_count: number;
+      tickets_sold: number;
       revenue: number;
       movie_id: string;
       title: string;

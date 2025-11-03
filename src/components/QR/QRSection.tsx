@@ -68,7 +68,7 @@ const VietQRBanking: React.FC<VietQRBankingProps> = ({
     <div className="bg-white/10 rounded-xl p-6 text-center border border-blue-500/30 max-w-sm mx-auto">
       <div className="flex items-center justify-center gap-2 mb-4">
         <CreditCard className="h-5 w-5 text-blue-400" />
-        <h3 className="text-lg font-semibold text-black">QR Payment</h3>
+        <h3 className="text-lg font-semibold text-white">Thanh toán bằng QR</h3>
       </div>
 
       {/* QR Code */}
@@ -80,7 +80,7 @@ const VietQRBanking: React.FC<VietQRBankingProps> = ({
         ) : (
           <img
             src={qrImageUrl}
-            alt="VietQR Code"
+            alt="Mã QR VietQR"
             className="w-[200px] h-[200px] mx-auto object-contain"
             onError={(e) => {
               // Fallback to alternative QR if VietQR API fails
@@ -100,19 +100,19 @@ const VietQRBanking: React.FC<VietQRBankingProps> = ({
       <div className="bg-blue-500/10 rounded-lg p-4 mb-4 text-left">
         <div className="space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-black">Bank:</span>
-            <span className="text-black font-medium">MB Bank</span>
+            <span className="text-white">Ngân hàng:</span>
+            <span className="text-white font-medium">MB Bank</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-black">Account:</span>
-            <span className="text-black font-medium">{accountName}</span>
+            <span className="text-white">Chủ tài khoản:</span>
+            <span className="text-white font-medium">{accountName}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-black">Account number:</span>
-            <span className="text-black font-mono">{accountNumber}</span>
+            <span className="text-white">Số tài khoản:</span>
+            <span className="text-white font-mono">{accountNumber}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-black">Amount:</span>
+            <span className="text-white">Số tiền:</span>
             <span className="text-green-400 font-bold">
               {amount.toLocaleString("vi-VN")} ₫
             </span>

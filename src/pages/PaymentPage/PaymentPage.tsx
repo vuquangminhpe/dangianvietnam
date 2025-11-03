@@ -82,6 +82,15 @@ const PaymentPage: React.FC = () => {
   const [bookingData, setBookingData] = useState<BookingData | null>(null);
   const [hasValidSeats, setHasValidSeats] = useState(false);
 
+  const seatTypeLabels: Record<string, string> = {
+    regular: "Ghế thường",
+    premium: "Ghế cao cấp",
+    recliner: "Ghế ngả",
+    couple: "Ghế đôi",
+  };
+
+  const formatSeatType = (type: string) => seatTypeLabels[type] || type;
+
   useEffect(() => {
     const storedData = localStorage.getItem("selected-movie-info");
     if (storedData) {
@@ -91,7 +100,7 @@ const PaymentPage: React.FC = () => {
         // Check if seats are selected
         if (!parsed.seats || parsed.seats.length === 0) {
           setHasValidSeats(false);
-          toast.error("Please select at least one seat before proceeding to payment");
+          toast.error("Vui lòng chọn ít nhất một ghế trước khi thanh toán");
           return;
         }
 
@@ -129,13 +138,13 @@ const PaymentPage: React.FC = () => {
         const formattedBookingData: BookingData = {
           _id: bookingId || parsed.showtimeId || "",
           movie: {
-            title: parsed.movieTitle || "Unknown Movie",
+            title: parsed.movieTitle || "Phim chưa xác định",
             poster_url: parsed.moviePoster || "/api/placeholder/300/400",
             duration: parsed.movieDuration || 120,
           },
           theater: {
-            name: parsed.theaterName || "Unknown Theater",
-            location: parsed.theaterLocation || "Unknown Location",
+            name: parsed.theaterName || "Rạp chưa xác định",
+            location: parsed.theaterLocation || "Địa điểm chưa xác định",
           },
           showtime: {
             start_time: parsed.startTime || new Date().toISOString(),
@@ -149,11 +158,11 @@ const PaymentPage: React.FC = () => {
       } catch (error) {
         console.error("Error parsing stored movie info:", error);
         setHasValidSeats(false);
-        toast.error("Invalid booking data. Please select seats again.");
+        toast.error("Thông tin đặt vé không hợp lệ. Vui lòng chọn ghế lại.");
       }
     } else {
       setHasValidSeats(false);
-      toast.error("No booking information found. Please select seats first.");
+      toast.error("Không tìm thấy thông tin đặt vé. Vui lòng chọn ghế trước.");
     }
   }, [bookingId]);
 
@@ -167,12 +176,12 @@ const PaymentPage: React.FC = () => {
         window.location.href = payment_url;
       } else {
         // Show success and redirect to booking history
-        toast.success("Payment completed successfully!");
+        toast.success("Thanh toán thành công!");
         navigate("/my-bookings");
       }
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Payment failed");
+      toast.error(error.response?.data?.message || "Thanh toán thất bại");
       setIsProcessing(false);
     },
   });
@@ -181,27 +190,27 @@ const PaymentPage: React.FC = () => {
     {
       id: "vnpay" as PaymentMethod,
       name: "VNPay",
-      description: "Pay with VNPay gateway",
+      description: "Thanh toán qua cổng VNPay",
       icon: Smartphone,
       color: "from-blue-500 to-blue-600",
     },
     {
       id: "sepay" as PaymentMethod,
-      name: "Sepay Bank Transfer",
-      description: "Instant bank transfer with auto-verification",
+      name: "Chuyển khoản Sepay",
+      description: "Chuyển khoản ngân hàng xác thực tự động",
       icon: Building2,
       color: "from-emerald-500 to-emerald-600",
     },
     {
       id: "credit_card" as PaymentMethod,
-      name: "Credit Card",
+      name: "Thẻ tín dụng",
       description: "Visa, Mastercard, JCB",
       icon: CreditCard,
       color: "from-purple-500 to-purple-600",
     },
     {
       id: "wallet" as PaymentMethod,
-      name: "Digital Wallet",
+      name: "Ví điện tử",
       description: "MoMo, ZaloPay, ShopeePay",
       icon: Wallet,
       color: "from-green-500 to-green-600",
@@ -210,29 +219,29 @@ const PaymentPage: React.FC = () => {
 
   const handlePayment = async () => {
     if (!bookingData) {
-      toast.error("No booking data available");
+      toast.error("Không có dữ liệu đặt vé");
       return;
     }
 
     if (!hasValidSeats) {
-      toast.error("Please select at least one seat before proceeding");
+      toast.error("Vui lòng chọn ít nhất một ghế trước khi tiếp tục");
       navigate(-1); // Go back to seat selection
       return;
     }
 
     if (!bookingId && !bookingData._id) {
-      toast.error("Booking ID is required");
+      toast.error("Cần có mã đặt vé");
       return;
     }
 
     if (bookingData.seats.length === 0) {
-      toast.error("No seats selected. Please go back and select seats.");
+      toast.error("Chưa chọn ghế. Vui lòng quay lại và chọn ghế.");
       navigate(-1);
       return;
     }
 
     if (bookingData.total_amount <= 0) {
-      toast.error("Invalid total amount. Please check your booking.");
+      toast.error("Tổng tiền không hợp lệ. Vui lòng kiểm tra lại.");
       return;
     }
 
@@ -270,12 +279,12 @@ const PaymentPage: React.FC = () => {
         <div className="text-center">
           <AlertCircle className="h-16 w-16 text-red-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            {!bookingData ? "No Booking Data" : "No Seats Selected"}
+            {!bookingData ? "Chưa có thông tin đặt vé" : "Chưa chọn ghế"}
           </h2>
           <p className="text-gray-600 mb-4">
-            {!bookingData 
-              ? "Please select seats and try again" 
-              : "You need to select at least one seat to proceed with payment"
+            {!bookingData
+              ? "Vui lòng chọn ghế và thử lại"
+              : "Bạn cần chọn ít nhất một ghế để tiếp tục thanh toán"
             }
           </p>
           <div className="flex gap-4 justify-center">
@@ -283,13 +292,13 @@ const PaymentPage: React.FC = () => {
               onClick={() => navigate(-1)}
               className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
             >
-              Go Back
+              Quay lại
             </button>
             <button
               onClick={() => navigate("/")}
               className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
             >
-              Home
+              Trang chủ
             </button>
           </div>
         </div>
@@ -318,10 +327,10 @@ const PaymentPage: React.FC = () => {
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mr-4"
           >
             <ArrowLeft className="h-5 w-5" />
-            Back
+            Quay lại
           </button>
           <h1 className="text-3xl font-bold text-gray-900">
-            Complete Your Payment
+            Hoàn tất thanh toán
           </h1>
         </motion.div>
 
@@ -336,7 +345,7 @@ const PaymentPage: React.FC = () => {
             <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-lg">
               <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
                 <Star className="h-5 w-5 text-yellow-400" />
-                Booking Summary
+                Tóm tắt đặt vé
               </h2>
 
               {/* Movie Info */}
@@ -351,7 +360,7 @@ const PaymentPage: React.FC = () => {
                     {bookingData.movie.title}
                   </h3>
                   <p className="text-gray-600 text-sm mt-1">
-                    {bookingData.movie.duration} minutes
+                    {bookingData.movie.duration} phút
                   </p>
                 </div>
               </div>
@@ -359,7 +368,7 @@ const PaymentPage: React.FC = () => {
               {/* Theater & Showtime */}
               <div className="space-y-3 mb-6">
                 <div>
-                  <p className="text-gray-500 text-sm">Theater</p>
+                  <p className="text-gray-500 text-sm">Rạp</p>
                   <p className="text-gray-900 font-medium">
                     {bookingData.theater.name}
                   </p>
@@ -368,7 +377,7 @@ const PaymentPage: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-gray-500 text-sm">Showtime</p>
+                  <p className="text-gray-500 text-sm">Suất chiếu</p>
                   <p className="text-gray-900 font-medium">
                     {formatDateTime(bookingData.showtime.start_time)}
                   </p>
@@ -377,7 +386,7 @@ const PaymentPage: React.FC = () => {
 
               {/* Seats */}
               <div className="mb-6">
-                <p className="text-gray-500 text-sm mb-2">Seats</p>
+                <p className="text-gray-500 text-sm mb-2">Ghế</p>
                 <div className="flex flex-wrap gap-2">
                   {bookingData.seats.map((seat, index) => (
                     <span
@@ -400,15 +409,15 @@ const PaymentPage: React.FC = () => {
                       className="flex justify-between text-gray-600"
                     >
                       <span>
-                        Seat {seat.row}
-                        {seat.number} ({seat.type})
+                        Ghế {seat.row}
+                        {seat.number} ({formatSeatType(seat.type)})
                       </span>
                       <span>{formatCurrency(seat.price)}</span>
                     </div>
                   ))}
                   <div className="border-t border-gray-200 pt-2 mt-2">
                     <div className="flex justify-between text-gray-900 font-semibold text-lg">
-                      <span>Total</span>
+                      <span>Tổng cộng</span>
                       <span>{formatCurrency(bookingData.total_amount)}</span>
                     </div>
                   </div>
@@ -427,7 +436,7 @@ const PaymentPage: React.FC = () => {
             <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-lg">
               <h2 className="text-xl font-semibold text-gray-900 mb-6 flex items-center gap-2">
                 <Shield className="h-5 w-5 text-green-500" />
-                Select Payment Method
+                Chọn phương thức thanh toán
               </h2>
 
               <div className="space-y-4 mb-8">
@@ -473,9 +482,9 @@ const PaymentPage: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <Shield className="h-5 w-5 text-green-500" />
                   <div>
-                    <p className="text-green-700 font-medium">Secure Payment</p>
+                    <p className="text-green-700 font-medium">Thanh toán an toàn</p>
                     <p className="text-green-600/80 text-sm">
-                      Your payment information is encrypted and secure
+                      Thông tin thanh toán của bạn được mã hóa và bảo mật
                     </p>
                   </div>
                 </div>
@@ -494,19 +503,18 @@ const PaymentPage: React.FC = () => {
                 {isProcessing || createPaymentMutation.isPending ? (
                   <>
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
-                    Processing...
+                    Đang xử lý...
                   </>
                 ) : (
                   <>
                     <CreditCard className="h-5 w-5" />
-                    Pay {formatCurrency(bookingData.total_amount)}
+                    Thanh toán {formatCurrency(bookingData.total_amount)}
                   </>
                 )}
               </motion.button>
 
               <p className="text-center text-gray-500 text-sm mt-4">
-                By completing this payment, you agree to our Terms of Service
-                and Privacy Policy
+                Khi thanh toán, bạn đồng ý với Điều khoản dịch vụ và Chính sách bảo mật của chúng tôi
               </p>
             </div>
           </motion.div>

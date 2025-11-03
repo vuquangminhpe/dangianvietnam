@@ -60,7 +60,7 @@ export const TopMovies = ({ dashboardData }: TopMoviesProps) => {
               <div className="flex-1 min-w-0">
                 <h4 className="font-medium text-white truncate font-heading">{movie.title}</h4>
                 <div className="flex items-center space-x-4 mt-1">
-                  <span className="text-sm text-gray-400 font-body">{movie.bookings_count} lượt đặt vé</span>
+                  <span className="text-sm text-gray-400 font-body">{movie.tickets_sold} lượt đặt vé</span>
                   <span className="text-sm font-medium text-green-400 font-body">{movie.revenue.toLocaleString()} VNĐ</span>
                 </div>
                 
@@ -70,7 +70,7 @@ export const TopMovies = ({ dashboardData }: TopMoviesProps) => {
                     initial={{ width: 0 }}
                     animate={{ 
                       width: `${Math.min(
-                        (movie.bookings_count / Math.max(...dashboardData.top_performers.top_movies.map(m => m.bookings_count))) * 100, 
+                        (movie.tickets_sold / Math.max(...dashboardData.top_performers.top_movies.map(m => m.tickets_sold))) * 100, 
                         100
                       )}%`
                     }}

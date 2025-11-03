@@ -56,7 +56,7 @@ const SepayInstructions: React.FC = () => {
   useEffect(() => {
     if (booking?.payment_status === "completed") {
       setIsPaymentCompleted(true);
-      toast.success("Payment completed successfully!");
+      toast.success("Thanh toán thành công!");
       setTimeout(() => {
         navigate(`/payment/success?bookingId=${bookingId}`);
       }, 2000);
@@ -82,10 +82,10 @@ const SepayInstructions: React.FC = () => {
         >
           <CheckCircle className="h-24 w-24 text-green-600 mx-auto mb-4" />
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Payment Received!
+            Đã nhận thanh toán!
           </h2>
           <p className="text-gray-600 mb-4">
-            Redirecting to confirmation page...
+            Đang chuyển đến trang xác nhận...
           </p>
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mx-auto" />
         </motion.div>
@@ -110,7 +110,7 @@ const SepayInstructions: React.FC = () => {
               className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mr-4"
             >
               <ArrowLeft className="h-5 w-5" />
-              Back
+              Quay lại
             </button>
 
             {/* Timer */}
@@ -123,7 +123,7 @@ const SepayInstructions: React.FC = () => {
           <div className="flex-1">
             <h1 className="text-3xl font-bold flex items-center gap-3" style={{ color: '#730109' }}>
               <Building2 className="h-8 w-8 text-gray-700" />
-              Bank Transfer Instructions
+             CHUYỂN KHOẢN QUA NGÂN HÀNG
             </h1>
           </div>
         </motion.div>
@@ -139,7 +139,7 @@ const SepayInstructions: React.FC = () => {
             {/* Booking Summary */}
             <div className="rounded-2xl p-6 border border-gray-200 shadow-sm" style={{ backgroundColor: '#37373c' }}>
               <h3 className="text-lg font-semibold mb-4" style={{ color: 'white' }}>
-                Booking Summary
+                Tóm tắt đặt vé
               </h3>
 
               <div className="space-y-3">
@@ -162,13 +162,13 @@ const SepayInstructions: React.FC = () => {
 
                 <div className="text-sm space-y-1">
                   <p style={{ color: '#cccccc' }}>
-                    Ticket Code:{" "}
+                    Mã vé:{" "}
                     <span style={{ color: 'white' }}>
                       {booking?.ticket_code}
                     </span>
                   </p>
                   <p style={{ color: '#cccccc' }}>
-                    Seats:{" "}
+                    Ghế:{" "}
                     <span style={{ color: 'white' }}>
                       {booking?.seats
                         ?.map((s: any) => `${s.row}${s.number}`)
@@ -182,7 +182,7 @@ const SepayInstructions: React.FC = () => {
                   {booking?.coupon_code && booking?.coupon_discount && (
                     <>
                       <div className="flex justify-between text-sm mb-2">
-                        <span style={{ color: '#cccccc' }}>Original Amount</span>
+                        <span style={{ color: '#cccccc' }}>Giá gốc</span>
                         <span style={{ color: 'white' }}>
                           {formatCurrency(
                             booking?.original_amount ||
@@ -191,12 +191,12 @@ const SepayInstructions: React.FC = () => {
                         </span>
                       </div>
                       <div className="flex justify-between text-sm mb-2">
-                        <span style={{ color: '#cccccc' }}>Coupon Discount ({booking?.coupon_code})</span>
+                        <span style={{ color: '#cccccc' }}>Giảm giá ({booking?.coupon_code})</span>
                         <span style={{ color: '#22c55e' }}>-{formatCurrency(booking?.coupon_discount)}</span>
                       </div>
                       <div className="border-t border-gray-100 pt-2">
                         <div className="flex justify-between font-semibold">
-                          <span style={{ color: 'white' }}>Final Total</span>
+                          <span style={{ color: 'white' }}>Tổng thanh toán</span>
                           <span style={{ color: 'white' }}>{formatCurrency(amount)}</span>
                         </div>
                       </div>
@@ -206,7 +206,7 @@ const SepayInstructions: React.FC = () => {
                   {/* No coupon - just show total */}
                   {!booking?.coupon_code && (
                     <div className="flex justify-between font-semibold">
-                      <span style={{ color: 'white' }}>Total</span>
+                      <span style={{ color: 'white' }}>Tổng cộng</span>
                       <span style={{ color: 'white' }}>{formatCurrency(amount)}</span>
                     </div>
                   )}
@@ -226,7 +226,7 @@ const SepayInstructions: React.FC = () => {
             <div className="rounded-2xl p-6 border border-gray-200 shadow-sm" style={{ backgroundColor: '#37373c' }}>
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2" style={{ color: 'white' }}>
                 <Clock className="h-5 w-5 text-orange-500" />
-                Payment Status
+                Trạng thái thanh toán
               </h3>
 
               <div className="space-y-4">
@@ -242,7 +242,7 @@ const SepayInstructions: React.FC = () => {
                   style={{ backgroundColor: '#730109', color: 'white' }}
                 >
                   <RefreshCw className="h-4 w-4" />
-                  Check Status
+                  Kiểm tra trạng thái
                 </button>
               </div>
             </div>
