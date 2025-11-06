@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { useAuthStore } from '../../store/useAuthStore';
 import { resendOtpCode } from '../../apis/user.api';
-import { Mail, Ticket } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import RegisterModal from '../../components/user/RegisterModal';
 
 const VerifyPage = () => {
@@ -119,9 +119,9 @@ const VerifyPage = () => {
         <div className="max-w-md w-full bg-white p-8 rounded-xl shadow-xl">
         <div className="text-center mb-6">
           <div className="flex justify-center mb-3">
-            <Ticket size={40} className="text-pink-500" />
+          
           </div>
-          <h1 className="text-3xl font-bold text-[#730109]">Cinema Connect</h1>
+          <h1 className="text-3xl font-bold text-[#730109]">Dan Gian</h1>
           <p className="mt-2 text-[#730109]">Xác minh email để hoàn tất đăng ký</p>
         </div>
         

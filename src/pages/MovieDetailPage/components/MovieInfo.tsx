@@ -63,7 +63,7 @@ export default function MovieInfo({
             {movie.title}
           </motion.h1>
 
-          {showtimes.length > 0 && (
+          {showtimes.length > 0 ? (
             <>
               <motion.p
                 variants={fadeUp}
@@ -121,6 +121,17 @@ export default function MovieInfo({
                   </g>
                 </svg>
                 {theater?.result?.theaters?.[0]?.name}
+              </motion.p>
+            </>
+          ) : (
+            <>
+              <motion.p
+                variants={fadeUp}
+                custom={1}
+                className="mb-2 flex items-center justify-center gap-2 text-base text-red-500 md:text-lg"
+                style={{ fontFamily: "Stuff Bold" }}
+              >
+                Hiện tại chưa có suất chiếu cho sự kiện này
               </motion.p>
             </>
           )}
