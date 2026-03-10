@@ -2,7 +2,7 @@ import axios from "axios";
 import type { SuccessResponse } from "../types/Utils.type";
 import { getAuthToken } from "./user.api";
 
-const BASE_URL = "https://dangianvietnam.space";
+const BASE_URL = "https://bookmovie-5n6n.onrender.com";
 
 const createAuthRequest = () => {
   const token = getAuthToken();

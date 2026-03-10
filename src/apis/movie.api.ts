@@ -14,7 +14,7 @@ import type {
 import { getAuthToken } from "./user.api";
 import type { SuccessResponse } from "../types";
 
-const BASE_URL = "https://dangianvietnam.space";
+const BASE_URL = "https://bookmovie-5n6n.onrender.com";
 
 // Create authenticated axios instance for movie requests
 const createMovieRequest = () => {

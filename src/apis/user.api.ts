@@ -12,7 +12,7 @@ import type {
   ChangePasswordResponse,
 } from "../types/User.type";
 
-const BASE_URL = "https://dangianvietnam.space";
+const BASE_URL = "https://bookmovie-5n6n.onrender.com";
 
 type ValidationErrors = Record<string, string>;
 

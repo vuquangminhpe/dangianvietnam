@@ -9,7 +9,7 @@ import type {
 
 // Sử dụng biến môi trường
 const showtimeApi = axios.create({
-  baseURL: `https://dangianvietnam.space/cinema/showtimes`,
+  baseURL: `https://bookmovie-5n6n.onrender.com/cinema/showtimes`,
   headers: {
     "Content-Type": "application/json",
   },
